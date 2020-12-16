@@ -14,14 +14,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     orderSuffix: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
   });
-  // Company.associate = (models) => {
-  //   Company.hasMany(models.Order, {
-  //     foreignKey: 'companyId',
-  //     as: 'orders',
-  //   });
-  // };
+  
+  Company.associate = (models) => {
+    Company.hasMany(models.Order, {
+      foreignKey: 'companyId',
+      as: 'orders',
+    });
+  };
   return Company;
 };
