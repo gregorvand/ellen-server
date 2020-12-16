@@ -9,10 +9,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       orderNumber: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       },
       orderDate: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       totalValue: {
         type: Sequelize.INTEGER
@@ -21,13 +23,16 @@ module.exports = {
         type: Sequelize.STRING
       },
       fromEmail: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       customerEmail: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       plainContent: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
