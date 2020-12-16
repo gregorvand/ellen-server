@@ -15,8 +15,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       orderPrefix: {
-        type: Sequelize.STRING,
-        defaultValue: '#'
+        type: Sequelize.STRING
       },
       orderSuffix: {
         type: Sequelize.STRING
