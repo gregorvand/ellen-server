@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
-  Company.associate = (models) => {
-    Company.hasMany(models.Order, {
-      foreignKey: 'companyId',
-      as: 'orders',
-    });
-  };
-  return Todo;
+  // Company.associate = (models) => {
+  //   Company.hasMany(models.Order, {
+  //     foreignKey: 'companyId',
+  //     as: 'orders',
+  //   });
+  // };
+  return Company;
 };

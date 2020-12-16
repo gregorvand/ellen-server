@@ -1,5 +1,7 @@
 const todosController = require('../controllers/todos');
 const todoItemsController = require('../controllers/todoitems');
+const companiesController = require('../controllers/companies');
+
 const formidable = require('formidable');
 
 module.exports = (app) => {
@@ -16,6 +18,9 @@ module.exports = (app) => {
   app.post('/api/todos/:todoId/items', todoItemsController.create);
   app.put('/api/todos/:todoId/items/:todoItemId', todoItemsController.update);
   app.delete('/api/todos/:todoId/items/:todoItemId', todoItemsController.destroy);
+
+  app.post('/api/companies', companiesController.create);
+  app.get('/api/companies', companiesController.list);
 
   app.post('/email', function(req, res) {
     console.log('receieved @ email');
