@@ -1,6 +1,7 @@
-const todosController = require('../controllers/todos');
-const todoItemsController = require('../controllers/todoitems');
+// const todosController = require('../controllers/todos');
+// const todoItemsController = require('../controllers/todoitems');
 const companiesController = require('../controllers/companies');
+const ordersController = require('../controllers/orders');
 
 const formidable = require('formidable');
 
@@ -19,6 +20,9 @@ module.exports = (app) => {
 
   app.post('/api/companies', companiesController.create);
   app.get('/api/companies', companiesController.list);
+
+  app.post('/api/orders', ordersController.create);
+  app.get('/api/orders', ordersController.list);
 
   app.post('/email', function(req, res) {
     console.log('receieved @ email');

@@ -1,27 +1,30 @@
-const Company = require('../models').Company;
 const Order = require('../models').Order;
+// const TodoItem = require('../models').TodoItem;
 
 module.exports = {
   create(req, res) {
-    return Company
+    return Order
       .create({
-        nameIdentifier: req.body.name,
-        emailIdentifier: req.body.email,
-        orderPrefix: req.body.prefix || '#',
-        orderSuffix: req.body.suffix || '',
+        orderNumber: req.body.number,
+        orderDate: req.body.date || Date.now(),
+        fromEmail: req.body.fromEmail || 'shop@sendertest.com',
+        customerEmail: req.body.customerEmail || 'customer@receivertest.com',
+        plainContent: req.body.content || 'Hello this is the email stuff!',
+        companyId: req.body.companyId || 1
       })
       .then(company => res.status(201).send(company))
       .catch(error => res.status(400).send(error));
   },
 
   list(req, res) {
-    return Company
-      .findAll({
-        include: [{
-          model: Order,
-          as: 'orders',
-        }],
-      })
+    return Order
+      // .findAll({
+      //   include: [{
+      //     model: TodoItem,
+      //     as: 'todoItems',
+      //   }],
+      // })
+      .findAll()
       .then((companies) => res.status(200).send(companies))
       .catch((error) => res.status(400).send(error));
   },
