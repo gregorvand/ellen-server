@@ -15,7 +15,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       orderPrefix: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: '#'
       },
       orderSuffix: {
         type: Sequelize.STRING
@@ -33,4 +34,4 @@ module.exports = {
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Companies');
   }
-};
+};  
