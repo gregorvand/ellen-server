@@ -1,11 +1,14 @@
 const Order = require('../models').Order;
+const emailHelpers = require('../modules/emailHelpers');
 // const TodoItem = require('../models').TodoItem;
 
 module.exports = {
   create(req, res) {
+    // emailHelpers.returnOrderNumber(req);
+    // emailHelpers.parseSubjectForOrder(req);
     return Order
       .create({
-        orderNumber: req.body.number,
+        orderNumber: req.body.number || 'XXXXX',
         orderDate: req.body.date || Date.now(),
         fromEmail: req.body.fromEmail || 'shop@sendertest.com',
         customerEmail: req.body.customerEmail || 'customer@receivertest.com',

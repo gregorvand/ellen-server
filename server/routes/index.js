@@ -3,6 +3,8 @@
 const companiesController = require('../controllers/companies');
 const ordersController = require('../controllers/orders');
 
+const emailHelpers = require('../modules/emailHelpers');
+
 const formidable = require('formidable');
 
 module.exports = (app) => {
@@ -24,14 +26,26 @@ module.exports = (app) => {
   app.post('/api/orders', ordersController.create);
   app.get('/api/orders', ordersController.list);
 
+  app.post('/api/orderemail', function(req, res) {
+    console.log('received @ emailR', Date.now());
+
+    let form = new formidable.IncomingForm();
+    form.parse(req, function(err, fields, files) {
+      emailHelpers.returnOrderNumber(fields['headers[subject]']);
+      
+      res.writeHead(200, {'content-type': 'text/plain'})
+      res.end('Message Received. Thanks!\r\n')
+    })
+  });
+
   app.post('/email', function(req, res) {
     console.log('receieved @ email');
-    let form = new formidable.IncomingForm()
+
+    let form = new formidable.IncomingForm();
     form.parse(req, function(err, fields, files) {
       // console.log(fields)
-      console.log('sender?', fields['sender'])
-      console.log('all fields', fields['plain'])
-      console.log('all fields', fields['html'])
+      // console.log('sender?', fields['sender'])
+      console.log('all fields', fields['plain']);
       res.writeHead(200, {'content-type': 'text/plain'})
       res.end('Message Received. Thanks!\r\n')
     })
