@@ -3,12 +3,12 @@ const emailHelpers = require('../modules/emailHelpers');
 // const TodoItem = require('../models').TodoItem;
 
 module.exports = {
-  create(req, res) {
+  create(req, res, orderNumber) {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
     return Order
       .create({
-        orderNumber: req.body.number || 'XXXXX',
+        orderNumber: orderNumber || req.body.number,
         orderDate: req.body.date || Date.now(),
         fromEmail: req.body.fromEmail || 'shop@sendertest.com',
         customerEmail: req.body.customerEmail || 'customer@receivertest.com',
@@ -17,6 +17,20 @@ module.exports = {
       })
       .then(company => res.status(201).send(company))
       .catch(error => res.status(400).send(error));
+  },
+
+  internalCreate(req, orderNumber) {
+    // emailHelpers.returnOrderNumber(req);
+    // emailHelpers.parseSubjectForOrder(req);
+    return Order
+      .create({
+        orderNumber: orderNumber || req.body.number,
+        orderDate: req.body.date || Date.now(),
+        fromEmail: req.body.fromEmail || 'shop@sendertest.com',
+        customerEmail: req.body.customerEmail || 'customer@receivertest.com',
+        plainContent: req.body.content || 'Hello this is the email stuff!',
+        companyId: req.body.companyId || 1
+      })
   },
 
   list(req, res) {

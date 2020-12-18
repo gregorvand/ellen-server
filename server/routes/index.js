@@ -35,8 +35,11 @@ module.exports = (app) => {
     form.parse(req, function(err, fields, files) {
       orderNumber = emailHelpers
         .returnOrderNumber(fields['headers[subject]'])
-        .then((value) => console.log('promised...', value));
-      console.log('got it!', orderNumber)
+        .then((value) => {
+          ordersController.internalCreate(req, value);
+          console.log('still made it here with', value);
+        });
+      
 
       // change to promise, add below to after resolved
       
