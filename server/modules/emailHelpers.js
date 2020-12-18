@@ -1,20 +1,18 @@
-module.exports = {
-  returnOrderNumber: function (subject) {
+
+  async function returnOrderNumber (subject) {
     // TODO: get prefix from Company record first
     // const prefix = "\#";
     // const regex = "\#(?=\w*)\w+"
     try {
-      console.log(subject);
+      console.log('original subject: ', subject);
       const found = subject.match(/\#(?=\w*)\w+/g);
-      console.log(`${found[0]} was the order number`);
-      console.log(typeof(subject));
+      let orderWithPrefix = found[0];
+      let orderNumberArray = orderWithPrefix.split('#');
+      return orderNumberArray[1];
     } catch(err) {
       console.error(err, 'probably no regex match');
       return 'No match to the defined prefix'
     }
-  },
-
-  parseSubjectForOrder: function(req) {
-    console.log('subject?', req.headers['subject']);
   }
-};
+
+  module.exports.returnOrderNumber = returnOrderNumber;

@@ -29,10 +29,18 @@ module.exports = (app) => {
   app.post('/api/orderemail', function(req, res) {
     console.log('received @ emailR', Date.now());
 
+    let orderNumber = 'XXXXX';
     let form = new formidable.IncomingForm();
+    
     form.parse(req, function(err, fields, files) {
-      emailHelpers.returnOrderNumber(fields['headers[subject]']);
+      orderNumber = emailHelpers
+        .returnOrderNumber(fields['headers[subject]'])
+        .then((value) => console.log('promised...', value));
+      console.log('got it!', orderNumber)
+
+      // change to promise, add below to after resolved
       
+      // ordersController.create(req, res, orderNumber);
       res.writeHead(200, {'content-type': 'text/plain'})
       res.end('Message Received. Thanks!\r\n')
     })
@@ -56,4 +64,4 @@ module.exports = (app) => {
     res.status(405).send({
       message: 'Method Not Allowed',
   }));
-};  
+};
