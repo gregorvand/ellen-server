@@ -20,47 +20,35 @@ module.exports = (app) => {
   // app.put('/api/todos/:todoId/items/:todoItemId', todoItemsController.update);
   // app.delete('/api/todos/:todoId/items/:todoItemId', todoItemsController.destroy);
 
+  // direct/testing api paths
   app.post('/api/companies', companiesController.create);
   app.get('/api/companies', companiesController.list);
 
   app.post('/api/orders', ordersController.create);
   app.get('/api/orders', ordersController.list);
 
+  // production api paths
   app.post('/api/orderemail', function(req, res) {
-    console.log('received @ emailR', Date.now());
-
-    let orderNumber = 'XXXXX';
-    let form = new formidable.IncomingForm();
-    
-    form.parse(req, function(err, fields, files) {
-      orderNumber = emailHelpers
-        .returnOrderNumber(fields['headers[subject]'])
-        .then((value) => {
-          ordersController.internalCreate(req, value);
-          console.log('still made it here with', value);
-        });
-      
-
-      // change to promise, add below to after resolved
-      
-      // ordersController.create(req, res, orderNumber);
+    console.log('received Email @', new Date(Date.UTC(0, 0, 0, 0, 0, 0)));
+    emailHelpers.parseForm(req).then(orderNumber => {
+      ordersController.internalCreate(req, orderNumber);
       res.writeHead(200, {'content-type': 'text/plain'})
-      res.end('Message Received. Thanks!\r\n')
-    })
+      res.end('Message Received. Thanks!\r\n');
+    });
   });
 
-  app.post('/email', function(req, res) {
-    console.log('receieved @ email');
 
-    let form = new formidable.IncomingForm();
-    form.parse(req, function(err, fields, files) {
-      // console.log(fields)
-      // console.log('sender?', fields['sender'])
-      console.log('all fields', fields['plain']);
-      res.writeHead(200, {'content-type': 'text/plain'})
-      res.end('Message Received. Thanks!\r\n')
-    })
-  });
+  // basic example function to receive email webhook with formidable
+  // app.post('/email', function(req, res) {
+  //   console.log('receieved @ email');
+
+  //   let form = new formidable.IncomingForm();
+  //   form.parse(req, function(err, fields, files) {
+  //     console.log('all fields', fields['plain']);
+  //     res.writeHead(200, {'content-type': 'text/plain'})
+  //     res.end('Message Received. Thanks!\r\n')
+  //   })
+  // });
 
   // For any other request method on companies, we're going to return "Method Not Allowed"
   app.all('/api/companies', (req, res) =>

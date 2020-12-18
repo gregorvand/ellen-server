@@ -1,4 +1,7 @@
 
+  const formidable = require('formidable');
+  const ordersController = require('../controllers/orders');
+  
   async function returnOrderNumber (subject) {
     // TODO: get prefix from Company record first
     // const prefix = "\#";
@@ -15,4 +18,24 @@
     }
   }
 
+  // good example of adding Promise structure to non-aync external function
+  // then returning value via another Promise from own function
+  async function parseForm (req) {
+    let form = new formidable.IncomingForm();
+    try {
+      return new Promise(function (resolve, reject) {
+        form.parse(req, function(err, fields, files) {
+          if (err) {
+            reject(err);
+            return;
+          }
+          resolve(returnOrderNumber(fields['headers[subject]']));
+        })
+      });
+    } catch(err) {
+      console.log('there was an error', err);
+    }
+  }
+
   module.exports.returnOrderNumber = returnOrderNumber;
+  module.exports.parseForm = parseForm;
