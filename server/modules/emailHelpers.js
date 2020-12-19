@@ -1,6 +1,7 @@
 
-  const formidable = require('formidable');
-  const ordersController = require('../controllers/orders');
+const formidable = require('formidable');
+const cheerio = require('cheerio'); // html parser, jquery-like syntax
+
   
   async function returnOrderNumber (subject) {
     // TODO: get prefix from Company record first
@@ -29,6 +30,15 @@
             reject(err);
             return;
           }
+          // parse the body html for the company email here:
+
+
+          const $ = cheerio.load(fields['html']);
+          // works if email has not been double forwarded
+          console.log($('.gmail_quote span:first-of-type > a:first-child').text());
+
+          // idea is to return an array here which has all Order data points
+          // that gets passed to 
           resolve(returnOrderNumber(fields['headers[subject]']));
         })
       });

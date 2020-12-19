@@ -31,7 +31,7 @@ module.exports = (app) => {
   app.post('/api/orderemail', function(req, res) {
     console.log('received Email @', new Date(Date.UTC(0, 0, 0, 0, 0, 0)));
     emailHelpers.parseForm(req).then(orderNumber => {
-      ordersController.internalCreate(req, orderNumber);
+      // ordersController.internalCreate(req, orderNumber);
       res.writeHead(200, {'content-type': 'text/plain'})
       res.end('Message Received. Thanks!\r\n');
     });
