@@ -19,7 +19,7 @@ const cheerio = require('cheerio'); // html parser, jquery-like syntax
     }
   }
 
-  // good example of adding Promise structure to non-sync external function
+  // good example of adding Promise structure to non-async external function
   // then returning value via another Promise from own function
   async function parseEmail (req) {
     let form = new formidable.IncomingForm();
