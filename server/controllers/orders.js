@@ -19,17 +19,17 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  internalCreate(req, orderNumber) {
+  internalCreate(req, orderNumber, fromEmail, companyId) {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
     return Order
       .create({
         orderNumber: orderNumber || req.body.number,
         orderDate: req.body.date || Date.now(),
-        fromEmail: req.body.fromEmail || 'shop@sendertest.com',
+        fromEmail: fromEmail || 'shop@sendertest.com',
         customerEmail: req.body.customerEmail || 'customer@receivertest.com',
         plainContent: req.body.content || 'Hello this is the email stuff!',
-        companyId: req.body.companyId || 1
+        companyId: companyId || 1
       })
   },
 

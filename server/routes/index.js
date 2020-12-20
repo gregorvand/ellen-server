@@ -5,8 +5,6 @@ const ordersController = require('../controllers/orders');
 
 const emailHelpers = require('../modules/emailHelpers');
 
-const formidable = require('formidable');
-
 module.exports = (app) => {
   app.get('/api', (req, res) => res.status(200).send({
     message: 'Welcome to the Todos API!',
@@ -29,12 +27,20 @@ module.exports = (app) => {
 
   // production api paths
   app.post('/api/orderemail', function(req, res) {
-    console.log('received Email @', new Date(Date.UTC(0, 0, 0, 0, 0, 0)));
-    emailHelpers.parseForm(req).then(orderNumber => {
-      // ordersController.internalCreate(req, orderNumber);
-      res.writeHead(200, {'content-type': 'text/plain'})
-      res.end('Message Received. Thanks!\r\n');
-    });
+    let date = Date.now();
+    console.log('received Email @', date.toString());
+    
+    let orderNumber = '';
+    emailHelpers.parseEmail(req)
+      .then((values) => { 
+        console.log(values);
+        orderNumber = values['parsedOrderNumber'];
+        return emailHelpers.findCompanyByEmail(values['parsedFromEmail']);
+       })
+      .then((company) => ordersController.internalCreate(req, orderNumber, company.emailIdentifier, company.id));
+
+    res.writeHead(200, {'content-type': 'text/plain'})
+    res.end('Message Received. Thanks!\r\n');
   });
 
 
