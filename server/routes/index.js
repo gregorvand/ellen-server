@@ -27,20 +27,30 @@ module.exports = (app) => {
 
   // production api paths
   app.post('/api/orderemail', function(req, res) {
-    let date = Date.now();
-    console.log('received Email @', date.toString());
-    
-    let orderNumber = '';
-    emailHelpers.parseEmail(req)
-      .then((values) => { 
-        console.log(values);
-        orderNumber = values['parsedOrderNumber'];
-        return emailHelpers.findCompanyByEmail(values['parsedFromEmail']);
-       })
-      .then((company) => ordersController.internalCreate(req, orderNumber, company.emailIdentifier, company.id));
+    console.log('received Email');
 
-    res.writeHead(200, {'content-type': 'text/plain'})
-    res.end('Message Received. Thanks!\r\n');
+    emailHelpers.parseEmail(req, res)
+      .then((emailFields) => {
+        availablEmailFields = emailFields;
+        console.log('at least subject was', emailFields['headers[subject]']);
+        const orderPromise = emailHelpers.returnOrderNumber(emailFields['headers[subject]']).then((returnedOrderNumber) => {
+          orderNumber = returnedOrderNumber;
+        });
+
+        const companyPromise = emailHelpers.findCompanyByEmail(emailFields['html']).then(returnedCompany => {
+          companyObject = returnedCompany;
+        });
+
+        Promise.all([
+          orderPromise,
+          companyPromise
+        ]).then(() => {
+          console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier);
+          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id);
+        });
+       })
+       
+      // .then((company) => ordersController.internalCreate(req, orderNumber, company.emailIdentifier, company.id));
   });
 
 

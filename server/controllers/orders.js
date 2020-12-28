@@ -19,7 +19,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  internalCreate(req, orderNumber, fromEmail, companyId) {
+  internalCreate(req = false, orderNumber, fromEmail, companyId) {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
     return Order
