@@ -70,9 +70,18 @@ const cheerio = require('cheerio'); // html parser, jquery-like syntax
     }
   }
 
+  async function getField (fields, scope) {
+    try {
+      return fields[scope];
+    } catch(err) {
+      console.err("could not identify that field");
+    }
+  }
+
   module.exports.returnOrderNumber = returnOrderNumber;
   module.exports.parseEmail = parseEmail;
   module.exports.findCompanyByEmail = findCompanyByEmail;
+  module.exports.getField = getField;
 
   // Internal functions -----------------------
 

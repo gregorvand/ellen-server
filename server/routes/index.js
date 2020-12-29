@@ -41,12 +41,17 @@ module.exports = (app) => {
           companyObject = returnedCompany;
         });
 
+        const customerPromise = emailHelpers.getField(emailFields, 'envelope[from]').then(returnedCustomer => {
+          customerEmail = returnedCustomer;
+        });
+
         Promise.all([
           orderPromise,
-          companyPromise
+          companyPromise,
+          customerPromise
         ]).then(() => {
-          console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier);
-          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id);
+          console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier, customerEmail);
+          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, customerEmail);
         });
        })
        
