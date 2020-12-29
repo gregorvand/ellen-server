@@ -2,6 +2,7 @@
 // const todoItemsController = require('../controllers/todoitems');
 const companiesController = require('../controllers/companies');
 const ordersController = require('../controllers/orders');
+const usersController = require('../controllers/users');
 
 const emailHelpers = require('../modules/emailHelpers');
 
@@ -58,18 +59,8 @@ module.exports = (app) => {
       // .then((company) => ordersController.internalCreate(req, orderNumber, company.emailIdentifier, company.id));
   });
 
-
-  // basic example function to receive email webhook with formidable
-  // app.post('/email', function(req, res) {
-  //   console.log('receieved @ email');
-
-  //   let form = new formidable.IncomingForm();
-  //   form.parse(req, function(err, fields, files) {
-  //     console.log('all fields', fields['plain']);
-  //     res.writeHead(200, {'content-type': 'text/plain'})
-  //     res.end('Message Received. Thanks!\r\n')
-  //   })
-  // });
+  app.post('/api/users', usersController.create);
+  app.get('/api/users', usersController.list);
 
   // For any other request method on companies, we're going to return "Method Not Allowed"
   app.all('/api/companies', (req, res) =>
