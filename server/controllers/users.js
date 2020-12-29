@@ -19,7 +19,7 @@ module.exports = {
       .findAll({
         include: [{
           model: Order,
-          as: 'orders',
+          as: 'orders'
         }],
       })
       .then((companies) => res.status(200).send(companies))

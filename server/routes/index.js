@@ -42,17 +42,22 @@ module.exports = (app) => {
           companyObject = returnedCompany;
         });
 
-        const customerPromise = emailHelpers.getField(emailFields, 'envelope[from]').then(returnedCustomer => {
-          customerEmail = returnedCustomer;
+        const customerPromise = emailHelpers.findCustomerByEmail(emailFields['envelope[from]']).then(returnedCustomer => {
+          customer = returnedCustomer;
+        });
+
+        const emailSenderPromise = emailHelpers.getField(emailFields, 'envelope[from]').then(returnedCustomer => {
+          senderEmail = returnedCustomer;
         });
 
         Promise.all([
           orderPromise,
           companyPromise,
-          customerPromise
+          customerPromise,
+          emailSenderPromise
         ]).then(() => {
-          console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier, customerEmail);
-          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, customerEmail);
+          console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier, customer.id);
+          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, senderEmail, customer.id);
         });
        })
        

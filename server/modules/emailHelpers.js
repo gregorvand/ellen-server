@@ -70,6 +70,25 @@ const cheerio = require('cheerio'); // html parser, jquery-like syntax
     }
   }
 
+  async function findCustomerByEmail (envelopeFrom) {
+    const User = require('../models').User;
+
+    console.log('envelope', envelopeFrom);
+    try {
+      let customer = await User.findOne({ where: { email: envelopeFrom } });
+      if (customer === null) {
+        console.log('Customer Not found!');
+        return 0; // no user assigned, will default to user '0'
+      } else {
+        console.log('found a customer?', customer instanceof User);
+        console.log(customer.email);
+        return customer;
+      }
+    } catch (err) {
+      return 'oh no! customer lookup totally failed.';
+    }
+  }
+
   async function getField (fields, scope) {
     try {
       return fields[scope];
@@ -81,7 +100,9 @@ const cheerio = require('cheerio'); // html parser, jquery-like syntax
   module.exports.returnOrderNumber = returnOrderNumber;
   module.exports.parseEmail = parseEmail;
   module.exports.findCompanyByEmail = findCompanyByEmail;
+  module.exports.findCustomerByEmail = findCustomerByEmail;
   module.exports.getField = getField;
+
 
   // Internal functions -----------------------
 

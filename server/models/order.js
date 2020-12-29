@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'NOACTION',
     });
     Order.belongsTo(models.User, { 
-      foreignKey: 'customerEmail',
+      foreignKey: 'customerId',
       onDelete: 'NOACTION', 
     });
   };

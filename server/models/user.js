@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
   
   User.associate = (models) => {
     User.hasMany(models.Order, {
-      foreignKey: 'customerEmail',
+      foreignKey: 'customerId',
       as: 'orders',
     });
   };

@@ -30,7 +30,7 @@ app.get('/dashboard', (req, res) => {
 });
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
   res.render("index");
 });
 
