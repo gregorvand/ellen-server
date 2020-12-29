@@ -1,27 +1,47 @@
-const Company = require('../models').Company;
 const Order = require('../models').Order;
+const emailHelpers = require('../modules/emailHelpers');
+// const TodoItem = require('../models').TodoItem;
 
 module.exports = {
-  create(req, res) {
-    return Company
+  create(req, res, orderNumber) {
+    // emailHelpers.returnOrderNumber(req);
+    // emailHelpers.parseSubjectForOrder(req);
+    return Order
       .create({
-        nameIdentifier: req.body.name,
-        emailIdentifier: req.body.email,
-        orderPrefix: req.body.prefix || '#',
-        orderSuffix: req.body.suffix || '',
+        orderNumber: orderNumber || req.body.number,
+        orderDate: req.body.date || Date.now(),
+        fromEmail: req.body.fromEmail || 'shop@sendertest.com',
+        customerEmail: req.body.customerEmail || 'customer@receivertest.com',
+        plainContent: req.body.content || 'Hello this is the email stuff!',
+        companyId: req.body.companyId || 1
       })
       .then(company => res.status(201).send(company))
       .catch(error => res.status(400).send(error));
   },
 
-  list(req, res) {
-    return Company
-      .findAll({
-        include: [{
-          model: Order,
-          as: 'orders',
-        }],
+  internalCreate(req = false, orderNumber, fromEmail, companyId) {
+    // emailHelpers.returnOrderNumber(req);
+    // emailHelpers.parseSubjectForOrder(req);
+    return Order
+      .create({
+        orderNumber: orderNumber || req.body.number,
+        orderDate: req.body.date || Date.now(),
+        fromEmail: fromEmail || 'shop@sendertest.com',
+        customerEmail: req.body.customerEmail || 'customer@receivertest.com',
+        plainContent: req.body.content || 'Hello this is the email stuff!',
+        companyId: companyId || 1
       })
+  },
+
+  list(req, res) {
+    return Order
+      // .findAll({
+      //   include: [{
+      //     model: TodoItem,
+      //     as: 'todoItems',
+      //   }],
+      // })
+      .findAll()
       .then((companies) => res.status(200).send(companies))
       .catch((error) => res.status(400).send(error));
   },
