@@ -34,16 +34,20 @@ module.exports = {
   },
 
   list(req, res) {
-    return Order
-      // .findAll({
-      //   include: [{
-      //     model: TodoItem,
-      //     as: 'todoItems',
-      //   }],
-      // })
+    if(req.body.email) {
+      return Order.findAll({
+        where: {
+          customerEmail: req.body.email
+        }
+      })
+      .then((companies) => res.status(200).send(companies))
+      .catch((error) => res.status(400).send(error));
+    } else {
+      return Order
       .findAll()
       .then((companies) => res.status(200).send(companies))
       .catch((error) => res.status(400).send(error));
+    }
   },
 
   // retrieve(req, res) {

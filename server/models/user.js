@@ -27,5 +27,5 @@ module.exports = (sequelize, DataTypes) => {
       as: 'orders',
     });
   };
-  return Company;
+  return User;
 };
