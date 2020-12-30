@@ -10,7 +10,6 @@ const initPassport = require('./passportConfig');
 initPassport(passport);
 
 const { registerForm } = require('./server/modules/registerForm');
-// const bcrypt = require('bcrypt');
 
 // Set up the express app
 const app = express();
@@ -24,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(session({
   secret: 'secret', // TODO: CHANGE THIS!! ENV VARIABLE SECRET KEY
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: true
 }));
 
 app.use(passport.initialize());
