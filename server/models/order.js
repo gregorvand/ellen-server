@@ -27,7 +27,11 @@ module.exports = (sequelize, DataTypes) => {
   Order.associate = (models) => {
     Order.belongsTo(models.Company, {
       foreignKey: 'companyId',
-      onDelete: 'RESTRICT',
+      onDelete: 'NOACTION',
+    });
+    Order.belongsTo(models.User, { 
+      foreignKey: 'customerId',
+      onDelete: 'NOACTION', 
     });
   };
 

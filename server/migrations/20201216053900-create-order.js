@@ -52,6 +52,15 @@ module.exports = {
           as: 'companyId',
         },
       },
+      customerId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'Users',
+          key: 'id',
+          as: 'customerId',
+        }
+      },
     });
   },
   down: async (queryInterface, Sequelize) => {

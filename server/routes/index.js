@@ -2,6 +2,7 @@
 // const todoItemsController = require('../controllers/todoitems');
 const companiesController = require('../controllers/companies');
 const ordersController = require('../controllers/orders');
+const usersController = require('../controllers/users');
 
 const emailHelpers = require('../modules/emailHelpers');
 
@@ -41,30 +42,30 @@ module.exports = (app) => {
           companyObject = returnedCompany;
         });
 
+        const customerPromise = emailHelpers.findCustomerByEmail(emailFields['envelope[from]']).then(returnedCustomer => {
+          customer = returnedCustomer;
+        });
+
+        const emailSenderPromise = emailHelpers.getField(emailFields, 'envelope[from]').then(returnedCustomer => {
+          senderEmail = returnedCustomer;
+        });
+
         Promise.all([
           orderPromise,
-          companyPromise
+          companyPromise,
+          customerPromise,
+          emailSenderPromise
         ]).then(() => {
-          console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier);
-          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id);
+          console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier, customer.id);
+          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, senderEmail, customer.id);
         });
        })
        
       // .then((company) => ordersController.internalCreate(req, orderNumber, company.emailIdentifier, company.id));
   });
 
-
-  // basic example function to receive email webhook with formidable
-  // app.post('/email', function(req, res) {
-  //   console.log('receieved @ email');
-
-  //   let form = new formidable.IncomingForm();
-  //   form.parse(req, function(err, fields, files) {
-  //     console.log('all fields', fields['plain']);
-  //     res.writeHead(200, {'content-type': 'text/plain'})
-  //     res.end('Message Received. Thanks!\r\n')
-  //   })
-  // });
+  app.post('/api/users', usersController.create);
+  app.get('/api/users', usersController.list);
 
   // For any other request method on companies, we're going to return "Method Not Allowed"
   app.all('/api/companies', (req, res) =>

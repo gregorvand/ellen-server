@@ -11,7 +11,7 @@ module.exports = {
         orderNumber: orderNumber || req.body.number,
         orderDate: req.body.date || Date.now(),
         fromEmail: req.body.fromEmail || 'shop@sendertest.com',
-        customerEmail: req.body.customerEmail || 'customer@receivertest.com',
+        customerEmail: req.body.customerEmail || 'gregor@vand.hk',
         plainContent: req.body.content || 'Hello this is the email stuff!',
         companyId: req.body.companyId || 1
       })
@@ -19,7 +19,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  internalCreate(req = false, orderNumber, fromEmail, companyId) {
+  internalCreate(req = false, orderNumber, fromEmail, companyId, customerEmail, customerId) {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
     return Order
@@ -27,23 +27,28 @@ module.exports = {
         orderNumber: orderNumber || req.body.number,
         orderDate: req.body.date || Date.now(),
         fromEmail: fromEmail || 'shop@sendertest.com',
-        customerEmail: req.body.customerEmail || 'customer@receivertest.com',
+        customerEmail: req.body.customerEmail || customerEmail,
         plainContent: req.body.content || 'Hello this is the email stuff!',
-        companyId: companyId || 1
+        companyId: companyId || 1,
+        customerId: customerId || 1
       })
   },
 
   list(req, res) {
-    return Order
-      // .findAll({
-      //   include: [{
-      //     model: TodoItem,
-      //     as: 'todoItems',
-      //   }],
-      // })
+    if(req.body.email) {
+      return Order.findAll({
+        where: {
+          customerEmail: req.body.email
+        }
+      })
+      .then((companies) => res.status(200).send(companies))
+      .catch((error) => res.status(400).send(error));
+    } else {
+      return Order
       .findAll()
       .then((companies) => res.status(200).send(companies))
       .catch((error) => res.status(400).send(error));
+    }
   },
 
   // retrieve(req, res) {
