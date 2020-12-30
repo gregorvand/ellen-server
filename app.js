@@ -1,6 +1,9 @@
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('express-flash');
+
 const { registerForm } = require('./server/modules/registerForm');
 // const bcrypt = require('bcrypt');
 
@@ -10,8 +13,16 @@ const app = express();
 // Log requests to the console.
 app.use(logger('dev'));
 
-// Log requests to the console.
+// Allow requests frontend > backend
 app.use(express.urlencoded({ extended: false }));
+
+app.use(session({
+  secret: 'secret', // TODO: CHANGE THIS!! ENV VARIABLE SECRET KEY
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(flash());
 
 app.set('view engine', 'ejs');
 

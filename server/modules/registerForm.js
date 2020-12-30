@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models').User;
+const usersController = require('../controllers/users');
+
 
 async function registerForm (req, res) {
   let { firstName, lastName, email, password, password2 } = req.body;
@@ -43,6 +45,7 @@ async function registerForm (req, res) {
       console.log(`already found a user called ${currentUser.firstName} ${currentUser.lastName}`)
     } else {
       console.log('new user!');
+      createUserFromRegister(firstName, lastName, email, hashedPassword);
     }
   }
 }
@@ -58,6 +61,18 @@ async function checkDbForUser (registerEmail) {
       })
       .then((foundUser) => foundUser)
       .catch((error) => console.error(error));
+}
+
+async function createUserFromRegister (firstName, lastName, email, hashedPassword) {
+  return User
+    .create({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: hashedPassword
+    })
+    .then(user => console.log(user))
+    .catch(error => console.log(error));
 }
 
 module.exports.registerForm = registerForm;
