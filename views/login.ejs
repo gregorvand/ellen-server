@@ -4,6 +4,10 @@
     <p><%= messages.success_msg %></p>
   <% } %>
 
+  <% if (messages.error) { %>
+    <p><%= messages.error %></p>
+  <% } %>
+
   <form action="/users/login" method="POST">
     <div>
       <input type="email" id="email" name="email" placeholder="Email address" required>

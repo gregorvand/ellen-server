@@ -1,7 +1,5 @@
 const bcrypt = require('bcrypt');
 const User = require('../models').User;
-const usersController = require('../controllers/users');
-
 
 async function registerForm (req, res) {
   let { firstName, lastName, email, password, password2 } = req.body;
@@ -37,7 +35,7 @@ async function registerForm (req, res) {
 
     // TODO: change this to a keyup function to do lookup while user entering password
     // wait on getting result from DB lookup with entered email
-    const currentUser = await checkDbForUser(email);
+    const currentUser = await checkDbForUser({'email': email});
 
     if (currentUser) {
       errors.push({ message: "Already found a user with that email" });
@@ -58,12 +56,10 @@ async function registerForm (req, res) {
 
 
 // internal functions
-async function checkDbForUser (registerEmail) {
+async function checkDbForUser (lookup) {
     return User
       .findOne({
-        where: [{
-          email: registerEmail
-        }],
+        where: [lookup],
       })
       .then((foundUser) => foundUser)
       .catch((error) => console.error(error));
