@@ -33,6 +33,7 @@ async function registerForm (req, res) {
     let hashedPassword = await bcrypt.hash(password, 15);
     console.log('hashed happened..', hashedPassword);
 
+    // TODO: change this to a keyup function to do lookup while user entering password
     // wait on getting result from DB lookup with entered email
     const currentUser = await checkDbForUser(email);
 
