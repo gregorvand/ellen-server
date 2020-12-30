@@ -1,6 +1,8 @@
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const { registerForm } = require('./server/modules/registerForm');
+// const bcrypt = require('bcrypt');
 
 // Set up the express app
 const app = express();
@@ -28,34 +30,8 @@ app.get('/users/register', (req, res) => {
   res.render("register");
 });
 
-app.post('/users/register', (req, res) => {
-  let { firstName, lastName, email, password, password2 } = req.body;
-
-  console.log('register creds', {
-    firstName,
-    lastName,
-    email,
-    password,
-    password2
-  })
-
-  let errors = [];
-
-  if (!firstName || !lastName || !email || !password || !password2) {
-    errors.push({ message: "Please enter all fields" });
-  }
-
-  if (password.length < 6) {
-    errors.push({ message: "Password must be a least 6 characters long" });
-  }
-
-  if (password !== password2) {
-    errors.push({ message: "Passwords do not match" });
-  }
-
-  if (errors.length > 0) {
-    res.render("register", { errors, firstName, lastName, email, password, password2 });
-  }
+app.post('/users/register', async (req, res) => {
+  registerForm(req, res);
 });
 
 app.get('/dashboard', (req, res) => {
