@@ -1,5 +1,8 @@
 <%- include('./includes/header'); -%>
   <h1>Login</h1>
+  <% if (messages.success_msg) { %>
+    <p><%= messages.success_msg %></p>
+  <% } %>
 
   <form action="/users/login" method="POST">
     <div>

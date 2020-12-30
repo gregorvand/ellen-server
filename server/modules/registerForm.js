@@ -45,7 +45,13 @@ async function registerForm (req, res) {
       console.log(`already found a user called ${currentUser.firstName} ${currentUser.lastName}`)
     } else {
       console.log('new user!');
-      createUserFromRegister(firstName, lastName, email, hashedPassword);
+      createUserFromRegister(firstName, lastName, email, hashedPassword)
+      .then(user => {
+        console.log(user);
+        req.flash('success_msg', "woohoo!"); // keep going from here
+        res.redirect('/users/login');
+      })
+      .catch(error => console.log(error));;
     }
   }
 }
@@ -70,9 +76,7 @@ async function createUserFromRegister (firstName, lastName, email, hashedPasswor
       lastName: lastName,
       email: email,
       password: hashedPassword
-    })
-    .then(user => console.log(user))
-    .catch(error => console.log(error));
+    });
 }
 
 module.exports.registerForm = registerForm;
