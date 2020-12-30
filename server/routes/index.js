@@ -26,6 +26,9 @@ module.exports = (app) => {
   app.post('/api/orders', ordersController.create);
   app.get('/api/orders', ordersController.list);
 
+  app.get('/api/ordersbycustomer/:userId', ordersController.listByCustomer);
+
+
   // production api paths
   app.post('/api/orderemail', function(req, res) {
     console.log('received Email');
