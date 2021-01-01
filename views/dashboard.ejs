@@ -2,4 +2,13 @@
   <h1>Hello <%= user.firstName %></h1>
   <p><%= user.email %></p>
   <a href="/users/logout">Logout</a>
+
+  <ul>
+    <% if (typeof orders != 'undefined') {  
+      orders.forEach(order => { %>
+        <li><%= order.orderNumber %> | <%= order.fromEmail %></li>
+      <% })} %>
+  </ul>
+
+
 <%- include('./includes/footer'); -%> 

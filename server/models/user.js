@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'customerId',
       as: 'orders',
     });
+    raw: true
   };
   return User;
 };
