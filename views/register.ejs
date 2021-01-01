@@ -1,13 +1,6 @@
 <%- include('./includes/header'); -%>
   <h1>Register</h1>
 
-  <ul>
-    <% if (typeof errors != 'undefined') {  
-      errors.forEach(error => { %>
-        <li><%= error.message %></li>
-      <% })} %>
-  </ul>
-
   <form action="/users/register" method="POST">
     <div>
       <input type="text" id="firstName" name="firstName" placeholder="First Name" required>

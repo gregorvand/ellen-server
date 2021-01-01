@@ -5,6 +5,8 @@ const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
 
+const Order = require('./server/models').Order;
+
 const initPassport = require('./passportConfig');
 
 initPassport(passport);
@@ -61,7 +63,12 @@ app.post('/users/register', async (req, res) => {
 });
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
-  res.render("dashboard", { user: req.user });
+  getOrders(req.user.id).then((userOrders) => {
+    res.render("dashboard", { 
+      user: req.user,
+      orders: userOrders
+    });
+  })
 });
 
 app.get('/users/logout',(req, res) => {
@@ -90,5 +97,18 @@ function checkNotAuthenticated(req, res, next) {
   }
   res.redirect("/users/login");
 }
+
+function getOrders (id) {
+  console.log('an id is', id);
+  return Order
+  .findAll({
+    where: {
+      customerId: id
+    },
+    raw : true
+  })
+  // .then((orders) => console.log('grabbing these orders', orders))
+  // .catch((error) => res.status(400).send(error));
+};
 
 module.exports = app;

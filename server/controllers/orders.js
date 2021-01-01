@@ -51,6 +51,17 @@ module.exports = {
     }
   },
 
+  listByCustomer(req, res) {
+    return Order
+    .findAll({
+      where: {
+        customerId: req.params.userId
+      },
+    })
+      .then((companies) => res.status(200).send(companies))
+      .catch((error) => res.status(400).send(error));
+  },
+
   // retrieve(req, res) {
   //     return Todo
   //       .findByPk(req.params.todoId, {
