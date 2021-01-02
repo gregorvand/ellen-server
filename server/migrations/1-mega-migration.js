@@ -222,7 +222,7 @@ var migrationCommands = function(transaction) {
                         "type": Sequelize.INTEGER,
                         "field": "customerId",
                         "onUpdate": "CASCADE",
-                        "onDelete": "NOACTION",
+                        "onDelete": "NO ACTION",
                         "references": {
                             "model": "Users",
                             "key": "id"
