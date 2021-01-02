@@ -26,6 +26,18 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  internalCreate(name, email) {
+    return Company
+      .create({
+        nameIdentifier: name,
+        emailIdentifier: email,
+        orderPrefix: '#',
+        orderSuffix: '',
+      })
+      .then(company => company)
+      .catch(error => res.status(400).send(error));
+  },
+
   // retrieve(req, res) {
   //     return Todo
   //       .findByPk(req.params.todoId, {
