@@ -1,0 +1,176 @@
+{
+    "tables": {
+        "Companies": {
+            "tableName": "Companies",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nameIdentifier": {
+                    "allowNull": false,
+                    "field": "nameIdentifier",
+                    "seqType": "Sequelize.STRING"
+                },
+                "emailIdentifier": {
+                    "allowNull": false,
+                    "field": "emailIdentifier",
+                    "seqType": "Sequelize.STRING"
+                },
+                "orderPrefix": {
+                    "allowNull": false,
+                    "field": "orderPrefix",
+                    "seqType": "Sequelize.STRING"
+                },
+                "orderSuffix": {
+                    "allowNull": true,
+                    "field": "orderSuffix",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "Orders": {
+            "tableName": "Orders",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "orderNumber": {
+                    "allowNull": false,
+                    "field": "orderNumber",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "orderDate": {
+                    "allowNull": false,
+                    "field": "orderDate",
+                    "seqType": "Sequelize.STRING"
+                },
+                "fromEmail": {
+                    "allowNull": false,
+                    "field": "fromEmail",
+                    "seqType": "Sequelize.STRING"
+                },
+                "customerEmail": {
+                    "allowNull": false,
+                    "field": "customerEmail",
+                    "seqType": "Sequelize.STRING"
+                },
+                "plainContent": {
+                    "allowNull": false,
+                    "field": "plainContent",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "totalValue": {
+                    "field": "totalValue",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "currency": {
+                    "field": "currency",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "companyId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Companies",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "companyId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "customerId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "customerId",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "Users": {
+            "tableName": "Users",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "firstName": {
+                    "allowNull": false,
+                    "field": "firstName",
+                    "seqType": "Sequelize.STRING"
+                },
+                "lastName": {
+                    "allowNull": false,
+                    "field": "lastName",
+                    "seqType": "Sequelize.STRING"
+                },
+                "email": {
+                    "allowNull": false,
+                    "unique": true,
+                    "field": "email",
+                    "seqType": "Sequelize.STRING"
+                },
+                "password": {
+                    "is": {},
+                    "allowNull": false,
+                    "field": "password",
+                    "seqType": "Sequelize.STRING(64)"
+                },
+                "status": {
+                    "default": "pending",
+                    "field": "status",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "revision": 1
+}
