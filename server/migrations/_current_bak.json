@@ -113,7 +113,7 @@
                         "model": "Users",
                         "key": "id"
                     },
-                    "onDelete": "NOACTION",
+                    "onDelete": "NO ACTION",
                     "onUpdate": "CASCADE",
                     "field": "customerId",
                     "seqType": "Sequelize.INTEGER"
@@ -228,7 +228,7 @@
                     "seqType": "Sequelize.STRING(64)"
                 },
                 "status": {
-                    "allowNull": false,
+                    "default": "pending",
                     "field": "status",
                     "seqType": "Sequelize.STRING"
                 },

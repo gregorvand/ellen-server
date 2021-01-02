@@ -121,80 +121,6 @@
             },
             "indexes": []
         },
-        "Todos": {
-            "tableName": "Todos",
-            "schema": {
-                "id": {
-                    "allowNull": false,
-                    "primaryKey": true,
-                    "autoIncrement": true,
-                    "field": "id",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "title": {
-                    "allowNull": false,
-                    "field": "title",
-                    "seqType": "Sequelize.STRING"
-                },
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
-                }
-            },
-            "indexes": []
-        },
-        "TodoItems": {
-            "tableName": "TodoItems",
-            "schema": {
-                "id": {
-                    "allowNull": false,
-                    "primaryKey": true,
-                    "autoIncrement": true,
-                    "field": "id",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "content": {
-                    "allowNull": false,
-                    "field": "content",
-                    "seqType": "Sequelize.STRING"
-                },
-                "complete": {
-                    "defaultValue": {
-                        "value": false
-                    },
-                    "field": "complete",
-                    "seqType": "Sequelize.BOOLEAN"
-                },
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "todoId": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "Todos",
-                        "key": "id"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "todoId",
-                    "seqType": "Sequelize.INTEGER"
-                }
-            },
-            "indexes": []
-        },
         "Users": {
             "tableName": "Users",
             "schema": {
@@ -246,5 +172,5 @@
             "indexes": []
         }
     },
-    "revision": 2
+    "revision": 3
 }
