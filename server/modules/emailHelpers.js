@@ -1,6 +1,7 @@
 
 const formidable = require('formidable');
 const cheerio = require('cheerio'); // html parser, jquery-like syntax
+const companiesController = require('../controllers/companies');
 
   // good example of adding Promise structure to non-async external function
   // then returning value via another Promise from own function
@@ -52,21 +53,20 @@ const cheerio = require('cheerio'); // html parser, jquery-like syntax
   async function findCompanyByEmail (fields) {
     const Company = require('../models').Company;
 
-    const parsedEmail = await parseHtmlForSender(fields);
-    console.log('got the email?', parsedEmail);
+    const parsedCompanyEmail = await parseHtmlForSender(fields);
 
     try {
-      let company = await Company.findOne({ where: { emailIdentifier: parsedEmail } });
+      let company = await Company.findOne({ where: { emailIdentifier: parsedCompanyEmail } });
       if (company === null) {
-        console.log('Company Not found!');
-        return 0; // no company assigned
+        let newCompany = await companiesController.internalCreate('unconfirmed', parsedCompanyEmail);
+        return newCompany;
       } else {
         console.log('found a company?', company instanceof Company);
         console.log(company.nameIdentifier);
         return company;
       }
     } catch (err) {
-      return 'oh no! company lookup totally failed.';
+      return `oh no! company lookup / create totally failed. with the following error: ${err}`;
     }
   }
 
@@ -109,9 +109,20 @@ const cheerio = require('cheerio'); // html parser, jquery-like syntax
   async function parseHtmlForSender (fields) {
     // parse the body html for the company email here:
     const $ = cheerio.load(fields);
-
+    const fromCompanyEmailGmailLink = $('.gmail_quote span:first-of-type > a:first-child').text();
+    const fromCompanyEmailGmailSpan = $('.gmail_quote span:first-of-type').text();
+    
+    // Leave the below logs in for now - will be useful to debug company email insert issues
+    console.log('\x1b[33m%s\x1b[0m', 'company email located as:');
+    if (fromCompanyEmailGmailLink.includes('@')) {
+      console.log('yeah', fromCompanyEmailGmailLink)
+      return fromCompanyEmailGmailLink;
+    } else if (fromCompanyEmailGmailSpan.includes('@')) {
+      let getEmailFromText = fromCompanyEmailGmailSpan.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/gi);
+      console.log(getEmailFromText[0]); 
+      return getEmailFromText[0];
+    }
     // works if email has not been double forwarded (and Gmail only)
-    const fromCompanyEmailGmail = $('.gmail_quote span:first-of-type > a:first-child').text();
-    console.log(fromCompanyEmailGmail);
+    // TODO: change above to variable per server
     return fromCompanyEmailGmail;
   }
