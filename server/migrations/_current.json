@@ -102,7 +102,7 @@
                         "model": "Companies",
                         "key": "id"
                     },
-                    "onDelete": "SET NULL",
+                    "onDelete": "cascade",
                     "onUpdate": "CASCADE",
                     "field": "companyId",
                     "seqType": "Sequelize.INTEGER"
@@ -172,5 +172,5 @@
             "indexes": []
         }
     },
-    "revision": 3
+    "revision": 4
 }
