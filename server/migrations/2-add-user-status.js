@@ -20,27 +20,6 @@ var info = {
 
 var migrationCommands = function(transaction) {
     return [{
-            fn: "changeColumn",
-            params: [
-                "Orders",
-                "customerId",
-                {
-                    "type": Sequelize.INTEGER,
-                    "field": "customerId",
-                    "onUpdate": "CASCADE",
-                    "onDelete": "NO ACTION",
-                    "references": {
-                        "model": "Users",
-                        "key": "id"
-                    },
-                    "allowNull": true
-                },
-                {
-                    transaction: transaction
-                }
-            ]
-        },
-        {
             fn: "addColumn",
             params: [
                 "Users",
