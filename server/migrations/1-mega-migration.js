@@ -6,17 +6,15 @@ var Sequelize = require('sequelize');
  * Actions summary:
  *
  * createTable "Companies", deps: []
- * createTable "Todos", deps: []
  * createTable "Users", deps: []
  * createTable "Orders", deps: [Companies, Users]
- * createTable "TodoItems", deps: [Todos]
  *
  **/
 
 var info = {
     "revision": 1,
     "name": "mega-migration",
-    "created": "2021-01-02T02:08:18.565Z",
+    "created": "2021-01-02T05:05:00.143Z",
     "comment": ""
 };
 
@@ -72,39 +70,6 @@ var migrationCommands = function(transaction) {
         {
             fn: "createTable",
             params: [
-                "Todos",
-                {
-                    "id": {
-                        "type": Sequelize.INTEGER,
-                        "field": "id",
-                        "autoIncrement": true,
-                        "primaryKey": true,
-                        "allowNull": false
-                    },
-                    "title": {
-                        "type": Sequelize.STRING,
-                        "field": "title",
-                        "allowNull": false
-                    },
-                    "createdAt": {
-                        "type": Sequelize.DATE,
-                        "field": "createdAt",
-                        "allowNull": false
-                    },
-                    "updatedAt": {
-                        "type": Sequelize.DATE,
-                        "field": "updatedAt",
-                        "allowNull": false
-                    }
-                },
-                {
-                    "transaction": transaction
-                }
-            ]
-        },
-        {
-            fn: "createTable",
-            params: [
                 "Users",
                 {
                     "id": {
@@ -135,6 +100,11 @@ var migrationCommands = function(transaction) {
                         "field": "password",
                         "allowNull": false,
                         "is": {}
+                    },
+                    "status": {
+                        "type": Sequelize.STRING,
+                        "field": "status",
+                        "default": "pending"
                     },
                     "createdAt": {
                         "type": Sequelize.DATE,
@@ -211,7 +181,7 @@ var migrationCommands = function(transaction) {
                         "type": Sequelize.INTEGER,
                         "field": "companyId",
                         "onUpdate": "CASCADE",
-                        "onDelete": "SET NULL",
+                        "onDelete": "CASCADE",
                         "references": {
                             "model": "Companies",
                             "key": "id"
@@ -222,58 +192,9 @@ var migrationCommands = function(transaction) {
                         "type": Sequelize.INTEGER,
                         "field": "customerId",
                         "onUpdate": "CASCADE",
-                        "onDelete": "NO ACTION",
+                        "onDelete": "CASCADE",
                         "references": {
                             "model": "Users",
-                            "key": "id"
-                        },
-                        "allowNull": true
-                    }
-                },
-                {
-                    "transaction": transaction
-                }
-            ]
-        },
-        {
-            fn: "createTable",
-            params: [
-                "TodoItems",
-                {
-                    "id": {
-                        "type": Sequelize.INTEGER,
-                        "field": "id",
-                        "autoIncrement": true,
-                        "primaryKey": true,
-                        "allowNull": false
-                    },
-                    "content": {
-                        "type": Sequelize.STRING,
-                        "field": "content",
-                        "allowNull": false
-                    },
-                    "complete": {
-                        "type": Sequelize.BOOLEAN,
-                        "field": "complete",
-                        "defaultValue": false
-                    },
-                    "createdAt": {
-                        "type": Sequelize.DATE,
-                        "field": "createdAt",
-                        "allowNull": false
-                    },
-                    "updatedAt": {
-                        "type": Sequelize.DATE,
-                        "field": "updatedAt",
-                        "allowNull": false
-                    },
-                    "todoId": {
-                        "type": Sequelize.INTEGER,
-                        "field": "todoId",
-                        "onUpdate": "CASCADE",
-                        "onDelete": "SET NULL",
-                        "references": {
-                            "model": "Todos",
                             "key": "id"
                         },
                         "allowNull": true
@@ -296,18 +217,6 @@ var rollbackCommands = function(transaction) {
         {
             fn: "dropTable",
             params: ["Orders", {
-                transaction: transaction
-            }]
-        },
-        {
-            fn: "dropTable",
-            params: ["Todos", {
-                transaction: transaction
-            }]
-        },
-        {
-            fn: "dropTable",
-            params: ["TodoItems", {
                 transaction: transaction
             }]
         },
