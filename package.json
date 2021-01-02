@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon ./bin/www",
+    "db:makemigrations": "./node_modules/sequelize-auto-migrations/bin/makemigration.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [], 
   "author": "GV",
   "repository": {
     "type": "git",
@@ -31,7 +32,8 @@
     "passport-local": "^1.0.0",
     "pg": "^8.5.1",
     "pg-hstore": "^2.3.3",
-    "sequelize": "^6.3.5"
+    "sequelize": "^6.3.5",
+    "sequelize-auto-migrations": "github:scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba"
   },
   "devDependencies": {
     "nodemon": "^2.0.6",

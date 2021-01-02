@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       is: /^[0-9a-f]{64}$/i,
       allowNull: false,
     },
+    status: {
+      type: DataTypes.STRING,
+      default: "pending",
+    },
   });
   
   User.associate = (models) => {
