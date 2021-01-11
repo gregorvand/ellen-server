@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     orderDate: {
-      type: DataTypes.STRING,
+      type: DataTypes.DATETIME,
       allowNull: false
     }, 
     fromEmail: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     }, 
     customerEmail: {
       type: DataTypes.STRING,
