@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
+const dashboardHelpers = require('./views/helpers/dashboard_helpers');
 
 const Order = require('./server/models').Order;
 
@@ -66,7 +67,8 @@ app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
   getOrders(req.user.id).then((userOrders) => {
     res.render("dashboard", { 
       user: req.user,
-      orders: userOrders
+      orders: userOrders,
+      helpers: dashboardHelpers
     });
   })
 });

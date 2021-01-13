@@ -6,9 +6,8 @@
   <ul>
     <% if (typeof orders != 'undefined') {  
       orders.forEach(order => { %>
-        <li><%= order.orderNumber %> | <%= order.fromEmail %></li>
+        <li><%= order.orderNumber %> | <%= order.fromEmail %> | <%= helpers.showDate(order.orderDate) %> </li>
       <% })} %>
   </ul>
-
 
 <%- include('./includes/footer'); -%> 

@@ -1,8 +1,8 @@
 
 const formidable = require('formidable');
 const cheerio = require('cheerio'); // html parser, jquery-like syntax
-let dayjs = require('dayjs');
-let customParseFormat = require('dayjs/plugin/customParseFormat')
+const dayjs = require('dayjs');
+const customParseFormat = require('dayjs/plugin/customParseFormat')
 
 const companiesController = require('../controllers/companies');
 
