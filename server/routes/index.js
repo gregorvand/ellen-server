@@ -53,11 +53,16 @@ module.exports = (app) => {
           senderEmail = returnedCustomer;
         });
 
+        const emailDatePromise = emailHelpers.returnOrderDate(emailFields['html']).then(returnedDate => {
+          orderDate = returnedDate;
+        });
+
         Promise.all([
           orderPromise,
           companyPromise,
           customerPromise,
-          emailSenderPromise
+          emailSenderPromise,
+          emailDatePromise
         ]).then(() => {
           console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier, customer.id);
           ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, senderEmail, customer.id);

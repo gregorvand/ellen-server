@@ -58,11 +58,6 @@
                     "field": "orderNumber",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "orderDate": {
-                    "allowNull": true,
-                    "field": "orderDate",
-                    "seqType": "Sequelize.DATE"
-                },
                 "fromEmail": {
                     "allowNull": true,
                     "field": "fromEmail",
@@ -172,5 +167,5 @@
             "indexes": []
         }
     },
-    "revision": 4
+    "revision": 3
 }

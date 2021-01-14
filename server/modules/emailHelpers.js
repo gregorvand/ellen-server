@@ -1,6 +1,9 @@
 
 const formidable = require('formidable');
 const cheerio = require('cheerio'); // html parser, jquery-like syntax
+const dayjs = require('dayjs');
+const customParseFormat = require('dayjs/plugin/customParseFormat')
+
 const companiesController = require('../controllers/companies');
 
   // good example of adding Promise structure to non-async external function
@@ -97,7 +100,30 @@ const companiesController = require('../controllers/companies');
     }
   }
 
+  async function returnOrderDate (fields) {
+    // parse the body html for the company email here:
+    const $ = cheerio.load(fields);
+    dayjs.extend(customParseFormat)
+
+    const fromCompanyEmailGmailSpan = $('.gmail_quote').text();
+    let getDateFromText = fromCompanyEmailGmailSpan.match(/Date:(.*)Subject/gi);
+    console.log(getDateFromText); 
+    const start = `Date: `;
+    const end = `Subject`;
+    let theDateString  = getDateFromText[0].split(start)[1].split(end)[0];
+    theDateString = theDateString.replace(' at', '');
+    let theDateArray = theDateString.split(', ');
+    theDateArray = theDateArray.splice(1,2);
+    theDateArray = theDateArray.join(' ');
+
+    console.log(theDateArray);
+    let parsedDate = dayjs(theDateArray, "MMM DD YYYY H:mm A");
+    console.log('parse', parsedDate);    
+    return parsedDate;
+  }
+
   module.exports.returnOrderNumber = returnOrderNumber;
+  module.exports.returnOrderDate = returnOrderDate;
   module.exports.parseEmail = parseEmail;
   module.exports.findCompanyByEmail = findCompanyByEmail;
   module.exports.findCustomerByEmail = findCustomerByEmail;
@@ -122,7 +148,4 @@ const companiesController = require('../controllers/companies');
       console.log(getEmailFromText[0]); 
       return getEmailFromText[0];
     }
-    // works if email has not been double forwarded (and Gmail only)
-    // TODO: change above to variable per server
-    return fromCompanyEmailGmail;
   }

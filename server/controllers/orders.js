@@ -25,7 +25,7 @@ module.exports = {
     return Order
       .create({
         orderNumber: orderNumber || req.body.number,
-        orderDate: req.body.date || Date.now(),
+        orderDate: orderDate || null,
         fromEmail: fromEmail || 'shop@sendertest.com',
         customerEmail: req.body.customerEmail || customerEmail,
         plainContent: req.body.content || 'Hello this is the email stuff!',
