@@ -6,7 +6,7 @@
   <ul>
     <% if (typeof orders != 'undefined') {  
       orders.forEach(order => { %>
-        <li><%= order.orderNumber %> | <%= order.fromEmail %> | <%= helpers.showDate(order.orderDate) %> </li>
+        <li><%= order.orderNumber %> | <%= order.Company.nameIdentifier %> | <%= order.fromEmail %> | <%= helpers.showDate(order.orderDate) %> </li>
       <% })} %>
   </ul>
 

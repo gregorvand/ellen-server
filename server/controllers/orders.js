@@ -1,5 +1,5 @@
 const Order = require('../models').Order;
-const emailHelpers = require('../modules/emailHelpers');
+const Company = require('../models').Company;
 // const TodoItem = require('../models').TodoItem;
 
 module.exports = {
@@ -57,6 +57,12 @@ module.exports = {
       where: {
         customerId: req.params.userId
       },
+      include: [{
+        model: Company,
+        attributes: ['nameIdentifier'],
+      }],
+      order: [ [ Company, 'nameIdentifier', 'ASC' ] ],
+      raw: true
     })
       .then((companies) => res.status(200).send(companies))
       .catch((error) => res.status(400).send(error));
