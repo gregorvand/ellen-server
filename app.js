@@ -7,6 +7,7 @@ const passport = require('passport');
 const dashboardHelpers = require('./views/helpers/dashboard_helpers');
 
 const Order = require('./server/models').Order;
+const Company = require('./server/models').Company;
 
 const initPassport = require('./passportConfig');
 
@@ -107,7 +108,11 @@ function getOrders (id) {
     where: {
       customerId: id
     },
-    raw : true
+    include: [{
+      model: Company,
+      attributes: ['nameIdentifier'],
+    }],
+    order: [ [ Company, 'nameIdentifier', 'ASC' ], ['orderDate', 'ASC'] ]
   })
   // .then((orders) => console.log('grabbing these orders', orders))
   // .catch((error) => res.status(400).send(error));
