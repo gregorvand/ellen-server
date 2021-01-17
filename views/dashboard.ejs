@@ -4,10 +4,15 @@
   <a href="/users/logout">Logout</a>
 
   <ul>
+    <% let companyName = 'firstloop' %>
     <% if (typeof orders != 'undefined') {  
-      orders.forEach(order => { %>
+      orders.forEach((order, index) => { %>
+        <% if (companyName !== order.Company.nameIdentifier) { %>
+          <h3><%= order.Company.nameIdentifier %></h3>
+        <% } %>
         <li><%= order.orderNumber %> | <%= order.Company.nameIdentifier %> | <%= order.fromEmail %> | <%= helpers.showDate(order.orderDate) %> </li>
-      <% })} %>
+        <% companyName = order.Company.nameIdentifier %>
+    <% })} %>
   </ul>
 
 <%- include('./includes/footer'); -%> 
