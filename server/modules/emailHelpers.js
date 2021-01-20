@@ -41,8 +41,11 @@ const companiesController = require('../controllers/companies');
     // const prefix = "\#";
     // const regex = "\#(?=\w*)\w+"
     try {
+
+      const prefix = '\\#';
+      const regexExpression = `${prefix}(?=\\w*)\\w+`;
       console.log('original subject: ', subject);
-      const found = subject.match(/\#(?=\w*)\w+/g);
+      const found = subject.match(new RegExp(regexExpression, 'g'));
       let orderWithPrefix = found[0];
       let orderNumberArray = orderWithPrefix.split('#');
       return await orderNumberArray[1];
