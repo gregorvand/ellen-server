@@ -36,19 +36,31 @@ const companiesController = require('../controllers/companies');
     });
   }
   
-  async function returnOrderNumber (subject) {
+  async function returnOrderNumber (subject, companyObject) {
     // TODO: get prefix from Company record first
     // const prefix = "\#";
     // const regex = "\#(?=\w*)\w+"
-    try {
+    console.log('the company?', companyObject);
+    console.log('the prefix?', companyObject.orderPrefix);
+    console.log('original subject: ', subject);
+    const orderPrefix = companyObject.orderPrefix;
+    
+    regexExpression = ``;
 
-      const prefix = '\\#';
-      const regexExpression = `${prefix}(?=\\w*)\\w+`;
-      console.log('original subject: ', subject);
+    // matching # vs A-Z prefix required different approaches
+    if (orderPrefix === '#') {
+      regexExpression = `\\${orderPrefix}(?=\\w*)\\w+`
+    } else {
+      regexExpression = `\\b(\\w*${orderPrefix}\\w*)\\b`
+    }
+
+    console.log('using', regexExpression);
+
+    try {
       const found = subject.match(new RegExp(regexExpression, 'g'));
       let orderWithPrefix = found[0];
-      let orderNumberArray = orderWithPrefix.split('#');
-      return await orderNumberArray[1];
+      let orderNumberArray = orderWithPrefix.split(`${orderPrefix}`);
+      return orderNumberArray[1];
     } catch(err) {
       console.error(err, 'probably no regex match');
       return 'No match to the defined prefix'

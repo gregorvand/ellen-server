@@ -37,13 +37,17 @@ module.exports = (app) => {
       .then((emailFields) => {
         availablEmailFields = emailFields;
         console.log('at least subject was', emailFields['headers[subject]']);
-        const orderPromise = emailHelpers.returnOrderNumber(emailFields['headers[subject]']).then((returnedOrderNumber) => {
-          orderNumber = returnedOrderNumber;
-        });
 
-        const companyPromise = emailHelpers.findCompanyByEmail(emailFields['html']).then(returnedCompany => {
+
+        const getCompanyPromise = emailHelpers.findCompanyByEmail(emailFields['html']);
+
+        const companyObjectPromise = getCompanyPromise.then(returnedCompany => {
           companyObject = returnedCompany;
-        });
+        })
+
+        const orderPromise = getCompanyPromise.then((companyObject) => emailHelpers.returnOrderNumber(emailFields['headers[subject]'], companyObject).then((returnedOrderNumber) => {
+          orderNumber = returnedOrderNumber;
+        }));
 
         const customerPromise = emailHelpers.findCustomerByEmail(emailFields['envelope[from]']).then(returnedCustomer => {
           customer = returnedCustomer;
@@ -59,11 +63,11 @@ module.exports = (app) => {
 
         Promise.all([
           orderPromise,
-          companyPromise,
+          companyObjectPromise,
           customerPromise,
           emailSenderPromise,
           emailDatePromise
-        ]).then(() => {
+        ]).then((values) => {
           console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier, customer.id);
           ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, senderEmail, customer.id);
         });
