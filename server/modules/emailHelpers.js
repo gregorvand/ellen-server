@@ -138,6 +138,7 @@ const companiesController = require('../controllers/companies');
     let theOrderDate = false;
 
     // start checking dates againt dayJS formats we are aware are used by email
+    // break when we find valid format
     dateFormatsToParse.some(format => {
       console.log(`testing ${format}`);
 
