@@ -2,7 +2,8 @@
 const formidable = require('formidable');
 const cheerio = require('cheerio'); // html parser, jquery-like syntax
 const dayjs = require('dayjs');
-const customParseFormat = require('dayjs/plugin/customParseFormat')
+const customParseFormat = require('dayjs/plugin/customParseFormat');
+var constants = require('../utils/constants');
 
 const companiesController = require('../controllers/companies');
 
@@ -131,11 +132,28 @@ const companiesController = require('../controllers/companies');
     theDateArray = theDateArray.splice(1,2);
     theDateArray = theDateArray.join(' ');
 
-    console.log(theDateArray);
-    let parsedDate = dayjs(theDateArray, "MMM DD YYYY H:mm A");
-    console.log('parse', parsedDate);    
-    return parsedDate;
-  }
+    console.log('date to parse', theDateArray);
+   
+    const dateFormatsToParse = constants.DATE_FORMATS;
+    let theOrderDate = false;
+
+    // start checking dates againt dayJS formats we are aware are used by email
+    // break when we find valid format
+    dateFormatsToParse.some(format => {
+      console.log(`testing ${format}`);
+
+      let theDate = dayjs(theDateArray, format);
+      console.log(`validity`, theDate.isValid());
+        if (theDate.isValid()) { 
+          theOrderDate = theDate;
+          return true;
+        } else {
+          return false;
+        }
+      })
+
+      return theOrderDate;
+    }
 
   module.exports.returnOrderNumber = returnOrderNumber;
   module.exports.returnOrderDate = returnOrderDate;

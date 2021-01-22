@@ -58,6 +58,7 @@ module.exports = (app) => {
         });
 
         const emailDatePromise = emailHelpers.returnOrderDate(emailFields['html']).then(returnedDate => {
+          console.log('order date will be entered as', returnedDate);
           orderDate = returnedDate;
         });
 
