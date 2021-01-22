@@ -131,11 +131,23 @@ const companiesController = require('../controllers/companies');
     theDateArray = theDateArray.splice(1,2);
     theDateArray = theDateArray.join(' ');
 
-    console.log(theDateArray);
-    let parsedDate = dayjs(theDateArray, "MMM DD YYYY H:mm A");
-    console.log('parse', parsedDate);    
-    return parsedDate;
-  }
+    console.log('date to parse', theDateArray);
+
+    let dateFormats = ['MMM DD YYYY H:mm A', 'DD MMM YYYY HH:mm'];
+   
+    let theOrderDate = false;
+    dateFormats.forEach(format => {
+      console.log(`testing ${format}`);
+
+      let theDate = dayjs(theDateArray, format);
+      console.log(`validity`, theDate.isValid());
+        if (theDate.isValid()) { 
+          theOrderDate = theDate;
+        }
+      })
+
+      return theOrderDate;
+    }
 
   module.exports.returnOrderNumber = returnOrderNumber;
   module.exports.returnOrderDate = returnOrderDate;
