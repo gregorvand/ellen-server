@@ -13,8 +13,8 @@ const dashboardHelpers = require('./views/helpers/dashboard_helpers');
 const Order = require('./server/models').Order;
 const Company = require('./server/models').Company;
 
+// User accounts
 const initPassport = require('./passportConfig');
-
 initPassport(passport);
 
 const { registerForm } = require('./server/modules/registerForm');
@@ -27,7 +27,7 @@ app.use(logger('dev'));
 
 // Allow requests frontend > backend
 app.use(express.urlencoded({ extended: false }));
- 
+app.use(express.static(__dirname + '/public'));
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     conString : 'pg://' + config.username + ':' + config.password + '@' + config.host + '/' + config.database

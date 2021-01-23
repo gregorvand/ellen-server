@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "nodemon ./bin/www",
+    "sass": "node-sass -w sass/app -o public/css --output-style compressed",
     "db:makemigrations": "./node_modules/sequelize-auto-migrations/bin/makemigration.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -31,6 +32,7 @@
     "express-session": "^1.17.1",
     "formidable": "^1.2.2",
     "morgan": "^1.10.0",
+    "node-sass": "^5.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pg": "^8.5.1",
