@@ -2,16 +2,16 @@
   "development": {
     "username": "postgres",
     "password": null,
-    "database": "todos-dev",
-    "host": "127.0.0.1",
+    "database": "[db name]",
+    "host": "[db host server",
     "port": 5432,
     "dialect": "postgres"
   },
   "test": {
     "username": "postgres",
     "password": null,
-    "database": "todos-test",
-    "host": "127.0.0.1",
+    "database": "[db name]",
+    "host": "[db host server",
     "port": 5432,
     "dialect": "postgres"
   }
