@@ -55,7 +55,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 require('./server/routes')(app);
 
 app.use(function (req, res, next) {
+  // could do a user lookup here and then store pertinent info for all views like name, email
   res.locals = {
+    // make session available to all views
     session: req.session
   };
   next();
