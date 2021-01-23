@@ -54,6 +54,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Require our routes into the application.
 require('./server/routes')(app);
 
+app.use(function (req, res, next) {
+  res.locals = {
+    session: req.session
+  };
+  next();
+});
+
 app.get('/users/login', checkAuthenticated, (req, res) => {
   res.render("login");
 });
@@ -90,9 +97,7 @@ app.get('/users/logout',(req, res) => {
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('/', (req, res) => {
-  res.render("index", {
-    session: req.session
-  });
+  res.render("index");
 });
 
 
