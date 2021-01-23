@@ -5,7 +5,7 @@
 This is a Node/Express/Postgres/Sequelize -based app, and currently uses simple EJS templating for server-side rendering of views
 
 - `npm i`
-- copy `/server/congif_template.json` and rename to `config.json` and add PG database info
+- copy `/server/config_template.json` and rename to `config.json` and add PG database info
 - copy `.env_template` and rename to `.env`, add required details (get from an existing developer)
 - `npm sequelize:migrate` to run a first migration and set up DB
 - Also run a one-off set up of the `sessions` table using the `CREATE TABLE "session"` file commands (this is just an easier to find copy of the file that comes with `connect-pg-simple` which manages db-based user sessions)
