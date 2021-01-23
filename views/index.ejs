@@ -1,6 +1,10 @@
 <%- include('./includes/header'); -%>
 
   <h1>Home</h1>
-  <a href="/users/login">Login</a> | <a href="/users/register">Register</a>
-
+  
+  <% if (session.passport && session.passport.user) { %>
+    <a href="/users/dashboard">My Dashboard</a>
+  <% } else { %>
+    <a href="/users/login">Login</a> | <a href="/users/register">Register</a>
+  <% } %>
   <%- include('./includes/footer'); -%>

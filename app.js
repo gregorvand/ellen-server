@@ -1,3 +1,7 @@
+const env = process.env.NODE_ENV || 'development';
+const config = require('./server/config/config.json')[env];
+require('dotenv').config();
+
 const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
@@ -23,11 +27,15 @@ app.use(logger('dev'));
 
 // Allow requests frontend > backend
 app.use(express.urlencoded({ extended: false }));
-
+ 
 app.use(session({
-  secret: 'secret', // TODO: CHANGE THIS!! ENV VARIABLE SECRET KEY
+  store: new (require('connect-pg-simple')(session))({
+    conString : 'pg://' + config.username + ':' + config.password + '@' + config.host + '/' + config.database
+  }),
+  secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false, // change to true if we want to identify recurring visitors who are logged out
+  cookie: { maxAge: 14 * 24 * 60 * 60 * 1000 } // 14 days
 }));
 
 app.use(passport.initialize());
@@ -82,7 +90,9 @@ app.get('/users/logout',(req, res) => {
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('/', (req, res) => {
-  res.render("index");
+  res.render("index", {
+    session: req.session
+  });
 });
 
 
