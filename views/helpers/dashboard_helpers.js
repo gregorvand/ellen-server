@@ -4,7 +4,6 @@ const dayjs = require('dayjs');
 // skip if not the first instance.
 
 const showDate = (date) => {
-  console.log('date', date);
   return dayjs(date).format('DD/MM/YYYY');
 }
 

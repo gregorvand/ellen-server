@@ -13,8 +13,8 @@ const dashboardHelpers = require('./views/helpers/dashboard_helpers');
 const Order = require('./server/models').Order;
 const Company = require('./server/models').Company;
 
+// User accounts
 const initPassport = require('./passportConfig');
-
 initPassport(passport);
 
 const { registerForm } = require('./server/modules/registerForm');
@@ -27,7 +27,7 @@ app.use(logger('dev'));
 
 // Allow requests frontend > backend
 app.use(express.urlencoded({ extended: false }));
- 
+app.use(express.static(__dirname + '/public'));
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     conString : 'pg://' + config.username + ':' + config.password + '@' + config.host + '/' + config.database
@@ -53,6 +53,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Require our routes into the application.
 require('./server/routes')(app);
+
+app.use(function (req, res, next) {
+  // could do a user lookup here and then store pertinent info for all views like name, email
+  res.locals = {
+    // make session available to all views
+    session: req.session
+  };
+  next();
+});
 
 app.get('/users/login', checkAuthenticated, (req, res) => {
   res.render("login");
@@ -90,9 +99,7 @@ app.get('/users/logout',(req, res) => {
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('/', (req, res) => {
-  res.render("index", {
-    session: req.session
-  });
+  res.render("index");
 });
 
 
