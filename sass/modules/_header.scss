@@ -16,6 +16,7 @@ nav {
       display: flex;
       justify-content: center;
       align-items: center;
+      text-transform: uppercase;
 
       &.nav-optional {
         @include breakpoint(medium down) {

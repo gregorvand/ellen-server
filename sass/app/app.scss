@@ -1,18 +1,26 @@
 @import './settings';
 @import '../lib/.foundation';
 @import '../modules/.modules';
+@import '../views/.views';
 
 body {
   font-family: $body-font-family;
+  font-size: 11px;
   // * { border: solid blue thin; }
 
   a {
     color: $primary;
     text-decoration: underline;
     font-weight: 500;
+    letter-spacing: 1px;
 
     &:hover {
       text-decoration: none;
     }
+  }
+
+  section {
+    max-width: 1280px;
+    margin: 0 auto;
   }
 }
