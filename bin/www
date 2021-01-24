@@ -1,11 +1,19 @@
 // This will be our application entry. We'll setup our server here.
-const http = require('http');
-const app = require('../app'); // The express app we just created
+const app = require('../app');
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
 const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);
 
-const server = http.createServer(app);
-server.listen(port, () => {
-  console.log(`port is ${port}`);
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
+
+http.listen(8000, () => {
+  console.log('listening on *:8000');
 });

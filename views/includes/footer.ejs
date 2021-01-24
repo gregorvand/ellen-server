@@ -1,4 +1,9 @@
 <% const today = new Date() %>
 <p>© Ellen Insights <%= today.getFullYear() %></p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+</script>
 </body>
 </html>
