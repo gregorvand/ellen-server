@@ -19,7 +19,19 @@
 <section class="dashboard-area">
 
 <section class="email-record">
-  <h4>Email record</h4>
+  <h4>Email record (latest 10)</h4>
+  <% if (typeof orders != 'undefined') {  
+    emails.forEach((email) => { %>
+      <li class="orders-by-company-list-item">
+        <span class="orders-by-company-list-date">
+          <%= helpers.showDate(email.createdAt) %>
+        </span> 
+        <span class="orders-by-company-list-divider">::</span>
+        <span class="orders-by-company-list-order-number">
+          <%= email.orderNumber %>
+        </span>
+      </li>
+  <% })} %>
 </section>
 
 <section class="orders-by-company">
