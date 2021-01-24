@@ -27,8 +27,8 @@
           <%= helpers.showDate(email.createdAt) %>
         </span> 
         <span class="orders-by-company-list-divider">::</span>
-        <span class="orders-by-company-list-order-number">
-          <%= email.orderNumber %>
+        <span class="orders-by-company-list-email-subject">
+          <%= email.plainContent %>
         </span>
       </li>
   <% })} %>

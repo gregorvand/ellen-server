@@ -70,7 +70,7 @@ module.exports = (app) => {
           emailDatePromise
         ]).then((values) => {
           console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier, customer.id);
-          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, senderEmail, customer.id);
+          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, senderEmail, customer.id, emailFields['headers[subject]']);
         });
        })
        
