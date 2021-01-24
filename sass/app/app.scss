@@ -1,6 +1,18 @@
-@import '../modules/header';
+@import './settings';
+@import '../lib/.foundation';
+@import '../modules/.modules';
 
 body {
-  * { border: solid blue thin; }
-}
+  font-family: $body-font-family;
+  // * { border: solid blue thin; }
 
+  a {
+    color: $primary;
+    text-decoration: underline;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

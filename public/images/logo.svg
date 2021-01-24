@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="46px" viewBox="0 0 80 46" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Ellen Insights logo</title>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" fill="#252525" x="1" y="25" width="75" height="21"></rect>
+        <text id="ELLEN" font-family="RedHatDisplay-Bold, Red Hat Display" font-size="21" font-weight="bold" letter-spacing="2" fill="#000000">
+            <tspan x="0" y="21">ELLEN</tspan>
+        </text>
+        <text id="insights" font-family="RedHatDisplay-Bold, Red Hat Display" font-size="11" font-weight="bold" fill="#FFFFFF">
+            <tspan x="9" y="40">insights</tspan>
+        </text>
+    </g>
+</svg>

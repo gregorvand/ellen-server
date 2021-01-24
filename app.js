@@ -27,7 +27,10 @@ app.use(logger('dev'));
 
 // Allow requests frontend > backend
 app.use(express.urlencoded({ extended: false }));
+
+// Static asset serving
 app.use(express.static(__dirname + '/public'));
+
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     conString : 'pg://' + config.username + ':' + config.password + '@' + config.host + '/' + config.database

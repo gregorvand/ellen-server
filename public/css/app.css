@@ -1,1 +1,1 @@
-header{color:blue}body *{border:solid blue thin}
+nav{height:50px;border-bottom:dotted 1px #000;display:flex;justify-content:center}nav ul{list-style:none;display:flex;width:100%;margin:0 auto}nav ul li{flex-grow:1;flex-basis:33%;display:flex;justify-content:center;align-items:center}@media print, screen and (max-width: 63.99875em){nav ul li.nav-optional{display:none}}body{font-family:"Red Hat Display",sans-serif}body a{color:#000;text-decoration:underline;font-weight:500}body a:hover{text-decoration:none}
