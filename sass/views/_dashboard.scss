@@ -119,4 +119,30 @@
       justify-content: center;
     }
   }
+
+  .email-record {
+    .orders-by-company {
+      &-list-divider {
+        flex-basis: 25%;
+      }
+    }
+    
+    @include breakpoint(small only) {
+      .orders-by-company {
+        &-list-date {
+          flex-basis: 40%;
+          padding-right: 10px;
+        }
+
+        &-list-divider {
+          display: none;
+        }
+
+        &-list-email-subject {
+          font-style: italic;
+          flex-basis: 50%;
+        }
+      }
+    }
+  }
 }
