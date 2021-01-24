@@ -1,18 +1,65 @@
 <%- include('./includes/header'); -%>
-  <h1>Hello <%= user.firstName %></h1>
-  <p><%= user.email %></p>
-  <a href="/users/logout">Logout</a>
 
-  <ul>
+<section class="dashboard-intro"> 
+  <div class="dashboard-intro-welcome">
+    <h1>Hello, <br /> <%= user.firstName %></h1>
+    <p><%= user.email %></p>
+  </div>
+  <div class="dashboard-intro-info">
+    <div class="padding-wrapper">
+      Send an email from your user account email to
+      <br /> 
+      <strong> 
+        <a href="mailto:f41656fbb6c2ab852136@cloudmailin.net ">f41656fbb6c2ab852136@cloudmailin.net</a>
+      </strong>
+    </div>
+  </div>
+</section>
+
+<section class="dashboard-area">
+
+<section class="email-record">
+  <h4>Email record (latest 10)</h4>
+  <ul class="orders-by-company-list">
+  <% if (typeof orders != 'undefined') {  
+    emails.forEach((email) => { %>
+      <li class="orders-by-company-list-item">
+        <span class="orders-by-company-list-date">
+          <%= helpers.showDate(email.createdAt) %>
+        </span> 
+        <span class="orders-by-company-list-divider">::</span>
+        <span class="orders-by-company-list-email-subject">
+          <%= email.plainContent %>
+        </span>
+      </li>
+  <% })} %>
+  </ul>
+</section>
+
+<section class="orders-by-company">
+  <h4>Orders by company</h4>
+  <ul class="orders-by-company-list">
     <% let companyName = 'firstloop' %>
     <% if (typeof orders != 'undefined') {  
       orders.forEach((order, index) => { %>
         <% if (companyName !== order.Company.nameIdentifier) { %>
-          <h3><%= order.Company.nameIdentifier %></h3>
+          <div class="company-header">
+            <h3><%= order.Company.nameIdentifier %></h3>
+            <span class="company-header-email"><%= order.fromEmail %></span>
+          </div>
         <% } %>
-        <li><%= order.orderNumber %> | <%= order.Company.nameIdentifier %> | <%= order.fromEmail %> | <%= helpers.showDate(order.orderDate) %> </li>
+        <li class="orders-by-company-list-item">
+          <span class="orders-by-company-list-date">
+            <%= helpers.showDate(order.orderDate) %>
+          </span> 
+          <span class="orders-by-company-list-divider">::</span>
+          <span class="orders-by-company-list-order-number">
+            <%= order.orderNumber %>
+          </span>
+        </li>
         <% companyName = order.Company.nameIdentifier %>
     <% })} %>
   </ul>
-
+</section>
+</section>
 <%- include('./includes/footer'); -%> 

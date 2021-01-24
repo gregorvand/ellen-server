@@ -1,0 +1,28 @@
+nav {
+  height: 50px;
+  border-bottom: dotted 1px $primary;
+  display: flex;
+  justify-content: center;
+
+  ul {
+    list-style: none;
+    display: flex;
+    width: 100%;
+    margin: 0 auto;
+
+    li {
+      flex-grow: 1;
+      flex-basis: 33%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-transform: uppercase;
+
+      &.nav-optional {
+        @include breakpoint(medium down) {
+          display: none;
+        }
+      }
+    }
+  }
+}

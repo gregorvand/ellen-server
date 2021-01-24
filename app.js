@@ -8,10 +8,8 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
-const dashboardHelpers = require('./views/helpers/dashboard_helpers');
 
-const Order = require('./server/models').Order;
-const Company = require('./server/models').Company;
+const { renderDashboard } = require('./views/rendering/render_dashboard')
 
 // User accounts
 const initPassport = require('./passportConfig');
@@ -27,7 +25,10 @@ app.use(logger('dev'));
 
 // Allow requests frontend > backend
 app.use(express.urlencoded({ extended: false }));
+
+// Static asset serving
 app.use(express.static(__dirname + '/public'));
+
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     conString : 'pg://' + config.username + ':' + config.password + '@' + config.host + '/' + config.database
@@ -82,13 +83,7 @@ app.post('/users/register', async (req, res) => {
 });
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
-  getOrders(req.user.id).then((userOrders) => {
-    res.render("dashboard", { 
-      user: req.user,
-      orders: userOrders,
-      helpers: dashboardHelpers
-    });
-  })
+  renderDashboard(req, res);
 });
 
 app.get('/users/logout',(req, res) => {
@@ -118,21 +113,6 @@ function checkNotAuthenticated(req, res, next) {
   res.redirect("/users/login");
 }
 
-function getOrders (id) {
-  console.log('an id is', id);
-  return Order
-  .findAll({
-    where: {
-      customerId: id
-    },
-    include: [{
-      model: Company,
-      attributes: ['nameIdentifier'],
-    }],
-    order: [ [ Company, 'nameIdentifier', 'ASC' ], ['orderDate', 'ASC'] ]
-  })
-  // .then((orders) => console.log('grabbing these orders', orders))
-  // .catch((error) => res.status(400).send(error));
-};
+
 
 module.exports = app;
