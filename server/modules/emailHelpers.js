@@ -66,18 +66,18 @@ const companiesController = require('../controllers/companies');
         return orderNumberArray[1];
       } else {
           let orderNumberFound = 0;
-          const prefixes = ['SO', 'ORDER'];
+          const prefixes = ['SO', 'ORDER']; // this should come from a Table of all known prefixes .. join table?
+          
           prefixes.some(regexPrefix => {
             console.log(`checking against ${regexPrefix}`);
             const regex = `\\b(\\w*${regexPrefix}\\w*)\\b`;
-            console.log('regex is..', regex);
             if (subject.match(new RegExp(regex, 'g'))) {
               const found = subject.match(new RegExp(regex, 'g'));
-              console.log('found?', found);
+              // console.log('found?', found);
               let orderWithPrefix = found[0];
               let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
               orderNumberFound = orderNumberArray[1];
-              console.log('trying to return', orderNumberFound);
+              // console.log('trying to return', orderNumberFound);
               return true;
             } else {
               return false;
