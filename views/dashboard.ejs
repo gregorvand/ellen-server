@@ -44,7 +44,7 @@
       orders.forEach((order, index) => { %>
         <% if (companyName !== order.Company.nameIdentifier) { %>
           <div class="company-header">
-            <h3><%= order.Company.nameIdentifier %></h3>
+            <a href="/companies/<%= order.Company.id %>"><h3><%= order.Company.nameIdentifier %></h3></a>
             <span class="company-header-email"><%= order.fromEmail %></span>
           </div>
         <% } %>

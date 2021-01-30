@@ -1,6 +1,9 @@
 <%- include('./includes/header'); -%>
-
-  <h1>companies!</h1>
+  <br />
+  <% if (company) { %> 
   <h2><%= company.nameIdentifier %></h2>
+  <% } else { %>
+    <p>No company found :(</p>
+  <% } %>
   
   <%- include('./includes/footer'); -%>
