@@ -46,25 +46,48 @@ const companiesController = require('../controllers/companies');
     console.log('original subject: ', subject);
     const orderPrefix = companyObject.orderPrefix;
     
-    regexExpression = ``;
+    let regexExpression = ``;
+    const mutableRegex = `\\b(\\w*${orderPrefix}\\w*)\\b`;
 
     // matching # vs A-Z prefix required different approaches
     if (orderPrefix === '#') {
       regexExpression = `\\${orderPrefix}(?=\\w*)\\w+`
     } else {
-      regexExpression = `\\b(\\w*${orderPrefix}\\w*)\\b`
+      regexExpression = mutableRegex;
     }
 
     console.log('using', regexExpression);
 
     try {
-      const found = subject.match(new RegExp(regexExpression, 'g'));
-      let orderWithPrefix = found[0];
-      let orderNumberArray = orderWithPrefix.split(`${orderPrefix}`);
-      return orderNumberArray[1];
+      if (subject.match(new RegExp(regexExpression, 'g'))) {
+        const found = subject.match(new RegExp(regexExpression, 'g'));
+        let orderWithPrefix = found[0];
+        let orderNumberArray = orderWithPrefix.split(`${orderPrefix}`);
+        return orderNumberArray[1];
+      } else {
+          let orderNumberFound = 0;
+          const prefixes = ['SO', 'ORDER']; // this should come from a Table of all known prefixes .. join table?
+          
+          prefixes.some(regexPrefix => {
+            console.log(`checking against ${regexPrefix}`);
+            const regex = `\\b(\\w*${regexPrefix}\\w*)\\b`;
+            if (subject.match(new RegExp(regex, 'g'))) {
+              const found = subject.match(new RegExp(regex, 'g'));
+              // console.log('found?', found);
+              let orderWithPrefix = found[0];
+              let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
+              orderNumberFound = orderNumberArray[1];
+              // console.log('trying to return', orderNumberFound);
+              return true;
+            } else {
+              return false;
+            }
+        });
+
+        return orderNumberFound;
+      }
     } catch(err) {
-      console.error(err, 'probably no regex match');
-      return 'No match to the defined prefix'
+      console.err("still could not match regex!", err);
     }
   }
 

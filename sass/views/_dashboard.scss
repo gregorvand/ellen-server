@@ -123,10 +123,10 @@
   .email-record {
     .orders-by-company {
       &-list-divider {
-        flex-basis: 25%;
+        flex-basis: 10%;
       }
     }
-    
+
     @include breakpoint(small only) {
       .orders-by-company {
         &-list-date {
