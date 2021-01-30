@@ -26,6 +26,21 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  listByCompany(req, res) {
+    return Company
+    .findAll({
+      where: {
+        id: req.params.companyId
+      },
+      include: [{
+        model: Order,
+        as: 'orders'
+      }],
+    })
+      .then((companies) => res.status(200).send(companies))
+      .catch((error) => res.status(400).send(error));
+  },
+
   internalCreate(name, email) {
     return Company
       .create({

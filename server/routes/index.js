@@ -22,6 +22,7 @@ module.exports = (app) => {
   // direct/testing api paths
   app.post('/api/companies', companiesController.create);
   app.get('/api/companies', companiesController.list);
+  app.get('/api/companies/:companyId', companiesController.listByCompany);
 
   app.post('/api/orders', ordersController.create);
   app.get('/api/orders', ordersController.list);
