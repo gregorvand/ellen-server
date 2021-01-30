@@ -31,7 +31,7 @@ function getOrdersByCompany (id) {
     },
     include: [{
       model: Company,
-      attributes: ['nameIdentifier'],
+      attributes: ['nameIdentifier', 'id'],
     }],
     order: [ [ Company, 'nameIdentifier', 'ASC' ], ['orderDate', 'ASC'] ]
   })

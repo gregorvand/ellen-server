@@ -10,6 +10,8 @@ const flash = require('express-flash');
 const passport = require('passport');
 
 const { renderDashboard } = require('./views/rendering/render_dashboard')
+const { renderCompanyPage } = require('./views/rendering/render_company')
+
 
 // User accounts
 const initPassport = require('./passportConfig');
@@ -91,6 +93,10 @@ app.get('/users/logout',(req, res) => {
   req.flash('success_msg', 'you have logged out');
   res.redirect('/users/login');
 })
+
+app.get('/companies/:id', checkNotAuthenticated, (req, res) => {
+  renderCompanyPage(req, res);
+});
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('/', (req, res) => {

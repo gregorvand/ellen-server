@@ -1,0 +1,15 @@
+<%- include('./includes/header'); -%>
+  <br />
+  <% if (company) { %> 
+  <h2><%= company.nameIdentifier %></h2>
+  <!-- TODO: make the below admin-only -->
+  <ul style="list-style: none; display: flex; justify-content: center;">
+    <li><strong>&nbsp;email:</strong> <%= company.emailIdentifier %></li>&nbsp;|
+    <li><strong>&nbsp;prefix:</strong> <%= company.orderPrefix %></li>&nbsp;| 
+    <li><strong>&nbsp;added to DB:</strong> <%= company.createdAt %></li>&nbsp;| 
+  </ul>
+  <% } else { %>
+    <p>No company found :(</p>
+  <% } %>
+  
+  <%- include('./includes/footer'); -%>
