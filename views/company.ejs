@@ -1,3 +1,5 @@
+
+
 <%- include('./includes/header'); -%>
   <br />
   <% if (company) { %> 
@@ -6,30 +8,81 @@
   <ul style="list-style: none; display: flex; justify-content: center;">
     <li><strong>&nbsp;email:</strong> <%= company.emailIdentifier %></li>&nbsp;|
     <li><strong>&nbsp;prefix:</strong> <%= company.orderPrefix %></li>&nbsp;| 
-    <li><strong>&nbsp;added to DB:</strong> <%= company.createdAt %></li>&nbsp;| 
+    <li><strong>&nbsp;added to DB:</strong> <%= company.createdAt %></li>&nbsp;
   </ul>
   <% } else { %>
     <p>No company found :(</p>
   <% } %>
 
-  <script src="/d3/build/d3.min.js" integrity=""></script>
-  <script src="/metrics-graphics/dist/metricsgraphics.min.js" integrity=""></script>
-  <div id="chart" class="data-chart"></div>
+  <script>
+  window.chartData = <%- JSON.stringify(orders) %>
+  </script>
+
+
+<canvas id="myChart" width="400" height="200"></canvas>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 
 <script>
-  MG.data_graphic({
-    data: [
-      {'date': new Date('2015-03-05T21:00:00Z'), 'value': 1},
-      {'date': new Date('2016-03-05T21:00:00Z'), 'value': 3},
-      {'date': new Date('2017-03-05T21:00:00Z'), 'value': 10}
-    ],
-    width: 600,
-    height: 200,
-    target: '#chart',
-    xAccessor: 'date',
-    yAccessor: 'value',
-    area: false,
-  });
-</script> 
+  console.log(typeof(chartData));
+
+    // let transformData = window.chartData.forEach((order, index) => {
+    //   let compareNumber = 0;
+    //   console.log(`well ${index} and ${order.y}`);
+    //   if (index == 0) { 
+    //     compareNumber = order.y;
+    //     order.y = order.y/365;
+    //     return false
+    //    } else {
+    //     console.log(compareNumber);
+    //     let nextCompareNumber = order.y;
+    //     order.y = order.y - compareNumber;
+    //     compareNumber = nextCompareNumber;
+    //   }
+    // });
+
+    let ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+        type: 'line', 
+        data: {
+            datasets: [{
+                label: 'Order numbers',
+                data: window.chartData,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false
+                    }
+                }],
+                xAxes: [{
+                  type: 'time',
+                  time: {
+                    unit: 'day'
+                  }
+                }]
+            }
+        }
+    });
+</script>
   
   <%- include('./includes/footer'); -%>

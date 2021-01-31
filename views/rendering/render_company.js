@@ -1,16 +1,21 @@
 const Company = require('../../server/models').Company;
 const Order = require('../../server/models').Order;
-const metricsGraphics = require('metrics-graphics');
-
-
-
-const companyViewHelpers = require('../../views/helpers/company_view_helpers');
 
 const renderCompanyPage = function(req, res) {
-  getCompanyForPage(req).then(returnedCompany => {
+
+  const companyPromise = getCompanyForPage(req).then(returnedCompany => {
+    currentCompany = returnedCompany;
+  })
+
+  const orderPromise = getOrders(req.params.id).then(returnedOrders => {
+    //  ordersData = doSomethingToData(returnedOrders);
+    ordersData = returnedOrders;
+  })
+
+  Promise.all([companyPromise, orderPromise]).then(() => {
     res.render("company", { 
-      company: returnedCompany,
-      MG: metricsGraphics
+      company: currentCompany,
+      orders: ordersData
     });
   })
 }
@@ -27,5 +32,32 @@ function getCompanyForPage(req, res) {
     .then((company) => company)
     .catch((error) => console.error('error with company page lookup', error));
 }
+
+function getOrders(id) {
+  console.log('uuuh', id);
+  return Order
+  .findAll({
+    where: {
+      companyId: id
+    },
+    attributes: [
+      ['orderDate', 't'],
+      ['orderNumber', 'y'],
+    ],
+    order: [
+      ['orderDate', 'DESC']
+    ],
+  })
+  .then((orders) => orders)
+  .catch((error) => console.error('error with company page lookup', error));
+
+};
+
+function doSomethingToData (data) {
+  // get initial value
+  // calc 
+
+  return data.map(order => order.t = 'woop woop');
+};
 
 module.exports.renderCompanyPage = renderCompanyPage;
