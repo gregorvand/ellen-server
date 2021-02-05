@@ -14,9 +14,23 @@
     <p>No company found :(</p>
   <% } %>
 
+  <!-- Transform chart data on server then serve via window -->
+  <%
+  const orderData = orders.map(order => order.dataValues)
+  let newData = new Array;
+    let transformData = function() {
+      orderData.forEach((order, index) => {
+        if (index !== 0) {
+          newData.push({'y': order.y - orderData[index-1].y, 't': order.t });
+        }
+      });
+    };
+
+    transformData();
+  %>
+
   <script>
-  window.chartData = <%- JSON.stringify(orders) %>
-  window.newData = new Array;
+  window.newData = <%- JSON.stringify(newData) %>
   </script>
 
 
@@ -26,17 +40,6 @@
 
 <!--  resolve promise each iteration and use promise.all to resolve all and continue!! -->
 <script>
-    let newData = window.newData;
-    let transformData = function() {
-      window.chartData.forEach((order, index) => {
-        if (index !== 0) {
-          newData.push({'y': order.y - chartData[index-1].y, 't': order.t });
-        }
-      });
-    };
-
-    transformData();
-    
     // if first index
     // set date and order number
     // move on
