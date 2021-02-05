@@ -15,6 +15,7 @@
   <% } %>
 
   <!-- Transform chart data on server then serve via window -->
+  <!-- Currently calculates the numerical difference between the two order numbers -->
   <%
   const orderData = orders.map(order => order.dataValues)
   let newData = new Array;
