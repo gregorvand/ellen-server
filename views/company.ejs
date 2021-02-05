@@ -27,10 +27,10 @@
 <!--  resolve promise each iteration and use promise.all to resolve all and continue!! -->
 <script>
     let newData = window.newData;
-    let transformData = async function() {
+    let transformData = function() {
       window.chartData.forEach((order, index) => {
         if (index !== 0) {
-          newData.push({'y': order.y - chartData[index-1].y, 'x': order.t });
+          newData.push({'y': order.y - chartData[index-1].y, 't': order.t });
         }
       });
     };
