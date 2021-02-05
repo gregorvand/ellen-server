@@ -16,6 +16,7 @@
 
   <script>
   window.chartData = <%- JSON.stringify(orders) %>
+  window.newData = new Array;
   </script>
 
 
@@ -23,23 +24,27 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 
+<!--  resolve promise each iteration and use promise.all to resolve all and continue!! -->
 <script>
-  console.log(typeof(chartData));
+    let newData = window.newData;
+    let transformData = async function() {
+      window.chartData.forEach((order, index) => {
+        if (index !== 0) {
+          newData.push({'y': order.y - chartData[index-1].y, 'x': order.t });
+        }
+      });
+    };
 
-    // let transformData = window.chartData.forEach((order, index) => {
-    //   let compareNumber = 0;
-    //   console.log(`well ${index} and ${order.y}`);
-    //   if (index == 0) { 
-    //     compareNumber = order.y;
-    //     order.y = order.y/365;
-    //     return false
-    //    } else {
-    //     console.log(compareNumber);
-    //     let nextCompareNumber = order.y;
-    //     order.y = order.y - compareNumber;
-    //     compareNumber = nextCompareNumber;
-    //   }
-    // });
+    transformData();
+    
+    // if first index
+    // set date and order number
+    // move on
+    // x = calculate difference in order number
+    // y = calculate number of days between dates
+    // divide x by y
+    // set y plot as y
+    // set next compare date and order number as what was in this iteration
 
     let ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
@@ -47,7 +52,7 @@
         data: {
             datasets: [{
                 label: 'Order numbers',
-                data: window.chartData,
+                data: window.newData,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',

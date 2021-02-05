@@ -45,7 +45,7 @@ function getOrders(id) {
       ['orderNumber', 'y'],
     ],
     order: [
-      ['orderDate', 'DESC']
+      ['orderDate', 'ASC']
     ],
   })
   .then((orders) => orders)
