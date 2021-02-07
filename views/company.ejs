@@ -16,22 +16,9 @@
 
   <!-- Transform chart data on server then serve via window -->
   <!-- Currently calculates the numerical difference between the two order numbers -->
-  <%
-  const orderData = orders.map(order => order.dataValues)
-  let newData = new Array;
-    let transformData = function() {
-      orderData.forEach((order, index) => {
-        if (index !== 0) {
-          newData.push({'y': order.y - orderData[index-1].y, 't': order.t });
-        }
-      });
-    };
-
-    transformData();
-  %>
 
   <script>
-  window.newData = <%- JSON.stringify(newData) %>
+  window.newData = <%- JSON.stringify(orders) %>
   </script>
 
 

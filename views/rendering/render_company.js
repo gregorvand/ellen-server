@@ -9,7 +9,7 @@ const renderCompanyPage = function(req, res) {
 
   const orderPromise = getOrders(req.params.id).then(returnedOrders => {
     //  ordersData = doSomethingToData(returnedOrders);
-    ordersData = returnedOrders;
+    ordersData = getOrderDifference(returnedOrders);
   })
 
   Promise.all([companyPromise, orderPromise]).then(() => {
@@ -18,6 +18,18 @@ const renderCompanyPage = function(req, res) {
       orders: ordersData
     });
   })
+}
+
+function getOrderDifference(orders) {
+  const orderData = orders.map(order => order.dataValues)
+  let newData = new Array;
+  orderData.forEach((order, index) => {
+    if (index !== 0) {
+      newData.push({'y': order.y - orderData[index-1].y, 't': order.t });
+    }
+  });
+
+  return newData;
 }
 
 
