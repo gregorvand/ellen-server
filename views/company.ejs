@@ -22,7 +22,7 @@
   </script>
 
 
-<canvas id="myChart" width="400" height="200"></canvas>
+<canvas id="myChart" class="chart-orders" height="100"></canvas>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 
@@ -42,7 +42,7 @@
         type: 'line', 
         data: {
             datasets: [{
-                label: 'Order numbers',
+                label: 'Avg orders',
                 data: window.newData,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -76,7 +76,9 @@
                     unit: 'day'
                   }
                 }]
-            }
+            },
+            cubicInterpolationMode: 'monotone',
+            steppedLine: 'after'
         }
     });
 </script>

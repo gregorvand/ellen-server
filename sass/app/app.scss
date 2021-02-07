@@ -26,9 +26,7 @@ body {
 }
 
 
-#chart {
-  .mg-main-line {
-    fill: transparent;
-    stroke: black;
-  }
+.chart-orders {
+  max-width: 1200px;
+  margin: 0 auto;
 }

@@ -1,5 +1,7 @@
 const Company = require('../../server/models').Company;
 const Order = require('../../server/models').Order;
+const dayjs = require('dayjs');
+const duration = require('dayjs/plugin/duration');
 
 const renderCompanyPage = function(req, res) {
 
@@ -9,7 +11,7 @@ const renderCompanyPage = function(req, res) {
 
   const orderPromise = getOrders(req.params.id).then(returnedOrders => {
     //  ordersData = doSomethingToData(returnedOrders);
-    ordersData = getOrderDifference(returnedOrders);
+    ordersData = getOrderDifferenceIncrement(returnedOrders);
   })
 
   Promise.all([companyPromise, orderPromise]).then(() => {
@@ -20,12 +22,18 @@ const renderCompanyPage = function(req, res) {
   })
 }
 
-function getOrderDifference(orders) {
+function getOrderDifferenceIncrement(orders) {
   const orderData = orders.map(order => order.dataValues)
   let newData = new Array;
   orderData.forEach((order, index) => {
     if (index !== 0) {
-      newData.push({'y': order.y - orderData[index-1].y, 't': order.t });
+      // get timestamp difference first and store as a day value, divide 
+      const date1 = dayjs(orderData[index-1].t);
+      const date2 = dayjs(orderData.t);
+      console.log('difference', date2.diff(date1, 'day'));
+      const dayDifference = date2.diff(date1, 'day');
+      const  avgOrderIncrement = parseInt((order.y - orderData[index-1].y) / dayDifference);
+      newData.push({'y': avgOrderIncrement, 't': order.t });
     }
   });
 
