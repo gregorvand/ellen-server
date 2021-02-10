@@ -14,6 +14,8 @@
     <p>No company found :(</p>
   <% } %>
 
+  <%= helpers.getAvgOrderCount(orders) %>
+
   <!-- Transform chart data on server then serve via window -->
   <!-- Currently calculates the numerical difference between the two order numbers -->
 
@@ -44,6 +46,7 @@
             datasets: [{
                 label: 'Avg orders',
                 data: window.newData,
+                steppedLine: true,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -73,12 +76,11 @@
                 xAxes: [{
                   type: 'time',
                   time: {
-                    unit: 'day'
+                    unit: 'week'
                   }
                 }]
             },
-            cubicInterpolationMode: 'monotone',
-            steppedLine: 'after'
+            cubicInterpolationMode: 'monotone'
         }
     });
 </script>
