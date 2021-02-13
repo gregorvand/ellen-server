@@ -1,15 +1,88 @@
+
+
 <%- include('./includes/header'); -%>
-  <br />
+
+<section class="dashboard-wrapper">
+
+  <div class="dashboard-header">
   <% if (company) { %> 
   <h2><%= company.nameIdentifier %></h2>
   <!-- TODO: make the below admin-only -->
   <ul style="list-style: none; display: flex; justify-content: center;">
     <li><strong>&nbsp;email:</strong> <%= company.emailIdentifier %></li>&nbsp;|
     <li><strong>&nbsp;prefix:</strong> <%= company.orderPrefix %></li>&nbsp;| 
-    <li><strong>&nbsp;added to DB:</strong> <%= company.createdAt %></li>&nbsp;| 
+    <li><strong>&nbsp;added to DB:</strong> <%= company.createdAt %></li>&nbsp;
   </ul>
+  <canvas id="myChart" class="chart-orders" height="100"></canvas>
+  <%= helpers.getAvgOrderCount(orders) %>
+
+  <!-- Transform chart data on server then serve via window -->
+  <!-- Currently calculates the numerical difference between the two order numbers -->
+
+  <script>
+  window.newData = <%- JSON.stringify(orders) %>
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+
   <% } else { %>
     <p>No company found :(</p>
   <% } %>
+</div>
+
+</section>
+
+<!--  resolve promise each iteration and use promise.all to resolve all and continue!! -->
+<script>
+  try {
+    // if first index
+    // set date and order number
+    // move on
+    // x = calculate difference in order number
+    // y = calculate number of days between dates
+    // divide x by y
+    // set y plot as y
+    // set next compare date and order number as what was in this iteration
+
+    let ctx = document.getElementById('myChart');
+    var myChart = new Chart(ctx, {
+        type: 'line', 
+        data: {
+            datasets: [{
+                label: 'Avg orders',
+                data: window.newData,
+                steppedLine: true,
+                backgroundColor: [
+                    'rgba(216, 216, 216, 0.3)',
+                ],
+                borderColor: [
+                    'rgba(0, 0, 0, 0.9)',
+                ],
+                borderWidth: 2,
+                borderCapStyle: 'round'
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false
+                    }
+                }],
+                xAxes: [{
+                  type: 'time',
+                  distribution: 'series',
+                  time: {
+                    unit: 'month'
+                  }
+                }]
+            },
+            cubicInterpolationMode: 'monotone'
+        }
+    });
+  } catch(err) {
+    console.log('no company data');
+  }
+</script>
   
   <%- include('./includes/footer'); -%>

@@ -33,7 +33,7 @@ function getOrdersByCompany (id) {
       model: Company,
       attributes: ['nameIdentifier', 'id'],
     }],
-    order: [ [ Company, 'nameIdentifier', 'ASC' ], ['orderDate', 'ASC'] ]
+    order: [ [ Company, 'nameIdentifier', 'ASC' ], ['orderDate', 'DESC'] ]
   })
 };
 

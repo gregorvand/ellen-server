@@ -15,5 +15,9 @@ const getEmailSubject = (email) => {
   return emailHelpers.getField(email.plainContent, 'envelope[subject]');
 }
 
+const getAvgOrderCount = (orderIncrements) => {
+  console.log(orderIncrements);
+}
+
 module.exports.showDate = showDate;
 module.exports.getEmailSubject = getEmailSubject;
