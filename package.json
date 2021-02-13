@@ -33,7 +33,6 @@
     "express-flash": "0.0.2",
     "express-session": "^1.17.1",
     "formidable": "^1.2.2",
-    "jsdom": "^16.4.0",
     "morgan": "^1.10.0",
     "node-sass": "^5.0.0",
     "passport": "^0.4.1",
