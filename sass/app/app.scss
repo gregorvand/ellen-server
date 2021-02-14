@@ -6,6 +6,11 @@
 body {
   font-family: $body-font-family;
   font-size: 11px;
+
+  @include breakpoint(large up) {
+    padding: 0 25px;
+  }
+  
   // * { border: solid blue thin; }
 
   a {

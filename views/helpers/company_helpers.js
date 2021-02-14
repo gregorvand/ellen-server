@@ -1,8 +1,8 @@
 
 // const dayjs = require('dayjs');
 
-const getAvgOrderCount = (orderIncrements) => {
-  console.log('woow', orderIncrements);
-}
+// const getAvgOrderCount = (orderIncrements) => {
+//   console.log('woow', orderIncrements);
+// }
 
-module.exports.getAvgOrderCount = getAvgOrderCount;
+// module.exports.getAvgOrderCount = getAvgOrderCount;

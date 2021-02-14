@@ -9,7 +9,6 @@
     <canvas id="myChart" class="chart-orders"></canvas>    
     <!-- Transform chart data on server then serve via window -->
     <!-- Currently calculates the numerical difference between the two order numbers -->
-    <%= helpers.getAvgOrderCount(orders) %>
     <script>
       window.newData = <%- JSON.stringify(orders) %>
     </script>

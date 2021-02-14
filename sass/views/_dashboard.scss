@@ -70,19 +70,35 @@
 
   .company-datapoints {
     display: flex;
-    padding: 5px;
+    padding: 0;
+    margin: 0;
     justify-content: space-evenly;
     min-height: 50px;
-    margin: 10px 0;
+  
 
     @include breakpoint(large up) {
       padding: 20px;
+      margin: 10px 0;
       width: 100%;
     }
 
-    > div {
+    &-data {
       display: flex;
       flex-grow: 1;
+      max-width: 20%;
+      flex-direction: column;
+      align-items: center;
+
+      > span {
+        display: flex;
+        width: 100%;
+
+        &.label { font-weight: bolder; }
+        &.datapoint { 
+          justify-self: flex-end;
+          font-size: rem-calc(32px);
+         }
+      }
     }
 
     &-data {
