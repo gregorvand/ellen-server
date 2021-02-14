@@ -34,7 +34,7 @@ app.use(express.static(__dirname + '/node_modules'));
 
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
-    conString : 'pg://' + config.username + ':' + config.password + '@' + config.host + '/' + config.database
+    conString : 'pg://' + config.username + ':' + config.password + '@' + config.host + '/' + config.database + config.ssl
   }),
   secret: process.env.SESSION_SECRET,
   resave: false,
