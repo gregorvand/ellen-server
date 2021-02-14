@@ -40,6 +40,81 @@
   }
 }
 
+.dashboard-header {
+  padding-top: 20px;
+  text-align: left;
+  justify-content: flex-start;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  @include breakpoint(large up) {
+    flex-direction: row;
+  }
+
+  h2 {
+    font-weight: bolder;
+    margin-bottom: 0;
+  }
+
+  h4 {
+    font-size: rem-calc(25px);
+  }
+
+  .company-info {
+    width: auto;  
+    white-space: nowrap;
+    padding-right: 20px;
+    min-width: 30%;
+  }
+
+  .company-datapoints {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    justify-content: space-evenly;
+    min-height: 50px;
+  
+
+    @include breakpoint(large up) {
+      padding: 20px;
+      margin: 10px 0;
+      width: 100%;
+    }
+
+    &-data {
+      display: flex;
+      flex-grow: 1;
+      max-width: 20%;
+      flex-direction: column;
+      align-items: center;
+
+      > span {
+        display: flex;
+        width: 100%;
+
+        &.label { font-weight: bolder; }
+        &.datapoint { 
+          justify-self: flex-end;
+          font-size: rem-calc(32px);
+         }
+      }
+    }
+
+    &-data {
+      margin: 0 10px;
+      padding: 2px 5px;
+      border: dotted $secondary 2px;
+      border-top: 0;
+      border-bottom: 0;
+ 
+      @include breakpoint(large up) {
+        padding: 2px 10px;
+      }
+    }
+  }
+}
+
 .dashboard-area {
   display: flex;
   text-align: left;
@@ -144,5 +219,14 @@
         }
       }
     }
+  }
+}
+
+// debug / admin data
+ul.quick-data {
+  padding-top: 40px;
+  li { 
+    list-style: none;
+    display: inline-block;
   }
 }

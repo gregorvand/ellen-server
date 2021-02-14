@@ -3,32 +3,27 @@
 <%- include('./includes/header'); -%>
 
 <section class="dashboard-wrapper">
-
-  <div class="dashboard-header">
   <% if (company) { %> 
-  <h2><%= company.nameIdentifier %></h2>
-  <!-- TODO: make the below admin-only -->
-  <ul style="list-style: none; display: flex; justify-content: center;">
-    <li><strong>&nbsp;email:</strong> <%= company.emailIdentifier %></li>&nbsp;|
-    <li><strong>&nbsp;prefix:</strong> <%= company.orderPrefix %></li>&nbsp;| 
-    <li><strong>&nbsp;added to DB:</strong> <%= company.createdAt %></li>&nbsp;
-  </ul>
-  <canvas id="myChart" class="chart-orders" height="100"></canvas>
-  <%= helpers.getAvgOrderCount(orders) %>
 
-  <!-- Transform chart data on server then serve via window -->
-  <!-- Currently calculates the numerical difference between the two order numbers -->
+    <%- include('./includes/dashboard_top'); -%>
+    <canvas id="myChart" class="chart-orders"></canvas>    
+    <!-- Transform chart data on server then serve via window -->
+    <!-- Currently calculates the numerical difference between the two order numbers -->
+    <script>
+      window.newData = <%- JSON.stringify(orders) %>
+    </script>
 
-  <script>
-  window.newData = <%- JSON.stringify(orders) %>
-  </script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 
   <% } else { %>
     <p>No company found :(</p>
   <% } %>
-</div>
+
+<ul class="quick-data">
+  <li><strong>&nbsp;email:</strong> <%= company.emailIdentifier %></li>&nbsp;|
+  <li><strong>&nbsp;prefix:</strong> <%= company.orderPrefix %></li>&nbsp;| 
+  <li><strong>&nbsp;added to DB:</strong> <%= company.createdAt %></li>&nbsp;
+</ul>
 
 </section>
 
@@ -44,9 +39,16 @@
     // set y plot as y
     // set next compare date and order number as what was in this iteration
 
+    let setAspectRatio = 2.5;
+    let timeStepSize = 5
+    if (window.innerWidth < 600) {
+      setAspectRatio = 1.5,
+      timeStepSize = 8
+    }
+
     let ctx = document.getElementById('myChart');
     var myChart = new Chart(ctx, {
-        type: 'line', 
+        type: 'line',
         data: {
             datasets: [{
                 label: 'Avg orders',
@@ -73,11 +75,14 @@
                   type: 'time',
                   distribution: 'series',
                   time: {
-                    unit: 'month'
+                    unit: 'month',
+                    stepSize: timeStepSize
                   }
                 }]
             },
-            cubicInterpolationMode: 'monotone'
+            cubicInterpolationMode: 'monotone',
+            responsive: true,
+            aspectRatio: setAspectRatio
         }
     });
   } catch(err) {
@@ -85,4 +90,4 @@
   }
 </script>
   
-  <%- include('./includes/footer'); -%>
+<%- include('./includes/footer'); -%>
