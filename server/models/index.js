@@ -2,6 +2,9 @@
 const env = process.env.NODE_ENV || 'development';
 const pg = require('pg');
 
+console.log('current ENV', process.env.NODE_ENV);
+
+console.log('more env', env);
 if (env != 'development') {
   pg.defaults.ssl = true;
 }
@@ -13,11 +16,27 @@ const basename = path.basename(__filename);
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
 
+let dialectOptions = false;
+
+if (env == 'production') {
+  dialectOptions = { ssl: { rejectUnauthorized: false } };
+}
+
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  console.log('Seq got here');
+  sequelize = new Sequelize({
+    dialect: 'postgres',
+    host: config.host,
+    port: config.port,
+    username: config.username,
+    password: config.password,
+    database: config.database,
+    sslmode: config.sslmode,
+    dialectOptions: dialectOptions
+  });
 }
 
 fs
