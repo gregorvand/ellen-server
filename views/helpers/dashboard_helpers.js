@@ -15,9 +15,10 @@ const getEmailSubject = (email) => {
   return emailHelpers.getField(email.plainContent, 'envelope[subject]');
 }
 
-const getAvgOrderCount = (orderIncrements) => {
-  console.log(orderIncrements);
-}
+const getInboundEmailAddress = () => {
+  return process.env.INBOUND_EMAIL;
+};
 
 module.exports.showDate = showDate;
 module.exports.getEmailSubject = getEmailSubject;
+module.exports.getInboundEmailAddress = getInboundEmailAddress;

@@ -9,8 +9,9 @@
     <div class="padding-wrapper">
       Send an email from your user account email to
       <br /> 
-      <strong> 
-        <a href="mailto:f41656fbb6c2ab852136@cloudmailin.net ">f41656fbb6c2ab852136@cloudmailin.net</a>
+      <strong>
+        <% const email = helpers.getInboundEmailAddress() %>
+        <a href="<%= email %>"><%= email %></a>
       </strong>
     </div>
   </div>
