@@ -28,17 +28,16 @@ const renderCompanyPage = function(req, res) {
 
 function getOrderDifferenceIncrement(orders) {
   const orderData = orders.map(order => order.dataValues)
+  // console.log(orderData);
   totalDataPoints = orderData.length;
   let newData = new Array;
   orderData.forEach((order, index) => {
     if (index !== 0) {
       // get timestamp difference first and store as a day value, divide by no. of days between
-      const date1 = dayjs(orderData[index-1].t);
-      const date2 = dayjs(orderData.t);
-      console.log('difference', date2.diff(date1, 'day'));
+      const date1 = dayjs(orderData[(index-1)].t);
+      const date2 = dayjs(order.t);
       const dayDifference = date2.diff(date1, 'day');
-      const  avgOrderIncrement = (order.y - orderData[index-1].y) / dayDifference;
-      console.log('avgs..', avgOrderIncrement);
+      const avgOrderIncrement = (order.y - orderData[index-1].y) / dayDifference;
 
       // we shift the 'differece' value to line up with date1 so that
       // avg *starts* at that date
@@ -52,6 +51,8 @@ function getOrderDifferenceIncrement(orders) {
         newData.push(({'y': avgOrderIncrement, 't': order.t }));
       }
     }
+
+    // console.log(newData);
   });
 
   return newData;
