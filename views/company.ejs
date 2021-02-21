@@ -1,5 +1,3 @@
-
-
 <%- include('./includes/header'); -%>
 
 <section class="dashboard-wrapper">
@@ -30,15 +28,7 @@
 <!--  resolve promise each iteration and use promise.all to resolve all and continue!! -->
 <script>
   try {
-    // if first index
-    // set date and order number
-    // move on
-    // x = calculate difference in order number
-    // y = calculate number of days between dates
-    // divide x by y
-    // set y plot as y
-    // set next compare date and order number as what was in this iteration
-
+    // note if NODE_ENV is 'production' EJS is cached and needs server restart to see changes
     let setAspectRatio = 2.5;
     let timeStepSize = 5
     if (window.innerWidth < 600) {
@@ -73,7 +63,7 @@
                 }],
                 xAxes: [{
                   type: 'time',
-                  distribution: 'series',
+                  distribution: 'linear',
                   time: {
                     unit: 'month',
                     stepSize: timeStepSize
