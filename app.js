@@ -80,7 +80,8 @@ app.use(function (req, res, next) {
   // could do a user lookup here and then store pertinent info for all views like name, email
   res.locals = {
     // make session available to all views
-    session: req.session
+    session: req.session,
+    currentUser: req.user
   };
   next();
 });
@@ -117,6 +118,10 @@ app.get('/companies/:id', checkNotAuthenticated, (req, res) => {
   renderCompanyPage(req, res);
 });
 
+app.get('/admin/companies/', checkNotAuthenticatedAndAdmin, (req, res) => {
+  res.render("admin/companies");
+});
+
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('/', (req, res) => {
   res.render("index");
@@ -133,6 +138,14 @@ function checkAuthenticated(req, res, next) {
 
 function checkNotAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect("/users/login");
+}
+
+function checkNotAuthenticatedAndAdmin(req, res, next) {
+  if (req.isAuthenticated() && req.user.status === 'admin') {
+    console.log('big user', req.session.passport.user['status']);
     return next();
   }
   res.redirect("/users/login");
