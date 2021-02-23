@@ -15,6 +15,7 @@ module.exports = {
   },
 
   list(req, res) {
+    console.log('gots here');
     return Company
       .findAll({
         include: [{
@@ -38,6 +39,26 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  update(req, res) {
+    return Company
+      .findByPk(req.params.id)
+      .then(company => {
+        if (!company) {
+          return res.status(404).send({
+            message: 'Company Not Found',
+          });
+        }
+        console.log('hoop', req);
+        return company
+          .update({
+            nameIdentifier: req.body.nameIdentifier || 'newname',
+          })
+          .then(() => res.status(200).send(company))  // Send back the updated todo.
+          .catch((error) => res.status(400).send(error));
+      })
+    .catch((error) => res.status(400).send(error));
+  },
+
   internalCreate(name, email) {
     return Company
       .create({
@@ -49,4 +70,12 @@ module.exports = {
       .then(company => company)
       .catch(error => res.status(400).send(error));
   },
+
+  internalList(req, res) {
+    console.log('gots here');
+    return Company
+      .findAll()
+      .then(companies => companies)
+      .catch((error) => res.status(400).send(error))
+  }
 };

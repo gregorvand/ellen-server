@@ -19,6 +19,9 @@
   </li>
   <li>
     <% if (session.passport && session.passport.user) { %>
+      <% if (currentUser.status === 'admin') { %>
+        <a href="/admin/companies">Admin</a>&nbsp;|&nbsp;
+      <% } %>
       <a href="/users/dashboard">My Dashboard</a>&nbsp;|&nbsp;<a href="/users/logout">Logout</a>
     <% } else { %>
       <a href="/users/login">Login</a>&nbsp;|&nbsp;<a href="/users/register">Register</a>

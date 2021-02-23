@@ -77,6 +77,8 @@ module.exports = (app) => {
   app.post('/api/users', usersController.create);
   app.get('/api/users', usersController.list);
 
+  app.post('/api/companies/update/:id', companiesController.update);
+
   // For any other request method on companies, we're going to return "Method Not Allowed"
   app.all('/api/companies', (req, res) =>
     res.status(405).send({
