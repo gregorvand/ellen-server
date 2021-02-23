@@ -1,7 +1,7 @@
 <%- include('./includes/header'); -%>
 
 <section class="dashboard-wrapper">
-  <% if (company) { %> 
+  <% if (company && orders.length > 1) { %> 
 
     <%- include('./includes/dashboard_top'); -%>
     <canvas id="myChart" class="chart-orders"></canvas>    
@@ -14,7 +14,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 
   <% } else { %>
-    <p>No company found :(</p>
+    <br />
+    <p>No company or not enough data found :(</p>
   <% } %>
 
 <ul class="quick-data">

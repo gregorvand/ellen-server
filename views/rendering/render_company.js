@@ -62,25 +62,27 @@ function getDayAvgOrders(orders) {
   const totalOrders = orders.length;
   const orderData = orders.map(order => order.dataValues)
 
-  const dayOneOrder = orderData[0].y;
-  const dayFinalOrder = orderData[totalOrders -1].y;
-  const orderDifference = dayFinalOrder - dayOneOrder;
- 
-  const dayOneDate = dayjs(orderData[0].t);
-  const dayFinalDate = dayjs(orderData[totalOrders -1].t);
-  const dayDifference = dayFinalDate.diff(dayOneDate, 'day');
-
-  const avgOrdersAll = orderDifference / dayDifference;
-
-  //  logs..
-  console.log('order diff', orderDifference);
-  console.log(dayOneDate);
-  console.log(dayOneOrder);
-  console.log(dayFinalOrder);
-  console.log('total diff', dayDifference); 
-  console.log('avg', avgOrdersAll); 
+  if (orderData.length > 0) {
+    const dayOneOrder = orderData[0].y;
+    const dayFinalOrder = orderData[totalOrders -1].y;
+    const orderDifference = dayFinalOrder - dayOneOrder;
+   
+    const dayOneDate = dayjs(orderData[0].t);
+    const dayFinalDate = dayjs(orderData[totalOrders -1].t);
+    const dayDifference = dayFinalDate.diff(dayOneDate, 'day');
   
- return avgOrdersAll.toFixed(2);
+    const avgOrdersAll = orderDifference / dayDifference;
+  
+    //  logs..
+    console.log('order diff', orderDifference);
+    console.log(dayOneDate);
+    console.log(dayOneOrder);
+    console.log(dayFinalOrder);
+    console.log('total diff', dayDifference); 
+    console.log('avg', avgOrdersAll); 
+    
+   return avgOrdersAll.toFixed(2);
+  } 
 }
 
 
