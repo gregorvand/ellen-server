@@ -12,6 +12,7 @@ const passport = require('passport');
 
 const { renderDashboard } = require('./views/rendering/render_dashboard')
 const { renderCompanyPage } = require('./views/rendering/render_company')
+const { renderAdminCompanies } = require('./views/rendering/render_admin_companies')
 
 
 // User accounts
@@ -73,8 +74,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// Require our routes into the application.
-require('./server/routes')(app);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(function (req, res, next) {
   // could do a user lookup here and then store pertinent info for all views like name, email
@@ -85,6 +86,9 @@ app.use(function (req, res, next) {
   };
   next();
 });
+
+// Require our routes into the application.
+require('./server/routes')(app);
 
 app.get('/users/login', checkAuthenticated, (req, res) => {
   res.render("login");
@@ -119,7 +123,7 @@ app.get('/companies/:id', checkNotAuthenticated, (req, res) => {
 });
 
 app.get('/admin/companies/', checkNotAuthenticatedAndAdmin, (req, res) => {
-  res.render("admin/companies");
+  renderAdminCompanies(req, res);
 });
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.

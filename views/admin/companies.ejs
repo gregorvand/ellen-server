@@ -1,1 +1,36 @@
-yoyo admin yo
+<%- include('../includes/header'); -%>
+<h2>Update Company Info</h2>
+<section style="text-align: left;">
+
+<% if (typeof companies != 'undefined') {  
+  companies.forEach((company, index) => { %>
+      <span class="orders-by-company-list-date">
+        <form class="internalCompanyUpdate" action="" data-company-id="<%= company.id %>">
+          <input type="text" placeholder="<%= company.nameIdentifier %>"> &nbsp; <%= company.emailIdentifier %>
+          <input type="hidden">
+        </form>
+      </span> 
+<% })} %>
+</section>
+<script src="../cash-dom/dist/cash.min.js"></script>
+<script src="../axios/dist/axios.min.js"></script>
+<script>
+  $('.internalCompanyUpdate').on('submit', function(e) {
+    e.preventDefault();
+    console.log($(e.target).data('company-id'));
+    const inputName = $(e.target).find('input[type=text]').val();
+
+    axios({
+      method: 'post',
+      url: `/api/companies/update/${$(e.target).data('company-id')}`,
+      data: {
+        nameIdentifier: inputName
+      }}).then(function (response) {
+          $(e.target).find('input[type=text]').val('');
+          $(e.target).find('input[type=text]').attr('placeholder', inputName);
+         console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
+  });
+</script> 
