@@ -48,7 +48,6 @@ module.exports = {
             message: 'Company Not Found',
           });
         }
-        console.log('hoop', req);
         return company
           .update({
             nameIdentifier: req.body.nameIdentifier || 'newname',
@@ -72,7 +71,6 @@ module.exports = {
   },
 
   internalList(req, res) {
-    console.log('gots here');
     return Company
       .findAll()
       .then(companies => companies)
