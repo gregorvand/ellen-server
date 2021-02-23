@@ -30,7 +30,7 @@
   try {
     // note if NODE_ENV is 'production' EJS is cached and needs server restart to see changes
     let setAspectRatio = 2.5;
-    let timeStepSize = 5
+    let timeStepSize = 2
     if (window.innerWidth < 600) {
       setAspectRatio = 1.5,
       timeStepSize = 8
@@ -58,7 +58,7 @@
             scales: {
                 yAxes: [{
                     ticks: {
-                        beginAtZero: false
+                        beginAtZero: true
                     }
                 }],
                 xAxes: [{
@@ -66,9 +66,18 @@
                   distribution: 'linear',
                   time: {
                     unit: 'month',
-                    stepSize: timeStepSize
+                    stepSize: timeStepSize,
+                    tooltipFormat: 'MMM Do YYYY'
                   }
                 }]
+            },
+            tooltips: {
+              mode: 'index',
+              intersect: false
+            },
+            hover: {
+              mode: 'index',
+              intersect: false
             },
             cubicInterpolationMode: 'monotone',
             responsive: true,
