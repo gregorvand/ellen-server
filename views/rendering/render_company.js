@@ -37,7 +37,7 @@ function getOrderDifferenceIncrement(orders) {
       const date1 = dayjs(orderData[(index-1)].t);
       const date2 = dayjs(order.t);
       const dayDifference = date2.diff(date1, 'day');
-      const avgOrderIncrement = (order.y - orderData[index-1].y) / dayDifference;
+      const avgOrderIncrement = ((order.y - orderData[index-1].y) / dayDifference).toFixed(2);
 
       // we shift the 'differece' value to line up with date1 so that
       // avg *starts* at that date
@@ -52,7 +52,7 @@ function getOrderDifferenceIncrement(orders) {
       }
     }
 
-    // console.log(newData);
+    console.log(newData);
   });
 
   return newData;
