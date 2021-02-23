@@ -6,7 +6,7 @@
   companies.forEach((company, index) => { %>
       <span class="orders-by-company-list-date">
         <form class="internalCompanyUpdate" action="" data-company-id="<%= company.id %>">
-          <input type="text" placeholder="<%= company.nameIdentifier %>"> &nbsp; <%= company.emailIdentifier %>
+          <input type="text" placeholder="<%= company.nameIdentifier %>"> &nbsp; <a href="/companies/<%= company.id %>">View chart (<%= company.emailIdentifier %>)</a>
           <input type="hidden">
         </form>
       </span> 
