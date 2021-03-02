@@ -1,0 +1,93 @@
+.index-hero {
+  width: 100%;
+  background-color: $color-brand-background;
+  min-height: 400px;
+  padding-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  padding-top: 50px;
+
+  @include breakpoint(large up) {
+    flex-direction: row;
+  }
+
+  &-left, &-right {
+    display: flex;
+    flex-basis: 50%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+      text-align: left;
+      width: 75%;
+    }
+  }
+}
+
+
+.bounty-list {
+  position: relative;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  margin-top: 20px;
+
+  // stagger each bounty block from the last
+  $indent: 5vw;
+  &:nth-child(2n) { 
+    margin-left: $indent;
+    opacity: 60%;
+  }
+
+  &:nth-child(3n) { 
+    margin-left: $indent * 2;
+    opacity: 30%;
+  }
+
+  &:after {
+    content: '';
+    opacity: 29%;
+    width: 100%;
+    position: absolute;
+    left: -5px;
+    top: 5px;
+    height: 100%;
+    background-image: url(/images/border_chequer.png);
+    z-index: -1;
+  }
+
+  &-item {
+    display: flex;
+    margin: 0;
+    width: 345px;
+    height: 80px;
+    background-color: $color-brand-highlight;
+    list-style: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+
+    @include breakpoint(large up) {
+      width: 475px;
+    }
+
+    &-content {
+      background-color: $color-white;
+      padding: 0 15px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+
+      &-left {
+        font-weight: 500;
+      }
+    }
+  }
+}

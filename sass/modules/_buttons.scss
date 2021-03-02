@@ -1,0 +1,12 @@
+button {
+  &.promo {
+    pointer-events: none;
+    background-color: black;
+    color: white;
+    letter-spacing: 0.5px;
+    font-weight: bolder;
+    border: 0;
+    margin-bottom: 0;
+    margin: 0 5px;
+  }
+}

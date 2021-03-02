@@ -8,10 +8,14 @@ body {
   font-size: 11px;
 
   @include breakpoint(large up) {
-    padding: 0 25px;
+    // padding: 0 25px;
   }
   
   // * { border: solid blue thin; }
+
+  * {
+    box-sizing: border-box;
+  }
 
   a {
     color: $primary;
@@ -24,8 +28,27 @@ body {
     }
   }
 
+  $max-width: 1280px;
+
   section {
-    max-width: 1280px;
+    max-width: $max-width;
     margin: 0 auto;
+
+    &.section-full-width {
+      max-width: none;
+      overflow-x: hidden;
+    }
+  }
+
+  .max-width-wrapper {
+    display: flex;
+    margin: 0 auto;
+    max-width: $max-width;
+    width: 100%;
+    flex-direction: column;
+
+    @include breakpoint(large up) {
+      flex-direction: row;
+    }  
   }
 }

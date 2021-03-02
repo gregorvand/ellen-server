@@ -1,1 +1,18 @@
+$color-brand-background: #FFFBEF;
+$color-brand-highlight: #FFEDBD;
+$color-white: #ffffff;
+
+body {
+  padding: 0;
+  margin: 0 auto;
+}
+
+@import './index';
 @import './dashboard';
+
+
+.text-highlight {
+  background-color: $color-brand-highlight;
+  padding: 2px;
+  font-weight: 500;
+}
