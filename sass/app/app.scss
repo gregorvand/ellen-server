@@ -9,7 +9,7 @@ body {
   font-size: 11px;
 
   @include breakpoint(large up) {
-    // padding: 0 25px;
+    padding: 0 25px;
   }
   
   // * { border: solid blue thin; }

@@ -14,7 +14,7 @@ nav {
       flex-grow: 1;
       flex-basis: 33%;
       display: flex;
-      justify-content: center;
+      justify-content: flex-end;
       align-items: center;
       text-transform: uppercase;
       margin-bottom: 0;
@@ -27,9 +27,22 @@ nav {
         margin: 0 2px;
       }
 
+      a.logout-nav {
+
+        @include breakpoint(large up) {
+          margin-left: 10px;
+        }
+      }
+
       &.nav-optional {
+        justify-content: flex-start;
+
         @include breakpoint(medium down) {
           display: none;
+        }
+
+        > a {
+          padding-top: 4px; // logo custom padding
         }
       }
     }

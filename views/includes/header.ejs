@@ -23,7 +23,8 @@
       <% if (currentUser.status === 'admin') { %>
         <a class="login-nav" href="/admin/companies">Admin</a>
       <% } %>
-      <a class="login-nav" href="/users/dashboard">My Dashboard</a><a href="/users/logout">Logout</a>
+      <a class="login-nav" href="/users/dashboard">My Dashboard</a>
+      <a class="logout-nav" href="/users/logout">Logout</a>
     <% } else { %>
       <a class="login-nav" href="/users/login">Login</a>
       <a class="login-nav"  href="/users/register">Register</a>
