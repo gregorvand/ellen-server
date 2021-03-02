@@ -1,0 +1,15 @@
+<% 
+const companyNames = ['Nike', 'REI', 'Another Co.'];
+companyNames.forEach((companyName) => { %>
+<div class="bounty-list">
+  <div class="bounty-list-item">
+    <div class="bounty-list-item-content">
+      <div class="bounty-list-item-content-left"><%= companyName %> / MARCH 2020</div>
+      <div class="bounty-list-item-right">
+        <span class="earn">earn <strong>$10</strong></span>
+        <button class="promo">SUBMIT</button>
+      </div>
+    </div>
+  </div>
+</div>
+<% }) %>

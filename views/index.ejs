@@ -1,5 +1,138 @@
 <%- include('./includes/header'); -%>
 
-  <h1>Home</h1>
+
+  <section class="index-hero section-full-width">
+    <div class="max-width-wrapper">
+      <div class="index-hero-left">
+        <h1>Share your eCommerce Data and <span class="text-highlight">Earn Cash</span></h1>
+      </div>
+
+
+      <div class="index-hero-right">
+        <%- include('./includes/bounty_list_item'); -%>
+      </div>
+    </div>
+  </section>
+
+  <section class="your-data-your-profit section-full-width">
+    <div class="max-width-wrapper">
+      <div class="your-data-your-profit-left">
+        <h1>Your data. <br /> Your profit.</h1>
+      </div>
+
+
+      <div class="your-data-your-profit-right">
+        <p>
+          Companies like Facebook, Google, and VISA make billions selling <strong>YOUR</strong> data. 
+        </p>
+        <p>Let’s change that.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-does-it-work section-full-width">
+    <div class="max-width-wrapper">
+      <div class="how-does-it-work-left">
+        <h1>
+          <span class="text-highlight">
+            How does it work?
+          </span>
+        </h1>
+        <ul class="how-does-it-work-list">
+          <li>Share eCommerce transactions (of your choosing) with <strong class="ellen">Ellen</strong>.</li>
+          <li><strong class="ellen">Ellen</strong> anonymizes your data and extracts the valuable information about the companies you purchase from.</li>
+          <li>Any profits are split 50/50 between you and <strong class="ellen">Ellen</strong></li>
+        </ul>
+      </div>
+
+
+      <div class="how-does-it-work-right">
+        <div class="screen-render">
+          <div class="screen-render-inner">
+            <div class="screen-render-inner-heading">My Submissions</div>
+            <div class="screen-data">
+              <div class="screen-data-column column-one">
+                <div class="screen-data-heading">Email date</div>
+                <span>Yesterday</span>
+                <span>2 days ago</span>
+                <span>Last week</span>
+              </div>
+              <div class="screen-data-column column-two">
+                <div class="screen-data-heading">Company</div>
+                <span>NIKE</span>
+                <span>REI</span>
+                <span>ANOTHER CO.</span>
+              </div>
+              <div class="screen-data-column column-three">
+                <div class="screen-data-heading">Order Date</div>
+                <span>March 20th 2020</span>
+                <span>April 23rd 2019</span>
+                <span>January 3rd 2018</span>
+              </div>  
+            </div>
+          </div>
+          </div>  
+        </div>
+      </div>
+    </div>
+  </section>
   
+  <section class="delete-your-data section-full-width">
+    <div class="max-width-wrapper">
+      <div class="delete-your-data-left">
+        <div class="screen-render">
+          <div class="screen-render-inner">
+            <img src="/images/data_delete_ellen.svg" alt="delete your data">
+          </div>
+        </div>  
+        </div>
+        <div class="delete-your-data-right">
+          <h2>Privacy</h2>
+          <p>
+            Easily delete all your data  <br />
+            on <strong class="ellen">Ellen</strong> with one click. <br />
+            It’s your data. <br />
+            You own it. <br />
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <script src="/cash-dom/dist/cash.min.js"></script>
+  <script>
+    console.log('wohooho home');
+
+    function getRandomInt(max) {
+      return Math.floor(Math.random() * Math.floor(max));
+    }
+
+    // on interval
+    // randomly choose a bounty item
+    // randomly assign data from list
+
+    const companyNames = ['Patagonia', 'REI', 'Rockler', 'Nike', 'West Elm', 'Crate&Barrel', 'IKEA'];
+    const companyDates = ['March 2020', 'April 2019', 'May 2018', 'February 2017', 'October 2010', 'August 2009', 'August 2019', 'December 2020', 'February 2021'];
+
+    setInterval(function() {
+      const companyNumber = getRandomInt(companyNames.length);
+      const dateNumber = getRandomInt(companyDates.length);
+      const elemNumber = getRandomInt(3);
+      const bountyItem = $('.bounty-list')[elemNumber];
+      const bountyContent = $(bountyItem).find('.bounty-list-item-content-left');
+      
+      $(bountyContent).addClass('blink');
+      setTimeout(function() {
+        bountyContent.text(`${companyNames[companyNumber]} / ${companyDates[dateNumber]}`);
+        bountyContent.css('opacity', '0');
+        bountyContent.css('opacity', '1');
+      }, 500);
+
+      setTimeout(function () {
+        $(bountyContent).removeClass('blink');
+      }, 1000)
+    }, 1200)
+  </script>
+
   <%- include('./includes/footer'); -%>

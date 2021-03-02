@@ -1,0 +1,145 @@
+.index-hero {
+  width: 100%;
+  background-color: $color-brand-background;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0 50px;
+  height: 70vh;
+
+  @include breakpoint(medium only) {
+    height: 50vh;
+  }
+
+  @include breakpoint(large up) {
+    flex-direction: row;
+    height: 60vh;
+  }
+
+  @include left-right;
+
+  &-left {
+    h1 {
+      font-weight: bold;
+      line-height: 1.2;
+
+      @include breakpoint(large up) {
+        font-size: 40px;
+      }
+
+      @include breakpoint(xlarge up) {
+        font-size: 50px;
+      }
+    }
+
+    @include breakpoint(small only) {
+      margin-bottom: 20px;
+    }
+  }
+
+  .text-highlight {
+    @include breakpoint(small only) {
+      width: 100%;
+      display: flex;
+    }
+  }
+}
+
+.your-data-your-profit {
+  background-color: $color-off-black;
+  text-align: left;
+  display: flex;
+  justify-content: center;
+  color: $color-brand-background;
+  padding: 50px 0;
+
+  @include left-right;
+
+  @include breakpoint(medium down) {
+    min-height: 300px;
+  }
+  
+  &-right {
+    align-items: flex-start;
+  }
+
+  h1 {
+    width: auto;
+    font-weight: bold;
+    @include breakpoint(medium down) {
+      text-align: center;
+    }
+  }
+
+  p {
+    @extend %font-paragraph-large;
+    width: 70%;
+
+    @include breakpoint(medium down) {
+      margin: 0 auto;
+      text-align: center;
+      width: 90%;
+    }
+  }
+}
+
+.how-does-it-work {
+  // height: 420px;
+  display: flex;
+  justify-content: center;
+  padding: 50px 0;
+
+  @include left-right;
+
+  &-left {
+    h1 { 
+      width: 90%;
+
+      @include breakpoint(large up) {
+        font-size: 36px;
+      }
+     }
+  }
+
+  &-list {
+    font-size: 19px;
+    text-align: left;
+    padding: 20px;
+
+    @include breakpoint(medium down) {
+      font-size: 16px;
+      text-align: left;
+    }
+  }
+}
+
+
+.delete-your-data {
+  display: flex;
+  justify-content: center;
+  padding: 50px 0;
+  background-color: $color-brand-background;
+
+  @include left-right;
+
+  h2 {
+    font-weight: bold;
+    text-align: left;
+  }
+
+  p {
+    @extend %font-paragraph-large;
+    text-align: left;
+  }
+
+  .screen-render-inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img { 
+      height: 100%;
+      max-height: 85%;
+     }
+  }
+}

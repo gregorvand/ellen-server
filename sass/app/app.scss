@@ -1,5 +1,6 @@
 @import './settings';
 @import '../lib/.foundation';
+@import '../fonts/.fonts';
 @import '../modules/.modules';
 @import '../views/.views';
 
@@ -13,6 +14,10 @@ body {
   
   // * { border: solid blue thin; }
 
+  * {
+    box-sizing: border-box;
+  }
+
   a {
     color: $primary;
     text-decoration: underline;
@@ -24,8 +29,27 @@ body {
     }
   }
 
+  $max-width: 1280px;
+
   section {
-    max-width: 1280px;
+    max-width: $max-width;
     margin: 0 auto;
+
+    &.section-full-width {
+      max-width: none;
+      overflow-x: hidden;
+    }
+  }
+
+  .max-width-wrapper {
+    display: flex;
+    margin: 0 auto;
+    max-width: $max-width;
+    width: 100%;
+    flex-direction: column;
+
+    @include breakpoint(large up) {
+      flex-direction: row;
+    }  
   }
 }

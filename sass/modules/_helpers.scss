@@ -1,0 +1,18 @@
+@mixin left-right {
+  &-left, &-right {
+    display: flex;
+    flex-basis: 50%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    h1 {
+      text-align: left;
+      width: 75%;
+    }
+  }
+}
+
+@mixin fade-fast($duration: 200ms, $property: all) {
+  transition: $property $duration ease-in-out;
+}

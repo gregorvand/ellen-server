@@ -118,11 +118,4 @@ function getOrders(id) {
 
 };
 
-function doSomethingToData (data) {
-  // get initial value
-  // calc 
-
-  return data.map(order => order.t = 'woop woop');
-};
-
 module.exports.renderCompanyPage = renderCompanyPage;
