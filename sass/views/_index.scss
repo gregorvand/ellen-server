@@ -11,18 +11,7 @@
     flex-direction: row;
   }
 
-  &-left, &-right {
-    display: flex;
-    flex-basis: 50%;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    h1 {
-      text-align: left;
-      width: 75%;
-    }
-  }
+  @include left-right;
 }
 
 
@@ -88,6 +77,42 @@
       &-left {
         font-weight: 500;
       }
+    }
+  }
+}
+
+.your-data-your-profit {
+  background-color: $color-off-black;
+  text-align: left;
+  height: 320px;
+  display: flex;
+  justify-content: center;
+  color: $color-brand-background;
+
+  @include left-right;
+
+  @include breakpoint(medium down) {
+    height: 280px;
+  }
+  
+  &-right {
+    align-items: flex-start;
+  }
+
+  h1 {
+    font-weight: bold;
+    @include breakpoint(medium down) {
+      text-align: center;
+      margin-bottom: 0
+    }
+  }
+
+  p {
+    @extend %font-paragraph-large;
+    @include breakpoint(medium down) {
+      margin: 0 auto;
+      text-align: center;
+      width: 90%;
     }
   }
 }
