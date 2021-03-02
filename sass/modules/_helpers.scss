@@ -12,3 +12,7 @@
     }
   }
 }
+
+@mixin fade-fast($duration: 200ms, $property: all) {
+  transition: $property $duration ease-in-out;
+}
