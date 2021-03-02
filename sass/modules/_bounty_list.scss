@@ -1,4 +1,5 @@
 .bounty-list {
+  $top-index: 10;
   $stagger-indent: 5vw;
 
   position: relative;
@@ -7,18 +8,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: $top-index;
   margin-top: 20px;
+
+  @include breakpoint(small only) {
+    margin-top: -10px;
+  }
 
   // stagger each bounty block from the last
   &:nth-child(2n) { 
     margin-left: $stagger-indent;
     opacity: 60%;
+    z-index: $top-index / 2;
   }
 
   &:nth-child(3n) { 
     margin-left: $stagger-indent * 2;
     opacity: 30%;
+    z-index: $top-index / 3;
   }
 
   @include breakpoint(small only) {
@@ -72,6 +79,16 @@
 
       &-left {
         font-weight: 500;
+        max-width: 50%;
+      }
+
+      button.promo {
+        @include breakpoint(small only) {
+          height: 25px;
+          align-items: center;
+          justify-content: center;
+          display: flex;
+        }
       }
     }
   }

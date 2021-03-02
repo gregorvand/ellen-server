@@ -5,9 +5,15 @@
   display: flex;
   flex-direction: column;
   padding: 30px 0 50px;
+  height: 70vh;
+
+  @include breakpoint(medium only) {
+    height: 50vh;
+  }
 
   @include breakpoint(large up) {
     flex-direction: row;
+    height: 60vh;
   }
 
   @include left-right;
@@ -17,7 +23,6 @@
       font-weight: bold;
       line-height: 1.2;
 
-
       @include breakpoint(large up) {
         font-size: 40px;
       }
@@ -25,6 +30,17 @@
       @include breakpoint(xlarge up) {
         font-size: 50px;
       }
+    }
+
+    @include breakpoint(small only) {
+      margin-bottom: 20px;
+    }
+  }
+
+  .text-highlight {
+    @include breakpoint(small only) {
+      width: 100%;
+      display: flex;
     }
   }
 }

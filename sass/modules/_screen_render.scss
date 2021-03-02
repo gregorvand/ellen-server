@@ -8,8 +8,12 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
-  width: 320px;
   height: 220px;
+  width: 90%;
+
+  @include breakpoint(medium down) {
+    margin-bottom: 30px;
+  }
 
   @include breakpoint(medium up) {
     width: 460px;
