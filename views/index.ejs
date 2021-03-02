@@ -10,8 +10,6 @@
 
       <div class="index-hero-right">
         <%- include('./includes/bounty_list_item'); -%>
-        <%- include('./includes/bounty_list_item'); -%>
-        <%- include('./includes/bounty_list_item'); -%>
       </div>
     </div>
   </section>
@@ -114,23 +112,23 @@
     // randomly choose a bounty item
     // randomly assign data from list
 
-    const companyNames = ['Nike', 'REI', 'Wool&Prince', 'Rockler'];
-    const companyDates = ['March 2020', 'April 2019', 'May 2018', 'February 2017', 'October 2001'];
+    const companyNames = ['Patagonia', 'REI', 'Wool&Prince', 'Rockler', 'Nike', 'West Elm', 'Crate&Barrel', 'IKEA'];
+    const companyDates = ['March 2020', 'April 2019', 'May 2018', 'February 2017', 'October 2010', 'August 2009', 'August 2019', 'December 2020', 'February 2021'];
 
     setInterval(function() {
       const companyNumber = getRandomInt(companyNames.length);
       const dateNumber = getRandomInt(companyDates.length);
       const elemNumber = getRandomInt(3);
       const bountyItem = $('.bounty-list')[elemNumber];
-
       const bountyContent = $(bountyItem).find('.bounty-list-item-content-left');
+      
       $(bountyContent).addClass('blink');
       setTimeout(function() {
         bountyContent.text(`${companyNames[companyNumber]} / ${companyDates[dateNumber]}`);
         bountyContent.css('opacity', '0');
         bountyContent.css('opacity', '1');
       }, 500);
-      
+
       setTimeout(function () {
         $(bountyContent).removeClass('blink');
       }, 1000)

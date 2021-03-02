@@ -19,24 +19,24 @@
   &:nth-child(2n) { 
     margin-left: $stagger-indent;
     opacity: 60%;
-    z-index: $top-index / 2;
+    z-index: $top-index - 2;
   }
 
   &:nth-child(3n) { 
     margin-left: $stagger-indent * 2;
     opacity: 30%;
-    z-index: $top-index / 3;
+    z-index: $top-index - 4;
   }
 
   @include breakpoint(small only) {
     &:nth-child(2n) { 
       margin-left: $stagger-indent * 2;
-      opacity: 60%;
+      opacity: 100%;
     }
   
     &:nth-child(3n) { 
       margin-left: $stagger-indent * 4;
-      opacity: 30%;
+      opacity: 100%;
     }
   }
 
