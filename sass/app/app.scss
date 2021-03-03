@@ -7,6 +7,7 @@
 body {
   font-family: $body-font-family;
   font-size: 11px;
+  padding: 0 15px;
 
   @include breakpoint(large up) {
     padding: 0 25px;

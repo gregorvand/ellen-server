@@ -16,3 +16,14 @@
 @mixin fade-fast($duration: 200ms, $property: all) {
   transition: $property $duration ease-in-out;
 }
+
+%fast-blink {
+  animation: fast-blinker 1s linear;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+  background-color: $color-brand-highlight;
+}
+
+.fast-blink {
+  @extend %fast-blink;
+}
