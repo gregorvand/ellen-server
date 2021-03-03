@@ -27,6 +27,12 @@ nav {
         font-size: 9px;
       }
 
+      > a {
+        &:hover {
+          @extend %fast-blink;
+        }
+      }
+
      > a.login-nav {
         background-color: black;
         color: white;
