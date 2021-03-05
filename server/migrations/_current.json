@@ -78,6 +78,11 @@
                     "field": "plainContent",
                     "seqType": "Sequelize.TEXT"
                 },
+                "subjectLine": {
+                    "allowNull": true,
+                    "field": "subjectLine",
+                    "seqType": "Sequelize.TEXT"
+                },
                 "totalValue": {
                     "field": "totalValue",
                     "seqType": "Sequelize.INTEGER"
@@ -172,5 +177,5 @@
             "indexes": []
         }
     },
-    "revision": 4
+    "revision": 5
 }
