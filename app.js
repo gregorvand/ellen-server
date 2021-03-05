@@ -4,6 +4,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('./server/config/config.json')[env];
 
 const express = require('express');
+const helmet = require('helmet');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -23,6 +24,14 @@ const { registerForm } = require('./server/modules/registerForm');
 
 // Set up the express app
 const app = express();
+app.use(helmet.contentSecurityPolicy({
+  directives:{
+    defaultSrc:["'self'"],
+    scriptSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'http://localhost:8000', 'https://alpha.ellen.me', 'unsafe-inline'],
+    styleSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'fonts.googleapis.com', 'http://localhost:8000', 'https://alpha.ellen.me'],
+    fontSrc:["'self'",'fonts.googleapis.com', 'https://fonts.gstatic.com', 'http://localhost:8000', 'https://alpha.ellen.me'],
+    imgSrc:["'self'"]
+  }}));
 
 // Log requests to the console.
 app.use(logger('dev'));
