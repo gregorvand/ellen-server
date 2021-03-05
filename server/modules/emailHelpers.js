@@ -139,14 +139,6 @@ const companiesController = require('../controllers/companies');
     }
   }
 
-  function getStaticField (fields, scope) {
-    try {
-      return fields[scope];
-    } catch(err) {
-      console.err("could not identify that field");
-    }
-  }
-
   async function returnOrderDate (fields) {
     // parse the body html for the company email here:
     const $ = cheerio.load(fields);

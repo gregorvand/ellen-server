@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     },
+    subjectLine: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
     totalValue: DataTypes.INTEGER,
     currency: DataTypes.STRING
   });

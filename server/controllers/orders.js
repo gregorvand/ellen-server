@@ -8,7 +8,7 @@ module.exports = {
     // emailHelpers.parseSubjectForOrder(req);
     return Order
       .create({
-        orderNumber: orderNumber || req.body.number,
+        orderNumber: orderNumber || req.body.number || 1,
         orderDate: req.body.date || Date.now(),
         fromEmail: req.body.fromEmail || 'shop@sendertest.com',
         customerEmail: req.body.customerEmail || 'gregor@vand.hk',
@@ -19,7 +19,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  internalCreate(req = false, orderNumber, fromEmail, companyId, customerEmail, customerId, subject) {
+  internalCreate(req = false, orderNumber, fromEmail, companyId, customerEmail, customerId, subject, emailPlainContent) {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
     return Order
@@ -28,9 +28,10 @@ module.exports = {
         orderDate: orderDate || null,
         fromEmail: fromEmail || 'shop@sendertest.com',
         customerEmail: req.body.customerEmail || customerEmail,
-        plainContent: req.body.content || subject,
+        plainContent: req.body.content || emailPlainContent,
         companyId: companyId || 1,
-        customerId: customerId || 1
+        customerId: customerId || 1,
+        subjectLine: subject
       })
   },
 
