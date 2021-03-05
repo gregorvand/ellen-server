@@ -8,7 +8,7 @@ module.exports = {
     // emailHelpers.parseSubjectForOrder(req);
     return Order
       .create({
-        orderNumber: orderNumber || req.body.number,
+        orderNumber: orderNumber || req.body.number || 1,
         orderDate: req.body.date || Date.now(),
         fromEmail: req.body.fromEmail || 'shop@sendertest.com',
         customerEmail: req.body.customerEmail || 'gregor@vand.hk',
