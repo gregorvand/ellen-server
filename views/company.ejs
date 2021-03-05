@@ -106,7 +106,12 @@
         <tr>
         <td><%= order.subjectLine || order.tdlainContent %></td>
         <td><%= order.customerEmail %></td>
-        <td><span class="order-number-highlight"><%= order.orderNumber %></span></td>
+        <td>
+          <form class="internalOrderUpdate" action="" data-order-id="<%= order.id %>">
+            <input type="text" placeholder="<%= order.orderNumber %>"></a>
+            <input type="hidden">
+          </form>
+        </td>
         <td><%= order.orderDate %></td>
         <td>
           <div class="overflow-container">
@@ -118,6 +123,27 @@
   </table>
     </div>
   </section>
+  <script src="../cash-dom/dist/cash.min.js"></script>
+  <script src="../axios/dist/axios.min.js"></script>
+  <script>
+  $('.internalOrderUpdate').on('submit', function(e) {
+    e.preventDefault();
+    const inputName = $(e.target).find('input[type=text]').val();
+
+    axios({
+      method: 'post',
+      url: `/api/orders/update/${$(e.target).data('order-id')}`,
+      data: {
+        orderNumber: inputName
+      }}).then(function (response) {
+          $(e.target).find('input[type=text]').val('');
+          $(e.target).find('input[type=text]').attr('placeholder', inputName);
+         console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
+  });
+</script> 
 <% } %>
   
 <%- include('./includes/footer'); -%>

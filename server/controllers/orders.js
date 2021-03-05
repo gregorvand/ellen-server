@@ -69,6 +69,25 @@ module.exports = {
       .catch((error) => res.status(400).send(error));
   },
 
+  update(req, res) {
+    return Order
+      .findByPk(req.params.id)
+      .then(order => {
+        if (!order) {
+          return res.status(404).send({
+            message: 'Order record Not Found',
+          });
+        }
+        return order
+          .update({
+            orderNumber: req.body.orderNumber || 1,
+          })
+          .then(() => res.status(200).send('updated!'))  // Send back the updated todo.
+          .catch((error) => res.status(400).send(error));
+      })
+    .catch((error) => res.status(400).send(error));
+  },
+
   // retrieve(req, res) {
   //     return Todo
   //       .findByPk(req.params.todoId, {
