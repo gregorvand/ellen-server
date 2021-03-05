@@ -137,6 +137,8 @@ function getAllCompanyEmails (id, user) {
       order: [ ['createdAt', 'DESC'] ]
     })
   } else {
+    // if not admin, just return an empty undefined Promise 
+    // for Promose.all to move on
     return Promise.resolve();
   }
 };

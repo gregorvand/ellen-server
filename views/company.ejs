@@ -92,16 +92,20 @@
 </script>
 
 <% if (currentUser.status === 'admin') { %>
-  <section class="email-record">
+  <section class="all-email-record">
     <h4>All emails submitted for this company</h4>
-    <ul class="orders-by-company-list">
+    <div class="orders-by-company-list">
     <% if (typeof orders != 'undefined') {  
       allOrders.forEach((order) => { %>
-        <li class="orders-by-company-list-item">
-          <%= order.subjectLine || order.plainContent %>
-        </li>
+        <div class="order-record">
+          <p><strong>Subject: </strong><%= order.subjectLine || order.plainContent %></p>
+          <p><strong>Submitter: </strong><%= order.customerEmail %></p>
+          <p><strong>Current Order Number ('1' means unknown): </strong><span class="order-number-highlight"><%= order.orderNumber %></span></p>
+          <p><strong>Current Date: </strong><%= order.orderDate %></p>
+          <p><strong>Content: </strong><%= order.plainContent %></p>
+        </div>
     <% })} %>
-    </ul>
+    </div>
   </section>
 <% } %>
   
