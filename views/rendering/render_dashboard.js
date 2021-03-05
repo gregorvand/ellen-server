@@ -1,6 +1,7 @@
 const Order = require('../../server/models').Order;
 const Company = require('../../server/models').Company;
 const dashboardHelpers = require('../../views/helpers/dashboard_helpers');
+const Op = require('sequelize').Op;
 
 
 const renderDashboard = function(req, res) {
@@ -27,13 +28,20 @@ function getOrdersByCompany (id) {
   return Order
   .findAll({
     where: {
-      customerId: id
+      customerId: id,
+      orderNumber: {
+        [Op.gt]: 1
+      }
     },
     include: [{
       model: Company,
       attributes: ['nameIdentifier', 'id'],
     }],
-    order: [ [ Company, 'nameIdentifier', 'ASC' ], ['orderDate', 'DESC'] ]
+    order: [ 
+      [ 
+        Company, 'nameIdentifier', 'ASC' ],
+        ['orderDate', 'DESC'],
+      ]
   })
 };
 
