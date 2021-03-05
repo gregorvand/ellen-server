@@ -30,7 +30,7 @@
         </span> 
         <span class="orders-by-company-list-divider">::</span>
         <span class="orders-by-company-list-email-subject">
-          <%= email.plainContent %>
+          <%= email.subjectLine || email.plainContent %>
         </span>
       </li>
   <% })} %>

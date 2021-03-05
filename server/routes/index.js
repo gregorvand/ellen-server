@@ -73,7 +73,7 @@ module.exports = (app) => {
           emailPlainContentPromise
         ]).then((values) => {
           console.log('woohoo! finito', orderNumber, companyObject.nameIdentifier, customer.id);
-          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, senderEmail, customer.id, emailFields['headers[subject]']);
+          ordersController.internalCreate(req, orderNumber, companyObject.emailIdentifier, companyObject.id, senderEmail, customer.id, emailFields['headers[subject]'], plainContent);
         });
        })
        
