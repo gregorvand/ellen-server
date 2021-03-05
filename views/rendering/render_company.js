@@ -17,12 +17,17 @@ const renderCompanyPage = function(req, res) {
     avgData = getDayAvgOrders(returnedOrders);
   })
 
-  Promise.all([companyPromise, orderPromise]).then(() => {
+  const latestEmailsPromise = getAllCompanyEmails(req.params.id, req.user).then(allEmails => {
+    userOrders = allEmails;
+  })
+
+  Promise.all([companyPromise, orderPromise, latestEmailsPromise]).then(() => {
     res.render("company", { 
       company: currentCompany,
       orders: ordersData,
       avgOrders: avgData,
-      helpers: companyHelpers
+      helpers: companyHelpers,
+      allOrders: userOrders
     });
   })
 }
@@ -75,12 +80,12 @@ function getDayAvgOrders(orders) {
     const avgOrdersAll = orderDifference / dayDifference;
   
     //  logs..
-    console.log('order diff', orderDifference);
-    console.log(dayOneDate);
-    console.log(dayOneOrder);
-    console.log(dayFinalOrder);
-    console.log('total diff', dayDifference); 
-    console.log('avg', avgOrdersAll); 
+    // console.log('order diff', orderDifference);
+    // console.log(dayOneDate);
+    // console.log(dayOneOrder);
+    // console.log(dayFinalOrder);
+    // console.log('total diff', dayDifference); 
+    // console.log('avg', avgOrdersAll); 
     
    return avgOrdersAll.toFixed(2);
   } 
@@ -120,6 +125,20 @@ function getOrders(id) {
   .then((orders) => orders)
   .catch((error) => console.error('error with company page lookup', error));
 
+};
+
+function getAllCompanyEmails (id, user) {
+  if (user.status == 'admin') {
+    return Order
+    .findAll({
+      where: {
+        companyId: id
+      },
+      order: [ ['createdAt', 'DESC'] ]
+    })
+  } else {
+    return Promise.resolve();
+  }
 };
 
 module.exports.renderCompanyPage = renderCompanyPage;

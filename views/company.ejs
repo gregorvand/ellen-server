@@ -90,5 +90,19 @@
     console.log('no company data');
   }
 </script>
+
+<% if (currentUser.status === 'admin') { %>
+  <section class="email-record">
+    <h4>All emails submitted for this company</h4>
+    <ul class="orders-by-company-list">
+    <% if (typeof orders != 'undefined') {  
+      allOrders.forEach((order) => { %>
+        <li class="orders-by-company-list-item">
+          <%= order.subjectLine || order.plainContent %>
+        </li>
+    <% })} %>
+    </ul>
+  </section>
+<% } %>
   
 <%- include('./includes/footer'); -%>
