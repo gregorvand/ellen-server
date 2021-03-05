@@ -4,8 +4,10 @@ nav {
   display: flex;
   justify-content: center;
 
-  @include breakpoint(small only) {
-    padding: 0 5px;
+  .index & {
+    @include breakpoint(small only) {
+      padding: 0 15px;
+    }
   }
 
   ul {

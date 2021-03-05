@@ -9,6 +9,12 @@ body {
   font-size: 11px;
   padding: 0 15px;
 
+  &.index {
+    @include breakpoint(small only) {
+      padding: 0;
+    }
+  }
+
   @include breakpoint(large up) {
     padding: 0 25px;
   }
