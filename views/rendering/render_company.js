@@ -2,6 +2,7 @@ const Company = require('../../server/models').Company;
 const Order = require('../../server/models').Order;
 const dayjs = require('dayjs');
 const companyHelpers = require('../../views/helpers/company_helpers');
+const Op = require('sequelize').Op;
 
 
 const renderCompanyPage = function(req, res) {
@@ -103,7 +104,10 @@ function getOrders(id) {
   return Order
   .findAll({
     where: {
-      companyId: id
+      companyId: id,
+      orderNumber: {
+        [Op.gt]: 1
+      }
     },
     attributes: [
       ['orderDate', 't'],
