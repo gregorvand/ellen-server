@@ -95,16 +95,23 @@
   <section class="all-email-record">
     <h4>All emails submitted for this company</h4>
     <div class="orders-by-company-list">
+  <table>
+        <th>Subject</th>  
+        <th>Submitter</th>  
+        <th>Order No.</th>  
+        <th>Order Date</th>  
+        <th>Content</th> 
     <% if (typeof orders != 'undefined') {  
       allOrders.forEach((order) => { %>
-        <div class="order-record">
-          <p><strong>Subject: </strong><%= order.subjectLine || order.plainContent %></p>
-          <p><strong>Submitter: </strong><%= order.customerEmail %></p>
-          <p><strong>Current Order Number ('1' means unknown): </strong><span class="order-number-highlight"><%= order.orderNumber %></span></p>
-          <p><strong>Current Date: </strong><%= order.orderDate %></p>
-          <p><strong>Content: </strong><%= order.plainContent %></p>
-        </div>
+        <tr>
+        <td><%= order.subjectLine || order.tdlainContent %></td>
+        <td><%= order.customerEmail %></td>
+        <td><span class="order-number-highlight"><%= order.orderNumber %></span></td>
+        <td><%= order.orderDate %></td>
+        <td><%= order.plainContent %></td>
+      </td>
     <% })} %>
+  </table>
     </div>
   </section>
 <% } %>
