@@ -1,3 +1,11 @@
+<!-- set a class on the body if passed in with view var -->
+<% 
+let bodyClass = '';
+  if (typeof view !== 'undefined') { 
+    bodyClass = view
+  }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">  <link rel="stylesheet" href="/css/app.css">
   <script src="/cash-dom/dist/cash.min.js"></script>
 </head>
-<body style="text-align: center;">
+<body class="<%= bodyClass %>" style="text-align: center;">
 <nav>
 <ul>
   <li class="nav-optional">
