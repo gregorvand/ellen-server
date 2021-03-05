@@ -2,11 +2,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
 const User = require('./server/models').User;
 
-const usersController = require('./server/controllers/users');
-
 async function initPassport(passport) {
   const authenticateUser = (userEmail, password, done) => {
-    // const currentUser = await usersController.checkDbForUser({'email': email});
     
     return User
     .findOne({

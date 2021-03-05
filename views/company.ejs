@@ -90,5 +90,60 @@
     console.log('no company data');
   }
 </script>
+
+<% if (currentUser.status === 'admin') { %>
+  <section class="all-email-record">
+    <h4>All emails submitted for this company</h4>
+    <div class="orders-by-company-list">
+  <table>
+        <th>Subject</th>  
+        <th>Submitter</th>  
+        <th>Order No.</th>  
+        <th>Order Date</th>  
+        <th>Content</th> 
+    <% if (typeof orders != 'undefined') {  
+      allOrders.forEach((order) => { %>
+        <tr>
+        <td><%= order.subjectLine || order.tdlainContent %></td>
+        <td><%= order.customerEmail %></td>
+        <td>
+          <form class="internalOrderUpdate" action="" data-order-id="<%= order.id %>">
+            <input type="text" placeholder="<%= order.orderNumber %>"></a>
+            <input type="hidden">
+          </form>
+        </td>
+        <td><%= order.orderDate %></td>
+        <td>
+          <div class="overflow-container">
+            <%= order.plainContent %>
+          </div>
+        </td>
+      </td>
+    <% })} %>
+  </table>
+    </div>
+  </section>
+  <script src="../cash-dom/dist/cash.min.js"></script>
+  <script src="../axios/dist/axios.min.js"></script>
+  <script>
+  $('.internalOrderUpdate').on('submit', function(e) {
+    e.preventDefault();
+    const inputName = $(e.target).find('input[type=text]').val();
+
+    axios({
+      method: 'post',
+      url: `/api/orders/update/${$(e.target).data('order-id')}`,
+      data: {
+        orderNumber: inputName
+      }}).then(function (response) {
+          $(e.target).find('input[type=text]').val('');
+          $(e.target).find('input[type=text]').attr('placeholder', inputName);
+         console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
+  });
+</script> 
+<% } %>
   
 <%- include('./includes/footer'); -%>

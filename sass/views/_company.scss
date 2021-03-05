@@ -1,0 +1,29 @@
+.all-email-record {
+  text-align: left;
+
+  .order-record {
+    margin-bottom: 40px;
+
+    > p {
+      margin-bottom: 10px;
+    }
+
+    .order-number-highlight {
+      font-size: 16px;
+    }
+  }
+
+  th { width: 100px; }
+  td {
+    .overflow-container {
+      height: 100px;
+      overflow: scroll;
+      border: solid #efefef 2px
+    }
+
+    form { 
+      height: 38px;
+      margin-bottom: 0;
+     }
+  }
+}
