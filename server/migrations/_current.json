@@ -163,6 +163,10 @@
                     "field": "status",
                     "seqType": "Sequelize.STRING"
                 },
+                "identifier": {
+                    "field": "identifier",
+                    "seqType": "Sequelize.STRING"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -177,5 +181,5 @@
             "indexes": []
         }
     },
-    "revision": 5
+    "revision": 6
 }

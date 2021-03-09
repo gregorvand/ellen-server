@@ -8,7 +8,8 @@ module.exports = {
         firstName: req.body.firstName || 'Jon',
         lastName: req.body.lastName || 'Jim',
         email: req.body.email,
-        password: req.body.password || 'password'
+        password: req.body.password || 'password',
+        identifier: req.body.identifier
       })
       .then(user => res.status(201).send(user))
       .catch(error => res.status(400).send(error));
