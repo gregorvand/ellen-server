@@ -1,17 +1,21 @@
 <%- include('./includes/header'); -%>
+<% const email = helpers.getInboundEmailAddress() %>
 
 <section class="dashboard-intro"> 
   <div class="dashboard-intro-welcome">
     <h1>Hello, <br /> <%= user.firstName %></h1>
-    <p><%= user.email %></p>
+    <p>
+      <%= user.email %>
+      <br />
+      <strong>My unique address: </strong><%= user.identifier %>@<%= email %>
+    </p>
   </div>
   <div class="dashboard-intro-info">
     <div class="padding-wrapper">
-      Send an email from your user account email to:
+      Send an email from your user account email to your unique address below:
       <br /> 
       <strong>
-        <% const email = helpers.getInboundEmailAddress() %>
-        <a href="<%= email %>"><%= email %></a>
+        <a href="<%= user.identifier %>@<%= email %>"><%= user.identifier %>@<%= email %></a>
       </strong>
     </div>
   </div>
