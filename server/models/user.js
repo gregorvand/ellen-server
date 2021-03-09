@@ -23,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       default: "pending",
     },
+    identifier: {
+      type: DataTypes.STRING,
+    },
   });
   
   User.associate = (models) => {
