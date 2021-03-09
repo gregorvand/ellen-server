@@ -112,19 +112,28 @@ const companiesController = require('../controllers/companies');
     }
   }
 
-  async function findCustomerByEmail (envelopeFrom) {
+  async function findCustomerByEmail (envelopeFrom, envelopeTo) {
     const User = require('../models').User;
 
     console.log('envelope', envelopeFrom);
+    const identiferStringArray = envelopeTo.split('@'); 
+    // find a customer by email
+    let customer = await User.findOne({ where: { email: envelopeFrom } });
+
+    console.log('so far...', customer);
+    
+    // or by their identifier (inbound email address)
+    let customerByIdentifer = await User.findOne({ where: { identifier: identiferStringArray[0] } });
+    
     try {
-      let customer = await User.findOne({ where: { email: envelopeFrom } });
-      if (customer === null) {
+      if (customerByIdentifer) {
+        return customerByIdentifer;
+      } else if (customer) {
+        console.log('found a customer?', customer.email);
+        return customer;
+      } else if (customer === null && customerByIdentifer === null) {
         console.log('Customer Not found!');
         return 0; // no user assigned, will default to user '0'
-      } else {
-        console.log('found a customer?', customer instanceof User);
-        console.log(customer.email);
-        return customer;
       }
     } catch (err) {
       return 'oh no! customer lookup totally failed.';
