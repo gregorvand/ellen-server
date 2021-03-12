@@ -154,13 +154,3 @@ function getAllCompanyEmails (id, user) {
 };
 
 module.exports.renderCompanyPage = renderCompanyPage;
-
-
-let compare6 = function(dataArray) {
-  dataArray.forEach(function(item, index) {
-    const lastItem = dataArray[index-1];
-    if (item != lastItem) {
-      console.log('using', item);
-    }
-  });
-}
