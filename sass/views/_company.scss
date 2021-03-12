@@ -1,6 +1,11 @@
 .all-email-record {
   text-align: left;
 
+  .orders-by-company-list {
+    width: 100%;
+    overflow-x: scroll;
+  }
+  
   .order-record {
     margin-bottom: 40px;
 
