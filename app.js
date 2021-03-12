@@ -24,6 +24,8 @@ const { registerForm } = require('./server/modules/registerForm');
 
 // Set up the express app
 const app = express();
+// app.disable('view cache'); // DO NOT COMMIT THIS
+
 app.use(helmet.contentSecurityPolicy({
   directives:{
     defaultSrc:["'self'"],
