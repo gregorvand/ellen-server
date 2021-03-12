@@ -1,7 +1,6 @@
 const Company = require('../../server/models').Company;
 const Order = require('../../server/models').Order;
 const dayjs = require('dayjs');
-const companyHelpers = require('../../views/helpers/company_helpers');
 const Op = require('sequelize').Op;
 
 
@@ -26,7 +25,7 @@ const renderCompanyPage = function(req, res) {
       company: currentCompany,
       orders: ordersData,
       avgOrders: avgData,
-      helpers: companyHelpers,
+      // helpers: companyHelpers,
       allOrders: userOrders
     });
   })
@@ -40,21 +39,32 @@ function getOrderDifferenceIncrement(orders) {
   orderData.forEach((order, index) => {
     if (index !== 0) {
       // get timestamp difference first and store as a day value, divide by no. of days between
+
+      // if date1 and date2 are the same, remove the last loop's data, get 
       const date1 = dayjs(orderData[(index-1)].t);
       const date2 = dayjs(order.t);
       const dayDifference = date2.diff(date1, 'day');
       const avgOrderIncrement = ((order.y - orderData[index-1].y) / dayDifference).toFixed(2);
 
-      // we shift the 'differece' value to line up with date1 so that
-      // avg *starts* at that date
-      const backDate = orderData[index-1].t;
-      newData.push({'y': avgOrderIncrement, 't': backDate });
+      // if we have two of the same date, discard the higher number (easier solution day one)
+      if (!date1.isSame(date2, 'day')) {
+        
+        // GOOD DEBUG
+        // console.log('data stuff', order.y, date1, date2, dayDifference, avgOrderIncrement);
 
-      // for stepped graph, we then need a final data point 
-      // that is the final date and a repeat of the avg order value
-      // also valid as 'extrapolation' technique for non-stepped
-      if (index === (totalDataPoints-1)) {
-        newData.push(({'y': avgOrderIncrement, 't': order.t }));
+        // we shift the 'differece' value to line up with date1 so that
+        // avg *starts* at that date
+        const backDate = orderData[index-1].t;
+        newData.push({'y': avgOrderIncrement, 't': backDate });
+  
+        // for stepped graph, we then need a final data point 
+        // that is the final date and a repeat of the avg order value
+        // also valid as 'extrapolation' technique for non-stepped
+        if (index === (totalDataPoints-1)) {
+          newData.push({'y': avgOrderIncrement, 't': order.t });
+        }
+      } else {
+        console.log(`yikes we got two of the same!, ignoring ${order.y}`);
       }
     }
 
@@ -144,3 +154,13 @@ function getAllCompanyEmails (id, user) {
 };
 
 module.exports.renderCompanyPage = renderCompanyPage;
+
+
+let compare6 = function(dataArray) {
+  dataArray.forEach(function(item, index) {
+    const lastItem = dataArray[index-1];
+    if (item != lastItem) {
+      console.log('using', item);
+    }
+  });
+}
