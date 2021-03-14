@@ -33,8 +33,6 @@ module.exports = (app) => {
     emailHelpers.parseEmail(req, res)
       .then((emailFields) => {
         availablEmailFields = emailFields;
-        console.log('at least subject was', emailFields['headers[subject]']);
-
 
         const getCompanyPromise = emailHelpers.findCompanyByEmail(emailFields['html']);
 
@@ -42,7 +40,7 @@ module.exports = (app) => {
           companyObject = returnedCompany;
         })
 
-        const orderPromise = getCompanyPromise.then((companyObject) => emailHelpers.returnOrderNumber(emailFields['headers[subject]'], companyObject).then((returnedOrderNumber) => {
+        const orderPromise = getCompanyPromise.then((companyObject) => emailHelpers.returnOrderNumber(emailFields['headers[subject]'], companyObject, emailFields['plain']).then((returnedOrderNumber) => {
           orderNumber = returnedOrderNumber || 1;
         }));
 

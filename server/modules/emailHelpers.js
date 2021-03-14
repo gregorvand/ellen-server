@@ -37,7 +37,9 @@ const companiesController = require('../controllers/companies');
     });
   }
   
-  async function returnOrderNumber (subject, companyObject) {
+  async function returnOrderNumber (subject, companyObject, plainContent) {
+    // console.log('plain izz', plainContent);
+
     // TODO: get prefix from Company record first
     // const prefix = "\#";
     // const regex = "\#(?=\w*)\w+"
@@ -52,7 +54,7 @@ const companiesController = require('../controllers/companies');
     // matching # vs A-Z prefix required different approaches
     if (orderPrefix === '#') {
       regexExpression = `\\${orderPrefix}\\s*(?=\\w*)\\w+`
-    } else {
+    } else {  
       regexExpression = mutableRegex;
     }
 
@@ -66,7 +68,7 @@ const companiesController = require('../controllers/companies');
         return orderNumberArray[1];
       } else {
           let orderNumberFound = 0;
-          const prefixes = ['SO', 'ORDER']; // this should come from a Table of all known prefixes .. join table?
+          const prefixes = constants.PREFIXES; // this should come from a Table of all known prefixes .. join table?
           
           prefixes.some(regexPrefix => {
             console.log(`checking against ${regexPrefix}`);
@@ -79,6 +81,12 @@ const companiesController = require('../controllers/companies');
               orderNumberFound = orderNumberArray[1];
               // console.log('trying to return', orderNumberFound);
               return true;
+             } else if (plainContent.match(new RegExp(regex, 'g'))){
+              const found = plainContent.match(new RegExp(regex, 'g'));
+              // console.log('found?', found);
+              let orderWithPrefix = found[0];
+              let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
+              orderNumberFound = orderNumberArray[1];
             } else {
               return false;
             }

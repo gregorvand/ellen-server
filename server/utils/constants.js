@@ -4,5 +4,15 @@ module.exports = Object.freeze({
     'MMM D YYYY H:mm A', 
     'DD MMM YYYY HH:mm',
     'D MMM YYYY HH:mm'
+  ],
+  PREFIXES: [
+    'SO',
+    'ORDER',
+    'No.',
+    '#',
+    'Order',
+    'order',
+    'Confirmation',
+    'confirmation'
   ]
 });
