@@ -47,11 +47,11 @@ const companiesController = require('../controllers/companies');
     const orderPrefix = companyObject.orderPrefix;
     
     let regexExpression = ``;
-    const mutableRegex = `\\b(\\w*${orderPrefix}\\w*)\\b`;
+    const mutableRegex = `\\b(\\w*${orderPrefix}\\s*\\w*)\\b`;
 
     // matching # vs A-Z prefix required different approaches
     if (orderPrefix === '#') {
-      regexExpression = `\\${orderPrefix}(?=\\w*)\\w+`
+      regexExpression = `\\${orderPrefix}\\s*(?=\\w*)\\w+`
     } else {
       regexExpression = mutableRegex;
     }
@@ -70,7 +70,7 @@ const companiesController = require('../controllers/companies');
           
           prefixes.some(regexPrefix => {
             console.log(`checking against ${regexPrefix}`);
-            const regex = `\\b(\\w*${regexPrefix}\\w*)\\b`;
+            const regex = `\\b(\\w*${regexPrefix}\\s*\\w*)\\b`;
             if (subject.match(new RegExp(regex, 'g'))) {
               const found = subject.match(new RegExp(regex, 'g'));
               // console.log('found?', found);
