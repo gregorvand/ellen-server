@@ -68,7 +68,7 @@ const companiesController = require('../controllers/companies');
         return orderNumberArray[1];
       } else {
           let orderNumberFound = 0;
-          const prefixes = constants.PREFIXES; // this should come from a Table of all known prefixes .. join table?
+          const prefixes = constants.PREFIXES;
           
           prefixes.some(regexPrefix => {
             console.log(`checking against ${regexPrefix}`);
