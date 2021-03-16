@@ -27,6 +27,7 @@
     "cash-dom": "^8.1.0",
     "chart.js": "^2.9.4",
     "cheerio": "^1.0.0-rc.3",
+    "clipboard": "^2.0.8",
     "connect-pg-simple": "^6.2.1",
     "dayjs": "^1.10.2",
     "dotenv": "^8.2.0",
