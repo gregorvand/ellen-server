@@ -36,6 +36,11 @@
       text-transform: uppercase;
       font-weight: bold;
       text-align: left;
+
+      @include breakpoint(small only) {
+        text-align: center;
+        font-size: 24px;
+      }
     }
   }
 }
@@ -252,7 +257,10 @@
     height: 100%;
     align-items: center;
     margin: 0;
-    margin-right: 20px;
+    
+    @include breakpoint(medium up) {
+      margin-right: 20px;
+    }
   }
 
   .unique-identifier-email {
