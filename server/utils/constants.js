@@ -8,11 +8,13 @@ module.exports = Object.freeze({
   PREFIXES: [
     'SO',
     'ORDER',
+    'order -',
     'No.',
     '#',
     'Order',
     'order',
     'Confirmation',
-    'confirmation'
+    'confirmation',
+    'order r'
   ]
-});
+}); 

@@ -1,22 +1,26 @@
 <%- include('./includes/header'); -%>
 <% const email = helpers.getInboundEmailAddress() %>
 
+<section class="dashboard-top-info">  
+  <% if (session.passport && session.passport.user) { %>
+  <div>
+    <strong>
+        <%= user.email %>
+    </strong>
+  </div>
+  <% } %>
+</section>
 <section class="dashboard-intro"> 
   <div class="dashboard-intro-welcome">
-    <h1>Hello, <br /> <%= user.firstName %></h1>
-    <p>
-      <%= user.email %>
-      <br />
-      <strong>My unique address: </strong><%= user.identifier %>@<%= email %>
-    </p>
-  </div>
-  <div class="dashboard-intro-info">
-    <div class="padding-wrapper">
-      Send an email from your user account email to your unique address below:
-      <br /> 
-      <strong>
-        <a href="<%= user.identifier %>@<%= email %>"><%= user.identifier %>@<%= email %></a>
-      </strong>
+    <h1>Hello, <%= user.firstName %></h1>
+    <div class="unique-identifier-wrapper">
+      <h5>Send in your order data</h5>
+      <div class="unique-identifier-email" data-clipboard-target="#copy-email">
+        <img src="/images/email-icon.svg" alt="ellen insights logo">
+        <span id="copy-email" class="unique-identifier-email-copy">
+          <%= user.identifier %>@<%=email %>
+        </span>
+      </div>
     </div>
   </div>
 </section>
@@ -68,3 +72,16 @@
 </section>
 </section>
 <%- include('./includes/footer'); -%> 
+
+<script src="../cash-dom/dist/cash.min.js"></script>
+<script src="../clipboard/dist/clipboard.min.js"></script>
+
+<script>
+  $(function() {
+    console.log('loaded!');
+    let clipboard = new ClipboardJS('.unique-identifier-email');
+    clipboard.on('success', function(e) {
+      $('#copy-email').addClass('copied');
+    });
+  })
+</script>

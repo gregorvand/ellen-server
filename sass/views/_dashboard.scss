@@ -36,6 +36,11 @@
       text-transform: uppercase;
       font-weight: bold;
       text-align: left;
+
+      @include breakpoint(small only) {
+        text-align: center;
+        font-size: 24px;
+      }
     }
   }
 }
@@ -218,6 +223,80 @@
           flex-basis: 50%;
         }
       }
+    }
+  }
+}
+
+.unique-identifier-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+
+  &:after {
+    content: 'Your unique identifier email to send to. Click to copy';
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    color: $color-gray;
+
+    @include breakpoint(small only) {
+      position: relative;
+      bottom: -5px;
+    }
+  }
+
+  @include breakpoint(medium up) {
+    flex-direction: row;
+  }
+
+  h5 {
+    @extend %font-heading-medium;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    margin: 0;
+    
+    @include breakpoint(medium up) {
+      margin-right: 20px;
+    }
+  }
+
+  .unique-identifier-email {
+    background-color: $color-brand-background;
+    border: solid black 2px;
+    border-radius: 13px;
+    padding: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    position: relative;
+
+    @include breakpoint(small only) {
+      margin-top: 30px;
+    }
+
+    
+    &-copy::selection {
+      background: $color-brand-highlight; /* WebKit/Blink Browsers */
+    }
+
+    &-copy {
+      &.copied {
+        &:after {
+          content: 'copied!';
+          position: absolute;
+          top: -30px;
+          left: 0;
+        }
+      }
+    }
+
+    > img {
+      margin-right: 10px;
     }
   }
 }
