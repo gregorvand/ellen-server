@@ -23,7 +23,7 @@
 
       <div class="your-data-your-profit-right">
         <p>
-          Companies like Facebook, Google, and VISA make billions selling <strong>YOUR</strong> data. 
+          Companies like Facebook, Google, and VISA make billions using <strong>YOUR</strong> data. Amazon is getting in on it, too.
         </p>
         <p>Let’s change that.</p>
       </div>
@@ -99,9 +99,11 @@
     </div>
   </section>
 
-  <script>
-    console.log('wohooho home');
+  <section>
+    
+  </section>
 
+  <script>
     function getRandomInt(max) {
       return Math.floor(Math.random() * Math.floor(max));
     }
@@ -113,10 +115,14 @@
     const companyNames = ['Patagonia', 'REI', 'Rockler', 'Nike', 'West Elm', 'Crate&Barrel', 'IKEA'];
     const companyDates = ['March 2020', 'April 2019', 'May 2018', 'February 2017', 'October 2010', 'August 2009', 'August 2019', 'December 2020', 'February 2021'];
 
+    let lastValue = 4;
     setInterval(function() {
       const companyNumber = getRandomInt(companyNames.length);
       const dateNumber = getRandomInt(companyDates.length);
       const elemNumber = getRandomInt(3);
+      if (elemNumber === lastValue) {
+        elemNumber = getRandomInt(3);
+      }
       const bountyItem = $('.bounty-list')[elemNumber];
       const bountyContent = $(bountyItem).find('.bounty-list-item-content-left');
       
@@ -130,6 +136,8 @@
       setTimeout(function () {
         $(bountyContent).removeClass('blink');
       }, 1000)
+
+      lastValue = elemNumber;
     }, 1500)
   </script>
 
