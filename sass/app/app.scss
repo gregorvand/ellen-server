@@ -8,6 +8,9 @@ body {
   font-family: $body-font-family;
   font-size: 11px;
   padding: 0 15px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 
   &.index {
     @include breakpoint(small only) {
@@ -33,6 +36,7 @@ body {
 
     &:hover {
       text-decoration: none;
+      color: $color-gray;
     }
   }
 
@@ -41,6 +45,7 @@ body {
   section {
     max-width: $max-width;
     margin: 0 auto;
+    width: 100%;
 
     &.section-full-width {
       max-width: none;
@@ -58,5 +63,17 @@ body {
     @include breakpoint(large up) {
       flex-direction: row;
     }  
+  }
+}
+
+footer {
+  border-top: dotted $primary 1px;
+  background-color: $color-brand-highlight;
+  padding: 20px;
+  margin-top: auto;
+
+  p {
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 }

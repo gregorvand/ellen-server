@@ -238,7 +238,7 @@
     content: 'Your unique identifier email to send to. Click to copy';
     position: absolute;
     bottom: -20px;
-    right: 0;
+    right: 5px;
     color: $color-gray;
 
     @include breakpoint(small only) {
