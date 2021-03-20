@@ -52,8 +52,9 @@ const companiesController = require('../controllers/companies');
     const mutableRegex = `\\b(\\w*${orderPrefix}\\s*\\w*)\\b`;
 
     // matching # vs A-Z prefix required different approaches
-    if (orderPrefix === '#') {
+    if (orderPrefix.includes('#')) {
       regexExpression = `\\${orderPrefix}\\s*(?=\\w*)\\w+`
+      console.log('using #-based');
     } else {  
       regexExpression = mutableRegex;
     }
@@ -65,7 +66,21 @@ const companiesController = require('../controllers/companies');
         const found = subject.match(new RegExp(regexExpression, 'g'));
         let orderWithPrefix = found[0];
         let orderNumberArray = orderWithPrefix.split(`${orderPrefix}`);
-        return orderNumberArray[1];
+
+        // finally get rid of any unforeseen letters
+        // *****CLEAN THIS UP INTO FUNCTION WITH BELOW
+        const letterRegExp = new RegExp(`[a-zA-Z]`, 'g');
+        const checkString = orderNumberArray[1];
+
+        if (letterRegExp.test(checkString)) {
+          console.log('needed to get rid of Letter..');
+          const foundWithLetter = checkString.split(letterRegExp);
+          orderNumberFound = foundWithLetter[foundWithLetter.length -1];          
+        } else {
+          orderNumberFound = orderNumberArray[1];
+        }
+
+        return orderNumberFound;
       } else {
           let orderNumberFound = 0;
           const prefixes = constants.PREFIXES;
@@ -86,7 +101,9 @@ const companiesController = require('../controllers/companies');
               // console.log('found?', found);
               let orderWithPrefix = found[0];
               let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
-              orderNumberFound = orderNumberArray[1];
+
+              return orderNumberArray[1];
+
             } else {
               return false;
             }
@@ -95,7 +112,7 @@ const companiesController = require('../controllers/companies');
         return orderNumberFound;
       }
     } catch(err) {
-      console.err("still could not match regex!", err);
+      console.error("still could not match regex!", err);
     }
   }
 
