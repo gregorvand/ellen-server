@@ -102,17 +102,7 @@ const companiesController = require('../controllers/companies');
               let orderWithPrefix = found[0];
               let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
 
-              // *****CLEAN THIS UP INTO FUNCTION WITH ABOVE
-              const letterRegExp = new RegExp(`[a-zA-Z]`, 'g');
-              const checkString = orderNumberArray[1];
-
-              if (letterRegExp.test(checkString)) {
-                console.log('needed to get rid of Letter..');
-                const foundWithLetter = checkString.split(letterRegExp);
-                orderNumberFound = foundWithLetter[foundWithLetter.length -1];          
-              } else {
-                orderNumberFound = orderNumberArray[1];
-              }
+              return orderNumberArray[1];
 
             } else {
               return false;
