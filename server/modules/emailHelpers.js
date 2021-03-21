@@ -275,22 +275,22 @@ const companiesController = require('../controllers/companies');
       subjectWithGenericPrefixResult = numberReturned;
     });
 
-
-    // const contentWithCompanyPrefix = await checkEmailContentWithCompanyPrefix(plainContent, companyObject).then(numberReturned => {
-    //   emailContentWithCompanyPrefixResult = numberReturned;
-    // });
+    const contentWithCompanyPrefix = await checkSubjectWithCompanyPrefix(plainContent, companyObject).then(numberReturned => {
+      contentWithCompanyPrefixResult = numberReturned;
+    });
 
     Promise.all([
       subjectWithCompanyPrefix,
-      subjectWithGenericPrefix
+      subjectWithGenericPrefix,
+      contentWithCompanyPrefix
     ]).then((values) => {
-      console.log('got either?', subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult);
+      console.log('got any?', subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult);
     });
 
 
     // check all results and see which contains a number
     const containsNumbersRegExp = new RegExp(`[1-9]`, 'g');
-    const results = [subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult];
+    const results = [subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult];
     let finalOrderNumber = 0;
 
     results.some(orderNumberOrFalse => {
