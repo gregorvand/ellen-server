@@ -266,12 +266,48 @@ const companiesController = require('../controllers/companies');
 
   async function returnOrderNumberV2 (subject, companyObject, plainContent) {
     // look at subject and try with company prefix
-    const subjectWithCompanyPrefix = checkSubjectWithCompanyPrefix(subject, companyObject);
-    const subjectWithGenericPrefix = checkSubjectWithGenericPrefix(subject);
+    const subjectWithCompanyPrefix = await checkSubjectWithCompanyPrefix(subject, companyObject).then(numberReturned => {
+      subjectWithCompanyPrefixResult = numberReturned;
+    });
+    
+    // look at subject and try with other prefixes
+    const subjectWithGenericPrefix = await checkSubjectWithGenericPrefix(subject).then(numberReturned => {
+      subjectWithGenericPrefixResult = numberReturned;
+    });
+
+
+    // const contentWithCompanyPrefix = await checkEmailContentWithCompanyPrefix(plainContent, companyObject).then(numberReturned => {
+    //   emailContentWithCompanyPrefixResult = numberReturned;
+    // });
+
+    Promise.all([
+      subjectWithCompanyPrefix,
+      subjectWithGenericPrefix
+    ]).then((values) => {
+      console.log('got either?', subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult);
+    });
+
+
+    // check all results and see which contains a number
+    const containsNumbersRegExp = new RegExp(`[1-9]`, 'g');
+    const results = [subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult];
+    let finalOrderNumber = 0;
+
+    results.some(orderNumberOrFalse => {
+      if (containsNumbersRegExp.test(orderNumberOrFalse)) {
+        finalOrderNumber = orderNumberOrFalse;
+        return true;
+      } else {
+        return false;
+      }
+    })
+
+    return finalOrderNumber;
   }
 
 
   async function checkSubjectWithCompanyPrefix (subject, companyObject) {
+    let orderNumber = 0;
      // matching # vs A-Z prefix required different approaches
     const orderPrefix = companyObject.orderPrefix;
     let regexExpression = returnRegexStructure(orderPrefix);
@@ -285,38 +321,37 @@ const companiesController = require('../controllers/companies');
       console.log('checkSubjectWithCompanyPrefix array...', orderNumberArray);
 
       // finally get rid of any unforeseen letters
-      const orderNumberFound = removeLettersFromOrderNumber(orderNumberArray);
-
-      return orderNumberFound;
+      orderNumber = removeLettersFromOrderNumber(orderNumberArray);
     }
+
+    return orderNumber; 
   }
 
   async function checkSubjectWithGenericPrefix (subject) {
     const prefixes = constants.PREFIXES;
-    let orderNumberFound = 0;
+    let orderNumber = 0;
+    prefixes.some(regexPrefix => {
+      console.log(`checking against ${regexPrefix}`);
 
-      prefixes.some(regexPrefix => {
-        console.log(`checking against ${regexPrefix}`);
+      const regex = `\\b(\\w*${regexPrefix}\\s*\\w*)\\b`;
 
-        const regex = `\\b(\\w*${regexPrefix}\\s*\\w*)\\b`;
-        const containsNumbersRegExp = new RegExp(`[1-9]`, 'g');
+      // if it matches this prefix and the match has some numbers in it..
+      if (subject.match(new RegExp(regex, 'g'))) {
+        const found = subject.match(new RegExp(regex, 'g'));
+        console.log('trying to use subject..', found);
 
-        // if it matches this prefix and the match has some numbers in it..
-        if (subject.match(new RegExp(regex, 'g'))) {
-          const found = subject.match(new RegExp(regex, 'g'));
-          console.log('trying to use subject..', found);
+        let orderWithPrefix = found[0];
+        let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
 
-          let orderWithPrefix = found[0];
-          let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
-
-          orderNumberFound = removeLettersFromOrderNumber(orderNumberArray);
-          return true; // stop 'some' looping more
-        } else {
-          return false; // needed to keep 'some' looping over
-        }
+        const orderNumberArrayNoSpaces = orderNumberArray.map(str => str.replace(/\s/g, ''));
+        orderNumber = removeLettersFromOrderNumber(orderNumberArrayNoSpaces); // CHECKED!
+        return true;
+      } else {
+        return false; // needed to keep 'some' looping over
+      }
     });
 
-    return orderNumberFound;
+    return orderNumber;
   }
 
 
@@ -336,21 +371,20 @@ const companiesController = require('../controllers/companies');
 
   function removeLettersFromOrderNumber (checkArray) {
     // finally get rid of any unforeseen letters
+    let orderNumber = 0;
     const letterRegExp = new RegExp(`[a-zA-Z]`, 'g');
     const stringToCheck = checkArray[1];
-
-    finalOrderNumber = 0; // 0/null
+    console.log('check array?', checkArray);
 
     if (letterRegExp.test(stringToCheck)) {
       console.log('needed to get rid of Letter..');
       const foundWithLetter = stringToCheck.split(letterRegExp);
-      finalOrderNumber = foundWithLetter[foundWithLetter.length - 1];
-      console.log('returning', finalOrderNumber);        
+      orderNumber = foundWithLetter[foundWithLetter.length - 1];
     } else {  
-      finalOrderNumber = checkArray[1];
+      orderNumber = stringToCheck;
     }
 
-    return finalOrderNumber;
+    return orderNumber;
   }
 
 
