@@ -279,18 +279,24 @@ const companiesController = require('../controllers/companies');
       contentWithCompanyPrefixResult = numberReturned;
     });
 
+    const contentWithGenericPrefix = await checkSubjectWithGenericPrefix(plainContent).then(numberReturned => {
+      contentWithGenericPrefixResult = numberReturned;
+    });
+
+
     Promise.all([
       subjectWithCompanyPrefix,
       subjectWithGenericPrefix,
-      contentWithCompanyPrefix
+      contentWithCompanyPrefix,
+      contentWithGenericPrefix
     ]).then((values) => {
-      console.log('got any?', subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult);
+      console.log('got any?', subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult, contentWithGenericPrefixResult);
     });
 
 
     // check all results and see which contains a number
     const containsNumbersRegExp = new RegExp(`[1-9]`, 'g');
-    const results = [subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult];
+    const results = [subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult, contentWithGenericPrefixResult];
     let finalOrderNumber = 0;
 
     results.some(orderNumberOrFalse => {
@@ -324,6 +330,7 @@ const companiesController = require('../controllers/companies');
       orderNumber = removeLettersFromOrderNumber(orderNumberArray);
     }
 
+    console.log('will return', typeof(orderNumber));
     return orderNumber; 
   }
 
@@ -335,10 +342,11 @@ const companiesController = require('../controllers/companies');
 
       const regex = `\\b(\\w*${regexPrefix}\\s*\\w*)\\b`;
 
-      // if it matches this prefix and the match has some numbers in it..
+      // if it matches this prefix
       if (subject.match(new RegExp(regex, 'g'))) {
         const found = subject.match(new RegExp(regex, 'g'));
         console.log('trying to use subject..', found);
+        // NEED TO CHECK FOR NUMBERS HERE!!!!
 
         let orderWithPrefix = found[0];
         let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
@@ -351,6 +359,7 @@ const companiesController = require('../controllers/companies');
       }
     });
 
+    console.log('will return', orderNumber);
     return orderNumber;
   }
 
