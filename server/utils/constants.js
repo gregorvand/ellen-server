@@ -11,10 +11,16 @@ module.exports = Object.freeze({
     'order -',
     'No.',
     '#',
+    'Order Confirmation is',
+    'order confirmation is',
+    'Order Confirmation',
+    'order confirmation',
+    'order number is',
+    'Order Number is',
+    'order number',
+    'Order Number',
     'Order',
     'order',
-    'Confirmation',
-    'confirmation',
     'order r'
   ]
 }); 
