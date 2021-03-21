@@ -38,11 +38,6 @@ const companiesController = require('../controllers/companies');
   }
   
   async function returnOrderNumber (subject, companyObject, plainContent) {
-    // console.log('plain izz', plainContent);
-
-    // TODO: get prefix from Company record first
-    // const prefix = "\#";
-    // const regex = "\#(?=\w*)\w+"
     console.log('the company?', companyObject);
     console.log('the prefix?', companyObject.orderPrefix);
     console.log('original subject: ', subject);
@@ -61,6 +56,11 @@ const companiesController = require('../controllers/companies');
 
     console.log('using', regexExpression);
 
+
+    // always check for a number in subject before moving on 
+    const containsNumbersRegExp = new RegExp(`[1-9]`, 'g');
+
+
     try {
       if (subject.match(new RegExp(regexExpression, 'g'))) {
         const found = subject.match(new RegExp(regexExpression, 'g'));
@@ -68,7 +68,6 @@ const companiesController = require('../controllers/companies');
         let orderNumberArray = orderWithPrefix.split(`${orderPrefix}`);
 
         // finally get rid of any unforeseen letters
-        // *****CLEAN THIS UP INTO FUNCTION WITH BELOW
         const letterRegExp = new RegExp(`[a-zA-Z]`, 'g');
         const checkString = orderNumberArray[1];
 
@@ -87,18 +86,37 @@ const companiesController = require('../controllers/companies');
           
           prefixes.some(regexPrefix => {
             console.log(`checking against ${regexPrefix}`);
+
+            // ***WE NEED TO STOP LETTERS BEING ACCEPTED HERE: ONLY RETURN SOMETHING THAT IS A NUMBER, OR NULL  
+
             const regex = `\\b(\\w*${regexPrefix}\\s*\\w*)\\b`;
-            if (subject.match(new RegExp(regex, 'g'))) {
+            if (subject.match(new RegExp(regex, 'g') && containsNumbersRegExp.test(subject))) {
               const found = subject.match(new RegExp(regex, 'g'));
-              // console.log('found?', found);
+              console.log('trying to use subject..', found);
+    
               let orderWithPrefix = found[0];
               let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
+
+              // check if it contains any numbers
+              const letterRegExp = new RegExp(`[a-zA-Z]`, 'g');
+              const checkString = orderNumberArray[1];
+
+              if (letterRegExp.test(checkString)) {
+                console.log('needed to get rid of Letter..');
+                const foundWithLetter = checkString.split(letterRegExp);
+                orderNumberFound = foundWithLetter[foundWithLetter.length -1];          
+              } else {
+                orderNumberFound = orderNumberArray[1];
+              }
+
               orderNumberFound = orderNumberArray[1];
-              // console.log('trying to return', orderNumberFound);
+   
               return true;
              } else if (plainContent.match(new RegExp(regex, 'g'))){
               const found = plainContent.match(new RegExp(regex, 'g'));
-              // console.log('found?', found);
+
+              console.log('trying to use content..', found);
+           
               let orderWithPrefix = found[0];
               let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
 
@@ -212,13 +230,6 @@ const companiesController = require('../controllers/companies');
       return theOrderDate;
     }
 
-  module.exports.returnOrderNumber = returnOrderNumber;
-  module.exports.returnOrderDate = returnOrderDate;
-  module.exports.parseEmail = parseEmail;
-  module.exports.findCompanyByEmail = findCompanyByEmail;
-  module.exports.findCustomerByEmail = findCustomerByEmail;
-  module.exports.getField = getField;
-
 
   // Internal functions -----------------------
 
@@ -239,3 +250,86 @@ const companiesController = require('../controllers/companies');
       return getEmailFromText[0];
     }
   }
+
+
+
+
+
+  // look at subject and try with company prefix
+  // look at subject try with all prefixes
+
+  // look at content try with company prefix
+  // look at content try with all prefixes
+
+  // check anything found only contains numbers
+  // return that, otherwise, null
+
+
+  async function returnOrderNumberV2 (subject, companyObject, plainContent) {
+    // look at subject and try with company prefix
+    const subjectWithCompanyPrefix = checkSubjectWithCompanyPrefix(subject, companyObject);
+  }
+
+
+  async function checkSubjectWithCompanyPrefix (subject, companyObject) {
+     // matching # vs A-Z prefix required different approaches
+    const orderPrefix = companyObject.orderPrefix;
+    let regexExpression = returnRegexStructure(orderPrefix);
+
+    if (subject.match(new RegExp(regexExpression, 'g'))) {
+      const found = subject.match(new RegExp(regexExpression, 'g'));
+      let orderWithPrefix = found[0];
+      let orderNumberArray = orderWithPrefix.split(`${orderPrefix}`);
+
+      console.log('checkSubjectWithCompanyPrefix subject...', subject);
+      console.log('checkSubjectWithCompanyPrefix array...', orderNumberArray);
+
+      // finally get rid of any unforeseen letters
+      const orderNumberFound = removeLettersFromOrderNumber(orderNumberArray);
+
+      return orderNumberFound;
+    }
+  }
+
+
+  function returnRegexStructure (companyPrefix) {
+    const orderPrefix = companyPrefix
+    let regexExpression = ``;
+    const mutableRegex = `\\b(\\w*${orderPrefix}\\s*\\w*)\\b`;
+
+    if (orderPrefix.includes('#')) {
+      regexExpression = `\\${orderPrefix}\\s*(?=\\w*)\\w+`
+    } else {  
+      regexExpression = mutableRegex;
+    }
+
+    return regexExpression;
+  }
+
+  function removeLettersFromOrderNumber (checkArray) {
+    // finally get rid of any unforeseen letters
+    const letterRegExp = new RegExp(`[a-zA-Z]`, 'g');
+    const stringToCheck = checkArray[1];
+
+    finalOrderNumber = 0; // 0/null
+
+    if (letterRegExp.test(stringToCheck)) {
+      console.log('needed to get rid of Letter..');
+      const foundWithLetter = stringToCheck.split(letterRegExp);
+      finalOrderNumber = foundWithLetter[foundWithLetter.length - 1];
+      console.log('returning', finalOrderNumber);        
+    } else {  
+      finalOrderNumber = checkArray[1];
+    }
+
+    return finalOrderNumber;
+  }
+
+
+module.exports.returnOrderNumber = returnOrderNumber;
+module.exports.returnOrderNumberV2 = returnOrderNumberV2;
+module.exports.returnOrderDate = returnOrderDate;
+module.exports.parseEmail = parseEmail;
+module.exports.findCompanyByEmail = findCompanyByEmail;
+module.exports.findCustomerByEmail = findCustomerByEmail;
+module.exports.getField = getField;

@@ -40,7 +40,7 @@ module.exports = (app) => {
           companyObject = returnedCompany;
         })
 
-        const orderPromise = getCompanyPromise.then((companyObject) => emailHelpers.returnOrderNumber(emailFields['headers[subject]'], companyObject, emailFields['plain']).then((returnedOrderNumber) => {
+        const orderPromise = getCompanyPromise.then((companyObject) => emailHelpers.returnOrderNumberV2(emailFields['headers[subject]'], companyObject, emailFields['plain']).then((returnedOrderNumber) => {
           orderNumber = returnedOrderNumber || 1;
         }));
 
