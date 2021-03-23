@@ -26,7 +26,7 @@ module.exports = {
       .create({
         orderNumber: orderNumber || req.body.number,
         orderDate: orderDate || null,
-        fromEmail: fromEmail || 'shop@sendertest.com',
+        fromEmail: fromEmail || 'notfound@ellen.me',
         customerEmail: req.body.customerEmail || customerEmail,
         plainContent: req.body.content || emailPlainContent,
         companyId: companyId || 1,
