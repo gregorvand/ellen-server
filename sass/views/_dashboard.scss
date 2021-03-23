@@ -1,3 +1,8 @@
+.dashboard-wrapper {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 .dashboard-top-info {
   display: flex;
   justify-content: flex-end;
@@ -396,6 +401,10 @@
       margin-right: 10px;
     }
   }
+}
+
+.dashboard-no-data {
+  opacity: 0.2;
 }
 
 // debug / admin data

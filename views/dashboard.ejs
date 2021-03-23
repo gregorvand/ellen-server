@@ -33,7 +33,7 @@
 <section class="dashboard-area">
   <section class="email-record screen-render">
     <ul class="orders-by-company-list screen-render-inner">
-    <% if (typeof orders != 'undefined') {  
+    <% if (typeof orders != 'undefined' && orders.length > 0) {  
       emails.forEach((email) => { %>
         <li class="orders-by-company-list-item">
           <span class="orders-by-company-list-date">
@@ -51,7 +51,9 @@
             <% } %>
           </span>
         </li>
-    <% })} %>
+    <% })} else { %>
+      <li>Emails that you have submitted will show up here when we receive them</li>
+    <% } %>
     </ul>
   </section>
 
@@ -61,21 +63,23 @@
     <% let companyName = 'firstloop' %>
     <% if (typeof orders != 'undefined') {  
       orders.forEach((order, index) => { %>
-        <% if (companyName !== order.Company.nameIdentifier) { %>
-          <div class="company-header">
-            <a href="/companies/<%= order.Company.id %>"><h3><%= order.Company.nameIdentifier %></h3></a>
-            <span class="company-header-email"><%= order.fromEmail %></span>
-          </div>
-        <% } %>
-        <li class="orders-by-company-list-item">
-          <span class="orders-by-company-list-date">
-            <%= helpers.showDate(order.orderDate) %>
-          </span> 
-          <span class="orders-by-company-list-divider">::</span>
-          <span class="orders-by-company-list-order-number">
-            <%= order.orderNumber %>
-          </span>
-        </li>
+        <% if (order.Company.nameIdentifier !== 'unconfirmed') { %>
+          <% if (companyName !== order.Company.nameIdentifier) { %>
+            <div class="company-header">
+              <a href="/companies/<%= order.Company.id %>"><h3><%= order.Company.nameIdentifier %></h3></a>
+              <span class="company-header-email"><%= order.fromEmail %></span>
+            </div>
+          <% } %>
+          <li class="orders-by-company-list-item">
+            <span class="orders-by-company-list-date">
+              <%= helpers.showDate(order.orderDate) %>
+            </span> 
+            <span class="orders-by-company-list-divider">::</span>
+            <span class="orders-by-company-list-order-number">
+              <%= order.orderNumber %>
+            </span>
+          </li>
+          <% } %>
         <% companyName = order.Company.nameIdentifier %>
     <% })} %>
   </ul>
