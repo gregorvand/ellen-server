@@ -116,7 +116,10 @@
     setInterval(function() {
       const companyNumber = getRandomInt(companyNames.length);
       const dateNumber = getRandomInt(companyDates.length);
-      const elemNumber = getRandomInt(3);
+      let elemNumber = getRandomInt(3);
+      if (elemNumber === lastValue) {
+        elemNumber = getRandomInt(3);
+      }
       const bountyItem = $('.bounty-list')[elemNumber];
       const bountyContent = $(bountyItem).find('.bounty-list-item-content-left');
       
