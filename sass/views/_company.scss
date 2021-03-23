@@ -4,6 +4,7 @@
   .orders-by-company-list {
     width: 100%;
     overflow-x: scroll;
+    border-radius: $border-radius-common;
   }
   
   .order-record {

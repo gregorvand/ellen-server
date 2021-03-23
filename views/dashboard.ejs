@@ -14,6 +14,10 @@
 <section class="dashboard-intro"> 
   <div class="dashboard-intro-welcome">
     <h1>Hello, <%= user.firstName %></h1>
+    <p class="send-blurb">
+      Send your email order confirmations / receipts to the address below. <br /><br />
+      Just tap the address below to copy it, then <strong>forward</strong> your email confirmation/receipt to that address.
+    </p>
     <div class="unique-identifier-wrapper">
       <h5>Send in your order data:</h5>
       <div class="unique-identifier-email" data-clipboard-target="#copy-email">
@@ -27,24 +31,27 @@
 </section>
 
 <section class="dashboard-area">
-
-<section class="email-record">
-  <h4>Email record (latest 10)</h4>
-  <ul class="orders-by-company-list">
-  <% if (typeof orders != 'undefined') {  
-    emails.forEach((email) => { %>
-      <li class="orders-by-company-list-item">
-        <span class="orders-by-company-list-date">
-          <%= helpers.showDate(email.createdAt) %>
-        </span> 
-        <span class="orders-by-company-list-divider">::</span>
-        <span class="orders-by-company-list-email-subject">
-          <%= email.subjectLine || email.plainContent %>
-        </span>
-      </li>
-  <% })} %>
-  </ul>
-</section>
+  <section class="email-record screen-render">
+    <ul class="orders-by-company-list screen-render-inner">
+    <% if (typeof orders != 'undefined') {  
+      emails.forEach((email) => { %>
+        <li class="orders-by-company-list-item">
+          <span class="orders-by-company-list-date">
+            <%= helpers.showDate(email.createdAt) %>
+          </span> 
+          <span class="orders-by-company-list-divider">::</span>
+          <span class="orders-by-company-list-email-subject">
+            <%= email.subjectLine || email.plainContent %>
+          </span>
+          <span class="orders-by-company-list-status">
+            <% if(email.orderNumber == 1) { %> 
+            <img src="/images/time-icon.svg" alt="processing"> 
+            <%} else { %> <img src="/images/confirmed-icon.svg" alt="confirmed"> <% } %>
+          </span>
+        </li>
+    <% })} %>
+    </ul>
+  </section>
 
 <section class="orders-by-company">
   <h4>Orders by company</h4>
