@@ -7,6 +7,7 @@
     <strong>
         <%= user.email %>
     </strong>
+    <a class="logout-nav" href="/users/logout">Logout</a>
   </div>
   <% } %>
 </section>
@@ -14,7 +15,7 @@
   <div class="dashboard-intro-welcome">
     <h1>Hello, <%= user.firstName %></h1>
     <div class="unique-identifier-wrapper">
-      <h5>Send in your order data</h5>
+      <h5>Send in your order data:</h5>
       <div class="unique-identifier-email" data-clipboard-target="#copy-email">
         <img src="/images/email-icon.svg" alt="ellen insights logo">
         <span id="copy-email" class="unique-identifier-email-copy">

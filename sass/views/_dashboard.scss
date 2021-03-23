@@ -1,6 +1,17 @@
+.dashboard-top-info {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0;
+  max-width: none;
+
+  strong {
+    margin-right: 10px;
+  }
+}
+
 .dashboard-intro {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
   margin-bottom: 20px;
 
@@ -13,7 +24,7 @@
   > div {
     display: flex;
     flex-direction: column;
-    align-items: flex;
+    align-items: flex-start;
     justify-content: center;
     text-align: left;
     width: 100%;
@@ -41,6 +52,10 @@
         text-align: center;
         font-size: 24px;
       }
+    }
+
+    h5 {
+      width: 100%;
     }
   }
 }
@@ -234,6 +249,13 @@
   position: relative;
   justify-content: space-between;
 
+  @include breakpoint(small only) {
+    display: flex;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+
   &:after {
     content: 'Your unique identifier email to send to. Click to copy';
     position: absolute;
@@ -276,7 +298,9 @@
     position: relative;
 
     @include breakpoint(small only) {
-      margin-top: 30px;
+      margin-top: 10px;
+      width: 100%;
+      text-align: center;
     }
 
     
@@ -285,12 +309,21 @@
     }
 
     &-copy {
+      width: 100%;
+      text-align: center;
+      justify-content: center;
+
       &.copied {
         &:after {
           content: 'copied!';
           position: absolute;
           top: -30px;
           left: 0;
+
+          @include breakpoint(small only) {
+            left: unset;
+            right: 0;
+          }
         }
       }
     }
