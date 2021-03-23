@@ -45,8 +45,10 @@
           </span>
           <span class="orders-by-company-list-status">
             <% if(email.orderNumber == 1) { %> 
-            <img src="/images/time-icon.svg" alt="processing"> 
-            <%} else { %> <img src="/images/confirmed-icon.svg" alt="confirmed"> <% } %>
+              <img src="/images/time-icon.svg" alt="processing"> 
+            <%} else { %> 
+              <img src="/images/confirmed-icon.svg" alt="confirmed"> 
+            <% } %>
           </span>
         </li>
     <% })} %>
@@ -54,7 +56,7 @@
   </section>
 
 <section class="orders-by-company">
-  <h4>Orders by company</h4>
+  <h4>Your confirmed data by Company</h4>
   <ul class="orders-by-company-list">
     <% let companyName = 'firstloop' %>
     <% if (typeof orders != 'undefined') {  
