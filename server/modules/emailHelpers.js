@@ -43,14 +43,15 @@ const companiesController = require('../controllers/companies');
       contentWithGenericPrefix
     ]);
 
-    return allResults.then((values) => {
+    return allResults
+    .then((values) => {
       console.log('got any?', subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult, contentWithGenericPrefixResult);
     
        // check all results and see which contains a number
       const containsNumbersRegExp = new RegExp(`[1-9]`, 'g');
       const results = [subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult, contentWithGenericPrefixResult];
-      
       let finalOrderNumber = 0;
+
       results.some(orderNumberOrFalse => {
         if (containsNumbersRegExp.test(orderNumberOrFalse)) {
           finalOrderNumber = orderNumberOrFalse;
@@ -61,7 +62,11 @@ const companiesController = require('../controllers/companies');
       })
 
       return finalOrderNumber;
-    });
+    })
+     .catch(err => {
+       console.log(`Nothing parsed and somehow got an error of ${err}`);
+       return 0;
+     })
   }
 
 
@@ -158,35 +163,41 @@ const companiesController = require('../controllers/companies');
     dayjs.extend(customParseFormat)
 
     const fromCompanyEmailGmailSpan = $('.gmail_quote').text();
-    let getDateFromText = fromCompanyEmailGmailSpan.match(/Date:(.*)Subject/gi);
+    let getDateFromText = fromCompanyEmailGmailSpan.match(/Date:(.*)Subject/gi) || '';
     console.log(getDateFromText); 
     const start = `Date: `;
     const end = `Subject`;
-    let theDateString  = getDateFromText[0].split(start)[1].split(end)[0];
-    theDateString = theDateString.replace(' at', '');
-    let theDateArray = theDateString.split(', ');
-    theDateArray = theDateArray.splice(1,2);
-    theDateArray = theDateArray.join(' ');
+    let theOrderDate = 0;
 
-    console.log('date to parse', theDateArray);
-   
-    const dateFormatsToParse = constants.DATE_FORMATS;
-    let theOrderDate = false;
-
-    // start checking dates againt dayJS formats we are aware are used by email
-    // break when we find valid format
-    dateFormatsToParse.some(format => {
-      console.log(`testing ${format}`);
-
-      let theDate = dayjs(theDateArray, format);
-      console.log(`validity`, theDate.isValid());
-        if (theDate.isValid()) { 
-          theOrderDate = theDate;
-          return true;
-        } else {
-          return false;
-        }
-      })
+      try {
+        let theDateString = getDateFromText[0]?.split(start)[1].split(end)[0];
+        theDateString = theDateString.replace(' at', '');
+        let theDateArray = theDateString.split(', ');
+        theDateArray = theDateArray.splice(1,2);
+        theDateArray = theDateArray.join(' ');
+    
+        console.log('date to parse', theDateArray);
+      
+        const dateFormatsToParse = constants.DATE_FORMATS;
+    
+        // start checking dates againt dayJS formats we are aware are used by email
+        // break when we find valid format
+        dateFormatsToParse.some(format => {
+          console.log(`testing ${format}`);
+    
+        let theDate = dayjs(theDateArray, format);
+        console.log(`validity`, theDate.isValid());
+          if (theDate.isValid()) { 
+            theOrderDate = theDate;
+            return true;
+          } else {
+            console.log('could not locate date');
+            return false;
+          }
+        })
+      } catch (err) {
+        console.error('failed on date parsing')
+      };
 
       return theOrderDate;
     }
