@@ -36,34 +36,32 @@ const companiesController = require('../controllers/companies');
       contentWithGenericPrefixResult = numberReturned;
     });
 
-
-
-    // MOVE ALL DATA RETURNED TO INSIDE THE PROMISE
-    Promise.all([
+    const allResults = Promise.all([
       subjectWithCompanyPrefix,
       subjectWithGenericPrefix,
       contentWithCompanyPrefix,
       contentWithGenericPrefix
-    ]).then((values) => {
+    ]);
+
+    return allResults.then((values) => {
       console.log('got any?', subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult, contentWithGenericPrefixResult);
+    
+       // check all results and see which contains a number
+      const containsNumbersRegExp = new RegExp(`[1-9]`, 'g');
+      const results = [subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult, contentWithGenericPrefixResult];
+      
+      let finalOrderNumber = 0;
+      results.some(orderNumberOrFalse => {
+        if (containsNumbersRegExp.test(orderNumberOrFalse)) {
+          finalOrderNumber = orderNumberOrFalse;
+          return true;
+        } else {
+          return false;
+        }
+      })
+
+      return finalOrderNumber;
     });
-
-
-    // check all results and see which contains a number
-    const containsNumbersRegExp = new RegExp(`[1-9]`, 'g');
-    const results = [subjectWithCompanyPrefixResult, subjectWithGenericPrefixResult, contentWithCompanyPrefixResult, contentWithGenericPrefixResult];
-    let finalOrderNumber = 0;
-
-    results.some(orderNumberOrFalse => {
-      if (containsNumbersRegExp.test(orderNumberOrFalse)) {
-        finalOrderNumber = orderNumberOrFalse;
-        return true;
-      } else {
-        return false;
-      }
-    })
-
-    return finalOrderNumber;
   }
 
 
