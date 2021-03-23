@@ -50,6 +50,7 @@
     height: 100%;
     background-image: url(/images/border_chequer.png);
     z-index: -1;
+    border-radius: $border-radius-common + 2;
   }
 
   &-item {
@@ -63,6 +64,7 @@
     align-items: center;
     justify-content: center;
     padding: 8px;
+    border-radius: $border-radius-common;
 
     @include breakpoint(large up) {
       width: 475px;
