@@ -34,7 +34,7 @@ module.exports = (app) => {
       .then((emailFields) => {
         availablEmailFields = emailFields;
 
-        const getCompanyPromise = emailHelpers.findCompanyByEmail(emailFields['html']);
+        const getCompanyPromise = emailHelpers.findCompanyByEmail(emailFields);
 
         const companyObjectPromise = getCompanyPromise.then(returnedCompany => {
           companyObject = returnedCompany;
@@ -58,7 +58,6 @@ module.exports = (app) => {
         });
 
         const emailPlainContentPromise = emailHelpers.getField(emailFields, 'plain').then(returnedContent => {
-          console.log('the content is', returnedContent);
           plainContent = returnedContent;
         });
 
