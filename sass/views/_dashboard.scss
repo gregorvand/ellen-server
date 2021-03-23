@@ -206,7 +206,8 @@
 
     &-list-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      justify-content: space-between;
     }
 
     &-list-date {
@@ -225,6 +226,12 @@
     &-list-divider { 
       text-align: center;
       justify-content: center;
+    }
+
+    &-list-status {
+      display: flex;
+      align-items: center;
+      img { width: 20px; }
     }
 
     @include breakpoint(small only) {

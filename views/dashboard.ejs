@@ -43,7 +43,11 @@
           <span class="orders-by-company-list-email-subject">
             <%= email.subjectLine || email.plainContent %>
           </span>
-          <span>OK / !OK</span>
+          <span class="orders-by-company-list-status">
+            <% if(email.orderNumber == 1) { %> 
+            <img src="/images/time-icon.svg" alt="processing"> 
+            <%} else { %> <img src="/images/confirmed-icon.svg" alt="confirmed"> <% } %>
+          </span>
         </li>
     <% })} %>
     </ul>
