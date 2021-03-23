@@ -37,6 +37,8 @@ const companiesController = require('../controllers/companies');
     });
 
 
+
+    // MOVE ALL DATA RETURNED TO INSIDE THE PROMISE
     Promise.all([
       subjectWithCompanyPrefix,
       subjectWithGenericPrefix,
@@ -98,8 +100,8 @@ const companiesController = require('../controllers/companies');
   // return id of Company from email lookup
   async function findCompanyByEmail (fields) {
     const Company = require('../models').Company;
-
-    const parsedCompanyEmail = await parseHtmlForSender(fields);
+    const plainContent = await getField(fields, 'plain');
+    const parsedCompanyEmail = await parseEmailSender(plainContent);
 
     try {
       let company = await Company.findOne({ where: { emailIdentifier: parsedCompanyEmail } });
@@ -200,24 +202,13 @@ const companiesController = require('../controllers/companies');
 
   // Internal functions -----------------------
 
-  async function parseHtmlForSender (fields) {
-    // parse the body html for the company email here:
-    const $ = cheerio.load(fields);
-    const fromCompanyEmailGmailLink = $('.gmail_quote span:first-of-type > a:first-child').text();
-    const fromCompanyEmailGmailSpan = $('.gmail_quote span:first-of-type').text();
-    
+  async function parseEmailSender (plainContent) {
     // Leave the below logs in for now - will be useful to debug company email insert issues
+    let getEmailFromText = plainContent.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/gi);
     console.log('\x1b[33m%s\x1b[0m', 'company email located as:');
-    if (fromCompanyEmailGmailLink.includes('@')) {
-      console.log('yeah', fromCompanyEmailGmailLink)
-      return fromCompanyEmailGmailLink;
-    } else if (fromCompanyEmailGmailSpan.includes('@')) {
-      let getEmailFromText = fromCompanyEmailGmailSpan.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/gi);
-      console.log(getEmailFromText[0]); 
-      return getEmailFromText[0];
-    }
+    console.log(getEmailFromText[0]); 
+    return getEmailFromText[0];
   }
-
 
   async function checkSubjectWithCompanyPrefix (subject, companyObject) {
     let orderNumber = 0;
@@ -259,7 +250,7 @@ const companiesController = require('../controllers/companies');
         let orderNumberArray = orderWithPrefix.split(`${regexPrefix}`);
 
         const orderNumberArrayNoSpaces = orderNumberArray.map(str => str.replace(/\s/g, ''));
-        orderNumber = removeLettersFromOrderNumber(orderNumberArrayNoSpaces); // CHECKED!
+        orderNumber = removeLettersFromOrderNumber(orderNumberArrayNoSpaces);
         return true;
       } else {
         return false; // needed to keep 'some' looping over
@@ -289,7 +280,7 @@ const companiesController = require('../controllers/companies');
     // finally get rid of any unforeseen letters
     let orderNumber = 0;
     const letterRegExp = new RegExp(`[a-zA-Z]`, 'g');
-    const stringToCheck = checkArray[1];
+    const stringToCheck = checkArray[1] || checkArray[0];
     console.log('check array?', checkArray);
 
     if (letterRegExp.test(stringToCheck)) {
