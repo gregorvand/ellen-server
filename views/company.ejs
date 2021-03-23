@@ -16,14 +16,17 @@
 
   <% } else { %>
     <br />
-    <p>No company or not enough data found :(</p>
+    <h2><%= company.nameIdentifier %></h2>
+    <h5>Not enough data, yet :(</h5>
+    <p>
+      <strong>
+        When we have enough datapoints for this Company its insights will be shown
+      </strong>
+    </p> 
+    <div class="dashboard-no-data">
+      <img src="/images/ellen_insights_graph.jpg" alt="our graphs">
+    </div>
   <% } %>
-
-<ul class="quick-data">
-  <li><strong>&nbsp;email:</strong> <%= company.emailIdentifier %></li>&nbsp;|
-  <li><strong>&nbsp;prefix:</strong> <%= company.orderPrefix %></li>&nbsp;| 
-  <li><strong>&nbsp;added to DB:</strong> <%= company.createdAt %></li>&nbsp;
-</ul>
 
 </section>
 
@@ -92,6 +95,12 @@
 </script>
 
 <% if (currentUser.status === 'admin') { %>
+  <ul class="quick-data">
+    <li><strong>&nbsp;email:</strong> <%= company.emailIdentifier %></li>&nbsp;|
+    <li><strong>&nbsp;prefix:</strong> <%= company.orderPrefix %></li>&nbsp;| 
+    <li><strong>&nbsp;added to DB:</strong> <%= company.createdAt %></li>&nbsp;
+  </ul>
+
   <section class="all-email-record">
     <h4>All emails submitted for this company</h4>
     <div class="orders-by-company-list">
