@@ -34,13 +34,13 @@ module.exports = (app) => {
       .then((emailFields) => {
         availablEmailFields = emailFields;
 
-        const getCompanyPromise = emailHelpers.findCompanyByEmail(emailFields['html']);
+        const getCompanyPromise = emailHelpers.findCompanyByEmail(emailFields);
 
         const companyObjectPromise = getCompanyPromise.then(returnedCompany => {
           companyObject = returnedCompany;
         })
 
-        const orderPromise = getCompanyPromise.then((companyObject) => emailHelpers.returnOrderNumber(emailFields['headers[subject]'], companyObject, emailFields['plain']).then((returnedOrderNumber) => {
+        const orderPromise = getCompanyPromise.then((companyObject) => emailHelpers.returnOrderNumberV2(emailFields['headers[subject]'], companyObject, emailFields['plain']).then((returnedOrderNumber) => {
           orderNumber = returnedOrderNumber || 1;
         }));
 
@@ -58,7 +58,6 @@ module.exports = (app) => {
         });
 
         const emailPlainContentPromise = emailHelpers.getField(emailFields, 'plain').then(returnedContent => {
-          console.log('the content is', returnedContent);
           plainContent = returnedContent;
         });
 

@@ -56,7 +56,7 @@
                 "orderNumber": {
                     "allowNull": false,
                     "field": "orderNumber",
-                    "seqType": "Sequelize.INTEGER"
+                    "seqType": "Sequelize.BIGINT"
                 },
                 "orderDate": {
                     "allowNull": true,
@@ -181,5 +181,5 @@
             "indexes": []
         }
     },
-    "revision": 6
+    "revision": 7
 }
