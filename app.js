@@ -28,11 +28,11 @@ const app = express();
 
 app.use(helmet.contentSecurityPolicy({
   directives:{
-    defaultSrc:["'self'"],
-    scriptSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'http://localhost:8000', 'https://alpha.ellen.me', 'unsafe-inline'],
-    styleSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'fonts.googleapis.com', 'http://localhost:8000', 'https://alpha.ellen.me'],
+    defaultSrc:["'self'", 'https://fast.a.klaviyo.com/', 'https://static.klaviyo.com/', 'https://telemetrics.klaviyo.com/', 'https://a.klaviyo.com/'],
+    scriptSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'http://localhost:8000', 'https://alpha.ellen.me', 'https://static.klaviyo.com/', 'https://fast.a.klaviyo.com/', 'https://telemetrics.klaviyo.com'],
+    styleSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'fonts.googleapis.com', 'http://localhost:8000', 'https://alpha.ellen.me', 'https://static.klaviyo.com'],
     fontSrc:["'self'",'fonts.googleapis.com', 'https://fonts.gstatic.com', 'http://localhost:8000', 'https://alpha.ellen.me'],
-    imgSrc:["'self'"]
+    imgSrc:["'self'", 'https://a.klaviyo.com/api']
   }}));
 
 // Log requests to the console.
