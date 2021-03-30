@@ -1,5 +1,6 @@
 <%- include('./includes/header'); -%>
 <% const email = helpers.getInboundEmailAddress() %>
+<% helpers.identifyKlaviyoUser(currentUser) %>
 
 <section class="dashboard-top-info">  
   <% if (session.passport && session.passport.user) { %>
