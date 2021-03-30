@@ -15,6 +15,7 @@ const { renderDashboard } = require('./views/rendering/render_dashboard')
 const { renderCompanyPage } = require('./views/rendering/render_company')
 const { renderAdminCompanies } = require('./views/rendering/render_admin_companies')
 
+const indexHelpers = require('./views/helpers/index_helpers');
 
 // User accounts
 const initPassport = require('./passportConfig');
@@ -28,11 +29,11 @@ const app = express();
 
 app.use(helmet.contentSecurityPolicy({
   directives:{
-    defaultSrc:["'self'", 'https://fast.a.klaviyo.com/', 'https://static.klaviyo.com/', 'https://telemetrics.klaviyo.com/', 'https://a.klaviyo.com/'],
-    scriptSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'http://localhost:8000', 'https://alpha.ellen.me', 'https://static.klaviyo.com/', 'https://fast.a.klaviyo.com/', 'https://telemetrics.klaviyo.com'],
+    defaultSrc:["'self'"],
+    scriptSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'http://localhost:8000', 'https://alpha.ellen.me'],
     styleSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'fonts.googleapis.com', 'http://localhost:8000', 'https://alpha.ellen.me', 'https://static.klaviyo.com'],
     fontSrc:["'self'",'fonts.googleapis.com', 'https://fonts.gstatic.com', 'http://localhost:8000', 'https://alpha.ellen.me'],
-    imgSrc:["'self'", 'https://a.klaviyo.com/api']
+    imgSrc:["'self'"]
   }}));
 
 // Log requests to the console.
@@ -82,8 +83,6 @@ initPassport(passport);
 app.set('view engine', 'ejs');
 
 // Parse incoming requests data (https://github.com/expressjs/body-parser)
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -139,7 +138,9 @@ app.get('/admin/companies/', checkNotAuthenticatedAndAdmin, (req, res) => {
 
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('/', (req, res) => {
-  res.render("index");
+  res.render("index", {
+    helpers: indexHelpers
+  });
 });
 
 

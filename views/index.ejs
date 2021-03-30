@@ -1,13 +1,9 @@
 <%- include('./includes/header',  {view: 'index'}); -%>
-
-
   <section class="index-hero section-full-width">
     <div class="max-width-wrapper">
       <div class="index-hero-left">
         <h1 class="section-title">Share your eCommerce Data and <span class="text-highlight">Earn Cash</span></h1>
       </div>
-
-
       <div class="index-hero-right">
         <%- include('./includes/bounty_list_item'); -%>
       </div>
@@ -19,7 +15,6 @@
       <div class="your-data-your-profit-left">
         <h1>Your data. <br /> Your profit.</h1>
       </div>
-
 
       <div class="your-data-your-profit-right">
         <p>
@@ -44,7 +39,6 @@
           <li>Any profits are split 50/50 between you and <strong class="ellen">Ellen</strong></li>
         </ul>
       </div>
-
 
       <div class="how-does-it-work-right">
         <div class="screen-render">
@@ -149,9 +143,32 @@
       }, 900)
 
       lastValue = elemNumber;
-    }, 1400)
+    }, 1400)  
   </script>
 
-  <div class="klaviyo-form-XtHXa3"></div>
+  <!-- <div class="klaviyo-form-XtHXa3"></div> -->
+  <form class="submitEmail" action="">
+    <input type="text" class="klaviyoEmail" placeholder="Yoz email" value="gregor@ellen.me">
+  </form>
 
+  <script src="../cash-dom/dist/cash.min.js"></script>
+  <script src="../axios/dist/axios.min.js"></script>
+
+  <script>
+    $('.submitEmail').on('submit', function(e) {
+      e.preventDefault();
+      const emailAddress = $(e.target).find('input[type=text]').val();
+      console.log(emailAddress);
+      axios({
+        method: 'post',
+        url: `/api/users/subscribe`,
+        data: {
+          email: emailAddress
+        }}).then(function (response) {
+           console.log(response);
+        }).catch(function (error) {
+          console.log(error);
+        });
+    });
+    </script>
   <%- include('./includes/footer'); -%>

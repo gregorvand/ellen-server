@@ -3,6 +3,7 @@
 const companiesController = require('../controllers/companies');
 const ordersController = require('../controllers/orders');
 const usersController = require('../controllers/users');
+const serviceKlaviyo = require('../services/klaviyo');
 
 const emailHelpers = require('../modules/emailHelpers');
 
@@ -79,6 +80,7 @@ module.exports = (app) => {
 
   app.post('/api/users', usersController.create);
   app.get('/api/users', usersController.list);
+  app.post('/api/users/subscribe', serviceKlaviyo.submitEmail);
 
   app.post('/api/companies/update/:id', companiesController.update);
   app.post('/api/orders/update/:id', ordersController.update);

@@ -1,6 +1,8 @@
 const User = require('../models').User;
 const Order = require('../models').Order;
 
+const klaviyoHelpers = require('../services/klaviyo');
+
 module.exports = {
   create(req, res) {
     return User
