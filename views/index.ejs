@@ -1,13 +1,9 @@
 <%- include('./includes/header',  {view: 'index'}); -%>
-
-
   <section class="index-hero section-full-width">
     <div class="max-width-wrapper">
       <div class="index-hero-left">
         <h1 class="section-title">Share your eCommerce Data and <span class="text-highlight">Earn Cash</span></h1>
       </div>
-
-
       <div class="index-hero-right">
         <%- include('./includes/bounty_list_item'); -%>
       </div>
@@ -19,7 +15,6 @@
       <div class="your-data-your-profit-left">
         <h1>Your data. <br /> Your profit.</h1>
       </div>
-
 
       <div class="your-data-your-profit-right">
         <p>
@@ -44,7 +39,6 @@
           <li>Any profits are split 50/50 between you and <strong class="ellen">Ellen</strong></li>
         </ul>
       </div>
-
 
       <div class="how-does-it-work-right">
         <div class="screen-render">
@@ -149,7 +143,58 @@
       }, 900)
 
       lastValue = elemNumber;
-    }, 1400)
+    }, 1400)  
   </script>
 
+  <section class="email-subscribe">
+    <h2>ELLEN updates</h2>
+    <p>
+      When we are looking for specific data we will let you know (hint: you get paid!)
+    </p>
+    <p class="disclaimer">
+      Your email address is kept strictly with ELLEN and our mail disribution system (Klaviyo). 
+      No weird third parties, ever.
+    </p>
+    <form class="submitEmail" action="">
+      <div class="submit-position-wrapper">
+        <div class="input-wrapper">
+          <input type="email" class="klaviyoEmail" placeholder="Email" value="" data-signup-location="homepage" />
+          <div class="message"><!-- response message gets filled in here !--></div>
+        </div>
+        <button type="submit" class="email-submit"></button>
+      </div>
+    </form>
+  </section>
+
+  <script src="../cash-dom/dist/cash.min.js"></script>
+  <script src="../axios/dist/axios.min.js"></script>
+
+  <script>
+    $('.submitEmail').on('submit', function(e) {
+      // cleanup to function for use on any page
+      e.preventDefault();
+      const $emailInput = $(e.target).find('input[type=email]');
+      const emailAddress = $emailInput.val();
+      const singupLocation = $emailInput.data('signup-location');
+      const $statusMessage = $('div.message'); 
+      axios({
+        method: 'post',
+        url: `/api/users/subscribe`,
+        data: {
+          email: emailAddress,
+          location: singupLocation,
+          listIdentifier: 'U4qXB2'
+        }}).then(function (response) {
+          $emailInput.removeClass('error');
+           $emailInput.addClass('success');
+           $statusMessage.text("You're on the list, thanks!");
+        }).catch(function (error) {
+          if (error.response.status == 400) {
+            $emailInput.val('');
+            $emailInput.addClass('error');
+            $statusMessage.text(`Looks like we couldn't add ${emailAddress} to our system :( please try again`);
+          }
+        });
+    });
+    </script>
   <%- include('./includes/footer'); -%>
