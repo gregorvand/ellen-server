@@ -8,14 +8,14 @@ const KlaviyoClient = new Klaviyo({
 
 const addSubscribersToList = (req, res) => {
   console.log(req);
-  console.log('klaviyo email?', req.body.email);
+  console.log('klaviyo email?', req.body.email, req.body.location, req.body.listIdentifier);
 
   KlaviyoClient.lists.addSubscribersToList({
-    listId: 'U4qXB2',
+    listId: req.body.listIdentifier,
     profiles: [
         {
           email: req.body.email,
-          signup_location: 'homepage'
+          signup_location: req.body.location
         }
     ]
   })

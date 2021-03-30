@@ -146,28 +146,55 @@
     }, 1400)  
   </script>
 
-  <!-- <div class="klaviyo-form-XtHXa3"></div> -->
-  <form class="submitEmail" action="">
-    <input type="text" class="klaviyoEmail" placeholder="Yoz email" value="gregor@ellen.me">
-  </form>
+  <section class="email-subscribe">
+    <h2>ELLEN updates</h2>
+    <p>
+      When we are looking for specific data we will let you know (hint: you get paid!)
+    </p>
+    <p class="disclaimer">
+      Your email address is kept strictly with ELLEN and our mail disribution system (Klaviyo). 
+      No weird third parties, ever.
+    </p>
+    <form class="submitEmail" action="">
+      <div class="submit-position-wrapper">
+        <div class="input-wrapper">
+          <input type="email" class="klaviyoEmail" placeholder="Email" value="" data-signup-location="homepage" />
+          <div class="message"><!-- response message gets filled in here !--></div>
+        </div>
+        <button type="submit" class="email-submit"></button>
+      </div>
+    </form>
+  </section>
 
   <script src="../cash-dom/dist/cash.min.js"></script>
   <script src="../axios/dist/axios.min.js"></script>
 
   <script>
     $('.submitEmail').on('submit', function(e) {
+      // cleanup to function for use on any page
       e.preventDefault();
-      const emailAddress = $(e.target).find('input[type=text]').val();
-      console.log(emailAddress);
+      const $emailInput = $(e.target).find('input[type=email]');
+      const emailAddress = $emailInput.val();
+      const singupLocation = $emailInput.data('signup-location');
+      const $statusMessage = $('div.message'); 
+      console.log(emailAddress, singupLocation);
       axios({
         method: 'post',
         url: `/api/users/subscribe`,
         data: {
-          email: emailAddress
+          email: emailAddress,
+          location: singupLocation,
+          listIdentifier: 'U4qXB2'
         }}).then(function (response) {
-           console.log(response);
+          $emailInput.removeClass('error');
+           $emailInput.addClass('success');
+           $statusMessage.text("You're on the list, thanks!");
         }).catch(function (error) {
-          console.log(error);
+          if (error.response.status == 400) {
+            $emailInput.val('');
+            $emailInput.addClass('error');
+            $statusMessage.text(`Looks like we couldn't add ${emailAddress} to our system :( please try again`);
+          }
         });
     });
     </script>

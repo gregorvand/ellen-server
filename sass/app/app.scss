@@ -66,6 +66,13 @@ body {
   }
 }
 
+p {
+  &.disclaimer {
+    font-size: 9px !important;
+    margin-bottom: 10px !important;
+  }
+}
+
 footer {
   border-top: dotted $primary 1px;
   background-color: $color-brand-highlight;
