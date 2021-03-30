@@ -80,7 +80,7 @@ module.exports = (app) => {
 
   app.post('/api/users', usersController.create);
   app.get('/api/users', usersController.list);
-  app.post('/api/users/subscribe', serviceKlaviyo.submitEmail);
+  app.post('/api/users/subscribe', serviceKlaviyo.addSubscribersToList);
 
   app.post('/api/companies/update/:id', companiesController.update);
   app.post('/api/orders/update/:id', ordersController.update);

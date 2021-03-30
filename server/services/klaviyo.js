@@ -1,7 +1,7 @@
 const Klaviyo = require('node-klaviyo');
 const env = process.env.NODE_ENV || 'development';
 
-const submitEmail = (req, res) => {
+const addSubscribersToList = (req, res) => {
   const KlaviyoClient = new Klaviyo({
     privateToken: process.env.KLAVIYO_PRIVATE_KEY,
   });
@@ -21,4 +21,4 @@ const submitEmail = (req, res) => {
   .catch(error => res.status(400).send(error));
 }
 
-module.exports.submitEmail = submitEmail;
+module.exports.addSubscribersToList = addSubscribersToList;
