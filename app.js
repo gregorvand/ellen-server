@@ -31,7 +31,7 @@ app.use(helmet.contentSecurityPolicy({
   directives:{
     defaultSrc:["'self'"],
     scriptSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'http://localhost:8000', 'https://alpha.ellen.me'],
-    styleSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'fonts.googleapis.com', 'http://localhost:8000', 'https://alpha.ellen.me', 'https://static.klaviyo.com'],
+    styleSrc:["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com', 'fonts.googleapis.com', 'http://localhost:8000', 'https://alpha.ellen.me'],
     fontSrc:["'self'",'fonts.googleapis.com', 'https://fonts.gstatic.com', 'http://localhost:8000', 'https://alpha.ellen.me'],
     imgSrc:["'self'"]
   }}));

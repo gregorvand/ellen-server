@@ -7,9 +7,7 @@ const KlaviyoClient = new Klaviyo({
 });
 
 const addSubscribersToList = (req, res) => {
-  console.log(req);
-  console.log('klaviyo email?', req.body.email, req.body.location, req.body.listIdentifier);
-
+  console.log('klaviyo email addition..', req.body.email, req.body.location, req.body.listIdentifier);
   KlaviyoClient.lists.addSubscribersToList({
     listId: req.body.listIdentifier,
     profiles: [
@@ -32,8 +30,8 @@ const identifyUserInternal = (userEmail) => {
       hasAccount: true
     }
   })
-  .then(user => console.log(user || 'no user found...'))
-  .catch(error => console.log(error));
+  .then(user => console.log(user))
+  .catch(error => console.error(error));
 }
 
 module.exports.addSubscribersToList = addSubscribersToList;

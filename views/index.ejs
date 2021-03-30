@@ -177,7 +177,6 @@
       const emailAddress = $emailInput.val();
       const singupLocation = $emailInput.data('signup-location');
       const $statusMessage = $('div.message'); 
-      console.log(emailAddress, singupLocation);
       axios({
         method: 'post',
         url: `/api/users/subscribe`,
