@@ -23,7 +23,6 @@ let signupLocation = '';
 
 <script>
   $('.submitEmail').on('submit', function(e) {
-    // cleanup to function for use on any page
     e.preventDefault();
     const $emailInput = $(e.target).find('input[type=email]');
     const emailAddress = $emailInput.val();
