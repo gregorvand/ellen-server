@@ -1,8 +1,16 @@
+<% 
+let signupLocation = '';
+  if (typeof emailLocation !== 'undefined') { 
+    signupLocation = emailLocation
+  }
+%>
+
+
 <section class="email-form-container">
   <form class="submitEmail" action="">
     <div class="submit-position-wrapper">
       <div class="input-wrapper">
-        <input type="email" class="klaviyoEmail" placeholder="Email" value="" data-signup-location="homepage" />
+        <input type="email" class="klaviyoEmail" placeholder="Email" value="" data-signup-location="<%= signupLocation %>" />
         <div class="message"><!-- response message gets filled in here !--></div>
       </div>
       <button type="submit" class="email-submit"></button>
