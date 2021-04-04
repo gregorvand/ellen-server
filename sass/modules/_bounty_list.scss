@@ -1,3 +1,11 @@
+.bounty-list-container {
+  display: flex;
+  flex-basis: 50%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
 .bounty-list {
   $top-index: 10;
   $stagger-indent: 5vw;

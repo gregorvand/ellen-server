@@ -136,6 +136,10 @@ app.get('/admin/companies/', checkNotAuthenticatedAndAdmin, (req, res) => {
   renderAdminCompanies(req, res);
 });
 
+app.get('/earning', (req, res) => {
+  res.render("earning")
+});
+
 // Setup a default catch-all route that sends back a welcome message in JSON format.
 app.get('/', (req, res) => {
   res.render("index", {

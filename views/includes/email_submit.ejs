@@ -1,0 +1,43 @@
+<section class="email-form-container">
+  <form class="submitEmail" action="">
+    <div class="submit-position-wrapper">
+      <div class="input-wrapper">
+        <input type="email" class="klaviyoEmail" placeholder="Email" value="" data-signup-location="homepage" />
+        <div class="message"><!-- response message gets filled in here !--></div>
+      </div>
+      <button type="submit" class="email-submit"></button>
+    </div>
+  </form>
+</section>
+
+<script src="../cash-dom/dist/cash.min.js"></script>
+<script src="../axios/dist/axios.min.js"></script>
+
+<script>
+  $('.submitEmail').on('submit', function(e) {
+    // cleanup to function for use on any page
+    e.preventDefault();
+    const $emailInput = $(e.target).find('input[type=email]');
+    const emailAddress = $emailInput.val();
+    const singupLocation = $emailInput.data('signup-location');
+    const $statusMessage = $('div.message'); 
+    axios({
+      method: 'post',
+      url: `/api/users/subscribe`,
+      data: {
+        email: emailAddress,
+        location: singupLocation,
+        listIdentifier: 'U4qXB2'
+      }}).then(function (response) {
+        $emailInput.removeClass('error');
+         $emailInput.addClass('success');
+         $statusMessage.text("You're on the list, thanks!");
+      }).catch(function (error) {
+        if (error.response.status == 400) {
+          $emailInput.val('');
+          $emailInput.addClass('error');
+          $statusMessage.text(`Looks like we couldn't add ${emailAddress} to our system :( please try again`);
+        }
+      });
+  });
+  </script>

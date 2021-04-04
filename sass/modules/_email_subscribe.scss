@@ -1,7 +1,5 @@
-section.email-subscribe {
-  background-color: $color-brand-highlight;
+.email-subscribe {
   max-width: none;
-  background-color: $color-super-light-gray;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -104,6 +102,19 @@ section.email-subscribe {
         font-size: 11px;
         margin-top: 10px;
       }
+    }
+  }
+
+  .index & {
+    background-color: $color-super-light-gray;
+  } 
+
+  .earning & {
+    align-items: flex-start;
+    text-align: left;
+
+    p {
+      padding: 10px 0;
     }
   }
 }
