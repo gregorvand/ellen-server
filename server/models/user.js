@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       as: 'orders',
     });
     User.hasMany(models.Point, {
-      foreignKey: 'pointId',
+      foreignKey: 'customerId',
       as: 'points',
     });
     raw: true
