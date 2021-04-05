@@ -38,6 +38,11 @@
           <li><strong class="ellen">Ellen</strong> anonymizes your data and extracts the valuable information about the companies you purchase from.</li>
           <li>Any profits are split 50/50 between you and <strong class="ellen">Ellen</strong></li>
         </ul>
+
+        <h4>
+          <span class="text-highlight"><a href="/earning"> Read More</a></span> about earning with Ellen
+          <br />
+        </h4>
       </div>
 
       <div class="how-does-it-work-right">
@@ -155,46 +160,6 @@
       Your email address is kept strictly with ELLEN and our mail disribution system (Klaviyo). 
       No weird third parties, ever.
     </p>
-    <form class="submitEmail" action="">
-      <div class="submit-position-wrapper">
-        <div class="input-wrapper">
-          <input type="email" class="klaviyoEmail" placeholder="Email" value="" data-signup-location="homepage" />
-          <div class="message"><!-- response message gets filled in here !--></div>
-        </div>
-        <button type="submit" class="email-submit"></button>
-      </div>
-    </form>
+    <%- include('./includes/email_submit', {emailLocation: 'homepage'}); -%> 
   </section>
-
-  <script src="../cash-dom/dist/cash.min.js"></script>
-  <script src="../axios/dist/axios.min.js"></script>
-
-  <script>
-    $('.submitEmail').on('submit', function(e) {
-      // cleanup to function for use on any page
-      e.preventDefault();
-      const $emailInput = $(e.target).find('input[type=email]');
-      const emailAddress = $emailInput.val();
-      const singupLocation = $emailInput.data('signup-location');
-      const $statusMessage = $('div.message'); 
-      axios({
-        method: 'post',
-        url: `/api/users/subscribe`,
-        data: {
-          email: emailAddress,
-          location: singupLocation,
-          listIdentifier: 'U4qXB2'
-        }}).then(function (response) {
-          $emailInput.removeClass('error');
-           $emailInput.addClass('success');
-           $statusMessage.text("You're on the list, thanks!");
-        }).catch(function (error) {
-          if (error.response.status == 400) {
-            $emailInput.val('');
-            $emailInput.addClass('error');
-            $statusMessage.text(`Looks like we couldn't add ${emailAddress} to our system :( please try again`);
-          }
-        });
-    });
-    </script>
   <%- include('./includes/footer'); -%>
