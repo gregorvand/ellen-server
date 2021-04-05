@@ -1,5 +1,6 @@
 const Order = require('../models').Order;
 const Company = require('../models').Company;
+const env = process.env.NODE_ENV || 'development';
 // const TodoItem = require('../models').TodoItem;
 
 const Sentry = require("@sentry/node");
@@ -12,6 +13,7 @@ Sentry.init({
   // of transactions for performance monitoring.
   // We recommend adjusting this value in production
   tracesSampleRate: 1.0,
+  environment: env
 });
 
 module.exports = {
