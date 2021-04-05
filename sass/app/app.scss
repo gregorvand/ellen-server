@@ -40,6 +40,7 @@ body {
     }
   }
 
+  $max-width-l: 1200px;
   $max-width: 1280px;
 
   section {
@@ -56,13 +57,17 @@ body {
   .max-width-wrapper {
     display: flex;
     margin: 0 auto;
-    max-width: $max-width;
+    max-width: $max-width-l;
     width: 100%;
     flex-direction: column;
 
     @include breakpoint(large up) {
       flex-direction: row;
     }  
+
+    @include breakpoint(xxlarge up) {
+      max-width: $max-width;
+    }
   }
 }
 

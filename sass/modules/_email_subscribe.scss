@@ -62,6 +62,10 @@
       border-bottom: 10px solid transparent;
       border-left: 10px solid $color-off-black;
 
+      &:hover {
+        border-left: 10px solid $color-brand-highlight;
+      }
+
       @include breakpoint(large up){
         position: absolute;
         right: -40px;
