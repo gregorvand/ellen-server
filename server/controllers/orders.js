@@ -2,6 +2,33 @@ const Order = require('../models').Order;
 const Company = require('../models').Company;
 // const TodoItem = require('../models').TodoItem;
 
+const Sentry = require("@sentry/node");
+const Tracing = require("@sentry/tracing");
+
+Sentry.init({
+  dsn: "https://c2597939546c419ea0c56a3d5ab4b6d7@o564925.ingest.sentry.io/5705951",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
+
+// const transaction = Sentry.startTransaction({
+//   op: "test",
+//   name: "My First Test Transaction",
+// });
+
+// setTimeout(() => {
+//   try {
+//     foo();
+//   } catch (e) {
+//     Sentry.captureException(e);
+//   } finally {
+//     transaction.finish();
+//   }
+// }, 99);
+
 module.exports = {
   create(req, res, orderNumber) {
     // emailHelpers.returnOrderNumber(req);
@@ -22,7 +49,8 @@ module.exports = {
   internalCreate(req = false, orderNumber, fromEmail, companyId, customerEmail, customerId, subject, emailPlainContent) {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
-    return Order
+    try {
+      return Order
       .create({
         orderNumber: orderNumber || req.body.number,
         orderDate: orderDate || null,
@@ -33,6 +61,9 @@ module.exports = {
         customerId: customerId || 1,
         subjectLine: subject
       })
+    } catch(e) {
+      Sentry.captureException(e);
+    }
   },
 
   list(req, res) {
