@@ -84,7 +84,6 @@
 }
 
 .how-does-it-work {
-  // height: 420px;
   display: flex;
   justify-content: center;
   padding: 50px 0;
@@ -109,6 +108,13 @@
     @include breakpoint(medium down) {
       font-size: 16px;
       text-align: left;
+    }
+  }
+
+  .text-highlight {
+    @include breakpoint(small only) {
+      width: 100%;
+      display: flex;
     }
   }
 }

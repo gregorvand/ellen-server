@@ -92,7 +92,8 @@
     }
 
     p {
-      padding-right: 10vw;
+      padding-right: 5vw;
+      font-size: rem-calc(18px);
 
       @include breakpoint(small only) {
         padding-right: 1vw;
@@ -113,7 +114,7 @@
 
     > div {
       height: 100%;
-      padding: 0 50px 0 15px;
+      padding: 0 50px 30px 15px;
 
       @include breakpoint(large up) {
         padding: 0;
