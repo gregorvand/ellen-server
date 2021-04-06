@@ -1,10 +1,11 @@
 const Order = require('../models').Order;
 const Company = require('../models').Company;
 const env = process.env.NODE_ENV || 'development';
-// const TodoItem = require('../models').TodoItem;
+
+// const SentryInit = require('../services/sentryInit');
 
 const Sentry = require("@sentry/node");
-const Tracing = require("@sentry/tracing");
+// const Tracing = require("@sentry/tracing");
 
 Sentry.init({
   dsn: "https://c2597939546c419ea0c56a3d5ab4b6d7@o564925.ingest.sentry.io/5705951",
@@ -15,6 +16,7 @@ Sentry.init({
   tracesSampleRate: 1.0,
   environment: env
 });
+
 
 module.exports = {
   create(req, res, orderNumber) {
@@ -49,7 +51,8 @@ module.exports = {
         subjectLine: subject
       })
     } catch(e) {
-      Sentry.captureException(e);
+      SentryInit.setUser({ email: customerEmail });
+      SentryInit.captureException(e);
     }
   },
 
