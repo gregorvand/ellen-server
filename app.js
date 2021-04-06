@@ -2,11 +2,9 @@ require('dotenv').config();
 
 const env = process.env.NODE_ENV || 'development';
 const config = require('./server/config/config.json')[env];
-
 const express = require('express');
 const helmet = require('helmet');
 const logger = require('morgan');
-const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
@@ -14,6 +12,19 @@ const passport = require('passport');
 const { renderDashboard } = require('./views/rendering/render_dashboard')
 const { renderCompanyPage } = require('./views/rendering/render_company')
 const { renderAdminCompanies } = require('./views/rendering/render_admin_companies')
+
+// const Sentry = require("@sentry/node");
+// // const Tracing = require("@sentry/tracing");
+
+// Sentry.init({
+//   dsn: "https://c2597939546c419ea0c56a3d5ab4b6d7@o564925.ingest.sentry.io/5705951",
+
+//   // Set tracesSampleRate to 1.0 to capture 100%
+//   // of transactions for performance monitoring.
+//   // We recommend adjusting this value in production
+//   tracesSampleRate: 1.0,
+//   environment: env
+// });
 
 const indexHelpers = require('./views/helpers/index_helpers');
 
@@ -45,6 +56,10 @@ app.use(express.urlencoded({ extended: false }));
 // Static asset serving
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
+
+// init Sentry across app
+// this dropped console logs so needs better integration before activatomg
+// app.use(Sentry.Handlers.requestHandler());
 
 console.log('env??', env);
 // Production (DigitalOcean-based) and dev Session store PG connections / parameters 
