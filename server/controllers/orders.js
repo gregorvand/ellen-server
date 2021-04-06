@@ -1,22 +1,6 @@
 const Order = require('../models').Order;
 const Company = require('../models').Company;
-const env = process.env.NODE_ENV || 'development';
-
-// const SentryInit = require('../services/sentryInit');
-
-const Sentry = require("@sentry/node");
-// const Tracing = require("@sentry/tracing");
-
-Sentry.init({
-  dsn: "https://c2597939546c419ea0c56a3d5ab4b6d7@o564925.ingest.sentry.io/5705951",
-
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0,
-  environment: env
-});
-
+const SentryInit = require('../services/sentryInit');
 
 module.exports = {
   create(req, res, orderNumber) {
@@ -38,6 +22,7 @@ module.exports = {
   internalCreate(req = false, orderNumber, fromEmail, companyId, customerEmail, customerId, subject, emailPlainContent) {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
+    console.log(customerEmail);
     try {
       return Order
       .create({

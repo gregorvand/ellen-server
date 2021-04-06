@@ -2,7 +2,6 @@ require('dotenv').config();
 
 const env = process.env.NODE_ENV || 'development';
 const config = require('./server/config/config.json')[env];
-
 const express = require('express');
 const helmet = require('helmet');
 const logger = require('morgan');
