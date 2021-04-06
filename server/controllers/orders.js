@@ -1,6 +1,7 @@
 const Order = require('../models').Order;
 const Company = require('../models').Company;
 const SentryInit = require('../services/sentryInit');
+const pointsController = require('../controllers/points');
 
 module.exports = {
   create(req, res, orderNumber) {
@@ -23,6 +24,10 @@ module.exports = {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
     console.log(customerEmail);
+
+    // get customerEmail
+    // let customerByEmail = await User.findOne({ where: { email: customerByEmail } }); // what about customer identifer to find customer?
+
     try {
       return Order
       .create({
@@ -35,7 +40,11 @@ module.exports = {
         customerId: customerId || 1,
         subjectLine: subject
       })
-      .then(order => { console.log('completed!', order) }) // also call Points add with true/false activate flag on order number value
+      .then(order => { 
+        console.log('completed!', order);
+        const pointsActivated = order.orderNumber === '1' ? false : true;
+        pointsController.internalCreate(10, customerId, pointsActivated, 1, order.id);
+      }) // also call Points add with true/false activate flag on order number value
       .catch(error => { SentryInit.captureException(error); });
     } catch(e) {
       SentryInit.setUser({ email: customerEmail });
