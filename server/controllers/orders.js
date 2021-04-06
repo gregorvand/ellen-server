@@ -35,6 +35,8 @@ module.exports = {
         customerId: customerId || 1,
         subjectLine: subject
       })
+      .then(order => { console.log('completed!', order) }) // also call Points add with true/false activate flag on order number value
+      .catch(error => { SentryInit.captureException(error); });
     } catch(e) {
       SentryInit.setUser({ email: customerEmail });
       SentryInit.captureException(e);
