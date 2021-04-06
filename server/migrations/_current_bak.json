@@ -141,6 +141,19 @@
                     "field": "pointsValue",
                     "seqType": "Sequelize.INTEGER"
                 },
+                "orderId": {
+                    "allowNull": true,
+                    "field": "orderId",
+                    "seqType": "Sequelize.BIGINT"
+                },
+                "activated": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "activated",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -220,5 +233,5 @@
             "indexes": []
         }
     },
-    "revision": 8
+    "revision": 9
 }
