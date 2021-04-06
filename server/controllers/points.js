@@ -4,7 +4,7 @@ module.exports = {
   create(req, res) {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
-    if (req.body.pointsValue === 0) {
+    if (req.body.pointsValue !== 0) {
       try {
         return Point
           .create({
