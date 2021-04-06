@@ -3,6 +3,15 @@ module.exports = (sequelize, DataTypes) => {
     pointsValue: { 
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    orderId: { 
+      type: DataTypes.BIGINT,
+      allowNull: true
+    },
+    activated: { 
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   });
 
