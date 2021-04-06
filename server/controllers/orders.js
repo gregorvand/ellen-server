@@ -1,6 +1,6 @@
 const Order = require('../models').Order;
 const Company = require('../models').Company;
-// const TodoItem = require('../models').TodoItem;
+const SentryInit = require('../services/sentryInit');
 
 module.exports = {
   create(req, res, orderNumber) {
@@ -22,7 +22,9 @@ module.exports = {
   internalCreate(req = false, orderNumber, fromEmail, companyId, customerEmail, customerId, subject, emailPlainContent) {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
-    return Order
+    console.log(customerEmail);
+    try {
+      return Order
       .create({
         orderNumber: orderNumber || req.body.number,
         orderDate: orderDate || null,
@@ -33,6 +35,10 @@ module.exports = {
         customerId: customerId || 1,
         subjectLine: subject
       })
+    } catch(e) {
+      SentryInit.setUser({ email: customerEmail });
+      SentryInit.captureException(e);
+    }
   },
 
   list(req, res) {

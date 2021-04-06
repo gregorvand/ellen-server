@@ -1,0 +1,161 @@
+.earning {
+  $page-margin-padding: 30px;
+
+  section {
+    display: flex;
+    justify-content: flex-start;
+    
+    @include breakpoint(small only) {
+      flex-direction: column;
+    }
+  }
+
+  .header-info {
+    background-color: $color-brand-highlight;
+    padding: 40px $page-margin-padding 100px;
+    display: flex;
+    justify-content: flex-start;
+    position: relative;
+
+    @include breakpoint(small only) {
+      max-width: 90%;
+    }
+
+    > h1 {
+      line-height: 1;
+      color: $color-off-black;
+      font-weight: bolder;
+      z-index: 10;
+
+      @include breakpoint(small only) {
+        text-align: left;
+      }
+    }
+
+    &-mesh {
+      background-image: url(/images/border_chequer.png);
+      background-repeat: repeat;
+      opacity: 0.1;
+      position: absolute;
+      top: 20px;
+      left: -100px;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    &-alternative {
+      background-color: $color-brand-alternative-highlight;
+
+      h1 {
+        font-size: rem-calc(50px);
+        letter-spacing: 1px;
+        color: $color-white;
+      }
+    }
+  }
+
+  .subtitle {
+    margin-top: 20px;
+    padding: $page-margin-padding;
+    font-weight: bolder;
+    font-size: 16px;
+  }
+
+  .earning-types {
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 0 15px;
+
+    @include breakpoint(large up) {
+      padding: 0 50px 0 $page-margin-padding;
+    }
+
+    h2 {
+      font-size: 22px;
+      background-color: $color-off-black;
+      color: $color-white;
+      padding: 10px;
+      display: inline-flex;
+      font-weight: 500;
+      font-size: 15px;
+      letter-spacing: 1px;
+    }
+
+    &-type-block {
+      flex-basis: 50%;
+
+      @include breakpoint(small only) {
+        flex-basis: 100%;
+      }
+    }
+
+    p {
+      padding-right: 5vw;
+      font-size: rem-calc(18px);
+
+      @include breakpoint(small only) {
+        padding-right: 1vw;
+      }
+    }
+  }
+
+  .bounty-email-container {
+    overflow: hidden;
+
+    @include breakpoint(large up) {
+      height: 400px;
+    }
+
+    .bounty-list {
+      margin-top: -10px;
+    }
+
+    > div {
+      height: 100%;
+      padding: 0 50px 30px 15px;
+
+      @include breakpoint(large up) {
+        padding: 0;
+        padding-right: 50px;
+      }
+      
+
+      &.bounty-list-container {
+        margin: 50px 0;
+
+        @include breakpoint(large up) {
+          justify-content: flex-start;
+          margin: 75px 0;
+        }
+      }
+    }
+
+    .email-form-container {
+      margin-top: 20px;
+
+      &, form { 
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 100%;
+      };
+
+      div {
+        width: 100%;
+
+        @include breakpoint(large up) {
+          max-width: 400px;
+        }
+      }
+
+      input {
+        width: 100%;
+
+        @include breakpoint(large up) {
+          max-width: 400px;
+        }
+      }
+    }
+  }
+}

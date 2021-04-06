@@ -1,7 +1,5 @@
-section.email-subscribe {
-  background-color: $color-brand-highlight;
+.email-subscribe {
   max-width: none;
-  background-color: $color-super-light-gray;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -64,6 +62,10 @@ section.email-subscribe {
       border-bottom: 10px solid transparent;
       border-left: 10px solid $color-off-black;
 
+      &:hover {
+        border-left: 10px solid $color-brand-highlight;
+      }
+
       @include breakpoint(large up){
         position: absolute;
         right: -40px;
@@ -104,6 +106,19 @@ section.email-subscribe {
         font-size: 11px;
         margin-top: 10px;
       }
+    }
+  }
+
+  .index & {
+    background-color: $color-super-light-gray;
+  } 
+
+  .earning & {
+    align-items: flex-start;
+    text-align: left;
+
+    p {
+      padding: 10px 0;
     }
   }
 }

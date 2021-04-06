@@ -20,7 +20,7 @@
   flex-direction: column;
   margin-bottom: 20px;
 
-  @include breakpoint(medium up) {
+  @include breakpoint(large up) {
     flex-direction: row;
     height: 200px;
     justify-content: space-between;
