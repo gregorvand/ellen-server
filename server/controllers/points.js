@@ -31,7 +31,9 @@ module.exports = {
               activated: activated || false,
               reason: reason || 1
             })
-            .then(transaction => console.log('added points of ', transaction.pointsValue))
+            .then(transaction => 
+              console.log(`added points of, ${transaction.pointsValue}, activated: ${activated}`)
+            )
             .catch(error => console.error(error)); // obscure error message, stop people decoding API
           } catch (e) {
             throw new error(e);
