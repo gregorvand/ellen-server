@@ -98,10 +98,36 @@ module.exports = {
         return order
           .update({
             orderNumber: req.body.orderNumber || 1,
+          }, {
+            returning: true,
+            plain: true,
+            logging: false
           })
-          .then(() => res.status(200).send('updated!'))  // Send back the updated todo.
+          .then((order) => {
+            const consoleData = `${order.dataValues.orderNumber} (${order.dataValues.id})`;
+            if (order.dataValues.orderNumber === '1') {
+              console.log(`dont validate`, consoleData);
+              pointsController.validatePointsTransaction(order.dataValues.id, false);
+            } else {
+              console.log(`do validate`, consoleData);
+              pointsController.validatePointsTransaction(order.dataValues.id);
+            }
+          })
+          .then(() => 
+            res.status(200).send('updated yow!'),
+          )
           .catch((error) => res.status(400).send(error));
-      })
-    .catch((error) => res.status(400).send(error));
+      }).catch((error) => res.status(400).send(error));
   }
 };
+
+async function returnOrder (lookup) {
+  return Order
+    .findOne({
+      where: [lookup],
+    })
+    .then((foundOrder) => foundOrder)
+    .catch((error) => console.error(error));
+}
+
+module.exports.returnOrder = returnOrder;
