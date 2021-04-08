@@ -3,6 +3,7 @@ const Company = require('../models').Company;
 const SentryInit = require('../services/sentryInit');
 const pointsController = require('../controllers/points');
 const pointsValues = require('../utils/constants').POINTS;
+const pointsTransationQueue = require('../services/bull-queues').pointsTransactionQueue;
 
 module.exports = {
   create(req, res, orderNumber) {
@@ -120,6 +121,15 @@ async function afterOrderUpdateTasks (updatedOrder) {
 
   // validate whether basic points should be activated
   pointsController.validatePointsTransaction(orderData.id, orderData.orderNumber !== '1');  
+  
+  pointsTransationQueue.add({
+    foo: 'bar'
+  });
+
+  // REPEAT EXAMPLE - RUN EVERY ONE MINUTE
+  // pointsTransationQueue.add({
+  //   foo: 'bar3'
+  // }, { repeat: { cron: '*/1 * * * *' } });
 }
 
 async function returnOrder (lookup) {
