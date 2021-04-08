@@ -4,6 +4,7 @@ const SentryInit = require('../services/sentryInit');
 const pointsController = require('../controllers/points');
 const pointsValues = require('../utils/constants').POINTS;
 const pointsTransationQueue = require('../services/bull-queues').pointsTransactionQueue;
+const { Op } = require("sequelize");
 
 module.exports = {
   create(req, res, orderNumber) {
@@ -46,6 +47,7 @@ module.exports = {
         console.log('completed!', order);
         const pointsActivated = order.orderNumber === '1' ? false : true;
         pointsController.internalCreate(pointsValues.single, customerId, pointsActivated, 1, order.id);
+        checkFirstOrderForCompany(order.id);
       }) // also call Points add with true/false activate flag on order number value
       .catch(error => { SentryInit.captureException(error); });
     } catch(e) {
@@ -126,6 +128,10 @@ async function afterOrderUpdateTasks (updatedOrder) {
     foo: 'bar'
   });
 
+  checkFirstOrderForCompany(orderData.id);
+
+  // check if this is the first VALID order for this company, award 30 points if yes
+
   // REPEAT EXAMPLE - RUN EVERY ONE MINUTE
   // pointsTransationQueue.add({
   //   foo: 'bar3'
@@ -140,5 +146,33 @@ async function returnOrder (lookup) {
     .then((foundOrder) => foundOrder)
     .catch((error) => console.error(error));
 }
+
+async function checkFirstOrderForCompany (orderId) {
+  // lookup order in DB
+  return Order
+    .findByPk(orderId)
+    .then(order => { 
+      // lookup all orders with this company
+      return Order
+      .findAll({ 
+        where: {
+          companyId: order.companyId,
+          orderNumber: { [Op.not]: 1 },
+        },
+        order: [
+          ['createdAt', 'ASC']
+        ]
+      })
+      .then((allOrders) => {
+        if (orderId === allOrders[0].id) {
+          console.log(`yeah first! ${orderId} ${allOrders[0].id}`);
+        } else {
+          console.log('noppppe');
+        }
+      })
+    })
+  };
+
+  // lookup all orders in the given company
 
 module.exports.returnOrder = returnOrder;

@@ -48,18 +48,22 @@ module.exports = {
 // ie, validating points can only be done internally
 // no req/res returned
 async function validatePointsTransaction (orderIdLookup, validate = true) {
-  return Point
+    return Point
     .findOne({
       where: {
         orderId: orderIdLookup
       },
     })
     .then(pointsTransaction => {
-      return pointsTransaction.update({
-        activated: validate
-      }, { plain: true }).then((points) => 
-        console.log('updated points transaction', points.id)
-      )  // Send back the updated todo.
+      try {
+        return pointsTransaction.update({
+          activated: validate
+        }, { plain: true }).then((points) => 
+          console.log('updated points transaction', points.id)
+        )  // Send back the updated todo.
+      } catch(e) {
+        console.log('could not update points, probably legacy');
+      }
     })
     .catch((error) => console.error(error));
 }
