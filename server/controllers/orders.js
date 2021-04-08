@@ -2,6 +2,7 @@ const Order = require('../models').Order;
 const Company = require('../models').Company;
 const SentryInit = require('../services/sentryInit');
 const pointsController = require('../controllers/points');
+const pointsValues = require('../utils/constants').POINTS;
 
 module.exports = {
   create(req, res, orderNumber) {
@@ -43,7 +44,7 @@ module.exports = {
       .then(order => { 
         console.log('completed!', order);
         const pointsActivated = order.orderNumber === '1' ? false : true;
-        pointsController.internalCreate(10, customerId, pointsActivated, 1, order.id);
+        pointsController.internalCreate(pointsValues.single, customerId, pointsActivated, 1, order.id);
       }) // also call Points add with true/false activate flag on order number value
       .catch(error => { SentryInit.captureException(error); });
     } catch(e) {
@@ -104,14 +105,7 @@ module.exports = {
             logging: false
           })
           .then((order) => {
-            const consoleData = `${order.dataValues.orderNumber} (${order.dataValues.id})`;
-            if (order.dataValues.orderNumber === '1') {
-              console.log(`dont validate`, consoleData);
-              pointsController.validatePointsTransaction(order.dataValues.id, false);
-            } else {
-              console.log(`do validate`, consoleData);
-              pointsController.validatePointsTransaction(order.dataValues.id);
-            }
+            afterOrderUpdateTasks(order);
           })
           .then(() => 
             res.status(200).send('updated yow!'),
@@ -120,6 +114,13 @@ module.exports = {
       }).catch((error) => res.status(400).send(error));
   }
 };
+
+async function afterOrderUpdateTasks (updatedOrder) {
+  const orderData = updatedOrder.dataValues;
+
+  // validate whether basic points should be activated
+  pointsController.validatePointsTransaction(orderData.id, orderData.orderNumber !== '1');  
+}
 
 async function returnOrder (lookup) {
   return Order

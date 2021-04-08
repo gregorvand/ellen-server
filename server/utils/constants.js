@@ -22,5 +22,10 @@ module.exports = Object.freeze({
     'Order',
     'order',
     'order r'
-  ]
+  ],
+  POINTS: {
+    "single": 10,
+    "three-combo": 30,
+    "new-company": 30
+  }
 }); 

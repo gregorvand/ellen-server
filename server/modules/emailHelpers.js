@@ -3,7 +3,7 @@ const formidable = require('formidable');
 const cheerio = require('cheerio'); // html parser, jquery-like syntax
 const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat');
-var constants = require('../utils/constants');
+const constants = require('../utils/constants');
 
 const companiesController = require('../controllers/companies');
 
