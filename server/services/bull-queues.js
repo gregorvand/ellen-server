@@ -1,10 +1,5 @@
 const Bull = require('bull');
-const pointsTransactionQueue = new Bull('points-queue-first', {
-  limiter: {
-      max: 1,
-      duration: 5000
-    }
-  });
+const pointsTransactionQueue = new Bull('points-queue-first');
 
 const initPointsTransactionQueues = async function() {
   pointsTransactionQueue.process(async (job) => {
