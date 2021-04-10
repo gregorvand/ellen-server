@@ -47,7 +47,7 @@ module.exports = {
         console.log('completed!', order);
         const pointsActivated = order.orderNumber === '1' ? false : true;
         pointsController.internalCreate(pointsValues.single, customerId, pointsActivated, 1, order.id);
-        checkFirstOrderForCompany(order.id);
+        afterCreateTasks(order);
       }) // also call Points add with true/false activate flag on order number value
       .catch(error => { SentryInit.captureException(error); });
     } catch(e) {
@@ -119,16 +119,14 @@ module.exports = {
 };
 
 async function afterOrderUpdateTasks (updatedOrder) {
+  console.log('THE UPDATED IS', updatedOrder.orderNumber);
   const orderData = updatedOrder.dataValues;
 
   // validate whether basic points should be activated
   pointsController.validatePointsTransaction(orderData.id, orderData.orderNumber !== '1');  
   
-  pointsTransactionQueue.add({
-    foo: 'bar'
-  });
-
-  checkFirstOrderForCompany(orderData.id);
+  // check if first [valid]Order for that Company, award bonus if so 
+  validateIfFirstOrder(orderData);
 
   // check if this is the first VALID order for this company, award 30 points if yes
 
@@ -138,17 +136,15 @@ async function afterOrderUpdateTasks (updatedOrder) {
   // }, { repeat: { cron: '*/1 * * * *' } });
 }
 
-async function returnOrder (lookup) {
-  return Order
-    .findOne({
-      where: [lookup],
-    })
-    .then((foundOrder) => foundOrder)
-    .catch((error) => console.error(error));
+async function afterCreateTasks (createdOrder) {
+  const orderData = createdOrder.dataValues;
+  validateIfFirstOrder(orderData);
 }
 
 async function checkFirstOrderForCompany (orderId) {
-  // lookup order in DB
+  // checks if:
+  // This is order is valid, and
+  // if so, is it the first of those valid orders
   return Order
     .findByPk(orderId)
     .then(order => { 
@@ -164,15 +160,29 @@ async function checkFirstOrderForCompany (orderId) {
         ]
       })
       .then((allOrders) => {
-        if (orderId === allOrders[0].id) {
-          console.log(`yeah first! ${orderId} ${allOrders[0].id}`);
-        } else {
-          console.log('noppppe');
-        }
+        return orderId === allOrders[0]?.id;
       })
+      // .catch((error)) => console.log('no orders yet / all orders invalid', error));
     })
   };
 
-  // lookup all orders in the given company
+  async function validateIfFirstOrder (orderData) {
+    // check if first [valid]Order for that Company, award bonus if so 
+    const isFirstForThisCompany = await checkFirstOrderForCompany(orderData.id) || false;
+    if (isFirstForThisCompany) {
+      pointsTransactionQueue.add(
+        pointsController.internalCreate(pointsValues['new-company'], orderData.customerId, true, 2, orderData.id)
+      );
+    }
+  }
 
-module.exports.returnOrder = returnOrder;
+  // async function returnOrder (lookup) {
+//   return Order
+//     .findOne({
+//       where: [lookup],
+//     })
+//     .then((foundOrder) => foundOrder)
+//     .catch((error) => console.error(error));
+// }
+
+// module.exports.returnOrder = returnOrder;

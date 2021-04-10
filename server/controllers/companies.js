@@ -15,7 +15,6 @@ module.exports = {
   },
 
   list(req, res) {
-    console.log('gots here');
     return Company
       .findAll({
         include: [{
