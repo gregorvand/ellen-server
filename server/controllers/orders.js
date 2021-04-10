@@ -3,7 +3,7 @@ const Company = require('../models').Company;
 const SentryInit = require('../services/sentryInit');
 const pointsController = require('../controllers/points');
 const pointsValues = require('../utils/constants').POINTS;
-const pointsTransationQueue = require('../services/bull-queues').pointsTransactionQueue;
+const pointsTransactionQueue = require('../services/bull-queues').pointsTransactionQueue;
 const { Op } = require("sequelize");
 
 module.exports = {
@@ -124,7 +124,7 @@ async function afterOrderUpdateTasks (updatedOrder) {
   // validate whether basic points should be activated
   pointsController.validatePointsTransaction(orderData.id, orderData.orderNumber !== '1');  
   
-  pointsTransationQueue.add({
+  pointsTransactionQueue.add({
     foo: 'bar'
   });
 
@@ -133,7 +133,7 @@ async function afterOrderUpdateTasks (updatedOrder) {
   // check if this is the first VALID order for this company, award 30 points if yes
 
   // REPEAT EXAMPLE - RUN EVERY ONE MINUTE
-  // pointsTransationQueue.add({
+  // pointsTransactionQueue.add({
   //   foo: 'bar3'
   // }, { repeat: { cron: '*/1 * * * *' } });
 }
