@@ -31,6 +31,21 @@
   </div>
 </section>
 
+<section class="rewards-area">
+  <h4>Your Points</h4>
+  
+  <div class="rewards-area-left">
+    <div class="screen-render rewards-listing">
+      <div class="screen-render-inner screen-render-inner-alternative"> 
+      hello
+      </div>
+    </div>
+  </div>
+  <div class="rewards-area-right">
+
+  </div>
+</section>
+
 <section class="dashboard-area">
   <section class="email-record screen-render">
     <ul class="orders-by-company-list screen-render-inner">
@@ -58,33 +73,26 @@
     </ul>
   </section>
 
-<section class="orders-by-company">
-  <h4>Your confirmed data by Company</h4>
-  <ul class="orders-by-company-list">
-    <% let companyName = 'firstloop' %>
-    <% if (typeof orders != 'undefined') {  
-      orders.forEach((order, index) => { %>
-        <% if (order.Company.nameIdentifier !== 'unconfirmed') { %>
-          <% if (companyName !== order.Company.nameIdentifier) { %>
-            <div class="company-header">
-              <a href="/companies/<%= order.Company.id %>"><h3><%= order.Company.nameIdentifier %></h3></a>
-              <span class="company-header-email"><%= order.fromEmail %></span>
-            </div>
-          <% } %>
-          <li class="orders-by-company-list-item">
-            <span class="orders-by-company-list-date">
-              <%= helpers.showDate(order.orderDate) %>
-            </span> 
-            <span class="orders-by-company-list-divider">::</span>
-            <span class="orders-by-company-list-order-number">
-              <%= order.orderNumber %>
-            </span>
-          </li>
-          <% } %>
-        <% companyName = order.Company.nameIdentifier %>
-    <% })} %>
-  </ul>
-</section>
+  <div class="data-record">
+  <section class="orders-by-company">
+    <h4>Your confirmed data by Company</h4>
+    <ul class="orders-by-company-list">
+      <% let companyName = 'firstloop' %>
+      <% if (typeof orders != 'undefined') {  
+        orders.forEach((order, index) => { %>
+          <% if (order.Company.nameIdentifier !== 'unconfirmed') { %>
+            <% if (companyName !== order.Company.nameIdentifier) { %>
+              <div class="company-header">
+                <a href="/companies/<%= order.Company.id %>"><h3><%= order.Company.nameIdentifier %></h3></a>
+                <span class="company-header-email"><%= order.fromEmail %></span>
+              </div>
+            <% } %>
+            <% } %>
+          <% companyName = order.Company.nameIdentifier %>
+      <% })} %>
+    </ul>
+  </section>
+  </div>
 </section>
 <%- include('./includes/footer'); -%> 
 

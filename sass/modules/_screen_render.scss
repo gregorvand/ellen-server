@@ -35,6 +35,14 @@
     }
   }
 
+  &-inner-alternative {
+    background-color: $color-white;
+  }
+
+  &.rewards-listing {
+    margin-bottom: 40px;
+  }
+
   .screen-data {
     display: flex;
     flex-direction: row;

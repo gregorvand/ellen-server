@@ -310,6 +310,12 @@
   }
 }
 
+.data-record {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 45%;
+}
+
 .unique-identifier-wrapper {
   display: flex;
   flex-direction: column;
@@ -414,4 +420,10 @@ ul.quick-data {
     list-style: none;
     display: inline-block;
   }
+}
+
+// REWARDS STYLE
+
+.rewards-area {
+  
 }
