@@ -425,5 +425,10 @@ ul.quick-data {
 // REWARDS STYLE
 
 .rewards-area {
-  
+  .rewards-listing {
+    &-left, &-right {
+      flex-basis: 50%;
+      flex-direction: column;
+    }
+  }
 }

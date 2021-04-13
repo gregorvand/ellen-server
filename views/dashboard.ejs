@@ -37,8 +37,22 @@
   <div class="rewards-area-left">
     <div class="screen-render rewards-listing">
       <div class="screen-render-inner screen-render-inner-alternative"> 
-      hello
+        <div class="rewards-listing-left">
+          <!-- TOTAL POINTS -->
+        </div>
+        <div class="rewards-listing-right">
+        <% if (typeof points != 'undefined' && points.length > 0) {  
+          points.forEach((pointTransaction) => { %>
+            <li>
+              <% console.log(pointTransaction.reason) %>
+              <strong> <%= helpers.renderPointsReason(pointTransaction.reason) %> </strong> 
+              <%= pointTransaction.pointsValue %>
+            </li>
+        <% })} else { %>
+          <li>No points earned yet!</li>
+        <% } %>
       </div>
+    </div>
     </div>
   </div>
   <div class="rewards-area-right">

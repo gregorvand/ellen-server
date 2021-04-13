@@ -1,5 +1,6 @@
 const emailHelpers = require('../../server/modules/emailHelpers');
 const serviceKlaviyo = require('../../server/services/klaviyo');
+const constants = require('../../server/utils/constants');
 
 const dayjs = require('dayjs');
 const calendar = require('dayjs/plugin/calendar');
@@ -24,7 +25,13 @@ const identifyKlaviyoUser = (user) => {
   serviceKlaviyo.identifyUserInternal(user.email);
 }
 
+const renderPointsReason = (reasonNumber) => {
+  return constants.REASONS[reasonNumber];
+}
+
+
 module.exports.showDate = showDate;
 module.exports.getEmailSubject = getEmailSubject;
 module.exports.getInboundEmailAddress = getInboundEmailAddress;
 module.exports.identifyKlaviyoUser = identifyKlaviyoUser;
+module.exports.renderPointsReason = renderPointsReason;

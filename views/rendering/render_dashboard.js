@@ -1,3 +1,4 @@
+const Points = require('../../server/models').Point;
 const Order = require('../../server/models').Order;
 const Company = require('../../server/models').Company;
 const dashboardHelpers = require('../../views/helpers/dashboard_helpers');
@@ -12,10 +13,15 @@ const renderDashboard = function(req, res) {
   const latestEmailsPromise = getLatestEmails(req.user.id).then(latestEmails => {
     userEmails = latestEmails;
   })
+
+  const pointsByUserPromise = getPointsByUser(req.user.id).then(returnedPoints => {
+    userPoints = returnedPoints;
+  })
   
-  Promise.all([ordersByCompanyPromise, latestEmailsPromise]).then(() => {
+  Promise.all([ordersByCompanyPromise, latestEmailsPromise, pointsByUserPromise]).then(() => {
     res.render("dashboard", { 
       user: req.user,
+      points: userPoints,
       orders: userOrders,
       emails: userEmails,
       helpers: dashboardHelpers
@@ -55,5 +61,17 @@ function getLatestEmails (id) {
     order: [ ['createdAt', 'DESC'] ]
   })
 };
+
+function getPointsByUser (id) {
+  return Points
+  .findAll({
+    where: {
+      customerId: id
+    },
+    limit: 6,
+    order: [ ['createdAt', 'DESC'] ]
+  })
+};
+
 
 module.exports.renderDashboard = renderDashboard;

@@ -27,5 +27,10 @@ module.exports = Object.freeze({
     "single": 10,
     "three-combo": 30,
     "new-company": 30
+  },
+  REASONS: {
+    1: "Email",
+    2: "New Company!",
+    3: "MULTI BONUS"
   }
 }); 
