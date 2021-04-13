@@ -24,7 +24,9 @@ if (env == 'production') {
 
 let sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize(process.env[config.use_env_variable], config, {
+    logging: false
+  });
 } else {
   console.log('Seq got here');
   sequelize = new Sequelize({
