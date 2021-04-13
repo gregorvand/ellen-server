@@ -4,13 +4,11 @@ const SentryInit = require('../services/sentryInit');
 const pointsController = require('../controllers/points');
 const pointsValues = require('../utils/constants').POINTS;
 const { Op } = require("sequelize");
-// const pointsTransationQueue = require('../services/bull-queues').pointsTransactionQueue;
+const pointsTransactionQueue = require('../services/bull-queues').pointsTransactionQueue;
 
 
 module.exports = {
   create(req, res, orderNumber) {
-    // emailHelpers.returnOrderNumber(req);
-    // emailHelpers.parseSubjectForOrder(req);
     return Order
       .create({
         orderNumber: orderNumber || req.body.number || 1,
@@ -127,10 +125,10 @@ async function afterOrderUpdateTasks (updatedOrder) {
   pointsController.validateAllPointsTransactionsForOrder(orderData.id, orderData.orderNumber !== '1');  
   
   // 2 check if order is the first now valid order
-  checkFirstOrderForCompany(orderData.id);
-
+  // checkFirstOrderForCompany(orderData.id);
+  // and then
   // 4 upsert a 'first email' bonus if it is now the first valid  (ie check for reason2 point)
-
+  upsertFirstOrderPoints(orderData);
 
 
   // pointsTransationQueue.add({
@@ -160,13 +158,19 @@ async function checkFirstOrderForCompany (orderId) {
         ]
       })
       .then((allOrders) => {
-        if (orderId === allOrders[0].id) {
-          console.log(`yeah first! ${orderId} ${allOrders[0].id}`);
-        } else {
-          console.log('noppppe');
-        }
+        return orderId === allOrders[0]?.id;
       })
     })
   };
+
+  async function upsertFirstOrderPoints (orderData) {
+    // check if first [valid]Order for that Company, award bonus if so 
+    const isFirstForThisCompany = await checkFirstOrderForCompany(orderData.id) || false;
+    if (isFirstForThisCompany) {
+      pointsTransactionQueue.add(
+        pointsController.upsert(pointsValues['new-company'], orderData.customerId, true, 2, orderData.id)
+      );
+    }
+  }
 
   // lookup all orders in the given company
