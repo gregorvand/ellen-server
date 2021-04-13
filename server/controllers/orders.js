@@ -3,7 +3,9 @@ const Company = require('../models').Company;
 const SentryInit = require('../services/sentryInit');
 const pointsController = require('../controllers/points');
 const pointsValues = require('../utils/constants').POINTS;
-const pointsTransationQueue = require('../services/bull-queues').pointsTransactionQueue;
+const { Op } = require("sequelize");
+// const pointsTransationQueue = require('../services/bull-queues').pointsTransactionQueue;
+
 
 module.exports = {
   create(req, res, orderNumber) {
@@ -43,7 +45,6 @@ module.exports = {
         subjectLine: subject
       })
       .then(order => { 
-        console.log('completed!', order);
         const pointsActivated = order.orderNumber === '1' ? false : true;
         pointsController.internalCreate(pointsValues.single, customerId, pointsActivated, 1, order.id);
       }) // also call Points add with true/false activate flag on order number value
@@ -117,28 +118,55 @@ module.exports = {
 };
 
 async function afterOrderUpdateTasks (updatedOrder) {
-  const orderData = updatedOrder.dataValues;
+  const orderData = updatedOrder.dataValues;  
 
-  // validate whether basic points should be activated
-  pointsController.validatePointsTransaction(orderData.id, orderData.orderNumber !== '1');  
+
+  // AFTER UPDATE
+  // 1 check if order now valid and
+  // validate (or not) all points transactions associated
+  pointsController.validateAllPointsTransactionsForOrder(orderData.id, orderData.orderNumber !== '1');  
   
-  pointsTransationQueue.add({
-    foo: 'bar'
-  });
+  // 2 check if order is the first now valid order
+  checkFirstOrderForCompany(orderData.id);
 
+  // 4 upsert a 'first email' bonus if it is now the first valid  (ie check for reason2 point)
+
+
+
+  // pointsTransationQueue.add({
+  //   foo: 'bar'
+  // });
+  
   // REPEAT EXAMPLE - RUN EVERY ONE MINUTE
   // pointsTransationQueue.add({
   //   foo: 'bar3'
   // }, { repeat: { cron: '*/1 * * * *' } });
 }
 
-async function returnOrder (lookup) {
+async function checkFirstOrderForCompany (orderId) {
+  // lookup order in DB
   return Order
-    .findOne({
-      where: [lookup],
+    .findByPk(orderId)
+    .then(order => { 
+      // lookup all orders with this company
+      return Order
+      .findAll({ 
+        where: {
+          companyId: order.companyId,
+          orderNumber: { [Op.not]: 1 },
+        },
+        order: [
+          ['createdAt', 'ASC']
+        ]
+      })
+      .then((allOrders) => {
+        if (orderId === allOrders[0].id) {
+          console.log(`yeah first! ${orderId} ${allOrders[0].id}`);
+        } else {
+          console.log('noppppe');
+        }
+      })
     })
-    .then((foundOrder) => foundOrder)
-    .catch((error) => console.error(error));
-}
+  };
 
-module.exports.returnOrder = returnOrder;
+  // lookup all orders in the given company
