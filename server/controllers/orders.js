@@ -45,6 +45,7 @@ module.exports = {
       .then(order => { 
         const pointsActivated = order.orderNumber === '1' ? false : true;
         pointsController.internalCreate(pointsValues.single, customerId, pointsActivated, 1, order.id);
+        afterOrderUpdateTasks(order);
       }) // also call Points add with true/false activate flag on order number value
       .catch(error => { SentryInit.captureException(error); });
     } catch(e) {
