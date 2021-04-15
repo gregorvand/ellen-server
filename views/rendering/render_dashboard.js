@@ -4,7 +4,7 @@ const Company = require('../../server/models').Company;
 const dashboardHelpers = require('../../views/helpers/dashboard_helpers');
 const pointsServiceCalculator = require('../../server/services/points/point_calculators');
 const Op = require('sequelize').Op;
-const constants = require('../../server/utils/constants');
+const dayjs = require('dayjs');
 
 
 const renderDashboard = function(req, res) {
@@ -20,23 +20,25 @@ const renderDashboard = function(req, res) {
     userPoints = returnedPoints;
   })
 
-  // REFACTOR: POINTS REASONS AND VALUES NEED TO BE IN SAME OBJECT
-  // ALSO REFACTOR TO JUST TOTAL UP ALL SUBMISSION POINT VALUES ....
-  const reasonOne = 1;
-  const pointsByReasonPromise = pointsServiceCalculator.calculatePointsFromReason(req.user.id, reasonOne).then(returnedPointsCount => {
-    pointsCount = parseInt(returnedPointsCount) * parseInt(constants.POINTS[0]['value']);
-  })
+  let todayDay = dayjs();
+  let endofToday = todayDay.endOf('day');
 
-  const totalAllPointsPromise = pointsServiceCalculator.calculateAllPointsWithTimeframe(req.user.id).then(returnedTotal => {
-    console.log('yep', returnedTotal),
-    totalPoints = returnedTotal
-  })
+  let yesterday = dayjs().add(-24, 'hours');
+  let startOfYesterday = yesterday.startOf('day');
   
-  Promise.all([ordersByCompanyPromise, latestEmailsPromise, pointsByUserPromise, pointsByReasonPromise, totalAllPointsPromise]).then(() => {
+  const pointsTodayPromise = pointsServiceCalculator.calculateAllPointsWithTimeframe(req.user.id, startOfYesterday, endofToday).then(returnedPoints => {
+    pointsToday = returnedPoints;
+  });
+
+  const totalAllPointsPromise = pointsServiceCalculator.calculateAllPoints(req.user.id).then(returnedTotal => {
+    totalPoints = returnedTotal
+  });
+  
+  Promise.all([ordersByCompanyPromise, latestEmailsPromise, pointsByUserPromise, pointsTodayPromise, totalAllPointsPromise]).then(() => {
     res.render("dashboard", { 
       user: req.user,
       points: userPoints,
-      pointsCount: pointsCount,
+      pointsCount: pointsToday,
       totalPoints: totalPoints,
       orders: userOrders,
       emails: userEmails,

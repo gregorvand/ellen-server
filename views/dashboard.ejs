@@ -39,7 +39,14 @@
       <div class="screen-render-inner screen-render-inner-alternative"> 
         <div class="rewards-listing-left">
           <!-- TOTAL POINTS -->
-          <%= pointsCount %>
+          <p>
+            <h5>Total Points</h5>
+            <%= totalPoints %>
+          </p>
+          <p>
+            <h5>Today's Points</h5>
+            <%= pointsCount %>
+          </p>
         </div>
         <div class="rewards-listing-right">
         <% if (typeof points != 'undefined' && points.length > 0) {  
