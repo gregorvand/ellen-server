@@ -24,14 +24,20 @@ const renderDashboard = function(req, res) {
   // ALSO REFACTOR TO JUST TOTAL UP ALL SUBMISSION POINT VALUES ....
   const reasonOne = 1;
   const pointsByReasonPromise = pointsServiceCalculator.calculatePointsFromReason(req.user.id, reasonOne).then(returnedPointsCount => {
-    pointsCount = parseInt(returnedPointsCount) * parseInt(constants.POINTS['single']);
+    pointsCount = parseInt(returnedPointsCount) * parseInt(constants.POINTS[0]['value']);
+  })
+
+  const totalAllPointsPromise = pointsServiceCalculator.calculateAllPointsWithTimeframe(req.user.id).then(returnedTotal => {
+    console.log('yep', returnedTotal),
+    totalPoints = returnedTotal
   })
   
-  Promise.all([ordersByCompanyPromise, latestEmailsPromise, pointsByUserPromise, pointsByReasonPromise]).then(() => {
+  Promise.all([ordersByCompanyPromise, latestEmailsPromise, pointsByUserPromise, pointsByReasonPromise, totalAllPointsPromise]).then(() => {
     res.render("dashboard", { 
       user: req.user,
       points: userPoints,
       pointsCount: pointsCount,
+      totalPoints: totalPoints,
       orders: userOrders,
       emails: userEmails,
       helpers: dashboardHelpers

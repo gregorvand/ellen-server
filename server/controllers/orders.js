@@ -1,11 +1,10 @@
 const Order = require('../models').Order;
 const Company = require('../models').Company;
-const SentryInit = require('../services/third_party/sentryInit');
 const pointsController = require('../controllers/points');
-const pointsValues = require('../utils/constants').POINTS;
 const { Op } = require("sequelize");
 const pointsTransactionQueue = require('../services/bull-queues').pointsTransactionQueue;
-
+const pointsHelper = require('../utils/getPointValues');
+const Sentry = require("@sentry/node");
 
 module.exports = {
   create(req, res, orderNumber) {
@@ -44,13 +43,15 @@ module.exports = {
       })
       .then(order => { 
         const pointsActivated = order.orderNumber === '1' ? false : true;
-        pointsController.internalCreate(pointsValues.single, customerId, pointsActivated, 1, order.id);
+        const reasonNumber = 1;
+        const pointsToAward = pointsHelper.returnPointValueByReason(reasonNumber);
+        pointsController.internalCreate(pointsToAward, customerId, pointsActivated, reasonNumber, order.id);
         afterOrderUpdateTasks(order);
       }) // also call Points add with true/false activate flag on order number value
-      .catch(error => { SentryInit.captureException(error); });
+      .catch(error => { Sentry.captureException(error); });
     } catch(e) {
-      SentryInit.setUser({ email: customerEmail });
-      SentryInit.captureException(e);
+      Sentry.setUser({ email: customerEmail });
+      Sentry.captureException(e);
     }
   },
 
@@ -166,10 +167,12 @@ async function checkFirstOrderForCompany (orderId) {
 
   async function upsertFirstOrderPoints (orderData) {
     // check if first [valid]Order for that Company, award bonus if so 
+    const reasonNumber = 2;
+    const pointsToAward = pointsHelper.returnPointValueByReason(reasonNumber);
     const isFirstForThisCompany = await checkFirstOrderForCompany(orderData.id) || false;
     if (isFirstForThisCompany) {
       pointsTransactionQueue.add(
-        pointsController.upsert(pointsValues['new-company'], orderData.customerId, true, 2, orderData.id)
+        pointsController.upsert(pointsToAward, orderData.customerId, true, reasonNumber, orderData.id)
       );
     }
   }
