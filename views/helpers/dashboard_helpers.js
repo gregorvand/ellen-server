@@ -30,7 +30,8 @@ const identifyKlaviyoUser = (user) => {
 }
 
 const renderPointsReason = (reasonNumber) => {
-  return constants.REASONS[reasonNumber];
+  const reasons = constants.POINTS.map(value => value.key);
+  return reasons[reasonNumber - 1];
 }
 
 

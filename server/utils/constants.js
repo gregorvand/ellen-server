@@ -23,14 +23,18 @@ module.exports = Object.freeze({
     'order',
     'order r'
   ],
-  POINTS: {
-    "single": 10,
-    "three-combo": 30,
-    "new-company": 30
-  },
-  REASONS: {
-    1: "Email",
-    2: "New Company!",
-    3: "MULTI BONUS"
-  }
+  POINTS: [
+    {
+      key: "Email",
+      value: 10 
+    }, 
+    {
+      key: "New Company",
+      value: 30 
+    }, 
+    {
+      key: "MULTI BONUS",
+      value: 30 
+    },
+  ]
 }); 
