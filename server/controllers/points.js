@@ -109,21 +109,13 @@ async function validateAllPointsTransactionsForOrder (orderIdLookup, validate = 
       },
     })
     .then(pointsTransactions => {
-
     pointsTransactions.forEach((resultSetItem) => {
       resultSetItem.update({
             activated: validate
           }).then((points) => 
             console.log('updated points transaction', points.id)
-          )  // Send back the updated todo.
+          )
     });
-    //   return pointsTransaction.update({
-    //     activated: validate
-    //   }).then((points) => 
-    //     console.log('updated points transaction', points.id)
-    //   )  // Send back the updated todo.
-    // })
-    // .catch((error) => console.error(error));
   })
 }
 

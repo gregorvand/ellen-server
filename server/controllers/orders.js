@@ -1,6 +1,6 @@
 const Order = require('../models').Order;
 const Company = require('../models').Company;
-const SentryInit = require('../services/sentryInit');
+const SentryInit = require('../services/third_party/sentryInit');
 const pointsController = require('../controllers/points');
 const pointsValues = require('../utils/constants').POINTS;
 const { Op } = require("sequelize");

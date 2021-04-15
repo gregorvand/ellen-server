@@ -1,7 +1,7 @@
 const User = require('../models').User;
 const Order = require('../models').Order;
 
-const klaviyoHelpers = require('../services/klaviyo');
+const klaviyoHelpers = require('../services/third_party/klaviyo');
 
 module.exports = {
   create(req, res) {

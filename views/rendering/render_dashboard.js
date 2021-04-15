@@ -2,7 +2,9 @@ const Points = require('../../server/models').Point;
 const Order = require('../../server/models').Order;
 const Company = require('../../server/models').Company;
 const dashboardHelpers = require('../../views/helpers/dashboard_helpers');
+const pointsServiceCalculator = require('../../server/services/points/point_calculators');
 const Op = require('sequelize').Op;
+const constants = require('../../server/utils/constants');
 
 
 const renderDashboard = function(req, res) {
@@ -17,11 +19,19 @@ const renderDashboard = function(req, res) {
   const pointsByUserPromise = getPointsByUser(req.user.id).then(returnedPoints => {
     userPoints = returnedPoints;
   })
+
+  // REFACTOR: POINTS REASONS AND VALUES NEED TO BE IN SAME OBJECT
+  // ALSO REFACTOR TO JUST TOTAL UP ALL SUBMISSION POINT VALUES ....
+  const reasonOne = 1;
+  const pointsByReasonPromise = pointsServiceCalculator.calculatePointsFromReason(req.user.id, reasonOne).then(returnedPointsCount => {
+    pointsCount = parseInt(returnedPointsCount) * parseInt(constants.POINTS['single']);
+  })
   
-  Promise.all([ordersByCompanyPromise, latestEmailsPromise, pointsByUserPromise]).then(() => {
+  Promise.all([ordersByCompanyPromise, latestEmailsPromise, pointsByUserPromise, pointsByReasonPromise]).then(() => {
     res.render("dashboard", { 
       user: req.user,
       points: userPoints,
+      pointsCount: pointsCount,
       orders: userOrders,
       emails: userEmails,
       helpers: dashboardHelpers

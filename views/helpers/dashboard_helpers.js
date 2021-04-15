@@ -1,5 +1,9 @@
+// These are simply client-side helpers
+// All actions requiring DB lookup live currently in render_dashboard.js
+// So that data is fetched BEFORE RENDER in those cases
+
 const emailHelpers = require('../../server/modules/emailHelpers');
-const serviceKlaviyo = require('../../server/services/klaviyo');
+const serviceKlaviyo = require('../../server/services/third_party/klaviyo');
 const constants = require('../../server/utils/constants');
 
 const dayjs = require('dayjs');

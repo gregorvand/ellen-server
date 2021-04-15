@@ -4,7 +4,7 @@ const companiesController = require('../controllers/companies');
 const ordersController = require('../controllers/orders');
 const usersController = require('../controllers/users');
 const pointsController = require('../controllers/points');
-const serviceKlaviyo = require('../services/klaviyo');
+const serviceKlaviyo = require('../services/third_party/klaviyo');
 
 const emailHelpers = require('../modules/emailHelpers');
 
