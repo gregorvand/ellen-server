@@ -8,6 +8,7 @@ const logger = require('morgan');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
+const Sentry = require("@sentry/node");
 
 const { renderDashboard } = require('./views/rendering/render_dashboard')
 const { renderCompanyPage } = require('./views/rendering/render_company')
@@ -20,6 +21,16 @@ const initPassport = require('./passportConfig');
 initPassport(passport);
 
 const { registerForm } = require('./server/modules/registerForm');
+
+Sentry.init({
+  dsn: "https://c2597939546c419ea0c56a3d5ab4b6d7@o564925.ingest.sentry.io/5705951",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+  environment: env
+});
 
 // Set up the express app
 const app = express();
@@ -172,6 +183,17 @@ function checkNotAuthenticatedAndAdmin(req, res, next) {
   }
   res.redirect("/users/login");
 }
+
+// The error handler must be before any other error middleware and after all controllers
+app.use(Sentry.Handlers.errorHandler({
+  shouldHandleError(error) {
+    // Capture all 404 and 500 errors
+    if (error.status === 404 || error.status === 500) {
+      return true
+    }
+    return false
+  }
+}));
 
 
 
