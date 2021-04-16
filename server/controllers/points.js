@@ -2,6 +2,7 @@ const Point = require('../models').Point;
 const User = require('../models').User;
 const { Op } = require("sequelize");
 const sequelize = require("sequelize");
+const dateObjects = require('../utils/setTimezone');
 
 module.exports = {
   create(req, res) {
@@ -104,13 +105,22 @@ module.exports = {
     // summed by user
     // returned in order of most first
   
-    // let date1 = earlierDate.toISOString();
-    // let date2 = laterDate.toISOString();
-    // console.log(`start ${date1} end ${date2}`);
+    const date1 = dateObjects.startOfYesterdayBySetTimezone;
+    const date2 = dateObjects.endofTodayBySetTimezone;
     
     return Point
     .findAll({
-      where: { activated: true },
+      where: { 
+        [Op.and] : [
+          {activated: true},
+          {
+            createdAt: {
+              [Op.lt]: date2['$d'], // need UTC (['$d']) to match DB entries
+              [Op.gte]: date1['$d'] // ie from midnight of earlier date, to 11.59 of the current date
+            }
+          }
+        ],
+       },
       attributes: ['customerId', [sequelize.fn('sum', sequelize.col('pointsValue')), 'total']],
       group : ['customerId'],
       raw: true
