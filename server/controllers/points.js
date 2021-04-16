@@ -125,7 +125,7 @@ module.exports = {
       group : ['customerId'],
       raw: true
     })
-    .then((companies) => res.status(200).send(companies))
+    .then(users => users)
     .catch((error) => res.status(400).send(error));
   }
 };

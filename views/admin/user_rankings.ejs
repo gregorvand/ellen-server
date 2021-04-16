@@ -1,0 +1,10 @@
+<%- include('../includes/header'); -%>
+
+<div>
+  <% rankedUserList.forEach(user => { %>
+    <p>
+      User: <%= user.customerId %>
+      Daily Total: <%= user.total %>
+    </p>
+  <% });  %>
+</div>

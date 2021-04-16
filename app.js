@@ -13,6 +13,7 @@ const Sentry = require("@sentry/node");
 const { renderDashboard } = require('./views/rendering/render_dashboard')
 const { renderCompanyPage } = require('./views/rendering/render_company')
 const { renderAdminCompanies } = require('./views/rendering/render_admin_companies')
+const { renderRankedUsers } = require('./views/rendering/render_user_rankings')
 
 const indexHelpers = require('./views/helpers/index_helpers');
 
@@ -147,6 +148,10 @@ app.get('/companies/:id', checkNotAuthenticated, (req, res) => {
 
 app.get('/admin/companies/', checkNotAuthenticatedAndAdmin, (req, res) => {
   renderAdminCompanies(req, res);
+});
+
+app.get('/admin/user-rankings/', checkNotAuthenticatedAndAdmin, (req, res) => {
+  renderRankedUsers(req, res);
 });
 
 app.get('/earning', (req, res) => {
