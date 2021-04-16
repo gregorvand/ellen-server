@@ -1,5 +1,7 @@
 const Point = require('../models').Point;
+const User = require('../models').User;
 const { Op } = require("sequelize");
+const sequelize = require("sequelize");
 
 module.exports = {
   create(req, res) {
@@ -60,7 +62,7 @@ module.exports = {
           console.error(e);
         }
     },
-  upsert(pointsValue, customerId, activated, reason, orderIdentifier) {
+    upsert(pointsValue, customerId, activated, reason, orderIdentifier) {
     // upserts if finds that orderId already with activated status
     console.log('poiiiints', pointsValue)
     if (pointsValue !== '0') {
@@ -95,6 +97,26 @@ module.exports = {
     } else {
         console.error('tried to add zero points');
     }
+  },
+
+  dailyRankedList(req, res) {
+    // find all points in the last day
+    // summed by user
+    // returned in order of most first
+  
+    // let date1 = earlierDate.toISOString();
+    // let date2 = laterDate.toISOString();
+    // console.log(`start ${date1} end ${date2}`);
+    
+    return Point
+    .findAll({
+      where: { activated: true },
+      attributes: ['customerId', [sequelize.fn('sum', sequelize.col('pointsValue')), 'total']],
+      group : ['customerId'],
+      raw: true
+    })
+    .then((companies) => res.status(200).send(companies))
+    .catch((error) => res.status(400).send(error));
   }
 };
 

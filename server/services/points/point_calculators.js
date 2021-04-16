@@ -37,12 +37,9 @@ async function calculateAllPoints(userId) {
 
 async function calculateAllPointsWithTimeframe(userId, earlierDate, laterDate) {
   let date1 = earlierDate.toISOString();
-
-  console.log(date1);
   let date2 = laterDate.toISOString();
-  console.log(date2);
+  console.log(`start ${date1} end ${date2}`);
   
-
   return Point.sum('pointsValue', {
     where: {
       [Op.and] : [

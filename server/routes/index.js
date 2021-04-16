@@ -23,6 +23,7 @@ module.exports = (app) => {
   app.get('/api/orders', ordersController.list);
 
   app.post('/api/points', pointsController.create);
+  app.get('/api/points/rankings/daily', pointsController.dailyRankedList);
 
   app.get('/api/ordersbycustomer/:userId', ordersController.listByCustomer);
 
