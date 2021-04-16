@@ -77,7 +77,6 @@ module.exports = {
           })
           .then((obj) => {
             if (obj) {
-              console.log('gotz here');
               this.internalUpdate(obj.id, obj.activated);
             } else {
               return Point.create({
@@ -115,8 +114,8 @@ module.exports = {
           {activated: true},
           {
             createdAt: {
-              [Op.lt]: date2['$d'], // need UTC (['$d']) to match DB entries
-              [Op.gte]: date1['$d'] // ie from midnight of earlier date, to 11.59 of the current date
+              [Op.lt]: date2, // need UTC (['$d']) to match DB entries
+              [Op.gte]: date1 // ie from midnight of earlier date, to 11.59 of the current date
             }
           }
         ],

@@ -8,10 +8,10 @@ dayjs.tz.setDefault(process.env.SYSTEM_TIMEZONE);
 let date = dayjs;
 
 let todayDay = date.tz();
-const endofTodayBySetTimezone = todayDay.endOf('day');
+const endofTodayBySetTimezone = todayDay.endOf('day').toISOString();
 
 let yesterday = date.tz().add(-24, 'hours');
-const startOfYesterdayBySetTimezone = yesterday.startOf('day');
+const startOfYesterdayBySetTimezone = yesterday.startOf('day').toISOString();
   
 module.exports.date = date;
 module.exports.endofTodayBySetTimezone = endofTodayBySetTimezone;
