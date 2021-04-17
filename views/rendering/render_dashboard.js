@@ -30,6 +30,7 @@ const renderDashboard = function(req, res) {
   let startOfYesterday = yesterday.startOf('day');
   
   const pointsTodayPromise = pointsServiceCalculator.calculateAllPointsWithTimeframe(req.user.id, startOfYesterday, endofToday).then(returnedPoints => {
+    console.log('TOTAL TODAY', returnedPoints);
     pointsToday = returnedPoints;
   });
 

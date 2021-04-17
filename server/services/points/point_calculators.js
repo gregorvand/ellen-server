@@ -48,7 +48,7 @@ async function calculateAllPointsWithTimeframe(userId, earlierDate, laterDate) {
     },
   })
   .then((allTransactions) => {
-    return allTransactions;
+    return allTransactions ? allTransactions : 0; // sequelize returns NaN from sum if zero
   })
 }
 
