@@ -426,17 +426,37 @@ ul.quick-data {
 
 .rewards-area {
   background-color: $color-brand-highlight;
-  padding: 20px;
+  padding: 0 5px;
   margin-bottom: 20px;
   border-radius: 8px;
 
+  @include breakpoint(large up) {
+    padding: 0 20px;
+  }
+
+  > img {
+    max-width: 100%;
+  }
+
   &-left, &-right {
-    margin: 0 20px;
+    margin: 0 5px;
+    width: 90%;
+    display: flex;
+    justify-content: center;
+
+    @include breakpoint(large up) {
+      margin: 0 20px;
+      width: 90%;
+    }
   }
 
   h5 {
-    font-size: 18px;
+    font-size: 14px;
     margin-bottom: 5px;
+
+    @include breakpoint(large up) {
+      font-size: 18px;
+    }
   }
 
   .rewards-points-readout {
@@ -459,6 +479,18 @@ ul.quick-data {
         display: flex;
         justify-content: space-between;
       }
+    }
+  }
+
+  .screen-render {
+    @include breakpoint(small only) {
+      height: auto;
+      width: 100%;
+    }
+
+    &-inner-alternative {
+      margin-left: 10px;
+      margin-bottom: 5px;
     }
   }
 }

@@ -15,7 +15,12 @@
     margin-bottom: 30px;
   }
 
-  @include breakpoint(medium up) {
+  @include breakpoint(large up) {
+    width: 440px;
+    height: 290px;
+  }
+
+  @include breakpoint(xlarge up) {
     width: 460px;
     height: 290px;
   }
