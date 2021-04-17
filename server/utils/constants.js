@@ -29,7 +29,7 @@ module.exports = Object.freeze({
       value: 10 
     }, 
     {
-      key: "New Company",
+      key: "New Company!",
       value: 30 
     }, 
     {

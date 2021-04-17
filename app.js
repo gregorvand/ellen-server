@@ -151,7 +151,7 @@ app.get('/admin/companies/', checkNotAuthenticatedAndAdmin, (req, res) => {
 });
 
 app.get('/admin/user-rankings/', checkNotAuthenticatedAndAdmin, (req, res) => {
-  renderRankedUsers(req, res);
+  renderRankedUsers(req, res)
 });
 
 app.get('/earning', (req, res) => {

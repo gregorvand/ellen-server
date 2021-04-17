@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="380px" height="126px" viewBox="0 0 380 126" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <text id="text-1" font-family="RedHatDisplay-Bold, Red Hat Display" font-size="86" font-weight="bold" letter-spacing="5.375" fill="#F7B500">
+            <tspan x="14.0775" y="94">E</tspan>
+        </text>
+        <filter x="-7.4%" y="-1.3%" width="109.8%" height="105.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="-3" dy="3" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feColorMatrix values="0 0 0 0 0.892295063   0 0 0 0 0.892295063   0 0 0 0 0.892295063  0 0 0 1 0" type="matrix" in="shadowOffsetOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="ellen-bucks---full" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-2" transform="translate(21.000000, 0.000000)">
+            <g id="Group">
+                <g id="E" transform="translate(44.500000, 63.000000) rotate(-15.000000) translate(-44.500000, -63.000000) " fill="#F7B500" fill-opacity="1">
+                    <use filter="url(#filter-2)" xlink:href="#text-1"></use>
+                    <use xlink:href="#text-1"></use>
+                </g>
+                <line x1="29.5" y1="19.5" x2="54.5" y2="109.5" id="Line-2" stroke-opacity="0.686134178" stroke="#F7B500" stroke-width="8" stroke-linecap="square"></line>
+            </g>
+            <text id="ELLEN-POINTS" font-family="RedHatDisplay-Bold, Red Hat Display" font-size="26" font-weight="bold" letter-spacing="3.525" fill="#F7B500">
+                <tspan x="92.385" y="72">ELLEN POINTS</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

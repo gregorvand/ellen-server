@@ -124,8 +124,6 @@ module.exports = {
       group : ['customerId'],
       raw: true
     })
-    .then(users => users)
-    .catch((error) => res.status(400).send(error));
   }
 };
 

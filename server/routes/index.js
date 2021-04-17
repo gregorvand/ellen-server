@@ -23,7 +23,13 @@ module.exports = (app) => {
   app.get('/api/orders', ordersController.list);
 
   app.post('/api/points', pointsController.create);
-  app.get('/api/points/rankings/daily', pointsController.dailyRankedList);
+  app.get('/api/points/rankings/daily', function(req, res) {
+    pointsController.dailyRankedList(req, res)
+    .then(rankedUsers => {
+      res.status(200).send(rankedUsers)
+    })
+    .catch((e) => { res.send(e)});
+  });
 
   app.get('/api/ordersbycustomer/:userId', ordersController.listByCustomer);
 

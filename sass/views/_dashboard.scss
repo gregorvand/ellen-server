@@ -425,10 +425,40 @@ ul.quick-data {
 // REWARDS STYLE
 
 .rewards-area {
+  background-color: $color-brand-highlight;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+
+  &-left, &-right {
+    margin: 0 20px;
+  }
+
+  h5 {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+
+  .rewards-points-readout {
+    font-size: 40px;
+  }
+
   .rewards-listing {
     &-left, &-right {
       flex-basis: 50%;
       flex-direction: column;
+    }
+
+    &-right {
+      border-left: $color-off-black solid thin;
+      padding-left: 20px;
+
+      > li {
+        list-style: none;
+        border-bottom: solid $color-super-light-gray thin;
+        display: flex;
+        justify-content: space-between;
+      }
     }
   }
 }

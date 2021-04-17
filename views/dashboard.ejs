@@ -32,40 +32,49 @@
 </section>
 
 <section class="rewards-area">
-  <h4>Your Points</h4>
-  
+  <img src="/images/ELLEN_points_logo.svg" alt="ellen points">
+
+  <div class="flex-wrapper">
   <div class="rewards-area-left">
     <div class="screen-render rewards-listing">
       <div class="screen-render-inner screen-render-inner-alternative"> 
         <div class="rewards-listing-left">
           <!-- TOTAL POINTS -->
-          <p>
-            <h5>Total Points</h5>
-            <%= totalPoints %>
-          </p>
-          <p>
+
             <h5>Today's Points</h5>
-            <%= pointsCount %>
-          </p>
+            <div class="rewards-points-readout">
+              <%= pointsCount %>
+            </div>
+
+            <h5>Total Points</h5>
+            <div class="rewards-points-readout">
+              <%= totalPoints %>
+            </div>  
+
         </div>
         <div class="rewards-listing-right">
+        <h5>Recent Points</h5>
         <% if (typeof points != 'undefined' && points.length > 0) {  
           points.forEach((pointTransaction) => { %>
             <li>
-              <% console.log(pointTransaction.reason) %>
               <strong> <%= helpers.renderPointsReason(pointTransaction.reason) %> </strong> 
-              <%= pointTransaction.pointsValue %>
+              <span><%= pointTransaction.pointsValue %></span>
             </li>
         <% })} else { %>
           <li>No points earned yet!</li>
         <% } %>
+        <div>View all > </div>
       </div>
     </div>
     </div>
   </div>
   <div class="rewards-area-right">
-
+    <div class="screen-render rewards-listing">
+      <div class="screen-render-inner screen-render-inner-alternative">
+      </div>
+    </div>
   </div>
+</div>
 </section>
 
 <section class="dashboard-area">
