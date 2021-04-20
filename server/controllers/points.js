@@ -1,5 +1,4 @@
 const Point = require('../models').Point;
-const User = require('../models').User;
 const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 const dateObjects = require('../utils/setTimezone');
