@@ -9,19 +9,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     prizeValue: { 
-      type: DataTypes.INT,
-      allowNull: true,
-      defaultValue: false
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
     prizePosition: { 
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1
+      defaultValue: 0
     },
     pointsAtWin: { 
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1
+      defaultValue: 0
     },
   });
 

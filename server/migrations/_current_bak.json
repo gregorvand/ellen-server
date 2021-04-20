@@ -154,6 +154,14 @@
                     "field": "activated",
                     "seqType": "Sequelize.BOOLEAN"
                 },
+                "reason": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": 1
+                    },
+                    "field": "reason",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -233,5 +241,5 @@
             "indexes": []
         }
     },
-    "revision": 9
+    "revision": 10
 }
