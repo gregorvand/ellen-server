@@ -6,14 +6,13 @@ module.exports = {
     return Winner
       .create({
           endDate: reqBody.endDate,
-          prizeType: reqBody.body,
+          prizeType: reqBody.prizeType,
           prizeValue: reqBody.prizeValue,
           prizePosition: reqBody.prizePosition,
-          pointsAtWin: reqBody.pointsAtWin
+          pointsAtWin: reqBody.pointsAtWin,
+          customerId: reqBody.customerId
       })
-      .then(company => res.status(201).send(company))
-      .catch(error => res.status(400).send(error));
-  },
+    },
 
   list(req, res) {
     return Winner
