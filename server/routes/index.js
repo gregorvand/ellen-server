@@ -6,7 +6,7 @@ const usersController = require('../controllers/users');
 const pointsController = require('../controllers/points');
 const winnersController = require('../controllers/winners');
 const serviceKlaviyo = require('../services/third_party/klaviyo');
-
+const serviceWinners = require('../services/winners/winner_calculators');
 const emailHelpers = require('../modules/emailHelpers');
 
 module.exports = (app) => {
@@ -36,6 +36,14 @@ module.exports = (app) => {
     winnersController.create(req, res)
     .then(winnerDetails => {
       res.status(201).send(winnerDetails)
+    })
+    .catch((e) => { res.send(e) });
+  });
+
+  app.get('/api/winners', function(req, res) {
+    serviceWinners.calculateDailyWinners()
+    .then(winnerDetails => {
+      res.status(200).send(winnerDetails)
     })
     .catch((e) => { res.send(e) });
   });

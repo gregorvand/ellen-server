@@ -17,7 +17,5 @@ module.exports = {
   list(req, res) {
     return Winner
       .findAll()
-      .then((winners) => res.status(200).send(winners))
-      .catch((error) => res.status(400).send(error));
   }
 };

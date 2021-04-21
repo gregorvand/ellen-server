@@ -8,3 +8,37 @@
     </p>
   <% });  %>
 </div>
+
+<button class="get-rankings">
+  Generate Latest Rankings
+</button>
+
+<div class="results">
+
+</div>
+
+<!-- Add button when clicked, reuturns date of ranked users for that day -->
+<!-- render results in a div on the page -->
+<script src="../cash-dom/dist/cash.min.js"></script>
+<script src="../axios/dist/axios.min.js"></script>
+
+<script>
+  $('.get-rankings').on('click touch', function() {
+    axios({
+      method: 'get',
+      url: `/api/winners/`,
+      }).then(function (response) {
+          console.log(response);
+          let resultContainer = ``;
+          response.data.forEach(result => {
+            resultContainer += `
+              <li>${result.endDate} | ${result.pointsAtWin}</li>
+            `
+            $('.results').html(resultContainer);
+          });
+
+      }).catch(function (error) {
+        console.log(error);
+      });
+  })
+</script>
