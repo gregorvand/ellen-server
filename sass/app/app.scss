@@ -69,6 +69,17 @@ body {
       max-width: $max-width;
     }
   }
+
+  .flex-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include breakpoint(medium up) {
+      flex-direction: row;
+    }
+  }
 }
 
 p {

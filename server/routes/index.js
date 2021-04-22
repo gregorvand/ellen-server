@@ -4,7 +4,7 @@ const companiesController = require('../controllers/companies');
 const ordersController = require('../controllers/orders');
 const usersController = require('../controllers/users');
 const pointsController = require('../controllers/points');
-const serviceKlaviyo = require('../services/klaviyo');
+const serviceKlaviyo = require('../services/third_party/klaviyo');
 
 const emailHelpers = require('../modules/emailHelpers');
 
@@ -23,6 +23,13 @@ module.exports = (app) => {
   app.get('/api/orders', ordersController.list);
 
   app.post('/api/points', pointsController.create);
+  app.get('/api/points/rankings/daily', function(req, res) {
+    pointsController.dailyRankedList(req, res)
+    .then(rankedUsers => {
+      res.status(200).send(rankedUsers)
+    })
+    .catch((e) => { res.send(e)});
+  });
 
   app.get('/api/ordersbycustomer/:userId', ordersController.listByCustomer);
 
