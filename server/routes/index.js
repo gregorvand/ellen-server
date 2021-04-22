@@ -41,7 +41,7 @@ module.exports = (app) => {
   });
 
   app.get('/api/winners', function(req, res) {
-    serviceWinners.calculateDailyWinners()
+    serviceWinners.calculateDailyWinners(req.body.endDate)
     .then(winnerDetails => {
       res.status(200).send(winnerDetails)
     })

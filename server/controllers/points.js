@@ -116,6 +116,7 @@ module.exports = {
         attributes: ['id', 'firstName', 'lastName', 'email']
       }],
       group: ['User.id', 'Point.customerId'],
+      order: [[sequelize.fn('sum', sequelize.col('pointsValue')), 'DESC']]
     })
   }
 };
