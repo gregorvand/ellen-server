@@ -5,10 +5,9 @@ const winnersController = require('../../controllers/winners');
 
 // calculates the count of Point transactions for a given Point.reason
 async function calculateDailyWinners() {
-  return winnersController.list();
-
   // need to create a Promise-based function that captures 
   // Get current rankings
+  return winnersController.list();
   // Get user info for those rankings
   // Insert into Winners DB
   // Return the finally created entries

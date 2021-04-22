@@ -5,7 +5,7 @@ const dashboardHelpers = require('../../views/helpers/dashboard_helpers');
 const pointsServiceCalculator = require('../../server/services/points/point_calculators');
 const Op = require('sequelize').Op;
 // const dayjs = require('dayjs');
-const dayJsTz = require('../../server/utils/setTimezone').date; // timezone adjusted instance
+const dateObjects = require('../../server/utils/setTimezone'); // timezone adjusted instance
 
 
 const renderDashboard = function(req, res) {
@@ -21,15 +21,10 @@ const renderDashboard = function(req, res) {
     userPoints = returnedPoints;
   })
 
-  let todayDay = dayJsTz.tz();
-  let endofToday = todayDay.endOf('day');
-
-  console.log('TIMEZONE FOR CALC', todayDay);
-
-  let yesterday = dayJsTz.tz().add(-24, 'hours');
-  let startOfYesterday = yesterday.startOf('day');
+  const date1 = dateObjects.startofTodayBySetTimezone;
+  const date2 = dateObjects.endofTodayBySetTimezone;
   
-  const pointsTodayPromise = pointsServiceCalculator.calculateAllPointsWithTimeframe(req.user.id, startOfYesterday, endofToday).then(returnedPoints => {
+  const pointsTodayPromise = pointsServiceCalculator.calculateAllPointsWithTimeframe(req.user.id, date1, date2).then(returnedPoints => {
     console.log('TOTAL TODAY', returnedPoints);
     pointsToday = returnedPoints;
   });

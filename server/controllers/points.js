@@ -2,6 +2,9 @@ const Point = require('../models').Point;
 const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 const dateObjects = require('../utils/setTimezone');
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 module.exports = {
   create(req, res) {
@@ -98,27 +101,17 @@ module.exports = {
     }
   },
 
-  dailyRankedList(req, res) {
+  dailyRankedList(req, res, startDate, endDate) {
     // find all points in the last day
     // summed by user
     // returned in order of most first
   
-    const date1 = dateObjects.startOfYesterdayBySetTimezone;
-    const date2 = dateObjects.endofTodayBySetTimezone;
+    const date1 = startDate || dateObjects.startofYesterdayBySetTimezone;
+    const date2 = endDate || dateObjects.startofTodayBySetTimezone;
     
     return Point
     .findAll({
-      where: { 
-        [Op.and] : [
-          {activated: true},
-          {
-            createdAt: {
-              [Op.lt]: date2, // need UTC (['$d']) to match DB entries
-              [Op.gte]: date1 // ie from midnight of earlier date, to 11.59 of the current date
-            }
-          }
-        ],
-       },
+      where : {"createdAt" : {[Op.between] : [date1 , date2]}},
       attributes: ['customerId', [sequelize.fn('sum', sequelize.col('pointsValue')), 'total']],
       group : ['customerId'],
       raw: true

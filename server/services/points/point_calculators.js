@@ -30,26 +30,30 @@ async function calculateAllPoints(userId) {
 }
 
 async function calculateAllPointsWithTimeframe(userId, earlierDate, laterDate) {
-  const date1 = dateObjects.startOfYesterdayBySetTimezone;
-  const date2 = dateObjects.endofTodayBySetTimezone;
-  console.log(`start ${date1} end ${date2}`);
-  
-  return Point.sum('pointsValue', {
-    where: {
-      [Op.and] : [
-        {customerId: userId}, {activated: true},
-        {
-          createdAt: {
-            [Op.lt]: date2,
-            [Op.gte]: date1 // ie from midnight of earlier date, to 11.59 of the current date
-          }
-        }
-      ],
-    },
-  })
-  .then((allTransactions) => {
-    return allTransactions ? allTransactions : 0; // sequelize returns NaN from sum if zero
-  })
+  date1 = earlierDate;
+  date2 = laterDate;
+
+  try {
+    if (date1 && date2 !== undefined) {
+      return Point.sum('pointsValue', {
+        where: {
+          [Op.and] : [
+            {customerId: userId}, {activated: true},
+            {
+              createdAt: {[Op.between] : [date1 , date2]}
+            }
+          ],
+        },
+      })
+      .then((allTransactions) => {
+        return allTransactions ? allTransactions : 0; // sequelize returns NaN from sum if zero
+      })
+    } else {
+      throw new Error('No date defined, cannot calculate');
+    }
+  } catch(e) {
+    console.error(e);
+  }
 }
 
 
