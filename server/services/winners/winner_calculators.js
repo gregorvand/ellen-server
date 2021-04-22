@@ -1,5 +1,6 @@
 // const Winner = require('../../models').Winner;
 const winnersController = require('../../controllers/winners');
+const pointsController = require('../../controllers/points');
 // const { Op } = require("sequelize");
 // const dateObjects = require('../../utils/setTimezone');
 
@@ -7,8 +8,8 @@ const winnersController = require('../../controllers/winners');
 async function calculateDailyWinners() {
   // need to create a Promise-based function that captures 
   // Get current rankings
-  return winnersController.list();
-  // Get user info for those rankings
+  return pointsController.dailyRankedList()
+  
   // Insert into Winners DB
   // Return the finally created entries
 } 

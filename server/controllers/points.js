@@ -1,10 +1,8 @@
 const Point = require('../models').Point;
+const User = require('../models').User;
 const { Op } = require("sequelize");
 const sequelize = require("sequelize");
 const dateObjects = require('../utils/setTimezone');
-const dayjs = require('dayjs');
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
 
 module.exports = {
   create(req, res) {
@@ -107,14 +105,16 @@ module.exports = {
     // returned in order of most first
   
     const date1 = startDate || dateObjects.startofYesterdayBySetTimezone;
-    const date2 = endDate || dateObjects.startofTodayBySetTimezone;
+    const date2 = endDate || dateObjects.endofTodayBySetTimezone;
     
     return Point
     .findAll({
       where : {"createdAt" : {[Op.between] : [date1 , date2]}},
       attributes: ['customerId', [sequelize.fn('sum', sequelize.col('pointsValue')), 'total']],
-      group : ['customerId'],
-      raw: true
+      include: [{
+        model: User
+      }],
+      group: ['User.id', 'Point.customerId'],
     })
   }
 };
