@@ -25,7 +25,7 @@ async function calculateAllPoints(userId) {
     }
   })
   .then((allTransactions) => {
-    return allTransactions;
+    return allTransactions ? allTransactions : 0;
   })
 }
 
