@@ -112,7 +112,8 @@ module.exports = {
       where : {"createdAt" : {[Op.between] : [date1 , date2]}},
       attributes: ['customerId', [sequelize.fn('sum', sequelize.col('pointsValue')), 'total']],
       include: [{
-        model: User
+        model: User,
+        attributes: ['id', 'firstName', 'lastName', 'email']
       }],
       group: ['User.id', 'Point.customerId'],
     })
