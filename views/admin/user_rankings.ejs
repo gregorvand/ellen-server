@@ -1,20 +1,34 @@
-<%- include('../includes/header'); -%>
-
-<div>
+<%- include('../includes/header', {view: 'admin'}); -%>
+<h5>Live Rankings for current 24hr period</h5>
+<div class="rank-table-wrapper">
+  <table>
+    <th>Rank</th>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Points</th>
   <% rankedUserList.forEach((rankedUser, index) => { %>
   <% const UserData = rankedUser.User.dataValues; %>
-    <p>
-      <strong><%= index + 1 %></strong>
-      User: <%= UserData.firstName %> <%= UserData.lastName %> | <%= UserData.email %>
-      <br>
-      Daily Total: <%= rankedUser.total %>
-    </p>
+  <tr>
+    <td><%= index + 1 %></td>
+    <td><%= UserData.firstName %> <%= UserData.lastName %></td>
+    <td><%= UserData.email %></td>
+    <td><%= rankedUser.total %></td>
+  </tr>
   <% });  %>
+</table>
 </div>
 
-<button class="generate-rankings">
-  Generate Latest Rankings
-</button>
+
+<h5>Generate finalised winners</h5>
+<div class="select-rankings-end-date">
+  <input type="date" name="end-date-picker">
+  <label for="end-date-picker">Select to the end of which day (PST) to generate winners</label>
+
+  <br>
+  <button class="generate-rankings">
+    Generate Latest Rankings
+  </button>
+</div>
 
 <div class="results">
 
@@ -26,10 +40,11 @@
 <script src="../axios/dist/axios.min.js"></script>
 
 <script>
-  $('.get-rankings').on('click touch', function() {
+  $('.generate-rankings').on('click touch', function() {
     axios({
       method: 'get',
       url: `/api/winners/`,
+      data: { endDate: '' }
       }).then(function (response) {
           console.log(response);
           let resultContainer = ``;
