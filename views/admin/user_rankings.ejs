@@ -1,15 +1,18 @@
 <%- include('../includes/header'); -%>
 
 <div>
-  <% rankedUserList.forEach(user => { %>
+  <% rankedUserList.forEach((rankedUser, index) => { %>
+  <% const UserData = rankedUser.User.dataValues; %>
     <p>
-      User: <%= user.customerId %>
-      Daily Total: <%= user.total %>
+      <strong><%= index + 1 %></strong>
+      User: <%= UserData.firstName %> <%= UserData.lastName %> | <%= UserData.email %>
+      <br>
+      Daily Total: <%= rankedUser.total %>
     </p>
   <% });  %>
 </div>
 
-<button class="get-rankings">
+<button class="generate-rankings">
   Generate Latest Rankings
 </button>
 
