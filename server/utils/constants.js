@@ -48,7 +48,7 @@ module.exports = Object.freeze({
     }, 
     {
       key: "3",
-      value: 30 
+      value: 5 
     },
   ]
 }); 
