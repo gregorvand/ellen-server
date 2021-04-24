@@ -1,7 +1,8 @@
 const pointsController = require('../../server/controllers/points');
+const dateObjects = require('../../server/utils/setTimezone');
 
 const renderRankedUsers = function(req, res) {
-  const dailyRankedUsersPromise = pointsController.dailyRankedList(req, res)
+  const dailyRankedUsersPromise = pointsController.dailyRankedList()
   .then(returnedUsers => {
     const records = returnedUsers.map(result => result.dataValues);
     rankedUsers = records;
