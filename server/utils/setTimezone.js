@@ -7,6 +7,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.tz.setDefault(process.env.SYSTEM_TIMEZONE);
 let date = dayjs.tz();
+let dayJs = dayjs;
 
 let todayDate = date.startOf('day');
 const startofTodayBySetTimezone = todayDate.toISOString();
@@ -17,6 +18,7 @@ console.log(endofTodayBySetTimezone);
 let yesterdayDate = todayDate.add('-24', 'hours');
 const startofYesterdayBySetTimezone = yesterdayDate.tz().startOf('day').toISOString();
   
+module.exports.dayJs = dayJs;
 module.exports.date = date;
 module.exports.yesterday = yesterdayDate;
 module.exports.today = todayDate;

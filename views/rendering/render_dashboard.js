@@ -4,7 +4,6 @@ const Company = require('../../server/models').Company;
 const dashboardHelpers = require('../../views/helpers/dashboard_helpers');
 const pointsServiceCalculator = require('../../server/services/points/point_calculators');
 const Op = require('sequelize').Op;
-// const dayjs = require('dayjs');
 const dateObjects = require('../../server/utils/setTimezone'); // timezone adjusted instance
 
 
