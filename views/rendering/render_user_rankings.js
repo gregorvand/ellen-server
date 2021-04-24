@@ -1,5 +1,4 @@
 const pointsController = require('../../server/controllers/points');
-const dateObjects = require('../../server/utils/setTimezone');
 
 const renderRankedUsers = function(req, res) {
   const dailyRankedUsersPromise = pointsController.dailyRankedList()

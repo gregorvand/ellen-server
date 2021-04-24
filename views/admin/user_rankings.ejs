@@ -1,22 +1,5 @@
 <%- include('../includes/header', {view: 'admin'}); -%>
-<h5>Live Rankings for current 24hr period</h5>
-<div class="rank-table-wrapper">
-  <table>
-    <th>Rank</th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Points</th>
-  <% rankedUserList.forEach((rankedUser, index) => { %>
-  <% const UserData = rankedUser.User.dataValues; %>
-  <tr>
-    <td><%= index + 1 %></td>
-    <td><%= UserData.firstName %> <%= UserData.lastName %></td>
-    <td><%= UserData.email %></td>
-    <td><%= rankedUser.total %></td>
-  </tr>
-  <% });  %>
-</table>
-</div>
+<%- include('../includes/ranked_list_live_daily', { view: 'admin'}); -%>
 
 
 <h5>Generate finalised winners</h5>
