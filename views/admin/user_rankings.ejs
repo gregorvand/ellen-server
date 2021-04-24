@@ -42,6 +42,8 @@
 <script>
   $('.generate-rankings').on('click touch', function() {
     const endDateFromUI = $('input[type="date"]').val();
+    const resultsContainer = $('.results');
+    resultsContainer.html('no records found for today');
     axios({
       method: 'put',
       url: `/api/winners/`,
@@ -53,7 +55,7 @@
             resultContainer += `
               <li>${result.User.firstName} | ${result.total}</li>
             `
-            $('.results').html(resultContainer);
+            resultsContainer.html(resultContainer);
           });
 
       }).catch(function (error) {

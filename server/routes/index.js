@@ -41,7 +41,7 @@ module.exports = (app) => {
   });
 
   app.put('/api/winners', function(req, res) {
-    serviceWinners.calculateDailyWinners(req, res)
+    serviceWinners.calculateDailyWinners(req, res);
   });
 
 
