@@ -99,13 +99,13 @@ module.exports = {
     }
   },
 
-  dailyRankedList(req, res, startDate, endDate) {
+  dailyRankedList(startDate = dateObjects.startofTodayBySetTimezone, endDate = dateObjects.endofTodayBySetTimezone) {
     // find all points in the last day
     // summed by user
     // returned in order of most first
   
-    const date1 = startDate || dateObjects.startofTodayBySetTimezone;
-    const date2 = endDate || dateObjects.endofTodayBySetTimezone;
+    const date1 = startDate;
+    const date2 = endDate;
     
     return Point
     .findAll({

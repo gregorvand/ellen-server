@@ -10,10 +10,10 @@ async function calculateDailyWinners(req, res) {
   // need to create a Promise-based function that captures 
   // Get current rankings
   const endDate = req.body.endDate;
-  let convertedEndDate = dateObjects.dayJs(endDate).tz().toISOString();
+  const convertedEndDate = dateObjects.dayJs(endDate).tz().toISOString();
   const startDateDefault = dateObjects.dayJs(endDate).tz().add('-24', 'hours').toISOString();
 
-  pointsController.dailyRankedList(convertedEndDate, startDateDefault)
+  pointsController.dailyRankedList(startDateDefault, convertedEndDate)
     .then((results) => {
       // map main aggregated data
       const records = results.map(result => result.dataValues);
