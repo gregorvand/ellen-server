@@ -4,8 +4,9 @@ const companiesController = require('../controllers/companies');
 const ordersController = require('../controllers/orders');
 const usersController = require('../controllers/users');
 const pointsController = require('../controllers/points');
+const winnersController = require('../controllers/winners');
 const serviceKlaviyo = require('../services/third_party/klaviyo');
-
+const serviceWinners = require('../services/winners/winner_calculators');
 const emailHelpers = require('../modules/emailHelpers');
 
 module.exports = (app) => {
@@ -28,8 +29,21 @@ module.exports = (app) => {
     .then(rankedUsers => {
       res.status(200).send(rankedUsers)
     })
-    .catch((e) => { res.send(e)});
+    .catch((e) => { res.send(e) });
   });
+
+  app.post('/api/winners', function(req, res) {
+    winnersController.create(req, res)
+    .then(winnerDetails => {
+      res.status(201).send(winnerDetails)
+    })
+    .catch((e) => { res.send(e) });
+  });
+
+  app.put('/api/winners', function(req, res) {
+    serviceWinners.calculateDailyWinners(req, res);
+  });
+
 
   app.get('/api/ordersbycustomer/:userId', ordersController.listByCustomer);
 

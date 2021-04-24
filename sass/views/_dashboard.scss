@@ -450,6 +450,13 @@ ul.quick-data {
     }
   }
 
+  &-right {
+    .screen-render-inner-alternative {
+      flex-direction: column;
+      padding: 10px 30px;
+    }
+  }
+
   h5 {
     font-size: 14px;
     margin-bottom: 5px;
@@ -492,5 +499,9 @@ ul.quick-data {
       margin-left: 10px;
       margin-bottom: 5px;
     }
+  }
+
+  .rank-table-wrapper {
+    > table { width: 100%; }
   }
 }

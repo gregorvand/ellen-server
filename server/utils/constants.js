@@ -36,5 +36,19 @@ module.exports = Object.freeze({
       key: "MULTI BONUS",
       value: 30 
     },
+  ],
+  DAILY_PRIZES: [
+    {
+      key: "1",
+      value: 10 
+    }, 
+    {
+      key: "2",
+      value: 5 
+    }, 
+    {
+      key: "3",
+      value: 5 
+    },
   ]
 }); 

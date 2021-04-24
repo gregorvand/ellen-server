@@ -183,7 +183,6 @@ function checkNotAuthenticated(req, res, next) {
 
 function checkNotAuthenticatedAndAdmin(req, res, next) {
   if (req.isAuthenticated() && req.user.status === 'admin') {
-    console.log('big user', req.session.passport.user['status']);
     return next();
   }
   res.redirect("/users/login");
