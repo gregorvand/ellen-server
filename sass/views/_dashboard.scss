@@ -427,8 +427,8 @@ ul.quick-data {
 .rewards-area {
   background-color: $color-brand-highlight;
   padding: 0 5px;
-  margin-bottom: 20px;
   border-radius: 8px;
+  margin-bottom: 40px;
 
   @include breakpoint(large up) {
     padding: 0 20px;
