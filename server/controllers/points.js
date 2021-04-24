@@ -99,7 +99,7 @@ module.exports = {
     }
   },
 
-  dailyRankedList(req, res, startDate, endDate) {
+  dailyRankedList(endDate, startDate = false) {
     // find all points in the last day
     // summed by user
     // returned in order of most first

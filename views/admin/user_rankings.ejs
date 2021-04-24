@@ -41,16 +41,17 @@
 
 <script>
   $('.generate-rankings').on('click touch', function() {
+    const endDateFromUI = $('input[type="date"]').val();
     axios({
-      method: 'get',
+      method: 'put',
       url: `/api/winners/`,
-      data: { endDate: '' }
+      data: { endDate: endDateFromUI }
       }).then(function (response) {
           console.log(response);
           let resultContainer = ``;
           response.data.forEach(result => {
             resultContainer += `
-              <li>${result.endDate} | ${result.pointsAtWin}</li>
+              <li>${result.User.firstName} | ${result.total}</li>
             `
             $('.results').html(resultContainer);
           });
@@ -58,5 +59,10 @@
       }).catch(function (error) {
         console.log(error);
       });
+  })
+
+  $('input[type="date"]').on('change', function(e) {
+    let basicDate = $(e.target).val();
+    console.log('looking up', basicDate);
   })
 </script>

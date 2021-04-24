@@ -40,12 +40,8 @@ module.exports = (app) => {
     .catch((e) => { res.send(e) });
   });
 
-  app.get('/api/winners', function(req, res) {
-    serviceWinners.calculateDailyWinners(req.body.endDate)
-    .then(winnerDetails => {
-      res.status(200).send(winnerDetails)
-    })
-    .catch((e) => { res.send(e) });
+  app.put('/api/winners', function(req, res) {
+    serviceWinners.calculateDailyWinners(req, res)
   });
 
 

@@ -3,17 +3,24 @@ const winnersController = require('../../controllers/winners');
 const pointsController = require('../../controllers/points');
 const constants = require('../../utils/constants');
 // const { Op } = require("sequelize");
-// const dateObjects = require('../../utils/setTimezone');
+const dateObjects = require('../../utils/setTimezone');
 
 // calculates the count of Point transactions for a given Point.reason
-async function calculateDailyWinners(endDate) {
+async function calculateDailyWinners(req, res) {
   // need to create a Promise-based function that captures 
   // Get current rankings
-  pointsController.dailyRankedList(endDate)
-    .then((results) => {
+  const endDate = req.body.endDate;
+  let convertedEndDate = dateObjects.dayJs(endDate).tz().toISOString();
+  const todayDefault = dateObjects.endofTodayBySetTimezone;
+  const startDateDefault = dateObjects.dayJs(endDate).tz().add('-24', 'hours').toISOString();
 
+  pointsController.dailyRankedList(convertedEndDate = todayDefault, startDateDefault)
+    .then((results) => {
       // map main aggregated data
       const records = results.map(result => result.dataValues);
+      console.log('LENGTH', records.length);
+
+
       records.forEach((result, index) => {
         // get userInfo into nicer object
         const userInfo = result.User.dataValues;
@@ -34,7 +41,13 @@ async function calculateDailyWinners(endDate) {
         }
         winnersController.create(req);
       })
-    });
+
+      return records;
+    })
+    .then(winnerDetails => {
+      res.status(200).send(winnerDetails)
+    })
+    .catch((e) => { res.send(e) });
   
   // Insert into Winners DB
   // Return the finally created entries

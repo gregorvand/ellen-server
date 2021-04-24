@@ -13,7 +13,6 @@ let todayDate = date.startOf('day');
 const startofTodayBySetTimezone = todayDate.toISOString();
 
 const endofTodayBySetTimezone = date.endOf('day').toISOString();
-console.log(endofTodayBySetTimezone);
 
 let yesterdayDate = todayDate.add('-24', 'hours');
 const startofYesterdayBySetTimezone = yesterdayDate.tz().startOf('day').toISOString();
