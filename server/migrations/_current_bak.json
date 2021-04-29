@@ -56,7 +56,7 @@
                 "orderNumber": {
                     "allowNull": false,
                     "field": "orderNumber",
-                    "seqType": "Sequelize.INTEGER"
+                    "seqType": "Sequelize.BIGINT"
                 },
                 "orderDate": {
                     "allowNull": true,
@@ -111,6 +111,66 @@
                     "onUpdate": "CASCADE",
                     "field": "companyId",
                     "seqType": "Sequelize.INTEGER"
+                },
+                "customerId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "customerId",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "Points": {
+            "tableName": "Points",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "pointsValue": {
+                    "allowNull": false,
+                    "field": "pointsValue",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "orderId": {
+                    "allowNull": true,
+                    "field": "orderId",
+                    "seqType": "Sequelize.BIGINT"
+                },
+                "activated": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "activated",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "reason": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": 1
+                    },
+                    "field": "reason",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
                 },
                 "customerId": {
                     "allowNull": true,
@@ -181,5 +241,5 @@
             "indexes": []
         }
     },
-    "revision": 6
+    "revision": 10
 }

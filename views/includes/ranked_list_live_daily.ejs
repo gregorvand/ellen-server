@@ -1,0 +1,32 @@
+<% 
+if (typeof view == 'undefined') { 
+    adminCheck = false
+} else if (view == 'admin') {
+    adminCheck = true
+}
+%>
+
+<h5>Live Rankings for current 24hr period</h5>
+<div class="rank-table-wrapper">
+  <table>
+    <th>Rank</th>
+    <th>Name</th>
+    <% if (adminCheck) { %>
+    <th>Email</th>
+    <% } %>
+    <th>Points</th>
+  <% rankedUserList.forEach((rankedUser, index) => { %>
+  <% const UserData = rankedUser.User.dataValues; %>
+  <tr>
+    <td><%= index + 1 %></td>
+    <td><%= UserData.firstName %> 
+      <% if (adminCheck) { %><%= UserData.lastName %><% } %>
+    </td>
+    <% if (adminCheck) { %>
+      <td><%= UserData.email %></td>
+    <% } %>
+    <td><%= rankedUser.total %></td>
+  </tr>
+  <% });  %>
+</table>
+</div>

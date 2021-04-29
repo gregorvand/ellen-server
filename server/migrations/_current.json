@@ -126,6 +126,66 @@
             },
             "indexes": []
         },
+        "Points": {
+            "tableName": "Points",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "pointsValue": {
+                    "allowNull": false,
+                    "field": "pointsValue",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "orderId": {
+                    "allowNull": true,
+                    "field": "orderId",
+                    "seqType": "Sequelize.BIGINT"
+                },
+                "activated": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "activated",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "reason": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": 1
+                    },
+                    "field": "reason",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "customerId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "customerId",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
         "Users": {
             "tableName": "Users",
             "schema": {
@@ -179,7 +239,72 @@
                 }
             },
             "indexes": []
+        },
+        "Winners": {
+            "tableName": "Winners",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "endDate": {
+                    "allowNull": false,
+                    "field": "endDate",
+                    "seqType": "Sequelize.DATE"
+                },
+                "prizeType": {
+                    "allowNull": false,
+                    "field": "prizeType",
+                    "seqType": "Sequelize.STRING"
+                },
+                "prizeValue": {
+                    "allowNull": true,
+                    "field": "prizeValue",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "prizePosition": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": 0
+                    },
+                    "field": "prizePosition",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "pointsAtWin": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": 0
+                    },
+                    "field": "pointsAtWin",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "customerId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "customerId",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
         }
     },
-    "revision": 7
+    "revision": 11
 }

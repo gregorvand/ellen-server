@@ -1,0 +1,53 @@
+<%- include('../includes/header', {view: 'admin'}); -%>
+<%- include('../includes/ranked_list_live_daily', { view: 'admin'}); -%>
+
+
+<h5>Generate finalised winners</h5>
+<div class="select-rankings-end-date">
+  <input type="date" name="end-date-picker">
+  <label for="end-date-picker">Select to the end of which day (PST) to generate winners</label>
+
+  <br>
+  <button class="generate-rankings">
+    Generate Latest Rankings
+  </button>
+</div>
+
+<div class="results">
+
+</div>
+
+<!-- Add button when clicked, reuturns date of ranked users for that day -->
+<!-- render results in a div on the page -->
+<script src="../cash-dom/dist/cash.min.js"></script>
+<script src="../axios/dist/axios.min.js"></script>
+
+<script>
+  $('.generate-rankings').on('click touch', function() {
+    const endDateFromUI = $('input[type="date"]').val();
+    const resultsContainer = $('.results');
+    resultsContainer.html('no records found for today');
+    axios({
+      method: 'put',
+      url: `/api/winners/`,
+      data: { endDate: endDateFromUI }
+      }).then(function (response) {
+          console.log(response);
+          let resultContainer = ``;
+          response.data.forEach(result => {
+            resultContainer += `
+              <li>${result.User.firstName} | ${result.total}</li>
+            `
+            resultsContainer.html(resultContainer);
+          });
+
+      }).catch(function (error) {
+        console.log(error);
+      });
+  })
+
+  $('input[type="date"]').on('change', function(e) {
+    let basicDate = $(e.target).val();
+    console.log('looking up', basicDate);
+  })
+</script>

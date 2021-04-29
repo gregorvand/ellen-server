@@ -8,23 +8,12 @@ const logger = require('morgan');
 const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
+const Sentry = require("@sentry/node");
 
 const { renderDashboard } = require('./views/rendering/render_dashboard')
 const { renderCompanyPage } = require('./views/rendering/render_company')
 const { renderAdminCompanies } = require('./views/rendering/render_admin_companies')
-
-// const Sentry = require("@sentry/node");
-// // const Tracing = require("@sentry/tracing");
-
-// Sentry.init({
-//   dsn: "https://c2597939546c419ea0c56a3d5ab4b6d7@o564925.ingest.sentry.io/5705951",
-
-//   // Set tracesSampleRate to 1.0 to capture 100%
-//   // of transactions for performance monitoring.
-//   // We recommend adjusting this value in production
-//   tracesSampleRate: 1.0,
-//   environment: env
-// });
+const { renderRankedUsers } = require('./views/rendering/render_user_rankings')
 
 const indexHelpers = require('./views/helpers/index_helpers');
 
@@ -33,6 +22,16 @@ const initPassport = require('./passportConfig');
 initPassport(passport);
 
 const { registerForm } = require('./server/modules/registerForm');
+
+Sentry.init({
+  dsn: "https://c2597939546c419ea0c56a3d5ab4b6d7@o564925.ingest.sentry.io/5705951",
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+  environment: env
+});
 
 // Set up the express app
 const app = express();
@@ -151,6 +150,10 @@ app.get('/admin/companies/', checkNotAuthenticatedAndAdmin, (req, res) => {
   renderAdminCompanies(req, res);
 });
 
+app.get('/admin/user-rankings/', checkNotAuthenticatedAndAdmin, (req, res) => {
+  renderRankedUsers(req, res)
+});
+
 app.get('/earning', (req, res) => {
   res.render("earning")
 });
@@ -180,11 +183,21 @@ function checkNotAuthenticated(req, res, next) {
 
 function checkNotAuthenticatedAndAdmin(req, res, next) {
   if (req.isAuthenticated() && req.user.status === 'admin') {
-    console.log('big user', req.session.passport.user['status']);
     return next();
   }
   res.redirect("/users/login");
 }
+
+// The error handler must be before any other error middleware and after all controllers
+app.use(Sentry.Handlers.errorHandler({
+  shouldHandleError(error) {
+    // Capture all 404 and 500 errors
+    if (error.status === 404 || error.status === 500) {
+      return true
+    }
+    return false
+  }
+}));
 
 
 

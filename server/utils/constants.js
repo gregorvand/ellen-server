@@ -22,5 +22,33 @@ module.exports = Object.freeze({
     'Order',
     'order',
     'order r'
+  ],
+  POINTS: [
+    {
+      key: "Email",
+      value: 10 
+    }, 
+    {
+      key: "New Company!",
+      value: 30 
+    }, 
+    {
+      key: "MULTI BONUS",
+      value: 30 
+    },
+  ],
+  DAILY_PRIZES: [
+    {
+      key: "1",
+      value: 10 
+    }, 
+    {
+      key: "2",
+      value: 5 
+    }, 
+    {
+      key: "3",
+      value: 5 
+    },
   ]
 }); 

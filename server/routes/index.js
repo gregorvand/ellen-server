@@ -3,15 +3,14 @@
 const companiesController = require('../controllers/companies');
 const ordersController = require('../controllers/orders');
 const usersController = require('../controllers/users');
-const serviceKlaviyo = require('../services/klaviyo');
-
+const pointsController = require('../controllers/points');
+const winnersController = require('../controllers/winners');
+const serviceKlaviyo = require('../services/third_party/klaviyo');
+const serviceWinners = require('../services/winners/winner_calculators');
 const emailHelpers = require('../modules/emailHelpers');
 
 module.exports = (app) => {
-  // app.get('/api/todos/:todoId', todosController.retrieve);
-  // app.put('/api/todos/:todoId', todosController.update);
-  // app.delete('/api/todos/:todoId', todosController.destroy);
-
+  // examples 
   // app.post('/api/todos/:todoId/items', todoItemsController.create);
   // app.put('/api/todos/:todoId/items/:todoItemId', todoItemsController.update);
   // app.delete('/api/todos/:todoId/items/:todoItemId', todoItemsController.destroy);
@@ -23,6 +22,28 @@ module.exports = (app) => {
 
   app.post('/api/orders', ordersController.create);
   app.get('/api/orders', ordersController.list);
+
+  app.post('/api/points', pointsController.create);
+  app.get('/api/points/rankings/daily', function(req, res) {
+    pointsController.dailyRankedList(req, res)
+    .then(rankedUsers => {
+      res.status(200).send(rankedUsers)
+    })
+    .catch((e) => { res.send(e) });
+  });
+
+  app.post('/api/winners', function(req, res) {
+    winnersController.create(req, res)
+    .then(winnerDetails => {
+      res.status(201).send(winnerDetails)
+    })
+    .catch((e) => { res.send(e) });
+  });
+
+  app.put('/api/winners', function(req, res) {
+    serviceWinners.calculateDailyWinners(req, res);
+  });
+
 
   app.get('/api/ordersbycustomer/:userId', ordersController.listByCustomer);
 

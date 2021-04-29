@@ -1,11 +1,13 @@
 const Order = require('../models').Order;
 const Company = require('../models').Company;
-const SentryInit = require('../services/sentryInit');
+const pointsController = require('../controllers/points');
+const { Op } = require("sequelize");
+const pointsTransactionQueue = require('../services/bull-queues').pointsTransactionQueue;
+const pointsHelper = require('../utils/getPointValues');
+const Sentry = require("@sentry/node");
 
 module.exports = {
   create(req, res, orderNumber) {
-    // emailHelpers.returnOrderNumber(req);
-    // emailHelpers.parseSubjectForOrder(req);
     return Order
       .create({
         orderNumber: orderNumber || req.body.number || 1,
@@ -23,6 +25,10 @@ module.exports = {
     // emailHelpers.returnOrderNumber(req);
     // emailHelpers.parseSubjectForOrder(req);
     console.log(customerEmail);
+
+    // get customerEmail
+    // let customerByEmail = await User.findOne({ where: { email: customerByEmail } }); // what about customer identifer to find customer?
+
     try {
       return Order
       .create({
@@ -35,9 +41,17 @@ module.exports = {
         customerId: customerId || 1,
         subjectLine: subject
       })
+      .then(order => { 
+        const pointsActivated = order.orderNumber === '1' ? false : true;
+        const reasonNumber = 1;
+        const pointsToAward = pointsHelper.returnPointValueByReason(reasonNumber);
+        pointsController.internalCreate(pointsToAward, customerId, pointsActivated, reasonNumber, order.id);
+        afterOrderUpdateTasks(order);
+      }) // also call Points add with true/false activate flag on order number value
+      .catch(error => { Sentry.captureException(error); });
     } catch(e) {
-      SentryInit.setUser({ email: customerEmail });
-      SentryInit.captureException(e);
+      Sentry.setUser({ email: customerEmail });
+      Sentry.captureException(e);
     }
   },
 
@@ -87,70 +101,80 @@ module.exports = {
         return order
           .update({
             orderNumber: req.body.orderNumber || 1,
+          }, {
+            returning: true,
+            plain: true,
+            logging: false
           })
-          .then(() => res.status(200).send('updated!'))  // Send back the updated todo.
+          .then((order) => {
+            afterOrderUpdateTasks(order);
+          })
+          .then(() => 
+            res.status(200).send('updated yow!'),
+          )
           .catch((error) => res.status(400).send(error));
-      })
-    .catch((error) => res.status(400).send(error));
-  },
-
-  // retrieve(req, res) {
-  //     return Todo
-  //       .findByPk(req.params.todoId, {
-  //         include: [{
-  //           model: TodoItem,
-  //           as: 'todoItems',
-  //         }],
-  //       })
-  //       .then((todo) => {
-  //         if (!todo) {
-  //           return res.status(404).send({
-  //             message: 'Todo Not Found',
-  //           });
-  //         }
-  //         return res.status(200).send(todo);
-  //       })
-  //       .catch((error) => res.status(400).send(error));
-  //   },
-
-  //   update(req, res) {
-  //     return Todo
-  //       .findByPk(req.params.todoId, {
-  //         include: [{
-  //           model: TodoItem,
-  //           as: 'todoItems',
-  //         }],
-  //       })
-  //       .then(todo => {
-  //         if (!todo) {
-  //           return res.status(404).send({
-  //             message: 'Todo Not Found',
-  //           });
-  //         }
-  //         return todo
-  //           .update({
-  //             title: req.body.title || todo.title,
-  //           })
-  //           .then(() => res.status(200).send(todo))  // Send back the updated todo.
-  //           .catch((error) => res.status(400).send(error));
-  //       })
-  //       .catch((error) => res.status(400).send(error));
-  //   },
-
-  //   destroy(req, res) {
-  //     return Todo
-  //       .findByPk(req.params.todoId)
-  //       .then(todo => {
-  //         if (!todo) {
-  //           return res.status(400).send({
-  //             message: 'Todo Not Found',
-  //           });
-  //         }
-  //         return todo
-  //           .destroy()
-  //           .then(() => res.status(200).send({ message: 'Todo deleted successfully.' }))
-  //           .catch(error => res.status(400).send(error));
-  //       })
-  //       .catch(error => res.status(400).send(error));
-  //   },
+      }).catch((error) => res.status(400).send(error));
+  }
 };
+
+async function afterOrderUpdateTasks (updatedOrder) {
+  const orderData = updatedOrder.dataValues;  
+
+
+  // AFTER UPDATE
+  // 1 check if order now valid and
+  // validate (or not) all points transactions associated
+  pointsController.validateAllPointsTransactionsForOrder(orderData.id, orderData.orderNumber !== '1');  
+  
+  // 2 check if order is the first now valid order
+  // checkFirstOrderForCompany(orderData.id);
+  // and then
+  // 4 upsert a 'first email' bonus if it is now the first valid  (ie check for reason2 point)
+  upsertFirstOrderPoints(orderData);
+
+
+  // pointsTransationQueue.add({
+  //   foo: 'bar'
+  // });
+  
+  // REPEAT EXAMPLE - RUN EVERY ONE MINUTE
+  // pointsTransationQueue.add({
+  //   foo: 'bar3'
+  // }, { repeat: { cron: '*/1 * * * *' } });
+}
+
+async function checkFirstOrderForCompany (orderId) {
+  // lookup order in DB
+  return Order
+    .findByPk(orderId)
+    .then(order => { 
+      // lookup all orders with this company
+      return Order
+      .findAll({ 
+        where: {
+          companyId: order.companyId,
+          orderNumber: { [Op.not]: 1 },
+        },
+        order: [
+          ['createdAt', 'ASC']
+        ]
+      })
+      .then((allOrders) => {
+        return orderId === allOrders[0]?.id;
+      })
+    })
+  };
+
+  async function upsertFirstOrderPoints (orderData) {
+    // check if first [valid]Order for that Company, award bonus if so 
+    const reasonNumber = 2;
+    const pointsToAward = pointsHelper.returnPointValueByReason(reasonNumber);
+    const isFirstForThisCompany = await checkFirstOrderForCompany(orderData.id) || false;
+    if (isFirstForThisCompany) {
+      pointsTransactionQueue.add(
+        pointsController.upsert(pointsToAward, orderData.customerId, true, reasonNumber, orderData.id)
+      );
+    }
+  }
+
+  // lookup all orders in the given company

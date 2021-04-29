@@ -24,11 +24,58 @@
       <div class="unique-identifier-email" data-clipboard-target="#copy-email">
         <img src="/images/email-icon.svg" alt="ellen insights logo">
         <span id="copy-email" class="unique-identifier-email-copy">
-          <%= user.identifier %>@<%=email %>
+          <%= user.identifier %>@<%= email %>
         </span>
       </div>
     </div>
   </div>
+</section>
+
+<section class="rewards-area">
+  <img src="/images/ELLEN_points_logo.svg" alt="ellen points">
+
+  <div class="flex-wrapper">
+  <div class="rewards-area-left">
+    <div class="screen-render rewards-listing">
+      <div class="screen-render-inner screen-render-inner-alternative"> 
+        <div class="rewards-listing-left">
+          <!-- TOTAL POINTS -->
+
+            <h5>Today's Points</h5>
+            <div class="rewards-points-readout">
+              <%= pointsCount %>
+            </div>
+
+            <h5>Total Points</h5>
+            <div class="rewards-points-readout">
+              <%= totalPoints %>
+            </div>  
+
+        </div>
+        <div class="rewards-listing-right">
+        <h5>Recent Points</h5>
+        <% if (typeof points != 'undefined' && points.length > 0) {  
+          points.forEach((pointTransaction) => { %>
+            <li>
+              <strong> <%= helpers.renderPointsReason(pointTransaction.reason) %> </strong> 
+              <span><%= pointTransaction.pointsValue %></span>
+            </li>
+        <% })} else { %>
+          <li>No points earned yet!</li>
+        <% } %>
+        <div>View all > </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div class="rewards-area-right">
+    <div class="screen-render rewards-listing">
+      <div class="screen-render-inner screen-render-inner-alternative">
+        <%- include('./includes/ranked_list_live_daily'); -%>
+      </div>
+    </div>
+  </div>
+</div>
 </section>
 
 <section class="dashboard-area">
@@ -58,33 +105,26 @@
     </ul>
   </section>
 
-<section class="orders-by-company">
-  <h4>Your confirmed data by Company</h4>
-  <ul class="orders-by-company-list">
-    <% let companyName = 'firstloop' %>
-    <% if (typeof orders != 'undefined') {  
-      orders.forEach((order, index) => { %>
-        <% if (order.Company.nameIdentifier !== 'unconfirmed') { %>
-          <% if (companyName !== order.Company.nameIdentifier) { %>
-            <div class="company-header">
-              <a href="/companies/<%= order.Company.id %>"><h3><%= order.Company.nameIdentifier %></h3></a>
-              <span class="company-header-email"><%= order.fromEmail %></span>
-            </div>
-          <% } %>
-          <li class="orders-by-company-list-item">
-            <span class="orders-by-company-list-date">
-              <%= helpers.showDate(order.orderDate) %>
-            </span> 
-            <span class="orders-by-company-list-divider">::</span>
-            <span class="orders-by-company-list-order-number">
-              <%= order.orderNumber %>
-            </span>
-          </li>
-          <% } %>
-        <% companyName = order.Company.nameIdentifier %>
-    <% })} %>
-  </ul>
-</section>
+  <div class="data-record">
+  <section class="orders-by-company">
+    <h4>Your confirmed data by Company</h4>
+    <ul class="orders-by-company-list">
+      <% let companyName = 'firstloop' %>
+      <% if (typeof orders != 'undefined') {  
+        orders.forEach((order, index) => { %>
+          <% if (order.Company.nameIdentifier !== 'unconfirmed') { %>
+            <% if (companyName !== order.Company.nameIdentifier) { %>
+              <div class="company-header">
+                <a href="/companies/<%= order.Company.id %>"><h3><%= order.Company.nameIdentifier %></h3></a>
+                <span class="company-header-email"><%= order.fromEmail %></span>
+              </div>
+            <% } %>
+            <% } %>
+          <% companyName = order.Company.nameIdentifier %>
+      <% })} %>
+    </ul>
+  </section>
+  </div>
 </section>
 <%- include('./includes/footer'); -%> 
 
