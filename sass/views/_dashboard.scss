@@ -36,7 +36,7 @@
 
     @include breakpoint(medium up) {
       width: 45%;
-      height: 75%;
+      height: 100%;
     }
 
     &.dashboard-intro-info {
@@ -314,99 +314,6 @@
   display: flex;
   flex-direction: column;
   flex-basis: 45%;
-}
-
-.unique-identifier-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  justify-content: space-between;
-  width: 100%;
-
-  @include breakpoint(small only) {
-    display: flex;
-    width: 100%;
-    text-align: center;
-    justify-content: center;
-  }
-
-  &:after {
-    content: 'Your unique identifier email to send to. Click to copy';
-    position: absolute;
-    bottom: -20px;
-    right: 5px;
-    color: $color-gray;
-
-    @include breakpoint(small only) {
-      position: relative;
-      bottom: -5px;
-    }
-  }
-
-  @include breakpoint(medium up) {
-    flex-direction: row;
-  }
-
-  h5 {
-    @extend %font-heading-medium;
-    display: flex;
-    height: 100%;
-    align-items: center;
-    margin: 0;
-    
-    @include breakpoint(medium up) {
-      margin-right: 20px;
-    }
-  }
-
-  .unique-identifier-email {
-    background-color: $color-brand-background;
-    border: solid black 2px;
-    border-radius: $border-radius-common;
-    padding: 10px;
-    font-size: 15px;
-    font-weight: 500;
-    display: flex;
-    letter-spacing: 0.2px;
-    cursor: pointer;
-    position: relative;
-
-    @include breakpoint(small only) {
-      margin-top: 10px;
-      width: 100%;
-      text-align: center;
-    }
-
-    
-    &-copy::selection {
-      background: $color-brand-highlight; /* WebKit/Blink Browsers */
-    }
-
-    &-copy {
-      width: 100%;
-      text-align: center;
-      justify-content: center;
-
-      &.copied {
-        &:after {
-          content: 'copied!';
-          position: absolute;
-          top: -30px;
-          left: 0;
-
-          @include breakpoint(small only) {
-            left: unset;
-            right: 0;
-          }
-        }
-      }
-    }
-
-    > img {
-      margin-right: 10px;
-    }
-  }
 }
 
 .dashboard-no-data {

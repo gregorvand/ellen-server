@@ -10,10 +10,11 @@ const flash = require('express-flash');
 const passport = require('passport');
 const Sentry = require("@sentry/node");
 
-const { renderDashboard } = require('./views/rendering/render_dashboard')
-const { renderCompanyPage } = require('./views/rendering/render_company')
-const { renderAdminCompanies } = require('./views/rendering/render_admin_companies')
-const { renderRankedUsers } = require('./views/rendering/render_user_rankings')
+const { renderDashboard } = require('./views/rendering/render_dashboard');
+const { renderDashboardv2 } = require('./views/rendering/render_dashboardv2');
+const { renderCompanyPage } = require('./views/rendering/render_company');
+const { renderAdminCompanies } = require('./views/rendering/render_admin_companies');
+const { renderRankedUsers } = require('./views/rendering/render_user_rankings');
 
 const indexHelpers = require('./views/helpers/index_helpers');
 
@@ -134,6 +135,10 @@ app.post('/users/register', async (req, res) => {
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
   renderDashboard(req, res);
+});
+
+app.get('/users/dashboardv2', checkNotAuthenticated, (req, res) => {
+  renderDashboardv2(req, res);
 });
 
 app.get('/users/logout',(req, res) => {

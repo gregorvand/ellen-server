@@ -1,0 +1,73 @@
+<%- include('./includes/header', {view: 'dashboardv2'}); -%>
+<% const email = helpers.getInboundEmailAddress() %>
+<% helpers.identifyKlaviyoUser(currentUser) %>
+
+<section class="dashboard-top-info">  
+  <% if (session.passport && session.passport.user) { %>
+  <div>
+    <strong>
+        <%= user.email %>
+    </strong>
+    <a class="logout-nav" href="/users/logout">Logout</a>
+  </div>
+  <% } %>
+</section>
+
+<div class="dashboard-components-wrapper">
+  <section class="dashboard-intro"> 
+    <div class="dashboard-intro-welcome">
+      <h1 class="dashboard-intro-welcome-heading">
+        <span class="heading-soft"> 
+          Hey, <%= user.firstName %> 
+        </span>
+        <br>
+        WELCOME TO ELLEN
+      </h1>
+      <p class="send-blurb">
+        Submit order confirmation emails to earn cash.
+      </p>
+      <div class="unique-identifier-wrapper">
+        <div class="unique-identifier-email" data-clipboard-target="#copy-email">
+          <img src="/images/email-icon.svg" alt="ellen insights logo">
+          <span id="copy-email" class="unique-identifier-email-copy">
+            <%= user.identifier %>@<%= email %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-intro-points-summary">
+      <div class="welcome-heading heading-stripe">
+        <h1>YOUR POINTS </h1>
+        <div class="stripe"></div>
+      </div>
+      <div class="screen-render">
+        <div class="screen-render-inner">
+            <h2 class="alternative">Your points TODAY</h2>
+            <p class="subparagraph">some points may not be added until email data is verified</p>
+            <span class="points-score-readout">
+              10
+            </span>
+            <p>
+              <strong>Total Lifetime Points</strong>
+              <span class="points-score-readout">
+                70
+              </span>
+            </p>
+          </div>
+      </div>
+    </div>
+    </div>
+  </section>
+</div>
+
+<script src="../clipboard/dist/clipboard.min.js"></script>
+
+<script>
+  $(function() {
+    console.log('loaded!');
+    let clipboard = new ClipboardJS('.unique-identifier-email');
+    clipboard.on('success', function(e) {
+      $('#copy-email').addClass('copied');
+    });
+  })
+</script>

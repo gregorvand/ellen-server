@@ -6,3 +6,21 @@
   font-size: (22px);
   font-weight: bolder;
 }
+
+%dashboard-heading-small {
+  font-family: $alternative-font-family;
+  font-size: rem-calc(13px);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+%font-subparagraph-alternative {
+  font-family: $alternative-font-family;
+  font-size: (10px);
+}
+
+%big-number {
+  font-family: $alternative-font-family;
+  font-weight: 700;
+  font-size: rem-calc(33px);
+}
