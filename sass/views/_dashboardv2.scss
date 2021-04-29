@@ -38,13 +38,14 @@
     max-width: 1000px;
     margin: 0 auto;
     width: 100%;
+    padding: 0 15px;
   }
 
   .dashboard-top-info {
     display: flex;
     justify-content: flex-end;
-    padding: 10px 0;
     max-width: none;
+    padding: 60px 15px 10px; // for ticker fixed space
 
     strong {
       margin-right: 10px;

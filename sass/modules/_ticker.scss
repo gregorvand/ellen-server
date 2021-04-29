@@ -29,10 +29,9 @@ $duration: 50s;
 }
 
 $height: 45px;
-
 .ticker-wrap {
-  position: relative;
-  bottom: 0;
+  position: fixed;
+  top: 50px;
   width: 100%;
   overflow: hidden;
   height: $height;

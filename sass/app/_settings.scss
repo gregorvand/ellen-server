@@ -18,3 +18,5 @@ $alternative-font-family: 'Red Hat Text', sans-serif;
 
 $border-common: dotted 1px $primary;
 $border-radius-common: 13px;
+
+* { box-sizing: border-box; }
