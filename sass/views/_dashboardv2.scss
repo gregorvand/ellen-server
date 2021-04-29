@@ -75,6 +75,12 @@
       font-weight: 400;
     }
 
+    &-welcome {
+      @include breakpoint(small only) {
+        margin-bottom: 40px;
+      }
+    }
+
     p.send-blurb {
       font-size: 14px;
       line-height: 1;
@@ -84,8 +90,13 @@
     &-points-summary {
 
       .screen-render {
-        height: 190px;
-        width: 440px;
+        width: 100%;
+        
+        @include breakpoint(medium up) {
+          height: 190px;
+          width: 440px;
+          width: 90%;
+        }
         
         &-inner {
           background-color: rgba(255, 255, 255, 0.91);
@@ -98,5 +109,10 @@
         }
       }
     }
+  }
+
+  .unique-identifier-email-copy.copied:after {
+    top: unset;
+    bottom: -30px;
   }
 }
