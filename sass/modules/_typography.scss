@@ -1,5 +1,5 @@
 .heading-stripe {
-  width: 102%;
+  width: 98%;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -12,6 +12,6 @@
   .stripe {
     background-color: $color-brand-alternative-highlight;
     flex: 1;
-    height: 50%;
+    height: 10px;
   }
 }

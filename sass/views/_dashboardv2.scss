@@ -1,6 +1,11 @@
 .dashboardv2 { 
   $dashboard-silver: #E7E7E7;
   $dashboard-radius: 20px;
+  padding: 0;
+
+  > nav {
+    padding: 0 15px;
+  }
 
   p, h1, h2 {
     margin-bottom: 10px;
@@ -65,7 +70,7 @@
       letter-spacing: 0;
     }
 
-    @include breakpoint(large up) {
+    @include breakpoint(medium up) {
       flex-direction: row;
       min-height: 280px;
       justify-content: space-between;
@@ -94,8 +99,6 @@
         
         @include breakpoint(medium up) {
           height: 190px;
-          width: 440px;
-          width: 90%;
         }
         
         &-inner {
