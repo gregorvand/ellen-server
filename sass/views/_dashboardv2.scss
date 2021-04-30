@@ -146,6 +146,7 @@
 
         &-left, &-right {
           flex-basis: 49%;
+          max-width: 49%;
           border-radius: $dashboard-radius;
           background-color: $color-white;
           height: 100%;
