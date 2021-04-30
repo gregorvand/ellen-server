@@ -106,6 +106,8 @@ module.exports = {
   
     const date1 = startDate;
     const date2 = endDate;
+
+    console.log('WHATDATE', startDate, endDate);
     
     return Point
     .findAll({

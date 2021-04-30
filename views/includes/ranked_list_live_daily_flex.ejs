@@ -1,0 +1,23 @@
+<% 
+if (typeof view == 'undefined') { 
+    adminCheck = false
+} else if (view == 'admin') {
+    adminCheck = true
+}
+%>
+
+<div class="rank-table-wrapper">
+
+  <% rankedUserList.forEach((rankedUser, index) => { %>
+  <% const UserData = rankedUser.User.dataValues; %>
+  <div class="ranking-wrapper">
+    <div class="ranking-item">
+      <div class="ranking-item-value"><%= index + 1 %></div>
+      <div class="ranking-item-user"><%= UserData.firstName %> 
+        <% if (adminCheck) { %><%= UserData.lastName %><% } %>
+      </div>
+      <div class="ranking-item-points"><%= rankedUser.total %></div>
+    </div>
+  </div>
+  <% });  %>
+</div>

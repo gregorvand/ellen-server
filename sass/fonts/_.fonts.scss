@@ -3,8 +3,27 @@
 }
 
 %font-heading-medium {
-  font-size: (22px);
+  font-size: rem-calc(17px);
   font-weight: bolder;
+
+  @include breakpoint(large up) {
+    font-size: rem-calc(22px);
+  }
+}
+
+%font-heading-number-list {
+  font-size: rem-calc(16px);
+  font-weight: bolder;
+}
+
+%font-list-item {
+  font-size: rem-calc(12px);
+  font-family: $alternative-font-family;
+}
+
+%font-list-item-strong {
+  font-size: rem-calc(14px);
+  font-weight: 500;
 }
 
 %dashboard-heading-small {
