@@ -265,10 +265,14 @@
 
   .cash-reward-ranking-wrapper {
     width: 100%;
+    
   
     h5 {
       font-size: rem-calc(16px);
       margin-bottom: 5px;
+      font-weight: bold;
+      font-style: italic;
+      padding:  20px;
     }
 
     .ranking-wrapper {
@@ -313,6 +317,7 @@
 
     .ticker__item {
       width: 200px;
+      @extend %font-ticker;
     }
   }
 }
