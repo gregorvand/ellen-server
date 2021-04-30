@@ -1,0 +1,18 @@
+<div class="ticker cash">
+  <div class="ticker__list cash">
+    <div class="ticker__item">Debbie won <strong>$30 </strong>yesterday</div>
+    <div class="ticker__item">James won <strong>$5</strong> on Tuesday</div>
+    <div class="ticker__item">Debbie won <strong>$30 </strong>yesterday</div>
+    <div class="ticker__item">James won <strong>$5</strong> on Tuesday</div>
+    <div class="ticker__item">Debbie won <strong>$30 </strong>yesterday</div>
+    <div class="ticker__item">James won <strong>$5</strong> on Tuesday</div>
+  </div>
+</div>
+
+<script>
+  const ticker2 = document.querySelector('.ticker.cash');
+  let list2 = document.querySelector('.ticker__list.cash');
+  let clone2 = list2.cloneNode(true);
+
+  ticker2.append(clone2)
+</script>

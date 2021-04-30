@@ -54,7 +54,7 @@
     display: flex;
     justify-content: flex-end;
     max-width: none;
-    padding: 60px 15px 10px; // for ticker fixed space
+    padding: 10px 15px 10px; // for ticker fixed space
 
     strong {
       margin-right: 10px;
@@ -309,6 +309,10 @@
       &:last-child() {
         border-bottom: 0;
       }
+    }
+
+    .ticker__item {
+      width: 200px;
     }
   }
 }
