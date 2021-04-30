@@ -291,6 +291,7 @@
           @extend %font-heading-number-list;
           flex-shrink: 1;
           margin-right: 10px;
+          width: 15px;
         }
 
         &-user {
