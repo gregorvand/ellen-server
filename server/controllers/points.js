@@ -120,6 +120,17 @@ module.exports = {
       group: ['User.id', 'Point.customerId'],
       order: [[sequelize.fn('sum', sequelize.col('pointsValue')), 'DESC']]
     })
+  },
+
+  listByOrder(req, res) {
+    return Point
+    .findAll({
+      where: {
+        [Op.and] : [
+          {customerId: req.body.userId}, {orderId: req.body.emailId}
+        ]
+      }
+    })
   }
 };
 
@@ -139,7 +150,7 @@ async function validateAllPointsTransactionsForOrder (orderIdLookup, validate = 
             activated: validate
           }).then((points) => 
             console.log('updated points transaction', points.id)
-          )
+        )
     });
   })
 }

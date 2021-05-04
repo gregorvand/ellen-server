@@ -24,6 +24,12 @@ module.exports = (app) => {
   app.get('/api/orders', ordersController.list);
 
   app.post('/api/points', pointsController.create);
+  app.get('/api/points', function(req, res) {
+    pointsController.listByOrder(req, res)
+    .then(transaction => res.status(200).send(transaction))
+    .catch(error => res.status(400).send('not possible!'));
+  });
+  
   app.get('/api/points/rankings/daily', function(req, res) {
     pointsController.dailyRankedList(req, res)
     .then(rankedUsers => {
