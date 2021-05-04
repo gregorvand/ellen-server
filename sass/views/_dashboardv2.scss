@@ -332,7 +332,7 @@
   .email-points-history {
     .screen-render {
       &-inner {
-        background-color: $color-white;
+        background-color: #fffffff2; // transparent white
       }
     }
   }
