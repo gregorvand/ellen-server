@@ -14,10 +14,16 @@
   h1 {
     text-transform: uppercase;
     font-weight: bold;
-    text-align: left;
+    text-align: left !important;
     font-size: rem-calc(22px);
     margin-bottom: 0;
     letter-spacing: 0;
+
+    .h1-sub {
+      font-size: rem-calc(15px);
+      letter-spacing: 1.5px;
+      padding-left: 5px;
+    }
   }
 
   p > strong {
@@ -67,7 +73,6 @@
     flex-direction: column;
     margin-bottom: 20px;
     border: solid $dashboard-silver 3px;
-    
     border-radius: $dashboard-radius;
     padding: 20px;
 
@@ -77,20 +82,10 @@
       justify-content: space-between;
     }
 
-    .heading-soft {
-      font-weight: 400;
-    }
-
     &-welcome {
       @include breakpoint(small only) {
         margin-bottom: 40px;
       }
-    }
-
-    p.send-blurb {
-      font-size: 14px;
-      line-height: 1;
-      margin: 10px 0;
     }
 
     &-points-summary {
@@ -114,6 +109,15 @@
         }
       }
     }
+
+    .heading-soft {
+      font-weight: 400;
+    }
+    p.send-blurb {
+      font-size: 14px;
+      line-height: 1;
+      margin: 10px 0;
+    }
   }
 
   .unique-identifier-email-copy.copied:after {
@@ -122,6 +126,8 @@
   }
 
   .dashboard-cash-rewards {
+    margin-bottom: 30px;
+
     .screen-render {
       margin-top: 10px;
       width: 100%;
@@ -145,8 +151,8 @@
         }
 
         &-left, &-right {
-          flex-basis: 49%;
-          max-width: 49%;
+          flex-basis: 100%;
+          max-width: 100%;
           border-radius: $dashboard-radius;
           background-color: $color-white;
           height: 100%;
@@ -157,6 +163,8 @@
           
           @include breakpoint(large up) {
             align-items: flex-start;
+            flex-basis: 49%;
+            max-width: 49%;
           }
         }
 
@@ -266,7 +274,6 @@
 
   .cash-reward-ranking-wrapper {
     width: 100%;
-    
   
     h5 {
       font-size: rem-calc(16px);
@@ -319,6 +326,14 @@
     .ticker__item {
       width: 200px;
       @extend %font-ticker;
+    }
+  }
+
+  .email-points-history {
+    .screen-render {
+      &-inner {
+        background-color: $color-white;
+      }
     }
   }
 }
