@@ -53,7 +53,6 @@ const renderDashboard = function(req, res) {
 }
 
 function getOrdersByCompany (id) {
-  console.log('an id is', id);
   return Order
   .findAll({
     where: {
@@ -63,7 +62,7 @@ function getOrdersByCompany (id) {
       }
     },
     include: [{
-      model: Company,
+      model: Company  ,
       attributes: ['nameIdentifier', 'id'],
     }],
     order: [ 

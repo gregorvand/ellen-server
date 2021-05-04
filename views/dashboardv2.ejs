@@ -131,7 +131,6 @@
                 <%= email.subjectLine || email.plainContent %>
               </span>
 
-          
               <span class="orders-by-company-list-status">
                 <% if(email.orderNumber == 1) { %> 
                   <img src="/images/time-icon.svg" alt="processing"> 
@@ -139,6 +138,15 @@
                   <img src="/images/confirmed-icon.svg" alt="confirmed"> 
                 <% } %>
               </span>
+
+              <div class="points-row">
+                <% const pointsData = email.points.map(points => points.dataValues) %>
+                <ul>
+                <% pointsData.forEach(point => { %>
+                  <li><%= point.pointsValue %></li>
+                <% }); %>
+              </ul>
+              </div>
             </li>
         <% })} else { %>
           <li>Emails that you have submitted will show up here when we receive them</li>

@@ -77,6 +77,7 @@ function getLatestEmails (id) {
     where: {
       customerId: id
     },
+    include: 'points',
     limit: 10,
     order: [ ['createdAt', 'DESC'] ]
   })

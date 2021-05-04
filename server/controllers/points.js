@@ -29,7 +29,7 @@ module.exports = {
             .create({
               pointsValue: pointsValue,
               customerId: customerId,
-              orderId: orderIdentifier,
+              emailId: orderIdentifier,
               activated: activated || false,
               reason: reason || 1
             })
@@ -71,7 +71,7 @@ module.exports = {
         return Point
           .findOne({ where: {
             [Op.and] : [
-                {orderId: orderIdentifier}, {reason: reason}
+                {emailId: orderIdentifier}, {reason: reason}
               ]
             }
           })
@@ -127,7 +127,7 @@ module.exports = {
     .findAll({
       where: {
         [Op.and] : [
-          {customerId: req.body.userId}, {orderId: req.body.emailId}
+          {customerId: req.body.userId}, {emailId: req.body.emailId}
         ]
       }
     })
@@ -141,7 +141,7 @@ async function validateAllPointsTransactionsForOrder (orderIdLookup, validate = 
   return Point
     .findAll({
       where: {
-        orderId: orderIdLookup
+        emailId: orderIdLookup
       },
     })
     .then(pointsTransactions => {
