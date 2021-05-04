@@ -12,6 +12,9 @@ This is a Node/Express/Postgres/Sequelize -based app, and currently uses simple 
 - `npm run start:dev` to begin server on 8000
 - `npm run sass` to start watching scss / compiling css files from `/sass` directory (when doing any style work)
 
+## Redis
+You will need a redis server running (ie in termninal `redis-server`) on the default port (6379) to handle background tasks for calculating ad assigning Points.
+
 ## Modifying the DB
 
 We are not using Sequelize `.sync()` since this is not suitable once the app gets to Production, so we are doing migrations from day 1. However, to make these easier to generate we are using a recommended fork of `sequelize-auto-migrations` as per [this post](https://stackoverflow.com/a/59021807/707747) and follow the instructions 7-10 from this post for modifying the DB via the Models.
