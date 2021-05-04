@@ -4,10 +4,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    orderId: { 
-      type: DataTypes.BIGINT,
-      allowNull: true
-    },
     activated: { 
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -25,7 +21,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'customerId',
       onDelete: 'CASCADE',
     });
+    Point.belongsTo(models.Order, {
+      foreignKey: 'emailId',
+      onDelete: 'CASCADE',
+    });
   };
+  
 
   return Point;
 };

@@ -141,11 +141,6 @@
                     "field": "pointsValue",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "orderId": {
-                    "allowNull": true,
-                    "field": "orderId",
-                    "seqType": "Sequelize.BIGINT"
-                },
                 "activated": {
                     "allowNull": false,
                     "defaultValue": {
@@ -171,6 +166,17 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "emailId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Orders",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "emailId",
+                    "seqType": "Sequelize.INTEGER"
                 },
                 "customerId": {
                     "allowNull": true,
@@ -306,5 +312,5 @@
             "indexes": []
         }
     },
-    "revision": 11
+    "revision": 12
 }
