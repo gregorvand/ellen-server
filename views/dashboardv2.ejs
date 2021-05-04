@@ -118,18 +118,33 @@
   <section class="email-points-history">
     <div class="screen-render screen-render-full-width">
     <div class="screen-render-inner screen-render-inner-scroll">
-        <ul>
-          <li>hello</li>
-          <li>hello</li>
-          <li>hello</li>
-          <li>hello</li>
-          <li>hello</li>
-          <li>hello</li>
-          <li>hello</li>
-          <li>hello</li>
-          <li>hello</li>
-          <li>hello</li>
+      
+        <ul class="">
+        <% if (typeof email != 'undefined' && email.length > 0) {  
+          emails.forEach((email) => { %>
+            <li class="">
+              <span class="orders-by-company-list-date">
+                <%= helpers.showDate(email.createdAt) %>
+              </span> 
+              <span class="orders-by-company-list-divider">::</span>
+              <span class="orders-by-company-list-email-subject">
+                <%= email.subjectLine || email.plainContent %>
+              </span>
+
+          
+              <span class="orders-by-company-list-status">
+                <% if(email.orderNumber == 1) { %> 
+                  <img src="/images/time-icon.svg" alt="processing"> 
+                <%} else { %> 
+                  <img src="/images/confirmed-icon.svg" alt="confirmed"> 
+                <% } %>
+              </span>
+            </li>
+        <% })} else { %>
+          <li>Emails that you have submitted will show up here when we receive them</li>
+        <% } %>
         </ul>
+      
     </div>
   </div>
   </section>
