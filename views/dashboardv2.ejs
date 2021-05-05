@@ -117,34 +117,52 @@
 
   <section class="email-points-history">
     <div class="screen-render screen-render-full-width">
-    <div class="screen-render-inner screen-render-inner-scroll">
+    <div class="screen-render-inner">
+      <div class="row-headers">
+        <span class="row-headers-date">Date</span>
+        <span class="row-headers-divider"></span>
+        <span class="row-headers-subject">Email (subject)</span>
+        <span class="row-headers-status">Status</span>
+        <span class="row-headers-status">Points</span>
+      </div>
       
-        <ul class="">
+        <ul class="email-points-rows">
         <% if (typeof email != 'undefined' && email.length > 0) {  
           emails.forEach((email) => { %>
-            <li class="">
-              <span class="orders-by-company-list-date">
+
+            <% let active = true %>
+            <% if(email.orderNumber == 1) { %> 
+              <% active = false %>
+            <% } %>
+
+            <li class="email-points-rows-row">
+              <span class="email-row-date">
                 <%= helpers.showDate(email.createdAt) %>
               </span> 
-              <span class="orders-by-company-list-divider">::</span>
-              <span class="orders-by-company-list-email-subject">
+              <span class="email-row-divider">::</span>
+              <span class="email-row-subject">
                 <%= email.subjectLine || email.plainContent %>
               </span>
 
-              <span class="orders-by-company-list-status">
-                <% if(email.orderNumber == 1) { %> 
+              <span class="email-row-status">
+                <% if (!active) { %> 
                   <img src="/images/time-icon.svg" alt="processing"> 
                 <%} else { %> 
                   <img src="/images/confirmed-icon.svg" alt="confirmed"> 
                 <% } %>
               </span>
 
-              <div class="points-row">
+              <div class="points-rows-wrapper <% if (!active) { %> inactive <% } %>">
                 <% const pointsData = email.points.map(points => points.dataValues) %>
-                <ul>
+                <ul class="points-rows">
                 <% pointsData.forEach(point => { %>
-                  <li><%= point.pointsValue %></li>
-                <% }); %>
+                  <li class="points-rows-row reason-<%= point.reason %>">
+                    <strong><%= reasons[point.reason - 1].key %></strong> :: <%= point.pointsValue %>
+                    <% if (!active) { %> 
+                    <br> <span class="inactive-blurb">POINTS WILL BE ADDED WHEN EMAIL CONFIRMED</span> 
+                    <% } %>
+                  </li>                
+                  <% }); %>
               </ul>
               </div>
             </li>

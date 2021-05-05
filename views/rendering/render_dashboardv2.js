@@ -8,6 +8,8 @@ const pointsServiceCalculator = require('../../server/services/points/point_calc
 const Op = require('sequelize').Op;
 const dateObjects = require('../../server/utils/setTimezone'); // timezone adjusted instance
 
+const reasonsArray = require('../../server/utils/constants').POINTS;
+
 
 const renderDashboardv2 = function(req, res) {
 
@@ -43,7 +45,8 @@ const renderDashboardv2 = function(req, res) {
       totalPoints: totalPoints,
       helpers: dashboardHelpers,
       rankedUserList: rankedList,
-      emails: userEmails
+      emails: userEmails,
+      reasons: reasonsArray
     });
   })
 }

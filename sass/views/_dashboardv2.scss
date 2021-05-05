@@ -102,6 +102,7 @@
           background-color: rgba(255, 255, 255, 0.91);
           border: 0;
           padding: 15px;
+          overflow: hidden;
         }
   
         &:after {
@@ -280,7 +281,7 @@
       margin-bottom: 5px;
       font-weight: bold;
       font-style: italic;
-      padding:  20px;
+      padding:  10px 20px 0;
     }
 
     .ranking-wrapper {
@@ -333,6 +334,95 @@
     .screen-render {
       &-inner {
         background-color: #fffffff2; // transparent white
+        padding: 10px 30px;
+      }
+      
+      .email-row, .row-headers {
+        flex-direction: row;
+        display: flex;
+
+        > * {
+          display: flex;
+        }
+
+        &-date {
+          flex-basis: 15%;
+        }
+
+        &-divider {
+          justify-content: center;
+          width: 40px;
+        }
+
+        &-subject {
+          flex-basis: 30%;
+        }
+
+        &-status {
+          flex-basis: 10%;
+          padding-right: 20px;
+        }
+      }
+
+      .points-rows-wrapper {
+        display: flex;
+
+        &.inactive {
+          opacity: 0.5;
+
+          .inactive-blurb {
+            font-size: rem-calc(10px);
+          }
+        }
+
+        ul { 
+          margin: 0;
+          padding: 10px 0;
+          justify-content: center;
+          align-items: center;
+
+          li { margin-bottom: 0 !important; }
+        }
+      }
+
+      .row-headers { 
+        padding-bottom: 20px;
+
+        > * {
+          text-decoration: underline;
+         }
+      }
+      
+      .email-points-rows {
+        overflow-y: scroll;
+        height: 85%;
+
+        &-row {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          > span {
+            display: flex;
+            align-items: center;
+          }
+        }
+
+        .points-rows-wrapper {
+          .points-rows {
+            list-style: none;
+
+            &-row {
+              @extend %font-info-row;
+              text-transform: uppercase;
+              margin-bottom: 5px;
+
+              &.reason-2 {
+                color: $color-brand-alternative-highlight;
+              }
+            }
+          }
+        }
       }
     }
   }

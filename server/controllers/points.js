@@ -82,7 +82,7 @@ module.exports = {
               return Point.create({
                 pointsValue: pointsValue,
                 customerId: customerId, 
-                orderId: orderIdentifier,
+                emailId: orderIdentifier,
                 activated: activated || false,
                 reason: reason || 1
               }).then(transaction => 

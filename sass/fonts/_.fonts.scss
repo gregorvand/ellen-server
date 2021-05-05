@@ -48,3 +48,9 @@
   font-weight: 500;
   font-style: italic;
 }
+
+%font-info-row {
+  font-family: $alternative-font-family;
+  font-weight: 500;
+  font-size: rem-calc(12px);
+}
