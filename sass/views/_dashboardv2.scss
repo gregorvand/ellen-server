@@ -401,6 +401,9 @@
           display: flex;
           flex-direction: row;
           align-items: center;
+          border-bottom: solid #d8d8d8 thin;
+          margin-bottom: 0;
+          padding: 5px 0;
 
           > span {
             display: flex;
