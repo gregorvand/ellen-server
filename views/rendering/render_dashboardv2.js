@@ -8,7 +8,7 @@ const pointsServiceCalculator = require('../../server/services/points/point_calc
 const Op = require('sequelize').Op;
 const dateObjects = require('../../server/utils/setTimezone'); // timezone adjusted instance
 
-const reasonsArray = require('../../server/utils/constants').POINTS;
+const constantsArray = require('../../server/utils/constants');
 
 
 const renderDashboardv2 = function(req, res) {
@@ -46,7 +46,8 @@ const renderDashboardv2 = function(req, res) {
       helpers: dashboardHelpers,
       rankedUserList: rankedList,
       emails: userEmails,
-      reasons: reasonsArray
+      reasons: constantsArray.POINTS,
+      prizes: constantsArray.DAILY_PRIZES
     });
   })
 }
@@ -59,17 +60,6 @@ function getPointsByUser (id) {
     },
     limit: 6,
     order: [ ['createdAt', 'DESC'] ]
-  })
-};
-
-function getPointsByUserAndEmail (userId, emailId) {
-  return Points
-  .findAll({
-    where: {
-      [Op.and] : [
-          {customerId: userId}, {orderId: emailId}
-        ]
-    }
   })
 };
 
