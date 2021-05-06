@@ -334,7 +334,11 @@
     .screen-render {
       &-inner {
         background-color: #fffffff2; // transparent white
-        padding: 10px 30px;
+        padding: 10px;
+
+        @include breakpoint(medium up) {
+          padding: 10px 30px;
+        }
       }
       
       .email-row, .row-headers {
@@ -371,7 +375,12 @@
           opacity: 0.5;
 
           .inactive-blurb {
+            display: none;
             font-size: rem-calc(10px);
+
+            @include breakpoint(medium up) {
+              display: flex;
+            }
           }
         }
 

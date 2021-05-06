@@ -52,5 +52,9 @@
 %font-info-row {
   font-family: $alternative-font-family;
   font-weight: 500;
-  font-size: rem-calc(12px);
+  font-size: rem-calc(9px);
+
+  @include breakpoint(medium up) {
+    font-size: rem-calc(12px);
+  }
 }
