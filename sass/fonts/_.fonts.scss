@@ -3,6 +3,63 @@
 }
 
 %font-heading-medium {
-  font-size: (22px);
+  font-size: rem-calc(17px);
   font-weight: bolder;
+
+  @include breakpoint(large up) {
+    font-size: rem-calc(22px);
+  }
+}
+
+%font-heading-number-list {
+  font-size: rem-calc(16px);
+  font-weight: bolder;
+}
+
+%font-list-item {
+  font-size: rem-calc(12px);
+  font-family: $alternative-font-family;
+}
+
+%font-list-item-strong {
+  font-size: rem-calc(14px);
+  font-weight: 500;
+}
+
+%dashboard-heading-small {
+  font-family: $alternative-font-family;
+  font-size: rem-calc(13px);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+%font-subparagraph-alternative {
+  font-family: $alternative-font-family;
+  font-size: (10px);
+}
+
+%big-number {
+  font-family: $alternative-font-family;
+  font-weight: 700;
+  font-size: rem-calc(33px);
+}
+
+%font-ticker {
+  font-weight: 500;
+  font-style: italic;
+}
+
+%font-ticker-bold {
+  font-weight: 800;
+  font-style: bold;
+}
+
+%font-info-row {
+  font-family: $alternative-font-family;
+  font-weight: 500;
+  font-size: rem-calc(9px);
+
+  @include breakpoint(medium up) {
+    font-size: rem-calc(12px);
+  }
 }

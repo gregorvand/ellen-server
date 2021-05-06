@@ -1,0 +1,21 @@
+<div class="ticker top">
+  <div class="ticker__list top">
+    <div class="ticker__item">Debbie :: <br> + 30points</div>
+    <div class="ticker__item">John ::  <br> + 10points</div>
+    <div class="ticker__item">BigCat2000 :: <br> + 40points</div>
+    <div class="ticker__item">John :: <br> + 10points</div>
+    <div class="ticker__item">BigCat2000 :: <br> + 40points</div>
+    <div class="ticker__item">BigCat2000 :: <br> + 40points</div>
+    <div class="ticker__item">John :: <br> + 10points</div>
+    <div class="ticker__item">Debbie :: <br> + 30points</div>
+    <div class="ticker__item">John ::  <br> + 10points</div>
+  </div>
+</div>
+
+<script>
+  const ticker = document.querySelector('.ticker.top');
+  let list = document.querySelector('.ticker__list.top');
+  let clone = list.cloneNode(true);
+
+  ticker.append(clone)
+</script>

@@ -1,21 +1,17 @@
 const Points = require('../../server/models').Point;
 const Order = require('../../server/models').Order;
-const Company = require('../../server/models').Company;
+
 const dashboardHelpers = require('../../views/helpers/dashboard_helpers');
 const rankedUserHelpers = require('../../views/helpers/ranked_user_helper');
+
 const pointsServiceCalculator = require('../../server/services/points/point_calculators');
 const Op = require('sequelize').Op;
 const dateObjects = require('../../server/utils/setTimezone'); // timezone adjusted instance
 
+const constantsArray = require('../../server/utils/constants');
 
-const renderDashboard = function(req, res) {
-  const ordersByCompanyPromise = getOrdersByCompany(req.user.id).then(returnedOrders => {
-    userOrders = returnedOrders;
-  })
 
-  const latestEmailsPromise = getLatestEmails(req.user.id).then(latestEmails => {
-    userEmails = latestEmails;
-  })
+const renderDashboardv2 = function(req, res) {
 
   const pointsByUserPromise = getPointsByUser(req.user.id).then(returnedPoints => {
     userPoints = returnedPoints;
@@ -37,52 +33,24 @@ const renderDashboard = function(req, res) {
     rankedList = returnedList
   });
   
+  const latestEmailsPromise = getLatestEmails(req.user.id).then(latestEmails => {
+    userEmails = latestEmails;
+  })
 
-  Promise.all([ordersByCompanyPromise, latestEmailsPromise, pointsByUserPromise, pointsTodayPromise, totalAllPointsPromise, rankedUserPromise]).then(() => {
-    res.render("dashboard", { 
+  Promise.all([pointsByUserPromise, pointsTodayPromise, totalAllPointsPromise, rankedUserPromise, latestEmailsPromise]).then(() => {
+    res.render("dashboardv2", { 
       user: req.user,
       points: userPoints,
       pointsCount: pointsToday,
       totalPoints: totalPoints,
-      orders: userOrders,
-      emails: userEmails,
       helpers: dashboardHelpers,
-      rankedUserList: rankedList
+      rankedUserList: rankedList,
+      emails: userEmails,
+      reasons: constantsArray.POINTS,
+      prizes: constantsArray.DAILY_PRIZES
     });
   })
 }
-
-function getOrdersByCompany (id) {
-  return Order
-  .findAll({
-    where: {
-      customerId: id,
-      orderNumber: {
-        [Op.gt]: 1
-      }
-    },
-    include: [{
-      model: Company  ,
-      attributes: ['nameIdentifier', 'id'],
-    }],
-    order: [ 
-      [ 
-        Company, 'nameIdentifier', 'ASC' ],
-        ['orderDate', 'DESC'],
-      ]
-  })
-};
-
-function getLatestEmails (id) {
-  return Order
-  .findAll({
-    where: {
-      customerId: id
-    },
-    limit: 10,
-    order: [ ['createdAt', 'DESC'] ]
-  })
-};
 
 function getPointsByUser (id) {
   return Points
@@ -96,4 +64,16 @@ function getPointsByUser (id) {
 };
 
 
-module.exports.renderDashboard = renderDashboard;
+function getLatestEmails (id) {
+  return Order
+  .findAll({
+    where: {
+      customerId: id
+    },
+    include: 'points',
+    limit: 10,
+    order: [ ['createdAt', 'DESC'] ]
+  })
+};
+
+module.exports.renderDashboardv2 = renderDashboardv2;

@@ -1,9 +1,9 @@
 // colour variables
 $primary: black;
-$secondary: #efefef;
+$secondary: #F9F4F4;
 $color-brand-background: #FFFBEF;
 $color-brand-highlight: #FFEDBD;
-$color-brand-alternative-highlight: #dc5959;
+$color-brand-alternative-highlight: #E71D36;
 $color-white: #ffffff;
 $color-off-black: #252525;
 $color-gray: rgba(0,0,0,0.3);
@@ -12,8 +12,11 @@ $color-highlight-alternative: #62afff;
 
 // fonts
 $body-font-family: 'Red Hat Display', sans-serif;
+$alternative-font-family: 'Red Hat Text', sans-serif;
 
 // common styles
 
 $border-common: dotted 1px $primary;
 $border-radius-common: 13px;
+
+* { box-sizing: border-box; }

@@ -1,0 +1,194 @@
+<%- include('./includes/header', {view: 'dashboardv2'}); -%>
+<% const email = helpers.getInboundEmailAddress() %>
+<% helpers.identifyKlaviyoUser(currentUser) %>
+
+<%- include('./includes/ticker'); -%>
+
+<section class="dashboard-top-info">  
+  <% if (session.passport && session.passport.user) { %>
+  <div>
+    <strong>
+        <%= user.email %>
+    </strong>
+    <a class="logout-nav" href="/users/logout">Logout</a>
+  </div>
+  <% } %>
+</section>
+
+<div class="dashboard-components-wrapper">
+  <section class="dashboard-intro"> 
+    <div class="dashboard-intro-welcome">
+      <h1 class="dashboard-intro-welcome-heading">
+        <span class="heading-soft"> 
+          Hey, <%= user.firstName %> 
+        </span>
+        <br>
+        WELCOME TO ELLEN
+      </h1>
+      <p class="send-blurb">
+        Submit order confirmation emails to earn cash.
+      </p>
+      <div class="unique-identifier-wrapper">
+        <div class="unique-identifier-email" data-clipboard-target="#copy-email">
+          <img src="/images/email-icon.svg" alt="ellen insights logo">
+          <span id="copy-email" class="unique-identifier-email-copy">
+            <%= user.identifier %>@<%= email %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-intro-points-summary">
+      <div class="welcome-heading heading-stripe">
+        <h1>YOUR POINTS </h1>
+        <div class="stripe"></div>
+      </div>
+      <div class="screen-render">
+        <div class="screen-render-inner">
+            <h2 class="alternative">Your points TODAY</h2>
+            <p class="subparagraph">some points may not be added until email data is verified</p>
+            <span class="points-score-readout">
+              <%= pointsCount %>
+            </span>
+            <p>
+              <strong>Total Lifetime Points</strong>
+              <span class="points-score-readout">
+                <%= totalPoints %>
+              </span>
+            </p>
+          </div>
+      </div>
+    </div>
+  </section>
+  <div class="welcome-heading heading-stripe heading-stripe-brand">
+    <h1>CASH REWARDS</h1>
+    <div class="stripe"></div>
+  </div>
+  <section class="dashboard-cash-rewards">
+    <div class="screen-render">
+      <div class="screen-render-inner">
+          <div class="screen-render-inner-flex-wrapper">
+            <div class="screen-render-inner-left">
+
+              <div class="cash-reward-daily-wrapper">
+
+              
+              <div class="cash-reward-daily">
+                <div class="cash-reward-daily-indicator">
+                  <span class="cash-reward-daily-indicator-inner-circle">
+                    daily
+                  </span>
+                </div>
+              </div>
+
+
+              <ul class="cash-reward-daily-prize-values">
+                <li class="prize-value">
+                  $30
+                  <span class="rank-indicator">1st</span>
+                </li>
+                <li class="prize-value">
+                  $10
+                  <span class="rank-indicator">2nd</span>
+                </li>
+                <li class="prize-value">
+                  $5
+                  <span class="rank-indicator">3rd</span>
+                </li>
+              </ul>
+
+              </div>
+              <div class="cash-reward-ranking-wrapper">
+                <%- include('./includes/ticker_cash'); -%>
+                <%- include('./includes/ranked_list_live_daily_flex'); -%>
+              </div>
+            </div>
+            <div class="screen-render-inner-right">
+              
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <div class="welcome-heading heading-stripe heading-stripe-brand">
+    <h1>EMAIL & POINTS <span class="h1-sub">HISTORY</span></h1>
+    <div class="stripe"></div>
+  </div>
+
+  <section class="email-points-history">
+    <div class="screen-render screen-render-full-width">
+    <div class="screen-render-inner">
+      <div class="row-headers">
+        <span class="row-headers-date">Date</span>
+        <span class="row-headers-divider"></span>
+        <span class="row-headers-subject">Email (subject)</span>
+        <span class="row-headers-status">Status</span>
+        <span class="row-headers-status">Points</span>
+      </div>
+      
+        <ul class="email-points-rows">
+        <% if (typeof email != 'undefined' && email.length > 0) {  
+          emails.forEach((email) => { %>
+
+            <% let active = true %>
+            <% if(email.orderNumber == 1) { %> 
+              <% active = false %>
+            <% } %>
+
+            <li class="email-points-rows-row">
+              <span class="email-row-date">
+                <%= helpers.showDate(email.createdAt) %>
+              </span> 
+              <span class="email-row-divider">::</span>
+              <span class="email-row-subject">
+                <%= email.subjectLine || email.plainContent %>
+              </span>
+
+              <span class="email-row-status">
+                <% if (!active) { %> 
+                  <img src="/images/time-icon.svg" alt="processing"> 
+                <%} else { %> 
+                  <img src="/images/confirmed-icon.svg" alt="confirmed"> 
+                <% } %>
+              </span>
+
+              <div class="points-rows-wrapper <% if (!active) { %> inactive <% } %>">
+                <% const pointsData = email.points.map(points => points.dataValues) %>
+                <ul class="points-rows">
+                <% pointsData.forEach(point => { %>
+                  <li class="points-rows-row reason-<%= point.reason %>">
+                    <strong><%= reasons[point.reason - 1].key %></strong> :: <%= point.pointsValue %>
+                    <% if (!active) { %> 
+                    <br> <span class="inactive-blurb">POINTS WILL BE ADDED WHEN EMAIL CONFIRMED</span> 
+                    <% } %>
+                  </li>                
+                  <% }); %>
+              </ul>
+              </div>
+            </li>
+        <% })} else { %>
+          <li>Emails that you have submitted will show up here when we receive them</li>
+        <% } %>
+        </ul>
+      
+    </div>
+  </div>
+  </section>
+
+  
+</div>
+
+
+<%- include('./includes/footer'); -%> 
+
+<script src="../clipboard/dist/clipboard.min.js"></script>
+
+<script>
+  $(function() {
+    console.log('loaded!');
+    let clipboard = new ClipboardJS('.unique-identifier-email');
+    clipboard.on('success', function(e) {
+      $('#copy-email').addClass('copied');
+    });
+  })
+</script>

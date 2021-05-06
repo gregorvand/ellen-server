@@ -1,4 +1,5 @@
 const Order = require('../models').Order;
+const Point = require('../models').Points;
 const Company = require('../models').Company;
 const pointsController = require('../controllers/points');
 const { Op } = require("sequelize");
@@ -60,13 +61,16 @@ module.exports = {
       return Order.findAll({
         where: {
           customerEmail: req.body.email
-        }
+        },
+        include: Company
       })
       .then((companies) => res.status(200).send(companies))
       .catch((error) => res.status(400).send(error));
     } else {
       return Order
-      .findAll()
+      .findAll({
+        include: Company
+      })
       .then((companies) => res.status(200).send(companies))
       .catch((error) => res.status(400).send(error));
     }

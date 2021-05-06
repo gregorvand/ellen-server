@@ -1,6 +1,5 @@
 const Point = require('../../models').Point;
 const { Op } = require("sequelize");
-const dateObjects = require('../../utils/setTimezone');
 
 // calculates the count of Point transactions for a given Point.reason
 async function calculatePointsFromReason(userId, pointsReason) {

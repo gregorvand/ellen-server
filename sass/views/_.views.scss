@@ -5,10 +5,14 @@ body {
 
 @import './index';
 @import './dashboard';
+@import './dashboardv2';
 @import './company';
 @import './earning';
 @import './admin';
 
+html {
+  font-size: 16px; //sets rem base
+}
 
 .text-highlight {
   background-color: $color-brand-highlight;

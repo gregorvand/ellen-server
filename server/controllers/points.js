@@ -29,7 +29,7 @@ module.exports = {
             .create({
               pointsValue: pointsValue,
               customerId: customerId,
-              orderId: orderIdentifier,
+              emailId: orderIdentifier,
               activated: activated || false,
               reason: reason || 1
             })
@@ -71,7 +71,7 @@ module.exports = {
         return Point
           .findOne({ where: {
             [Op.and] : [
-                {orderId: orderIdentifier}, {reason: reason}
+                {emailId: orderIdentifier}, {reason: reason}
               ]
             }
           })
@@ -82,7 +82,7 @@ module.exports = {
               return Point.create({
                 pointsValue: pointsValue,
                 customerId: customerId, 
-                orderId: orderIdentifier,
+                emailId: orderIdentifier,
                 activated: activated || false,
                 reason: reason || 1
               }).then(transaction => 
@@ -106,6 +106,8 @@ module.exports = {
   
     const date1 = startDate;
     const date2 = endDate;
+
+    console.log('WHATDATE', startDate, endDate);
     
     return Point
     .findAll({
@@ -118,6 +120,17 @@ module.exports = {
       group: ['User.id', 'Point.customerId'],
       order: [[sequelize.fn('sum', sequelize.col('pointsValue')), 'DESC']]
     })
+  },
+
+  listByOrder(req, res) {
+    return Point
+    .findAll({
+      where: {
+        [Op.and] : [
+          {customerId: req.body.userId}, {emailId: req.body.emailId}
+        ]
+      }
+    })
   }
 };
 
@@ -128,7 +141,7 @@ async function validateAllPointsTransactionsForOrder (orderIdLookup, validate = 
   return Point
     .findAll({
       where: {
-        orderId: orderIdLookup
+        emailId: orderIdLookup
       },
     })
     .then(pointsTransactions => {
@@ -137,7 +150,7 @@ async function validateAllPointsTransactionsForOrder (orderIdLookup, validate = 
             activated: validate
           }).then((points) => 
             console.log('updated points transaction', points.id)
-          )
+        )
     });
   })
 }

@@ -1,0 +1,30 @@
+.ticker {
+	display: flex;
+  width: 100%;
+  overflow: hidden;
+  background-color: $color-brand-highlight;
+
+	&:hover {
+		.ticker__list {
+			animation-play-state: paused;
+		}
+	}
+}
+
+.ticker__list {
+	display: flex;
+	animation: ticker 15s infinite linear;
+  margin: 10px 0;
+}
+.ticker__item {
+	margin-right: 20px;
+  width: 70px;
+}
+
+@-webkit-keyframes ticker {
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes ticker {
+	100% { transform: translateX(-100%); }
+}

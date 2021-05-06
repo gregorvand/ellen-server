@@ -1,0 +1,25 @@
+.heading-stripe {
+  width: 98%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto 10px 0;
+  
+
+  h1 {
+    flex-shrink: 1;
+    margin-right: 10%;
+  }
+
+  .stripe {
+    background-color: $color-brand-alternative-highlight;
+    flex: 1;
+    height: 10px;
+  }
+
+  &-brand {
+    .stripe {
+      background-color: $color-brand-highlight;
+    }
+  }
+}
