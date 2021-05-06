@@ -27,9 +27,10 @@
     h1 {
       font-weight: bold;
       line-height: 1.2;
+      font-size: rem-calc(40px);
 
       @include breakpoint(large up) {
-        font-size: rem-calc(40px);
+        font-size: rem-calc(44px);
       }
 
       @include breakpoint(xlarge up) {
@@ -101,10 +102,15 @@
 
     h1 { 
       width: 90%;
+      font-size: rem-calc(35px);
 
       @include breakpoint(large up) {
         font-size: rem-calc(35px);
       }
+     }
+
+     h4 {
+       font-size: rem-calc(30px);
      }
   }
 
