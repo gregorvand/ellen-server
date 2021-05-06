@@ -134,11 +134,11 @@ app.post('/users/register', async (req, res) => {
 });
 
 app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
-  renderDashboard(req, res);
+  renderDashboardv2(req, res);
 });
 
-app.get('/users/dashboardv2', checkNotAuthenticated, (req, res) => {
-  renderDashboardv2(req, res);
+app.get('/users/dashboardv1', checkNotAuthenticated, (req, res) => {
+  renderDashboard(req, res);
 });
 
 app.get('/users/logout',(req, res) => {
