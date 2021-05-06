@@ -8,13 +8,15 @@ var Sequelize = require('sequelize');
  * createTable "Companies", deps: []
  * createTable "Users", deps: []
  * createTable "Orders", deps: [Companies, Users]
+ * createTable "Points", deps: [Orders, Users]
+ * createTable "Winners", deps: [Users]
  *
  **/
 
 var info = {
     "revision": 1,
-    "name": "mega-migration",
-    "created": "2021-01-02T05:05:00.143Z",
+    "name": "core-migration-6-5-21",
+    "created": "2021-05-06T13:32:11.776Z",
     "comment": ""
 };
 
@@ -106,6 +108,10 @@ var migrationCommands = function(transaction) {
                         "field": "status",
                         "default": "pending"
                     },
+                    "identifier": {
+                        "type": Sequelize.STRING,
+                        "field": "identifier"
+                    },
                     "createdAt": {
                         "type": Sequelize.DATE,
                         "field": "createdAt",
@@ -135,19 +141,19 @@ var migrationCommands = function(transaction) {
                         "allowNull": false
                     },
                     "orderNumber": {
-                        "type": Sequelize.INTEGER,
+                        "type": Sequelize.BIGINT,
                         "field": "orderNumber",
                         "allowNull": false
                     },
                     "orderDate": {
-                        "type": Sequelize.STRING,
+                        "type": Sequelize.DATE,
                         "field": "orderDate",
-                        "allowNull": false
+                        "allowNull": true
                     },
                     "fromEmail": {
                         "type": Sequelize.STRING,
                         "field": "fromEmail",
-                        "allowNull": false
+                        "allowNull": true
                     },
                     "customerEmail": {
                         "type": Sequelize.STRING,
@@ -158,6 +164,11 @@ var migrationCommands = function(transaction) {
                         "type": Sequelize.TEXT,
                         "field": "plainContent",
                         "allowNull": false
+                    },
+                    "subjectLine": {
+                        "type": Sequelize.TEXT,
+                        "field": "subjectLine",
+                        "allowNull": true
                     },
                     "totalValue": {
                         "type": Sequelize.INTEGER,
@@ -204,6 +215,139 @@ var migrationCommands = function(transaction) {
                     "transaction": transaction
                 }
             ]
+        },
+        {
+            fn: "createTable",
+            params: [
+                "Points",
+                {
+                    "id": {
+                        "type": Sequelize.INTEGER,
+                        "field": "id",
+                        "autoIncrement": true,
+                        "primaryKey": true,
+                        "allowNull": false
+                    },
+                    "pointsValue": {
+                        "type": Sequelize.INTEGER,
+                        "field": "pointsValue",
+                        "allowNull": false
+                    },
+                    "activated": {
+                        "type": Sequelize.BOOLEAN,
+                        "field": "activated",
+                        "defaultValue": false,
+                        "allowNull": false
+                    },
+                    "reason": {
+                        "type": Sequelize.INTEGER,
+                        "field": "reason",
+                        "defaultValue": 1,
+                        "allowNull": false
+                    },
+                    "createdAt": {
+                        "type": Sequelize.DATE,
+                        "field": "createdAt",
+                        "allowNull": false
+                    },
+                    "updatedAt": {
+                        "type": Sequelize.DATE,
+                        "field": "updatedAt",
+                        "allowNull": false
+                    },
+                    "emailId": {
+                        "type": Sequelize.INTEGER,
+                        "field": "emailId",
+                        "onUpdate": "CASCADE",
+                        "onDelete": "SET NULL",
+                        "references": {
+                            "model": "Orders",
+                            "key": "id"
+                        },
+                        "allowNull": true
+                    },
+                    "customerId": {
+                        "type": Sequelize.INTEGER,
+                        "field": "customerId",
+                        "onUpdate": "CASCADE",
+                        "onDelete": "CASCADE",
+                        "references": {
+                            "model": "Users",
+                            "key": "id"
+                        },
+                        "allowNull": true
+                    }
+                },
+                {
+                    "transaction": transaction
+                }
+            ]
+        },
+        {
+            fn: "createTable",
+            params: [
+                "Winners",
+                {
+                    "id": {
+                        "type": Sequelize.INTEGER,
+                        "field": "id",
+                        "autoIncrement": true,
+                        "primaryKey": true,
+                        "allowNull": false
+                    },
+                    "endDate": {
+                        "type": Sequelize.DATE,
+                        "field": "endDate",
+                        "allowNull": false
+                    },
+                    "prizeType": {
+                        "type": Sequelize.STRING,
+                        "field": "prizeType",
+                        "allowNull": false
+                    },
+                    "prizeValue": {
+                        "type": Sequelize.INTEGER,
+                        "field": "prizeValue",
+                        "allowNull": true
+                    },
+                    "prizePosition": {
+                        "type": Sequelize.INTEGER,
+                        "field": "prizePosition",
+                        "defaultValue": 0,
+                        "allowNull": false
+                    },
+                    "pointsAtWin": {
+                        "type": Sequelize.INTEGER,
+                        "field": "pointsAtWin",
+                        "defaultValue": 0,
+                        "allowNull": false
+                    },
+                    "createdAt": {
+                        "type": Sequelize.DATE,
+                        "field": "createdAt",
+                        "allowNull": false
+                    },
+                    "updatedAt": {
+                        "type": Sequelize.DATE,
+                        "field": "updatedAt",
+                        "allowNull": false
+                    },
+                    "customerId": {
+                        "type": Sequelize.INTEGER,
+                        "field": "customerId",
+                        "onUpdate": "CASCADE",
+                        "onDelete": "CASCADE",
+                        "references": {
+                            "model": "Users",
+                            "key": "id"
+                        },
+                        "allowNull": true
+                    }
+                },
+                {
+                    "transaction": transaction
+                }
+            ]
         }
     ];
 };
@@ -222,7 +366,19 @@ var rollbackCommands = function(transaction) {
         },
         {
             fn: "dropTable",
+            params: ["Points", {
+                transaction: transaction
+            }]
+        },
+        {
+            fn: "dropTable",
             params: ["Users", {
+                transaction: transaction
+            }]
+        },
+        {
+            fn: "dropTable",
+            params: ["Winners", {
                 transaction: transaction
             }]
         }
