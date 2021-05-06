@@ -3,6 +3,9 @@
   $dashboard-radius: 20px;
   padding: 0;
 
+  // toggle for now
+  .ticker.top { display: none; }
+
   > nav {
     padding: 0 15px;
   }
@@ -327,6 +330,11 @@
     .ticker__item {
       width: 200px;
       @extend %font-ticker;
+
+      > strong {
+        @extend %font-ticker-bold;
+        font-style: normal;
+      }
     }
   }
 
