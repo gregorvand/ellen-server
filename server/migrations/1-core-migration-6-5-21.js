@@ -15,8 +15,8 @@ var Sequelize = require('sequelize');
 
 var info = {
     "revision": 1,
-    "name": "next-step-points",
-    "created": "2021-05-06T13:06:05.717Z",
+    "name": "core-migration-6-5-21",
+    "created": "2021-05-06T13:32:11.776Z",
     "comment": ""
 };
 
