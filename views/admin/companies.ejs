@@ -1,16 +1,22 @@
-<%- include('../includes/header'); -%>
-<h2>Update Company Info</h2>
+<%- include('../includes/header', {view: 'admin'}); -%>
+<h5>Update Company Info</h5>
 <section style="text-align: left;">
-
-<% if (typeof companies != 'undefined') {  
-  companies.forEach((company, index) => { %>
-      <span class="orders-by-company-list-date">
+<table class="admin-companies">
+  <% if (typeof companies != 'undefined') {  
+    companies.forEach((company, index) => { %>
+      <tr>
         <form class="internalCompanyUpdate" action="" data-company-id="<%= company.id %>">
-          <input type="text" placeholder="<%= company.nameIdentifier %>"> &nbsp; <a href="/companies/<%= company.id %>">View chart (<%= company.emailIdentifier %>)</a>
+          <td>
+            <input type="text" placeholder="<%= company.nameIdentifier %>">
+          </td>
+          <td>
+          <a href="/companies/<%= company.id %>">View chart (<%= company.emailIdentifier %>)</a>
+        </td>
           <input type="hidden">
         </form>
-      </span> 
-<% })} %>
+        </tr>
+  <% })} %>
+</table>
 </section>
 <script src="../cash-dom/dist/cash.min.js"></script>
 <script src="../axios/dist/axios.min.js"></script>

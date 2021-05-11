@@ -60,3 +60,36 @@ nav {
     }
   }
 }
+
+.admin-menu-wrapper {
+  flex-direction: column;
+  height: 100px;
+  background-color: $color-brand-highlight;
+  margin-bottom: 20px;
+
+  @include breakpoint(medium up) {
+    height: 50px;
+    flex-direction: row;
+  }
+}
+
+.admin-menu {
+  display: flex;
+  margin: 0 auto;
+
+  &, li { list-style: none; }
+
+  li {
+    margin: 0 5px;
+  }
+
+  &-header {
+    flex-basis: 50%;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+  }
+}
