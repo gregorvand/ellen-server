@@ -33,7 +33,16 @@ module.exports = (app) => {
   app.get('/api/points/rankings/daily', function(req, res) {
     pointsController.dailyRankedList(req, res)
     .then(rankedUsers => {
-      res.status(200).send(rankedUsers)
+      console.log(rankedUsers);
+      res.send(rankedUsers)
+    })
+    .catch((e) => { res.send(e) });
+  });
+
+  app.put('/api/points/daily/user', function(req, res) {
+    pointsController.returnDailyPointsByUser(req, res)
+    .then(points => {
+      res.status(200).send(points);
     })
     .catch((e) => { res.send(e) });
   });

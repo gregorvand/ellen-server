@@ -131,6 +131,25 @@ module.exports = {
         ]
       }
     })
+  },
+
+  returnDailyPointsByUser(req, res) {
+    date1 = dateObjects.startofTodayBySetTimezone;
+    date2 = dateObjects.endofTodayBySetTimezone; 
+
+    return Point
+    .findAll({
+      where: {
+        [Op.and] : [
+          {customerId: req.body.userId}, 
+          {activated: true},
+          {createdAt: {[Op.between] : [date1 , date2]}}
+        ]
+      },
+      attributes: [
+        [sequelize.fn('SUM', sequelize.col('Point.pointsValue')), 'totalDailyPoints']
+      ],
+    })
   }
 };
 

@@ -46,8 +46,8 @@
         <div class="screen-render-inner">
             <h2 class="alternative">Your points TODAY</h2>
             <p class="subparagraph">some points may not be added until email data is verified</p>
-            <span class="points-score-readout">
-              <%= pointsCount %>
+            <span class="points-score-readout daily">
+              <img src="/images/ellen-loader.gif" alt="loading">
             </span>
             <p>
               <strong>Total Lifetime Points</strong>
@@ -182,6 +182,7 @@
 <%- include('./includes/footer'); -%> 
 
 <script src="../clipboard/dist/clipboard.min.js"></script>
+<script src="../axios/dist/axios.min.js"></script>
 
 <script>
   $(function() {
@@ -192,3 +193,19 @@
     });
   })
 </script>
+
+<script>
+  $(function() {
+    axios({
+      method: 'put',
+      url: `/api/points/daily/user`,
+      data: {
+        userId: <%= user.id %>
+      }}).then(function (returnedData) {
+          console.log(returnedData);
+          $('.points-score-readout.daily').html(returnedData.data[0].totalDailyPoints);
+      }).catch(function (error) {
+        console.log(error);
+      });
+  });
+</script> 
