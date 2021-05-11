@@ -1,5 +1,6 @@
 const Point = require('../../models').Point;
 const { Op } = require("sequelize");
+const dateObjects = require('../../utils/setTimezone'); // timezone adjusted instance
 
 // calculates the count of Point transactions for a given Point.reason
 async function calculatePointsFromReason(userId, pointsReason) {
@@ -29,8 +30,8 @@ async function calculateAllPoints(userId) {
 }
 
 async function calculateAllPointsWithTimeframe(userId, earlierDate, laterDate) {
-  date1 = earlierDate;
-  date2 = laterDate;
+  const date1 = dateObjects.startofTodayBySetTimezone;
+  const date2 = dateObjects.endofTodayBySetTimezone;  
 
   try {
     if (date1 && date2 !== undefined) {
