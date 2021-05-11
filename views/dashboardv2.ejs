@@ -196,7 +196,8 @@
 
 <script>
   $(function() {
-    axios({
+    setTimeout(function() { // adds 'loading time' to avoid flash
+      axios({
       method: 'put',
       url: `/api/points/daily/user`,
       data: {
@@ -207,4 +208,5 @@
         console.error(error);
       });
   });
+}, 2500);
 </script> 
