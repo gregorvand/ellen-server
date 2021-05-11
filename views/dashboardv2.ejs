@@ -202,10 +202,9 @@
       data: {
         userId: <%= user.id %>
       }}).then(function (returnedData) {
-          console.log(returnedData);
-          $('.points-score-readout.daily').html(returnedData.data[0].totalDailyPoints);
+        $('.points-score-readout.daily').html(returnedData.data[0].totalDailyPoints);
       }).catch(function (error) {
-        console.log(error);
+        console.error(error);
       });
   });
 </script> 
