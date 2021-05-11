@@ -65,7 +65,6 @@ module.exports = {
     },
     upsert(pointsValue, customerId, activated, reason, orderIdentifier) {
     // upserts if finds that orderId already with activated status
-    console.log('poiiiints', pointsValue)
     if (pointsValue !== '0') {
       try {
         return Point
@@ -99,15 +98,16 @@ module.exports = {
     }
   },
 
-  dailyRankedList(startDate = dateObjects.startofTodayBySetTimezone, endDate = dateObjects.endofTodayBySetTimezone) {
+  dailyRankedList(
+      startDate = dateObjects.startofTodayBySetTimezone, 
+      endDate = dateObjects.endofTodayBySetTimezone
+    ) {
     // find all points in the last day
     // summed by user
     // returned in order of most first
   
     const date1 = startDate;
     const date2 = endDate;
-
-    console.log('WHATDATE', startDate, endDate);
     
     return Point
     .findAll({

@@ -29,9 +29,17 @@ async function calculateAllPoints(userId) {
   })
 }
 
-async function calculateAllPointsWithTimeframe(userId, earlierDate, laterDate) {
-  const date1 = dateObjects.startofTodayBySetTimezone;
-  const date2 = dateObjects.endofTodayBySetTimezone;  
+async function calculateAllPointsWithTimeframe(userId, today = true, earlierDate, laterDate) {
+  let date1 = null;
+  let date2 = null;
+  
+  if (today) {
+    date1 = dateObjects.startofTodayBySetTimezone;
+    date2 = dateObjects.endofTodayBySetTimezone; 
+  } else {
+    date1 = earlierDate;
+    date2 = laterDate;
+  }
 
   try {
     if (date1 && date2 !== undefined) {
