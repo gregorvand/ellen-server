@@ -99,7 +99,10 @@ module.exports = {
     }
   },
 
-  dailyRankedList(startDate = dateObjects.startofTodayBySetTimezone, endDate = dateObjects.endofTodayBySetTimezone) {
+  dailyRankedList(
+      startDate = dateObjects.startofTodayBySetTimezone, 
+      endDate = dateObjects.endofTodayBySetTimezone
+    ) {
     // find all points in the last day
     // summed by user
     // returned in order of most first
