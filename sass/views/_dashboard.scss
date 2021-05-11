@@ -1,6 +1,21 @@
 .dashboard-wrapper {
   max-width: 100%;
   overflow-x: hidden;
+
+  h2 {
+    font-weight: bolder;
+    margin-bottom: 0;
+    font-size: rem-calc(40px);
+  }
+
+  h5 {
+    font-size: 14px;
+    margin-bottom: 5px;
+
+    @include breakpoint(large up) {
+      font-size: 18px;
+    }
+  }
 }
 
 .dashboard-top-info {
@@ -82,13 +97,8 @@
     flex-direction: row;
   }
 
-  h2 {
-    font-weight: bolder;
-    margin-bottom: 0;
-  }
-
   h4 {
-    font-size: rem-calc(25px);
+    font-size: rem-calc(22px);
     margin-bottom: 5px;
   }
 
@@ -244,7 +254,11 @@
     }
   }
 
-  .email-record {
+  .email-record { 
+    > h4 {
+      font-size: rem-calc(18px);
+    }
+
     .orders-by-company {
       &-list-divider {
         flex-basis: 10%;
@@ -361,15 +375,6 @@ ul.quick-data {
     .screen-render-inner-alternative {
       flex-direction: column;
       padding: 10px 30px;
-    }
-  }
-
-  h5 {
-    font-size: 14px;
-    margin-bottom: 5px;
-
-    @include breakpoint(large up) {
-      font-size: 18px;
     }
   }
 
