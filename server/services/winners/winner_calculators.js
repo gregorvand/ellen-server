@@ -10,8 +10,13 @@ async function calculateDailyWinners(req, res) {
   // need to create a Promise-based function that captures 
   // Get current rankings
   const endDate = req.body.endDate;
-  const convertedEndDate = dateObjects.dayJs(endDate).tz().toISOString();
-  const startDateDefault = dateObjects.dayJs(endDate).tz().add('-24', 'hours').toISOString();
+
+  // convert datepicker date to PST-based ISO
+  const endDateFromTz = dateObjects.dayJs.tz(endDate, "America/Los_Angeles");
+
+  // use above converted date start / end times for winners
+  const convertedEndDate = dateObjects.dayJs(endDateFromTz).endOf('day').toISOString();
+  const startDateDefault = dateObjects.dayJs(endDateFromTz).startOf('day').toISOString();
 
   pointsController.dailyRankedList(startDateDefault, convertedEndDate)
     .then((results) => {
@@ -20,7 +25,6 @@ async function calculateDailyWinners(req, res) {
       console.log('LENGTH', records.length);
 
       // loop of promises. return after all resolved;
-
       let promises = [];
       for (let i = 0; i < records.length; i++) {
         promises.push(new Promise((resolve, reject) => {
