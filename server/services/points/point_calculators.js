@@ -46,10 +46,9 @@ async function calculateAllPointsWithTimeframe(userId, today = true, earlierDate
       return Point.sum('pointsValue', {
         where: {
           [Op.and] : [
-            {customerId: userId}, {activated: true},
-            {
-              createdAt: {[Op.between] : [date1 , date2]}
-            }
+            {customerId: userId},
+            {activated: true},
+            {createdAt: {[Op.between] : [date1 , date2]}}
           ],
         },
       })

@@ -50,6 +50,14 @@
     @extend %big-number;
     width: 100%;
     display: flex;
+    min-height: 50px;
+    align-items: center;
+
+    > img {
+      $size: 30px;
+      width: $size;
+      height: $size;
+    }
   }
 
   .dashboard-components-wrapper {
