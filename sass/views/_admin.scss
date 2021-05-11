@@ -3,4 +3,27 @@ body.admin {
     display: flex;
     justify-content: center;
   }
+
+  .admin-companies {
+    margin: 0 auto;
+
+    td { 
+      padding: 5px;
+      border-bottom: 0;
+      height: 50px;
+      width: 100%;
+
+      @include breakpoint(medium up) {
+        width: 50%;
+      }
+
+      > input { 
+        width: 100%;
+      }
+
+      @include breakpoint(small only) {
+        float: left;
+      }
+    }
+  }
 }

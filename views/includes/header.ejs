@@ -44,6 +44,16 @@ let bodyClass = '';
 
 </nav>
 
+<% if (bodyClass == 'admin') { %>
+  <nav class="admin-menu-wrapper">
+  <h6 class="admin-menu-header">Admin menu</h6>
+  <ul class="admin-menu">
+    <li><a class="login-nav" href="/admin/companies">Company Name admin</a></li>
+    <li><a class="login-nav" href="/admin/user-rankings">Rankings / Winners</a></li>
+    <li><a class="login-nav" href="https://app.forestadmin.com/Ellen%20Production" target="_blank">Go to ForestAdmin (alpha)</a></li>
+  </ul>
+<% } %>
+</nav>
 <script>
   $('.login-nav').on('touch click', function(e) {
     $(e.target).addClass('fast-blink');

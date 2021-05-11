@@ -72,7 +72,9 @@ module.exports = {
 
   internalList(req, res) {
     return Company
-      .findAll()
+      .findAll({ order: [
+        ['nameIdentifier', 'ASC'],
+      ]})
       .then(companies => companies)
       .catch((error) => res.status(400).send(error))
   }
