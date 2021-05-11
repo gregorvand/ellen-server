@@ -65,7 +65,6 @@ module.exports = {
     },
     upsert(pointsValue, customerId, activated, reason, orderIdentifier) {
     // upserts if finds that orderId already with activated status
-    console.log('poiiiints', pointsValue)
     if (pointsValue !== '0') {
       try {
         return Point
@@ -109,8 +108,6 @@ module.exports = {
   
     const date1 = startDate;
     const date2 = endDate;
-
-    console.log('WHATDATE', startDate, endDate);
     
     return Point
     .findAll({

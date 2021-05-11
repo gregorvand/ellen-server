@@ -22,7 +22,7 @@ async function calculateDailyWinners(req, res) {
     .then((results) => {
       // map main aggregated data
       const records = results.map(result => result.dataValues);
-      console.log('LENGTH', records.length);
+      console.log('WINNER COUNT', records.length);
 
       // loop of promises. return after all resolved;
       let promises = [];
