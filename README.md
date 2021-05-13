@@ -33,6 +33,24 @@ Those steps in the link above were captured at commit time as:
 1. Run your migration through the normal sequelize-cli: $ yarn sequelize db:migrate.
 Repeat 7-10 as necessary
 
+> KNOWN GOTCHA - renaming a column will remove and add a column, *removing* the data.
+
+Renaming will require something like:
+
+```
+{
+    fn: "renameColumn",
+    params: [
+        "table_name",
+        "column_name_before",
+        "column_name_after",
+        {
+            transaction: transaction
+        }
+    ]
+}
+```
+
 ---
 
 Contact [gregorvand](https://github.com/gregorvand) for help with anything.
