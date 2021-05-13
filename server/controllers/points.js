@@ -134,8 +134,12 @@ module.exports = {
   },
 
   returnDailyPointsByUser(req, res) {
-    date1 = dateObjects.startofTodayBySetTimezone;
-    date2 = dateObjects.endofTodayBySetTimezone; 
+    const today = dateObjects.date;
+    console.log('TODAY IS', today);
+    let startOfToday = today.startOf('day');
+
+    const date1 = startOfToday.toISOString();
+    const date2 = today.endOf('day').toISOString();
 
     return Point
     .findAll({
