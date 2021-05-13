@@ -115,6 +115,7 @@ module.exports = (app) => {
   });
 
   app.post('/api/users', usersController.create);
+  app.put('/api/users/update/username/:id', usersController.update);
   app.get('/api/users', usersController.list);
   app.post('/api/users/subscribe', serviceKlaviyo.addSubscribersToList);
 

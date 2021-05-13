@@ -137,6 +137,10 @@ app.get('/users/dashboard', checkNotAuthenticated, (req, res) => {
   renderDashboardv2(req, res);
 });
 
+app.get('/users/profile', checkNotAuthenticated, (req, res) => {
+  renderDashboardv2(req, res, 'user_profile');
+});
+
 app.get('/users/dashboardv1', checkNotAuthenticated, (req, res) => {
   renderDashboard(req, res);
 });

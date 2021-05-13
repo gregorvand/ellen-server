@@ -1,0 +1,83 @@
+.user-profile {
+  .profile-intro {
+    $dashboard-silver: #E7E7E7;
+    $dashboard-radius: 20px;
+
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    margin-bottom: 20px;
+    border: solid $dashboard-silver 3px;
+    border-radius: $dashboard-radius;
+    padding: 20px;
+
+    @include breakpoint(medium up) {
+      flex-direction: row;
+      min-height: 280px;
+      justify-content: space-between;
+    }
+
+    &-welcome {
+      @include breakpoint(small only) {
+        margin-bottom: 40px;
+      }
+    }
+
+    &-points-summary {
+
+      .screen-render {
+        width: 100%;
+        height: auto;
+        
+        @include breakpoint(medium up) {
+          height: auto;
+        }
+        
+        &-inner {
+          background-color: rgba(255, 255, 255, 0.91);
+          border: 0;
+          padding: 15px;
+          overflow: hidden;
+        }
+
+        &:after {
+          background-size: 0.8%;
+        }
+      }
+    }
+  }
+
+  .unique-identifier {
+
+    &-wrapper {
+      align-items: center;
+      .username-form-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+  
+      form, input {
+         margin: 0;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+      }
+
+      form {
+        @include breakpoint(small only) {
+          flex-direction: column;
+        }
+      }
+
+      input[type=submit] {
+        margin-left: 10px;
+      }
+    }
+
+    &-email {
+      justify-content: center;
+      padding: 20px;
+    }
+  }
+}

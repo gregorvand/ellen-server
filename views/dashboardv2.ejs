@@ -32,10 +32,13 @@
         <div class="unique-identifier-email" data-clipboard-target="#copy-email">
           <img src="/images/email-icon.svg" alt="ellen insights logo">
           <span id="copy-email" class="unique-identifier-email-copy">
-            <%= user.identifier %>@<%= email %>
+            <%=user.username %>-<%= user.identifier %>@<%= email %>
           </span>
         </div>
       </div>
+      <br>
+      <p>Your username is: <strong><%=user.username %> </strong><br>
+        But you can change it <a href="/users/profile">here</a>!</p>
     </div>
     <div class="dashboard-intro-points-summary">
       <div class="welcome-heading heading-stripe">

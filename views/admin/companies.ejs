@@ -1,30 +1,29 @@
 <%- include('../includes/header', {view: 'admin'}); -%>
 <h5>Update Company Info</h5>
 <section style="text-align: left;">
-<table class="admin-companies">
   <% if (typeof companies != 'undefined') {  
     companies.forEach((company, index) => { %>
-      <tr>
+      <div>
         <form class="internalCompanyUpdate" action="" data-company-id="<%= company.id %>">
-          <td>
-            <input type="text" placeholder="<%= company.nameIdentifier %>">
-          </td>
-          <td>
+          <div>
+            <input id="companyId" type="text" placeholder="<%= company.nameIdentifier %>">
+          </div>
+          <div>
           <a href="/companies/<%= company.id %>">View chart (<%= company.emailIdentifier %>)</a>
-        </td>
+          </td>
           <input type="hidden">
         </form>
-        </tr>
+        </div>
   <% })} %>
-</table>
 </section>
 <script src="../cash-dom/dist/cash.min.js"></script>
 <script src="../axios/dist/axios.min.js"></script>
 <script>
   $('.internalCompanyUpdate').on('submit', function(e) {
     e.preventDefault();
-    console.log($(e.target).data('company-id'));
-    const inputName = $(e.target).find('input[type=text]').val();
+    console.log('WHAAT', $(e.target).data('company-id'));
+    const inputName = $(e.target).find('#companyId').val();
+    console.log(inputName);
 
     axios({
       method: 'post',

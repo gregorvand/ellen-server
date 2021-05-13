@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models').User;
-const makeId = require('.././utils/makeId').makeEmailId;
+const userGenerators = require('.././utils/makeId');
 
 async function registerForm (req, res) {
   let { firstName, lastName, email, password, password2 } = req.body;
@@ -34,7 +34,8 @@ async function registerForm (req, res) {
     let hashedPassword = await bcrypt.hash(password, 15);
     console.log('hashed happened..', hashedPassword);
 
-    let emailIdentifier = makeId(16);
+    const emailIdentifier = userGenerators.makeEmailId(6);
+    const userName = userGenerators.makeUsername();
 
     // TODO: change this to a keyup function to do lookup while user entering password
     // wait on getting result from DB lookup with entered email
@@ -46,7 +47,7 @@ async function registerForm (req, res) {
       console.log(`already found a user called ${currentUser.firstName} ${currentUser.lastName}`)
     } else {
       console.log('new user!');
-      createUserFromRegister(firstName, lastName, email, hashedPassword, emailIdentifier)
+      createUserFromRegister(firstName, lastName, email, hashedPassword, emailIdentifier, userName)
       .then(user => {
         console.log(user);
         req.flash('success_msg', "woohoo!"); // keep going from here
@@ -68,14 +69,15 @@ async function checkDbForUser (lookup) {
       .catch((error) => console.error(error));
 }
 
-async function createUserFromRegister (firstName, lastName, email, hashedPassword, emailIdentifier) {
+async function createUserFromRegister (firstName, lastName, email, hashedPassword, emailIdentifier, userName) {
   return User
     .create({
       firstName: firstName,
       lastName: lastName,
       email: email,
       password: hashedPassword,
-      identifier: emailIdentifier
+      identifier: emailIdentifier,
+      username: userName
     });
 }
 

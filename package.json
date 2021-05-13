@@ -49,7 +49,8 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.6.2",
     "sequelize-auto-migrations": "github:scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba",
-    "socket.io": "^3.1.0"
+    "socket.io": "^3.1.0",
+    "unique-names-generator": "^4.5.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.6",
