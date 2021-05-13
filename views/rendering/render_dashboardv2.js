@@ -8,7 +8,7 @@ const pointsServiceCalculator = require('../../server/services/points/point_calc
 const constantsArray = require('../../server/utils/constants');
 
 
-const renderDashboardv2 = function(req, res) {
+const renderDashboardv2 = function(req, res, view = "dashboardv2") {
 
   const pointsByUserPromise = getPointsByUser(req.user.id).then(returnedPoints => {
     userPoints = returnedPoints;
@@ -27,7 +27,7 @@ const renderDashboardv2 = function(req, res) {
   })
 
   Promise.all([pointsByUserPromise, totalAllPointsPromise, rankedUserPromise, latestEmailsPromise]).then(() => {
-    res.render("dashboardv2", { 
+    res.render(view, { 
       user: req.user,
       points: userPoints,
       totalPoints: totalPoints,

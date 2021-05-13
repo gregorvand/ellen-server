@@ -1,0 +1,70 @@
+<%- include('./includes/header', {view: 'dashboardv2 user-profile'}); -%>
+<% const email = helpers.getInboundEmailAddress() %>
+<% helpers.identifyKlaviyoUser(currentUser) %>
+
+<%- include('./includes/ticker'); -%>
+
+<section class="dashboard-top-info">  
+  <% if (session.passport && session.passport.user) { %>
+  <div>
+    <strong>
+        <%= user.email %>
+    </strong>
+    <a class="logout-nav" href="/users/logout">Logout</a>
+  </div>
+  <% } %>
+</section>
+
+<div class="dashboard«\-components-wrapper">
+  <section class="profile-intro"> 
+    <div class="profile-intro-welcome">
+      <h1 class="profile-intro-welcome-heading">
+        <span class="heading-soft"> 
+          Hey, <%= user.firstName %> 
+        </span>
+        <br>
+        Your user profile
+      </h1>
+      <p class="send-blurb">
+        Change your username below. This will be used to identify you on our leaderboards, and forms part of your unique email address.
+      </p>
+      <div class="unique-identifier-wrapper">
+        <div class="unique-identifier-email username">
+          <img src="/images/email-icon.svg" alt="ellen insights logo">
+          <div class="username-form-wrapper">
+            <form action="" class="update-username" data-user-id="<%= user.id %>">
+              <input type="text" id="username" value="<%=user.username %>">-<%= user.identifier %>@<%= email %>
+              <input type="submit">
+            </form>
+          </div>
+        </div>
+      </div>
+  </section>
+</div>
+
+
+<%- include('./includes/footer'); -%> 
+
+<script src="../cash-dom/dist/cash.min.js"></script>
+<script src="../axios/dist/axios.min.js"></script>
+<script>
+  $('.update-username').on('submit', function(e) {
+    const userNameField = $(e.target).find('#username');
+    e.preventDefault();
+    const inputName = userNameField.val();
+    console.log(inputName);
+
+    axios({
+      method: 'put',
+      url: `/api/users/update/username/${$(e.target).data('user-id')}`,
+      data: {
+        username: inputName
+      }}).then(function (response) {
+          userNameField.val('');
+          userNameField.attr('placeholder', inputName);
+         console.log(response);
+      }).catch(function (error) {
+        console.log(error);
+      });
+  });
+</script> 

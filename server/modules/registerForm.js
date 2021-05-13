@@ -34,7 +34,7 @@ async function registerForm (req, res) {
     let hashedPassword = await bcrypt.hash(password, 15);
     console.log('hashed happened..', hashedPassword);
 
-    const emailIdentifier = userGenerators.makeEmailId(16);
+    const emailIdentifier = userGenerators.makeEmailId(6);
     const userName = userGenerators.makeUsername();
 
     // TODO: change this to a keyup function to do lookup while user entering password
