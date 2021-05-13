@@ -203,7 +203,9 @@
       data: {
         userId: <%= user.id %>
       }}).then(function (returnedData) {
-        $('.points-score-readout.daily').html(returnedData.data[0].totalDailyPoints);
+        const totalPoints = returnedData.data[0].totalDailyPoints;
+        const pointsReadout = totalPoints == null ? '0' : totalPoints;
+        $('.points-score-readout.daily').html(pointsReadout);
       }).catch(function (error) {
         console.error(error);
       });
