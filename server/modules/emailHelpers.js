@@ -4,6 +4,7 @@ const cheerio = require('cheerio'); // html parser, jquery-like syntax
 const dayjs = require('dayjs');
 const customParseFormat = require('dayjs/plugin/customParseFormat');
 const constants = require('../utils/constants');
+const { Op } = require("sequelize");
 
 const companiesController = require('../controllers/companies');
 
@@ -85,16 +86,13 @@ const companiesController = require('../controllers/companies');
         }
 
         try {
-          console.log(fields);
-          console.log('files?', files);
           resolve(fields);
-
           // response header here, as it was firing too early when 
           // left in router (and fields did not get handled)
           res.writeHead(200, {'content-type': 'text/plain'})
           res.end('Message Received. Thanks!\r\n');
         } catch(error) {
-          reject(console.log('crap', error));
+          reject(console.log(error));
         }
       });
     });
@@ -126,13 +124,22 @@ const companiesController = require('../controllers/companies');
 
     console.log('envelope', envelopeFrom);
     const identiferStringArray = envelopeTo.split('@'); 
+    const joinedIdentifier = identiferStringArray[0].split('-') || '';
     // find a customer by email
     let customer = await User.findOne({ where: { email: envelopeFrom } });
 
-    console.log('so far...', customer);
+    console.log('so far...', customer, joinedIdentifier);
+    console.log('IDENTIFIER', identiferStringArray);
     
+    let customerByIdentifer = await User.findOne({ 
+    where: {
+      [Op.and]: [
+        { username: joinedIdentifier[0] },
+        { identifier: joinedIdentifier[1] }
+      ]
+    }});
     // or by their identifier (inbound email address)
-    let customerByIdentifer = await User.findOne({ where: { identifier: identiferStringArray[0] } });
+
     
     try {
       if (customerByIdentifer) {

@@ -1,5 +1,4 @@
 const Order = require('../models').Order;
-const Point = require('../models').Points;
 const Company = require('../models').Company;
 const pointsController = require('../controllers/points');
 const { Op } = require("sequelize");

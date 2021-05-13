@@ -11,7 +11,9 @@ function makeEmailId(length) {
 const { uniqueNamesGenerator, adjectives, animals } = require('unique-names-generator');
 
 function makeUsername() {
-  return uniqueNamesGenerator({ dictionaries: [adjectives, animals] }); // big_red_donkey
+  return uniqueNamesGenerator({ 
+    dictionaries: [adjectives, animals],
+  }); // big_red_donkey
 }
 
 module.exports.makeEmailId = makeEmailId;
