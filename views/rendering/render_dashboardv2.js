@@ -5,9 +5,6 @@ const dashboardHelpers = require('../../views/helpers/dashboard_helpers');
 const rankedUserHelpers = require('../../views/helpers/ranked_user_helper');
 
 const pointsServiceCalculator = require('../../server/services/points/point_calculators');
-const Op = require('sequelize').Op;
-const dateObjects = require('../../server/utils/setTimezone'); // timezone adjusted instance
-
 const constantsArray = require('../../server/utils/constants');
 
 
@@ -16,14 +13,6 @@ const renderDashboardv2 = function(req, res) {
   const pointsByUserPromise = getPointsByUser(req.user.id).then(returnedPoints => {
     userPoints = returnedPoints;
   })
-
-  const date1 = dateObjects.startofTodayBySetTimezone;
-  const date2 = dateObjects.endofTodayBySetTimezone;
-  
-  const pointsTodayPromise = pointsServiceCalculator.calculateAllPointsWithTimeframe(req.user.id, date1, date2).then(returnedPoints => {
-    console.log('TOTAL TODAY', returnedPoints);
-    pointsToday = returnedPoints;
-  });
 
   const totalAllPointsPromise = pointsServiceCalculator.calculateAllPoints(req.user.id).then(returnedTotal => {
     totalPoints = returnedTotal
@@ -37,11 +26,10 @@ const renderDashboardv2 = function(req, res) {
     userEmails = latestEmails;
   })
 
-  Promise.all([pointsByUserPromise, pointsTodayPromise, totalAllPointsPromise, rankedUserPromise, latestEmailsPromise]).then(() => {
+  Promise.all([pointsByUserPromise, totalAllPointsPromise, rankedUserPromise, latestEmailsPromise]).then(() => {
     res.render("dashboardv2", { 
       user: req.user,
       points: userPoints,
-      pointsCount: pointsToday,
       totalPoints: totalPoints,
       helpers: dashboardHelpers,
       rankedUserList: rankedList,
