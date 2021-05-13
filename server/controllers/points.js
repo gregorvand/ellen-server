@@ -2,7 +2,7 @@ const Point = require('../models').Point;
 const User = require('../models').User;
 const { Op } = require("sequelize");
 const sequelize = require("sequelize");
-const dateObjects = require('../utils/setTimezone');
+const Today = require('../utils/getToday');
 
 module.exports = {
   create(req, res) {
@@ -98,16 +98,13 @@ module.exports = {
     }
   },
 
-  dailyRankedList(
-      startDate = dateObjects.startofTodayBySetTimezone, 
-      endDate = dateObjects.endofTodayBySetTimezone
-    ) {
-    // find all points in the last day
+  dailyRankedList(startTime, endTime) {
+    // find all points in by a specific day
     // summed by user
     // returned in order of most first
-  
-    const date1 = startDate;
-    const date2 = endDate;
+    const today = new Date();
+    date1 = startTime || new Today(today).startOfToday();
+    date2 = endTime || new Today(today).endOfToday();
     
     return Point
     .findAll({
@@ -134,8 +131,9 @@ module.exports = {
   },
 
   returnDailyPointsByUser(req, res) {
-    date1 = dateObjects.startofTodayBySetTimezone;
-    date2 = dateObjects.endofTodayBySetTimezone; 
+    let today = new Date();
+    const date1 = new Today(today).startOfToday();
+    const date2 = new Today(today).endOfToday();
 
     return Point
     .findAll({
