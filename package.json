@@ -55,6 +55,7 @@
     "unique-names-generator": "^4.5.0"
   },
   "devDependencies": {
+    "@types/feather-icons": "^4.7.0",
     "@vue/eslint-config-prettier": "^6.0.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
