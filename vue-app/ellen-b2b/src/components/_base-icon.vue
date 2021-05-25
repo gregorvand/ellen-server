@@ -1,8 +1,11 @@
 <template>
-  <div class="icon-wrapper" v-html="svg">
-    <svg class="icon" :width="width" :height="height">
-      <use v-bind="{ 'xlink:href': '/feather-sprite.svg#' + name }" />
-    </svg>
+  <div>
+    <!-- computed property svg is what is being passed as html -->
+    <div class="icon-wrapper" v-html="svg">
+      <svg class="icon" :width="width" :height="height">
+        <use v-bind="{ 'xlink:href': '/feather-sprite.svg#' + name }" />
+      </svg>
+    </div>
     <slot></slot>
   </div>
 </template>
