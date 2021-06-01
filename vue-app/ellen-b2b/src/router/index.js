@@ -4,11 +4,24 @@ import EventCreate from '../views/EventCreate.vue'
 import EventList from '../views/EventList.vue'
 import EventShow from '../views/EventShow.vue'
 
+import Home from '@/views/Home.vue'
+import Dashboard from '@/views/Dashboard.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
+    name: 'home',
+    component: Home,
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard,
+  },
+  {
+    path: '/list',
     name: 'event-list',
     component: EventList,
   },
