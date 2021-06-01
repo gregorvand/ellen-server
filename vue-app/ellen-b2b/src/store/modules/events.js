@@ -6,6 +6,8 @@ export const state = {
   event: {},
 }
 
+export const namespaced = true
+
 export const mutations = {
   ADD_EVENT(state, event) {
     state.events.push(event)
@@ -26,16 +28,30 @@ export const actions = {
       commit('ADD_EVENT', event)
     })
   },
-  fetchEvents({ commit }, { perPage, currentPage }) {
-    EventService.getEvents(perPage, currentPage)
+  fetchEvents({ commit }, { perPage, page }) {
+    EventService.getEvents(perPage, page)
       .then((response) => {
-        console.log('Total events are ' + response.headers['x-total-count'])
         commit('SET_TOTAL', parseInt(response.headers['x-total-count']))
         commit('SET_EVENTS', response.data)
       })
       .catch((error) => {
         console.log('There was an error:', error.response)
       })
+  },
+  fetchEvent({ commit, getters }, id) {
+    var event = getters.getEventById(id)
+
+    if (event) {
+      commit('SET_EVENT', event)
+    } else {
+      EventService.getEvent(id)
+        .then((response) => {
+          commit('SET_EVENT', response.data)
+        })
+        .catch((error) => {
+          console.log('There was an error:', error.response)
+        })
+    }
   },
 }
 
