@@ -32,7 +32,7 @@ export default {
     // We don't need it to be reactive, and this way our component has access to it.
 
     this.$store.dispatch('event/fetchEvents', {
-      perPage: 3,
+      perPage: this.perPage,
       currentPage: this.page,
     })
   },

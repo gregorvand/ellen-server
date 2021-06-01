@@ -23,22 +23,33 @@ export const mutations = {
   },
 }
 export const actions = {
-  createEvent({ commit }, event) {
+  createEvent({ commit, dispatch }, event) {
     return EventService.postEvent(event).then(() => {
       commit('ADD_EVENT', event)
+      const notification = {
+        type: 'success',
+        message: 'Your event has been created!',
+      }
+      dispatch('notification/add', notification, { root: true })
     })
   },
-  fetchEvents({ commit }, { perPage, page }) {
-    EventService.getEvents(perPage, page)
+
+  fetchEvents({ commit, dispatch }, { perPage, currentPage }) {
+    EventService.getEvents(perPage, currentPage)
       .then((response) => {
         commit('SET_TOTAL', parseInt(response.headers['x-total-count']))
         commit('SET_EVENTS', response.data)
       })
       .catch((error) => {
-        console.log('There was an error:', error.response)
+        const notification = {
+          type: 'error',
+          message: 'There was a problem fetching events: ' + error.message,
+        }
+        dispatch('notification/add', notification, { root: true })
       })
   },
-  fetchEvent({ commit, getters }, id) {
+
+  fetchEvent({ commit, getters, dispatch }, id) {
     var event = getters.getEventById(id)
 
     if (event) {
@@ -50,6 +61,12 @@ export const actions = {
         })
         .catch((error) => {
           console.log('There was an error:', error.response)
+          const notification = {
+            type: 'error',
+            message:
+              'There was a problem fetching this event: ' + error.message,
+          }
+          dispatch('notification/add', notification, { root: true })
         })
     }
   },
