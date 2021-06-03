@@ -60,7 +60,6 @@ export const actions = {
           commit('SET_EVENT', response.data)
         })
         .catch((error) => {
-          console.log('There was an error:', error.response)
           const notification = {
             type: 'error',
             message:
