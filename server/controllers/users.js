@@ -3,12 +3,13 @@ const Order = require('../models').Order
 
 module.exports = {
   create(req, res) {
+    // console.log('what is the req', req)
     return User.create({
-      firstName: req.body.firstName || 'Jon',
-      lastName: req.body.lastName || 'Jim',
-      email: req.body.email,
-      password: req.body.password || 'password',
-      identifier: req.body.identifier,
+      firstName: req.body.firstName || req.data.credentials.firstName,
+      lastName: req.body.lastName || req.data.credentials.lastName,
+      email: req.body.email || req.data.credentials.email,
+      password: req.body.password || req.data.credentials.password,
+      identifier: req.body.identifier | 'undefined',
     })
       .then((user) => res.status(201).send(user))
       .catch((error) => res.status(400).send(error))

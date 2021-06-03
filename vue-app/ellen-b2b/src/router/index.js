@@ -6,6 +6,7 @@ import EventShow from '../views/EventShow.vue'
 
 import Home from '@/views/Home.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import RegisterUser from '@/views/RegisterUser.vue'
 
 Vue.use(VueRouter)
 
@@ -35,6 +36,11 @@ const routes = [
     path: '/event/create',
     name: 'event-create',
     component: EventCreate,
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: RegisterUser,
   },
 ]
 
