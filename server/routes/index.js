@@ -18,6 +18,7 @@ module.exports = (app) => {
   // app.delete('/api/todos/:todoId/items/:todoItemId', todoItemsController.destroy);
 
   // direct/testing api paths
+
   app.post('/api/companies', companiesController.create)
   app.get('/api/companies', companiesController.list)
   app.get('/api/companies/:companyId', companiesController.listByCompany)
@@ -160,8 +161,8 @@ module.exports = (app) => {
   app.post('/api/users', usersController.create)
 
   // New routes for Vue auth
-  app.get('/dashboard', auth.verifyToken, (req, res) => {
-    jwt.verify(req.token, 'the_secret_key', (err) => {
+  app.get('/api/dashboard', auth.verifyToken, (req, res) => {
+    jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
       if (err) {
         res.sendStatus(401)
       } else {
