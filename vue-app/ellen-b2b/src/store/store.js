@@ -24,4 +24,6 @@ export default new Vuex.Store({
       'community',
     ],
   },
+  mutations: {},
+  actions: {},
 })
