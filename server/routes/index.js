@@ -8,6 +8,8 @@ const winnersController = require('../controllers/winners')
 const serviceKlaviyo = require('../services/third_party/klaviyo')
 const serviceWinners = require('../services/winners/winner_calculators')
 const emailHelpers = require('../modules/emailHelpers')
+const auth = require('../middleware/verifyToken')
+const jwt = require('jsonwebtoken')
 
 module.exports = (app) => {
   // examples
@@ -158,14 +160,11 @@ module.exports = (app) => {
   app.post('/api/users', usersController.create)
 
   // New routes for Vue auth
-  app.get('/api/dashboard', verifyToken, (req, res) => {
+  app.get('/dashboard', auth.verifyToken, (req, res) => {
     jwt.verify(req.token, 'the_secret_key', (err) => {
-      // verifies token
       if (err) {
-        // if error, respond with 401 code
         res.sendStatus(401)
       } else {
-        // otherwise, respond with private data
         res.json({
           events: events,
         })
