@@ -26,7 +26,11 @@ export default new Vuex.Store({
       'community',
     ],
   },
-  mutations: {},
+  mutations: {
+  SET_USER_DATA (state, userData) {
+    state.user = userData
+    localStorage.setItem('user', JSON.stringify(userData))    
+  },
   actions: {
     register({ commit }, credentials) {
       console.log(credentials)
