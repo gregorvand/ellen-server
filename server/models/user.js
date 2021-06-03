@@ -1,4 +1,3 @@
-
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     firstName: {
@@ -12,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
     },
     password: {
       type: DataTypes.STRING(64),
@@ -21,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.STRING,
-      default: "pending",
+      default: 'pending',
     },
     identifier: {
       type: DataTypes.STRING,
@@ -29,18 +28,18 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       type: DataTypes.STRING,
     },
-  });
-  
+  })
+
   User.associate = (models) => {
     User.hasMany(models.Order, {
       foreignKey: 'customerId',
       as: 'orders',
-    });
+    })
     User.hasMany(models.Point, {
       foreignKey: 'customerId',
       as: 'points',
-    });
+    })
     raw: true
-  };
-  return User;
-};
+  }
+  return User
+}

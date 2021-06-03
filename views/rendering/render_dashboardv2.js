@@ -1,33 +1,44 @@
-const Points = require('../../server/models').Point;
-const Order = require('../../server/models').Order;
+const Points = require('../../server/models').Point
+const Order = require('../../server/models').Order
 
-const dashboardHelpers = require('../../views/helpers/dashboard_helpers');
-const rankedUserHelpers = require('../../views/helpers/ranked_user_helper');
+const dashboardHelpers = require('../../views/helpers/dashboard_helpers')
+const rankedUserHelpers = require('../../views/helpers/ranked_user_helper')
 
-const pointsServiceCalculator = require('../../server/services/points/point_calculators');
-const constantsArray = require('../../server/utils/constants');
+const pointsServiceCalculator = require('../../server/services/points/point_calculators')
+const constantsArray = require('../../server/utils/constants')
 
+const renderDashboardv2 = function (req, res, view = 'dashboardv2') {
+  const pointsByUserPromise = getPointsByUser(req.user.id).then(
+    (returnedPoints) => {
+      userPoints = returnedPoints
+    }
+  )
 
-const renderDashboardv2 = function(req, res, view = "dashboardv2") {
+  const totalAllPointsPromise = pointsServiceCalculator
+    .calculateAllPoints(req.user.id)
+    .then((returnedTotal) => {
+      totalPoints = returnedTotal
+    })
 
-  const pointsByUserPromise = getPointsByUser(req.user.id).then(returnedPoints => {
-    userPoints = returnedPoints;
-  })
+  const rankedUserPromise = rankedUserHelpers
+    .renderRankedUsers(req, res)
+    .then((returnedList) => {
+      rankedList = returnedList
+    })
 
-  const totalAllPointsPromise = pointsServiceCalculator.calculateAllPoints(req.user.id).then(returnedTotal => {
-    totalPoints = returnedTotal
-  });
-  
-  const rankedUserPromise = rankedUserHelpers.renderRankedUsers(req, res).then(returnedList => {
-    rankedList = returnedList
-  });
-  
-  const latestEmailsPromise = getLatestEmails(req.user.id).then(latestEmails => {
-    userEmails = latestEmails;
-  })
+  const latestEmailsPromise = getLatestEmails(req.user.id).then(
+    (latestEmails) => {
+      userEmails = latestEmails
+    }
+  )
 
-  Promise.all([pointsByUserPromise, totalAllPointsPromise, rankedUserPromise, latestEmailsPromise]).then(() => {
-    res.render(view, { 
+  Promise.all([
+    pointsByUserPromise,
+    totalAllPointsPromise,
+    rankedUserPromise,
+    latestEmailsPromise,
+  ]).then(() => {
+    res.render(view, {
       user: req.user,
       points: userPoints,
       totalPoints: totalPoints,
@@ -35,33 +46,30 @@ const renderDashboardv2 = function(req, res, view = "dashboardv2") {
       rankedUserList: rankedList,
       emails: userEmails,
       reasons: constantsArray.POINTS,
-      prizes: constantsArray.DAILY_PRIZES
-    });
+      prizes: constantsArray.DAILY_PRIZES,
+    })
   })
 }
 
-function getPointsByUser (id) {
-  return Points
-  .findAll({
+function getPointsByUser(id) {
+  return Points.findAll({
     where: {
-      customerId: id
+      customerId: id,
     },
     limit: 6,
-    order: [ ['createdAt', 'DESC'] ]
+    order: [['createdAt', 'DESC']],
   })
-};
+}
 
-
-function getLatestEmails (id) {
-  return Order
-  .findAll({
+function getLatestEmails(id) {
+  return Order.findAll({
     where: {
-      customerId: id
+      customerId: id,
     },
     include: 'points',
     limit: 10,
-    order: [ ['createdAt', 'DESC'] ]
+    order: [['createdAt', 'DESC']],
   })
-};
+}
 
-module.exports.renderDashboardv2 = renderDashboardv2;
+module.exports.renderDashboardv2 = renderDashboardv2
