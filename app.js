@@ -165,15 +165,6 @@ app.get('/users/login', checkAuthenticated, (req, res) => {
   res.render('login')
 })
 
-app.post(
-  '/users/login',
-  passport.authenticate('local', {
-    successRedirect: '/users/dashboard',
-    failureRedirect: '/users/login',
-    failureFlash: true,
-  })
-)
-
 app.get('/users/register', checkAuthenticated, (req, res) => {
   res.render('register')
 })

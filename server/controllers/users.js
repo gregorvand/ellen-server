@@ -34,6 +34,30 @@ module.exports = {
       .catch((error) => res.status(400).send(error))
   },
 
+  checkUser(req, res) {
+    return User.findOne({
+      where: {
+        email: req.body.email,
+        password: req.body.password,
+      },
+    })
+      .then((user) => {
+        if (user.email) {
+          const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
+          // In a production app, you'll want the secret key to be an environment variable
+          res.json({
+            token,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          })
+        } else {
+          res.sendStatus(400)
+        }
+      })
+      .catch((error) => res.status(400).send(error))
+  },
+
   update(req, res) {
     return User.findByPk(req.params.id)
       .then((company) => {

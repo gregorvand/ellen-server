@@ -1,84 +1,111 @@
-const bcrypt = require('bcrypt');
-const User = require('../models').User;
-const userGenerators = require('.././utils/makeId');
+const bcrypt = require('bcrypt')
+const User = require('../models').User
+const userGenerators = require('.././utils/makeId')
 
-async function registerForm (req, res) {
-  let { firstName, lastName, email, password, password2 } = req.body;
+async function registerForm(req, res) {
+  let { firstName, lastName, email, password, password2 } = req.body
 
   console.log('register creds', {
     firstName,
     lastName,
     email,
     password,
-    password2
+    password2,
   })
 
-  let errors = [];
+  let errors = []
 
   if (!(firstName || lastName || email || password || !password2)) {
-    errors.push({ message: "Please enter all fields" });
+    errors.push({ message: 'Please enter all fields' })
   }
 
   if (password.length < 6) {
-    errors.push({ message: "Password must be a least 6 characters long" });
+    errors.push({ message: 'Password must be a least 6 characters long' })
   }
 
   if (password !== password2) {
-    errors.push({ message: "Passwords do not match" });
+    errors.push({ message: 'Passwords do not match' })
   }
 
   // errors or not
   if (errors.length > 0) {
-    res.render("register", { errors, firstName, lastName, email, password, password2 });
+    res.render('register', {
+      errors,
+      firstName,
+      lastName,
+      email,
+      password,
+      password2,
+    })
   } else {
-    let hashedPassword = await bcrypt.hash(password, 15);
-    console.log('hashed happened..', hashedPassword);
+    let hashedPassword = await bcrypt.hash(password, 15)
+    console.log('hashed happened..', hashedPassword)
 
-    const emailIdentifier = userGenerators.makeEmailId(6);
-    const userName = userGenerators.makeUsername();
+    const emailIdentifier = userGenerators.makeEmailId(6)
+    const userName = userGenerators.makeUsername()
 
     // TODO: change this to a keyup function to do lookup while user entering password
     // wait on getting result from DB lookup with entered email
-    const currentUser = await checkDbForUser({'email': email});
+    const currentUser = await checkDbForUser({ email: email })
 
     if (currentUser) {
-      errors.push({ message: "Already found a user with that email" });
-      res.render("register", { errors, firstName, lastName, email, password, password2 });
-      console.log(`already found a user called ${currentUser.firstName} ${currentUser.lastName}`)
-    } else {
-      console.log('new user!');
-      createUserFromRegister(firstName, lastName, email, hashedPassword, emailIdentifier, userName)
-      .then(user => {
-        console.log(user);
-        req.flash('success_msg', "woohoo!"); // keep going from here
-        res.redirect('/users/login');
+      errors.push({ message: 'Already found a user with that email' })
+      res.render('register', {
+        errors,
+        firstName,
+        lastName,
+        email,
+        password,
+        password2,
       })
-      .catch(error => console.log(error));;
+      console.log(
+        `already found a user called ${currentUser.firstName} ${currentUser.lastName}`
+      )
+    } else {
+      console.log('new user!')
+      createUserFromRegister(
+        firstName,
+        lastName,
+        email,
+        hashedPassword,
+        emailIdentifier,
+        userName
+      )
+        .then((user) => {
+          console.log(user)
+          req.flash('success_msg', 'woohoo!') // keep going from here
+          res.redirect('/users/login')
+        })
+        .catch((error) => console.log(error))
     }
   }
 }
 
-
 // internal functions
-async function checkDbForUser (lookup) {
-    return User
-      .findOne({
-        where: [lookup],
-      })
-      .then((foundUser) => foundUser)
-      .catch((error) => console.error(error));
+async function checkDbForUser(lookup) {
+  return User.findOne({
+    where: [lookup],
+  })
+    .then((foundUser) => foundUser)
+    .catch((error) => console.error(error))
 }
 
-async function createUserFromRegister (firstName, lastName, email, hashedPassword, emailIdentifier, userName) {
-  return User
-    .create({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: hashedPassword,
-      identifier: emailIdentifier,
-      username: userName
-    });
+async function createUserFromRegister(
+  firstName,
+  lastName,
+  email,
+  hashedPassword,
+  emailIdentifier,
+  userName
+) {
+  return User.create({
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: hashedPassword,
+    identifier: emailIdentifier,
+    username: userName,
+  })
 }
 
-module.exports.registerForm = registerForm;
+module.exports.registerForm = registerForm

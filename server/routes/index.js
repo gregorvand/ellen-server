@@ -159,6 +159,7 @@ module.exports = (app) => {
 
   // Register a new user
   app.post('/api/users', usersController.create)
+  app.post('/api/login', usersController.checkUser)
 
   const theEvents = require('../../vue-app/ellen-b2b/db/events.json')
   // New routes for Vue auth
