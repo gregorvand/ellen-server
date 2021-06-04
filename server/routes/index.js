@@ -8,7 +8,7 @@ const winnersController = require('../controllers/winners')
 const serviceKlaviyo = require('../services/third_party/klaviyo')
 const serviceWinners = require('../services/winners/winner_calculators')
 const emailHelpers = require('../modules/emailHelpers')
-const auth = require('../middleware/verifyToken')
+const auth = require('../middleware/getToken')
 const jwt = require('jsonwebtoken')
 
 module.exports = (app) => {
@@ -160,14 +160,17 @@ module.exports = (app) => {
   // Register a new user
   app.post('/api/users', usersController.create)
 
+  const theEvents = require('../../vue-app/ellen-b2b/db/events.json')
   // New routes for Vue auth
-  app.get('/api/dashboard', auth.verifyToken, (req, res) => {
+  app.get('/api/dashboard', auth.getToken, (req, res) => {
+    console.log('also yep')
     jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
       if (err) {
         res.sendStatus(401)
       } else {
+        console.log('DID GET HERE')
         res.json({
-          events: events,
+          events: theEvents,
         })
       }
     })

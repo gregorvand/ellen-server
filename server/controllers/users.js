@@ -1,17 +1,23 @@
 const User = require('../models').User
 const Order = require('../models').Order
+const jwt = require('jsonwebtoken')
 
 module.exports = {
   create(req, res) {
     // console.log('what is the req', req)
+
+    // Generate token
+    const data = JSON.stringify(req?.data?.credentials, null, 2)
+    const token = jwt.sign({ data }, process.env.USER_AUTH_SECRET)
+
     return User.create({
       firstName: req.body.firstName || req.data.credentials.firstName,
       lastName: req.body.lastName || req.data.credentials.lastName,
       email: req.body.email || req.data.credentials.email,
       password: req.body.password || req.data.credentials.password,
-      identifier: req.body.identifier | 'undefined',
+      identifier: req.body.identifier || 'undefined',
     })
-      .then((user) => res.status(201).send(user))
+      .then((user) => res.status(201).send({ user, token }))
       .catch((error) => res.status(400).send(error))
   },
 
