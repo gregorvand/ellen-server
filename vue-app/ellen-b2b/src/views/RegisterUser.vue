@@ -33,7 +33,7 @@ export default {
   methods: {
     register() {
       this.$store
-        .dispatch('register', {
+        .dispatch('user/register', {
           firstName: this.fname,
           lastName: this.lname,
           email: this.email,

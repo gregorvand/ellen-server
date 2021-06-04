@@ -5,8 +5,6 @@ import * as user from '@/store/modules/user.js'
 import * as event from '@/store/modules/events.js'
 import * as notification from '@/store/modules/notification.js'
 
-import axios from 'axios'
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -25,36 +23,5 @@ export default new Vuex.Store({
       'food',
       'community',
     ],
-  },
-  mutations: {
-    SET_USER_DATA(state, userData) {
-      state.user = userData
-      localStorage.setItem('user', JSON.stringify(userData))
-      axios.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${userData.token}`
-    },
-  },
-  actions: {
-    register({ commit }, credentials) {
-      console.log(credentials)
-      return axios
-        .post('//localhost:8000/api/users', credentials, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        .then(({ data }) => {
-          console.log('user data iszz', data)
-          commit('SET_USER_DATA', data)
-        })
-    },
-    login({ commit }, credentials) {
-      return axios
-        .post('//localhost:8000/api/login', credentials)
-        .then(({ data }) => {
-          commit('SET_USER_DATA', data)
-        })
-    },
   },
 })

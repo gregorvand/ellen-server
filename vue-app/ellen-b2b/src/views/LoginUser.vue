@@ -18,10 +18,16 @@
 
 <script>
 export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+    }
+  },
   methods: {
     login() {
       this.$store
-        .dispatch('login', {
+        .dispatch('user/login', {
           email: this.email,
           password: this.password,
         })
