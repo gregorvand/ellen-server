@@ -2,13 +2,6 @@ import axios from 'axios'
 
 export const namespaced = true // ie user/[action]
 
-export const state = {
-  email: '',
-  password: '',
-  firstName: '',
-  lastName: '',
-}
-
 export const mutations = {
   SET_USER_DATA(state, userData) {
     state.user = userData
@@ -27,7 +20,6 @@ export const actions = {
         },
       })
       .then(({ data }) => {
-        console.log('user data iszz', data)
         commit('SET_USER_DATA', data)
       })
   },

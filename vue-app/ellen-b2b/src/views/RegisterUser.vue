@@ -24,8 +24,8 @@
 export default {
   data() {
     return {
-      fname: '',
-      lname: '',
+      firstNname: '',
+      lastName: '',
       email: '',
       password: '',
     }

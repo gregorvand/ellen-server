@@ -24,4 +24,5 @@ export default new Vuex.Store({
       'community',
     ],
   },
+  user: null,
 })
