@@ -17,6 +17,12 @@ export default {
   computed: {
     ...authComputed,
   },
+
+  methods: {
+    logout() {
+      this.$store.dispatch('user/logout')
+    },
+  },
 }
 </script>
 
