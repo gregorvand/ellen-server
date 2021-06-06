@@ -73,10 +73,17 @@ module.exports = {
             lastName: user.lastName,
           })
         } else {
-          res.sendStatus(400)
+          res.status(400)
         }
       })
-      .catch((error) => res.status(400).send(error))
+      .catch((error) => {
+        console.log(error)
+        res
+          .status(400)
+          .send(
+            'Sorry we could not locate an account with that email or password'
+          )
+      })
   },
 
   update(req, res) {
