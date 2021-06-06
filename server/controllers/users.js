@@ -6,19 +6,40 @@ module.exports = {
   create(req, res) {
     // console.log('what is the req', req)
 
+    if (req.data) {
+      const user = {
+        // name: req.body.name,
+        email: req.data.credentials.email,
+        password: req.data.credentials.password,
+        // In a production app, you'll want to encrypt the password
+      }
+    }
+
     // Generate token
     const data = JSON.stringify(req?.data?.credentials, null, 2)
     const token = jwt.sign({ data }, process.env.USER_AUTH_SECRET)
 
+    // do checks and then execute below if they all
+    let errorsToSend = []
+
     return User.create({
       firstName: req.body.firstName || req.data.credentials.firstName,
       lastName: req.body.lastName || req.data.credentials.lastName,
-      email: req.body.email || req.data.credentials.email,
-      password: req.body.password || req.data.credentials.password,
+      email: req.body.email || user.email,
+      password: req.body.password || user.password,
       identifier: req.body.identifier || 'undefined',
     })
       .then((user) => res.status(201).send({ user, token }))
-      .catch((error) => res.status(400).send(error))
+      .catch((error) => {
+        let errorMessage = error.errors[0].message
+        console.error('yah', error.errors[0].message)
+        // this.errors = error.response.errors
+        errorsToSend.push(errorMessage)
+        // res.status(400).send(error)
+        res.status(400).send({
+          message: error.errors[0].message,
+        })
+      })
   },
 
   list(req, res) {
