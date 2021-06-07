@@ -9,7 +9,7 @@
 
     <ul v-if="results.length > 0">
       <li v-for="result in results" :key="result.id">
-        {{ result.companyName }}
+        <CompanySelector :company="result" />
       </li>
     </ul>
     <p v-else>No results</p>
@@ -18,7 +18,12 @@
 
 <script>
 import { mapState } from 'vuex'
+import CompanySelector from '@/components/CompanySelector.vue'
+
 export default {
+  components: {
+    CompanySelector,
+  },
   data: function () {
     return {
       currentQuery: null,
