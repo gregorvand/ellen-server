@@ -1,8 +1,8 @@
 <template>
   <div class="search-component">
     <form @submit.prevent="searchCompanies">
-      <label for="password"> Serach for companies </label>
-      <input type="text" />
+      <label for="password"> Search for companies </label>
+      <input type="text" v-model="currentQuery" />
 
       <button type="submit" name="button">Search</button>
     </form>
@@ -19,10 +19,14 @@
 <script>
 import { mapState } from 'vuex'
 export default {
+  data: function () {
+    return {
+      currentQuery: null,
+    }
+  },
   methods: {
     searchCompanies() {
-      console.log('will be searching!!')
-      this.$store.dispatch('search/doSearchQuery')
+      this.$store.dispatch('search/doSearchQuery', this.currentQuery)
     },
   },
   computed: {

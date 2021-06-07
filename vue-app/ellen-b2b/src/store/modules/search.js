@@ -3,6 +3,7 @@ export const namespaced = true // ie user/[action]
 
 export const state = {
   results: [],
+  currentQuery: '',
 }
 
 export const getters = {
@@ -18,30 +19,24 @@ export const mutations = {
 }
 
 export const actions = {
-  doSearchQuery({ commit }, payload) {
-    const searchQuery = [
-      {
-        from: 0,
-        size: 100,
-        query: {
-          fuzzy: {
-            companyName: {
-              value: 'unconfirmed',
-            },
+  doSearchQuery({ commit }, currentQuery) {
+    const searchQuery = {
+      from: 0,
+      size: 100,
+      query: {
+        fuzzy: {
+          companyName: {
+            value: currentQuery || '',
           },
         },
       },
-    ]
+    }
+
     return axios
-      .get('//localhost:9200/csjoblist/_search', searchQuery, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      .post('//localhost:9200/csjoblist/_search', searchQuery)
       .then(({ data }) => {
         const results = data.hits['hits'].map((result) => result._source) // map from ES format
         commit('SET_SEARCH_RESULTS', results)
-        console.log('well..', data)
       })
   },
 }
