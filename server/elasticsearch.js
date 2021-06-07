@@ -70,4 +70,4 @@ async function populateDB() {
   })
 }
 
-populateDB()
+// populateDB()

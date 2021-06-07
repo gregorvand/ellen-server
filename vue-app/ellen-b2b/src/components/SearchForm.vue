@@ -8,23 +8,25 @@
     </form>
 
     <ul v-if="results.length > 0">
-      <li v-for="result in results" :key="result"></li>
+      <li v-for="result in results" :key="result._source.id">
+        {{ result._source.companyName }}
+      </li>
     </ul>
     <p v-else>No results</p>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
-  data: function () {
-    return {
-      results: [],
-    }
-  },
   methods: {
     searchCompanies() {
       console.log('will be searching!!')
+      this.$store.dispatch('search/doSearchQuery')
     },
+  },
+  computed: {
+    ...mapState('search', ['results']),
   },
 }
 </script>
