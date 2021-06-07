@@ -8,8 +8,8 @@
     </form>
 
     <ul v-if="results.length > 0">
-      <li v-for="result in results" :key="result._source.id">
-        {{ result._source.companyName }}
+      <li v-for="result in results" :key="result.id">
+        {{ result.companyName }}
       </li>
     </ul>
     <p v-else>No results</p>

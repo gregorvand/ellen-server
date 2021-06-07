@@ -71,3 +71,4 @@ async function populateDB() {
 }
 
 // populateDB()
+// activate above to run a DB sync
