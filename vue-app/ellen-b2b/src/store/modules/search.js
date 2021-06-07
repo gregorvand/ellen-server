@@ -26,6 +26,7 @@ export const actions = {
       query: {
         fuzzy: {
           companyName: {
+            fuzziness: '2',
             value: currentQuery || '',
           },
         },
@@ -35,6 +36,7 @@ export const actions = {
     return axios
       .post('//localhost:9200/csjoblist/_search', searchQuery)
       .then(({ data }) => {
+        console.log(data)
         const results = data.hits['hits'].map((result) => result._source) // map from ES format
         commit('SET_SEARCH_RESULTS', results)
       })
