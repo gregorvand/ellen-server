@@ -4,11 +4,11 @@ export const state = {
   selectedCompanies: [],
 }
 
-export const getters = {
-  getterValue: (state) => {
-    return state.value
-  },
-}
+// export const getters = {
+//   getterValue: (state) => {
+//     return state.value
+//   },
+// }
 
 export const mutations = {
   PUSH(state, company) {
@@ -32,5 +32,11 @@ export const actions = {
   },
   removeCompanySelection({ commit }, company) {
     commit('REMOVE', company)
+  },
+}
+
+export const getters = {
+  userHasCompany: (state) => (id) => {
+    return state.selectedCompanies.find((company) => company.id === id)
   },
 }

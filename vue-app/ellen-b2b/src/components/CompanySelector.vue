@@ -36,7 +36,7 @@ export default {
 
   data() {
     return {
-      checked: false,
+      checked: this.$store.getters['company/userHasCompany'](this.company.id),
     }
   },
 }
