@@ -2,9 +2,9 @@ import axios from 'axios'
 
 export const namespaced = true // ie user/[action]
 
-export const state = {
+export const state = () => ({
   user: null,
-}
+})
 
 export const mutations = {
   SET_USER_DATA(state, userData) {

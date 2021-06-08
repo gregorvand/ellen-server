@@ -6,11 +6,11 @@ export const state = {
   currentQuery: '',
 }
 
-export const getters = {
-  getSearchResults: (state) => {
-    return state.results
-  },
-}
+// export const getters = {
+//   getSearchResults: (state) => {
+//     return state.search.results
+//   },
+// }
 
 export const mutations = {
   SET_SEARCH_RESULTS(state, payload) {

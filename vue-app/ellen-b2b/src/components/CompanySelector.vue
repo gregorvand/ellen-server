@@ -1,6 +1,12 @@
 <template>
   <div>
-    {{ company.companyName }}
+    <span>{{ company.companyName }}</span>
+    <input
+      class="select-company"
+      type="checkbox"
+      v-model="checked"
+      @click="selectCompany"
+    />
   </div>
 </template>
 
@@ -11,8 +17,38 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    selected: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  methods: {
+    selectCompany() {
+      if (!this.checked) {
+        console.log('company?', this.company)
+        this.$store.dispatch('company/addCompanyToSelection', this.company)
+      } else {
+        this.$store.dispatch('company/removeCompanySelection', this.company)
+      }
+    },
+  },
+
+  data() {
+    return {
+      checked: false,
+    }
   },
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.select-company {
+  height: 1.6em;
+}
+
+span {
+  display: flex;
+  width: 100%;
+}
+</style>
