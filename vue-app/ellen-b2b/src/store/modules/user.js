@@ -47,4 +47,8 @@ export const getters = {
   loggedIn(state) {
     return !!state.user
   },
+
+  userObject(state) {
+    return state.user
+  },
 }

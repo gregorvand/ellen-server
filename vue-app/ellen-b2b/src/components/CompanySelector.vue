@@ -36,6 +36,7 @@ export default {
 
   data() {
     return {
+      // if user has already selected this company, will return true, else false
       checked: this.$store.getters['company/userHasCompany'](this.company.id),
     }
   },

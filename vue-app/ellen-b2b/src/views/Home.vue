@@ -9,12 +9,14 @@
     </div>
 
     <SearchForm />
+    <EmailCollect />
   </div>
 </template>
 
 <script>
 import { authComputed } from '@/store/helpers.js'
 import SearchForm from '@/components/SearchForm.vue'
+import EmailCollect from '@/components/EmailCollect.vue'
 
 export default {
   computed: {
@@ -22,6 +24,7 @@ export default {
   },
   components: {
     SearchForm,
+    EmailCollect,
   },
 }
 </script>
