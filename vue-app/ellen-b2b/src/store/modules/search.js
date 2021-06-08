@@ -1,6 +1,16 @@
 import axios from 'axios'
 export const namespaced = true // ie user/[action]
 
+// Separate axios instance that will not send default auth headers
+const searchClient = axios.create({
+  baseURL: `http://localhost:9200`,
+  withCredentials: false, // This is the default
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+})
+
 export const state = {
   results: [],
   currentQuery: '',
@@ -33,8 +43,8 @@ export const actions = {
       },
     }
 
-    return axios
-      .post('//localhost:9200/csjoblist/_search', searchQuery)
+    return searchClient
+      .post('csjoblist/_search', searchQuery)
       .then(({ data }) => {
         console.log(data)
         const results = data.hits['hits'].map((result) => result._source) // map from ES format
