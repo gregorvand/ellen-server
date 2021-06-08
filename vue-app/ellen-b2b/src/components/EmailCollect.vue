@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="email-collect">
     <h4>Enter email</h4>
     <input v-if="user" type="email" :value="[[user.email]]" />
     <input v-else type="email" :placeholder="'Enter your email'" />
@@ -19,4 +19,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.email-collect {
+  width: 100%;
+}
+</style>
