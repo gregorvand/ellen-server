@@ -233,6 +233,10 @@
                     "field": "identifier",
                     "seqType": "Sequelize.STRING"
                 },
+                "username": {
+                    "field": "username",
+                    "seqType": "Sequelize.STRING"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -312,5 +316,5 @@
             "indexes": []
         }
     },
-    "revision": 1
+    "revision": 2
 }

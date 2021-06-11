@@ -16,14 +16,29 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-  });
-  
+    orderSuffix: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    companyType: {
+      type: DataTypes.STRING,
+      validate: {
+        isIn: [['private', 'public']],
+      },
+      allowNull: true,
+    },
+    ticker: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+  })
+
   Company.associate = (models) => {
     Company.hasMany(models.Order, {
       foreignKey: 'companyId',
       as: 'orders',
-      onDelete: 'CASCADE'
-    });
-  };
-  return Company;
-};
+      onDelete: 'CASCADE',
+    })
+  }
+  return Company
+}
