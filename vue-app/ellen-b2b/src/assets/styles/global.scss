@@ -81,7 +81,7 @@ body {
 }
 #app {
   box-sizing: border-box;
-  width: 500px;
+  width: 100%;
   padding: 0 20px 20px;
   margin: 0 auto;
 }
@@ -108,6 +108,7 @@ h6 {
   display: flex;
   align-items: center;
   font-family: 'Montserrat', sans-serif;
+  line-height: 1;
 }
 h1 {
   font-size: 50px;
