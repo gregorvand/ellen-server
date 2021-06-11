@@ -2,9 +2,9 @@ import axios from 'axios'
 
 export const namespaced = true // ie user/[action]
 
-export const state = {
+export const state = () => ({
   user: null,
-}
+})
 
 export const mutations = {
   SET_USER_DATA(state, userData) {
@@ -46,5 +46,9 @@ export const actions = {
 export const getters = {
   loggedIn(state) {
     return !!state.user
+  },
+
+  userObject(state) {
+    return state.user
   },
 }
