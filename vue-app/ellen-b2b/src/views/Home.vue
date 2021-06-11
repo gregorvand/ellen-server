@@ -10,6 +10,9 @@
 
     <SearchForm />
     <EmailCollect />
+
+    <h4>Subscribe</h4>
+    <PlanType />
   </div>
 </template>
 
@@ -17,6 +20,7 @@
 import { authComputed } from '@/store/helpers.js'
 import SearchForm from '@/components/SearchForm.vue'
 import EmailCollect from '@/components/EmailCollect.vue'
+import PlanType from '@/components/PlanType.vue'
 
 export default {
   computed: {
@@ -25,6 +29,7 @@ export default {
   components: {
     SearchForm,
     EmailCollect,
+    PlanType,
   },
 }
 </script>
