@@ -52,7 +52,7 @@ async function populateDB() {
 
     bulk.push({
       index: {
-        _index: 'csjoblist',
+        _index: 'csjoblist_prod', // or csjoblist for dev
         _type: 'jobs_list',
         _id: company.id,
       },
