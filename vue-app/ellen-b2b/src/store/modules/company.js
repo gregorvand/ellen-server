@@ -39,4 +39,7 @@ export const getters = {
   userHasCompany: (state) => (id) => {
     return state.selectedCompanies.find((company) => company.id === id)
   },
+  userCompanies: (state) => {
+    return state.selectedCompanies
+  },
 }
