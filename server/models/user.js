@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'customerId',
       as: 'points',
     })
+    User.belongsToMany(Company, { through: 'UserCompany' })
     raw: true
   }
   return User
