@@ -1,11 +1,23 @@
 <template>
   <div>
     <form @submit.prevent="register">
-      <label for="fname"> First Name: </label>
-      <input v-model="fname" type="text" name="fname" value />
+      <label v-if="captureName" for="fname"> First Name: </label>
+      <input
+        v-if="captureName"
+        v-model="fname"
+        type="text"
+        name="fname"
+        value
+      />
 
-      <label for="lname"> Last Name: </label>
-      <input v-model="lname" type="text" name="lname" value />
+      <label v-if="captureName" for="lname"> Last Name: </label>
+      <input
+        v-if="captureName"
+        v-model="lname"
+        type="text"
+        name="lname"
+        value
+      />
 
       <label for="email"> Email: </label>
       <input v-model="email" type="email" name="email" value />
@@ -24,6 +36,12 @@
 
 <script>
 export default {
+  props: {
+    captureName: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       fname: '',
@@ -37,8 +55,8 @@ export default {
     register() {
       this.$store
         .dispatch('user/register', {
-          firstName: this.fname,
-          lastName: this.lname,
+          firstName: this.fname || '',
+          lastName: this.lname || '',
           email: this.email,
           password: this.password,
         })

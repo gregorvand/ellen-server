@@ -23,8 +23,8 @@ module.exports = {
     let errorsToSend = []
 
     return User.create({
-      firstName: req.body.firstName || req.data.credentials.firstName,
-      lastName: req.body.lastName || req.data.credentials.lastName,
+      firstName: req?.body?.firstName || req?.data?.credentials.firstName || '',
+      lastName: req?.body?.lastName || req?.data?.credentials.lastName || '',
       email: req.body.email || user.email,
       password: req.body.password || user.password,
       identifier: req.body.identifier || 'undefined',
@@ -32,7 +32,6 @@ module.exports = {
       .then((user) => res.status(201).send({ user, token }))
       .catch((error) => {
         let errorMessage = error.errors[0].message
-        console.error('yah', error.errors[0].message)
         // this.errors = error.response.errors
         errorsToSend.push(errorMessage)
         // res.status(400).send(error)

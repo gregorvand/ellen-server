@@ -11,8 +11,7 @@
     <SearchForm />
     <EmailCollect />
 
-    <h4>Subscribe</h4>
-    <PlanType />
+    <RegisterUser v-bind:captureName="false" />
   </div>
 </template>
 
@@ -20,7 +19,7 @@
 import { authComputed } from '@/store/helpers.js'
 import SearchForm from '@/components/SearchForm.vue'
 import EmailCollect from '@/components/EmailCollect.vue'
-import PlanType from '@/components/PlanType.vue'
+import RegisterUser from '@/views/RegisterUser.vue'
 
 export default {
   computed: {
@@ -29,7 +28,7 @@ export default {
   components: {
     SearchForm,
     EmailCollect,
-    PlanType,
+    RegisterUser,
   },
 }
 </script>
