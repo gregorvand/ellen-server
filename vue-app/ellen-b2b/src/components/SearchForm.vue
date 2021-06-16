@@ -9,11 +9,20 @@
       </ul>
     </section>
 
-    <form @submit.prevent="searchCompanies">
-      <label for="password"> Search for companies </label>
-      <input type="text" v-model="currentQuery" />
+    <h2>Search for companies</h2>
+    <form class="search-companies-form" @submit.prevent>
+      <input
+        v-on:keyup="searchCompanies"
+        type="text"
+        v-model="currentQuery"
+        @keyup.esc="clearInput"
+      />
 
-      <button type="submit" name="button">Search</button>
+      <ul class="companies-results" v-if="results.length > 0">
+        <li v-for="result in results" :key="result.id">
+          <CompanySelector :company="result" />
+        </li>
+      </ul>
     </form>
     <!-- dev only -->
     <!-- <ul>
@@ -22,13 +31,6 @@
       </li>
     </ul> -->
     <!--  -->
-
-    <ul v-if="results.length > 0">
-      <li v-for="result in results" :key="result.id">
-        <CompanySelector :company="result" />
-      </li>
-    </ul>
-    <p v-else>No results</p>
   </div>
 </template>
 
@@ -49,6 +51,10 @@ export default {
     searchCompanies() {
       this.$store.dispatch('search/doSearchQuery', this.currentQuery)
     },
+    clearInput() {
+      this.currentQuery = ''
+      this.$store.dispatch('search/doSearchQuery', '')
+    },
   },
   computed: {
     ...mapState('search', ['results']),
@@ -58,8 +64,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search-companies-form {
+  position: relative;
+}
+
 .search-component {
   margin: 20px auto;
+  width: 100%;
+  max-width: 500px;
+  padding: 15px 0;
+}
+
+.companies-results {
+  display: flex;
+  max-height: 300px;
+  overflow-y: scroll;
+  border: solid #e2e2e2 thin;
+  top: 35px;
+  position: absolute;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: flex-start;
+  background-color: #fffdf1;
+  padding: 10px;
+
+  li div {
+    justify-content: space-between;
+    text-align: left;
+  }
 }
 
 ul,
