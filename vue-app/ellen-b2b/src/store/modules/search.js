@@ -44,7 +44,7 @@ export const actions = {
     }
 
     return searchClient
-      .post('csjoblist_prod/_search', searchQuery)
+      .post('csjoblist/_search', searchQuery)
       .then(({ data }) => {
         console.log(data)
         const results = data.hits['hits'].map((result) => result._source) // map from ES format
