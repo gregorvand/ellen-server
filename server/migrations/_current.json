@@ -213,12 +213,12 @@
                     "seqType": "Sequelize.INTEGER"
                 },
                 "firstName": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "firstName",
                     "seqType": "Sequelize.STRING"
                 },
                 "lastName": {
-                    "allowNull": false,
+                    "allowNull": true,
                     "field": "lastName",
                     "seqType": "Sequelize.STRING"
                 },
@@ -234,11 +234,6 @@
                     "field": "password",
                     "seqType": "Sequelize.STRING(64)"
                 },
-                "status": {
-                    "default": "pending",
-                    "field": "status",
-                    "seqType": "Sequelize.STRING"
-                },
                 "identifier": {
                     "field": "identifier",
                     "seqType": "Sequelize.STRING"
@@ -246,6 +241,11 @@
                 "username": {
                     "field": "username",
                     "seqType": "Sequelize.STRING"
+                },
+                "activated": {
+                    "default": false,
+                    "field": "activated",
+                    "seqType": "Sequelize.BOOLEAN"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -326,5 +326,5 @@
             "indexes": []
         }
     },
-    "revision": 3
+    "revision": 4
 }
