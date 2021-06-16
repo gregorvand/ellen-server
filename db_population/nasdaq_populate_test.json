@@ -1,0 +1,695 @@
+[
+  {
+    "ticker": "AACG",
+    "nameIdentifier": "ATA Creativity Global - American Depositary Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AACQ",
+    "nameIdentifier": "Artius Acquisition Inc. - Class A Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AACQU",
+    "nameIdentifier": "Artius Acquisition Inc. - Unit consisting of one ordinary share and one third redeemable warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AACQW",
+    "nameIdentifier": "Artius Acquisition Inc. - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AADR",
+    "nameIdentifier": "AdvisorShares Dorsey Wright ADR ETF",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AAL",
+    "nameIdentifier": "American Airlines Group",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AAME",
+    "nameIdentifier": "Atlantic American Corporation - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AAOI",
+    "nameIdentifier": "Applied Optoelectronics",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AAON",
+    "nameIdentifier": "AAON",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AAPL",
+    "nameIdentifier": "Apple Inc. - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AAWW",
+    "nameIdentifier": "Atlas Air Worldwide Holdings - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AAXJ",
+    "nameIdentifier": "iShares MSCI All Country Asia ex Japan Index Fund",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABCB",
+    "nameIdentifier": "Ameris Bancorp - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABCL",
+    "nameIdentifier": "AbCellera Biologics Inc. - Common Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABCM",
+    "nameIdentifier": "Abcam plc - American Depositary Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABEO",
+    "nameIdentifier": "Abeona Therapeutics Inc. - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABGI",
+    "nameIdentifier": "ABG Acquisition Corp. I - Class A Ordinary Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABIO",
+    "nameIdentifier": "ARCA biopharma",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABMD",
+    "nameIdentifier": "ABIOMED",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABNB",
+    "nameIdentifier": "Airbnb",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABST",
+    "nameIdentifier": "Absolute Software Corporation - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABTX",
+    "nameIdentifier": "Allegiance Bancshares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ABUS",
+    "nameIdentifier": "Arbutus Biopharma Corporation - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACAC",
+    "nameIdentifier": "Acies Acquisition Corp. - Class A Ordinary Share",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACACU",
+    "nameIdentifier": "Acies Acquisition Corp. - Unit",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACACW",
+    "nameIdentifier": "Acies Acquisition Corp. - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACAD",
+    "nameIdentifier": "ACADIA Pharmaceuticals Inc. - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACAH",
+    "nameIdentifier": "Atlantic Coastal Acquisition Corp. - Class A Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACAHU",
+    "nameIdentifier": "Atlantic Coastal Acquisition Corp. - Unit",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACAHW",
+    "nameIdentifier": "Atlantic Coastal Acquisition Corp. - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACB",
+    "nameIdentifier": "Aurora Cannabis Inc. - Common Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACBA",
+    "nameIdentifier": "Ace Global Business Acquisition Limited - Ordinary Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACBAU",
+    "nameIdentifier": "Ace Global Business Acquisition Limited - Unit",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACBAW",
+    "nameIdentifier": "Ace Global Business Acquisition Limited - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACBI",
+    "nameIdentifier": "Atlantic Capital Bancshares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACCD",
+    "nameIdentifier": "Accolade",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACER",
+    "nameIdentifier": "Acer Therapeutics Inc. - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACET",
+    "nameIdentifier": "Adicet Bio",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACEV",
+    "nameIdentifier": "ACE Convergence Acquisition Corp. - Class A Ordinary Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACEVU",
+    "nameIdentifier": "ACE Convergence Acquisition Corp. - Unit",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACEVW",
+    "nameIdentifier": "ACE Convergence Acquisition Corp. - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACGL",
+    "nameIdentifier": "Arch Capital Group Ltd. - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACGLO",
+    "nameIdentifier": "Arch Capital Group Ltd. - Depositary Shares Each Representing 1/1",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACGLP",
+    "nameIdentifier": "Arch Capital Group Ltd. - Depositary Shares Representing Interest in 5.25% Non-Cumulative Preferred Series E Shrs",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACHC",
+    "nameIdentifier": "Acadia Healthcare Company",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACHL",
+    "nameIdentifier": "Achilles Therapeutics plc - American Depositary Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACHV",
+    "nameIdentifier": "Achieve Life Sciences",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACIU",
+    "nameIdentifier": "AC Immune SA - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACIW",
+    "nameIdentifier": "ACI Worldwide",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACKIT",
+    "nameIdentifier": "Ackrell SPAC Partners I Co.  - Subunits",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACKIU",
+    "nameIdentifier": "Ackrell SPAC Partners I Co.  - Units",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACKIW",
+    "nameIdentifier": "Ackrell SPAC Partners I Co.  - Warrants",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACLS",
+    "nameIdentifier": "Axcelis Technologies",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACMR",
+    "nameIdentifier": "ACM Research",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACNB",
+    "nameIdentifier": "ACNB Corporation - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACOR",
+    "nameIdentifier": "Acorda Therapeutics",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACQR",
+    "nameIdentifier": "Independence Holdings Corp. - Class A Ordinary Share",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACQRU",
+    "nameIdentifier": "Independence Holdings Corp. - Units",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACQRW",
+    "nameIdentifier": "Independence Holdings Corp. - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACRS",
+    "nameIdentifier": "Aclaris Therapeutics",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACRX",
+    "nameIdentifier": "AcelRx Pharmaceuticals",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACST",
+    "nameIdentifier": "Acasti Pharma",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACTC",
+    "nameIdentifier": "ArcLight Clean Transition Corp. - Class A Ordinary Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACTCU",
+    "nameIdentifier": "ArcLight Clean Transition Corp. - Unit",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACTCW",
+    "nameIdentifier": "ArcLight Clean Transition Corp. - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACTD",
+    "nameIdentifier": "ArcLight Clean Transition Corp. II - Class A Ordinary Share",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACTDU",
+    "nameIdentifier": "ArcLight Clean Transition Corp. II - Unit",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACTDW",
+    "nameIdentifier": "ArcLight Clean Transition Corp. II - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACTG",
+    "nameIdentifier": "Acacia Research Corporation - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACVA",
+    "nameIdentifier": "ACV Auctions Inc. - Class A Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACWI",
+    "nameIdentifier": "iShares MSCI ACWI Index Fund",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ACWX",
+    "nameIdentifier": "iShares MSCI ACWI ex US Index Fund",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADAG",
+    "nameIdentifier": "Adagene Inc. - ADS",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADAP",
+    "nameIdentifier": "Adaptimmune Therapeutics plc - American Depositary Shares",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADBE",
+    "nameIdentifier": "Adobe Inc. - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADER",
+    "nameIdentifier": "26 Capital Acquisition Corp. - Class A Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADERU",
+    "nameIdentifier": "26 Capital Acquisition Corp. - Unit",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADERW",
+    "nameIdentifier": "26 Capital Acquisition Corp. - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADES",
+    "nameIdentifier": "Advanced Emissions Solutions",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADI",
+    "nameIdentifier": "Analog Devices",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADIL",
+    "nameIdentifier": "Adial Pharmaceuticals",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADILW",
+    "nameIdentifier": "Adial Pharmaceuticals",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADMA",
+    "nameIdentifier": "ADMA Biologics Inc - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADMP",
+    "nameIdentifier": "Adamis Pharmaceuticals Corporation - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADMS",
+    "nameIdentifier": "Adamas Pharmaceuticals",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADN",
+    "nameIdentifier": "Advent Technologies Holdings",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADNWW",
+    "nameIdentifier": "Advent Technologies Holdings",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADOC",
+    "nameIdentifier": "Edoc Acquisition Corp. - Class A Ordinary Share",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADOCR",
+    "nameIdentifier": "Edoc Acquisition Corp. - Right",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADOCW",
+    "nameIdentifier": "Edoc Acquisition Corp. - Warrant",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADP",
+    "nameIdentifier": "Automatic Data Processing",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADPT",
+    "nameIdentifier": "Adaptive Biotechnologies Corporation - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADRE",
+    "nameIdentifier": "Invesco BLDRS Emerging Markets 50 ADR Index Fund",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADSK",
+    "nameIdentifier": "Autodesk",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADTN",
+    "nameIdentifier": "ADTRAN",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADTX",
+    "nameIdentifier": "ADiTx Therapeutics",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADUS",
+    "nameIdentifier": "Addus HomeCare Corporation - Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADV",
+    "nameIdentifier": "Advantage Solutions Inc.  - Class A Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "ADVM",
+    "nameIdentifier": "Adverum Biotechnologies",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  }
+]
