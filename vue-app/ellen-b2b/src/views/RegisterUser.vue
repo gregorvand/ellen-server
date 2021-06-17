@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     captureName: {
@@ -59,6 +60,7 @@ export default {
           lastName: this.lname || '',
           email: this.email,
           password: this.password,
+          userCompanies: this.selectedCompanies.map((company) => company.id),
         })
         .then(() => {
           this.$router.push({ name: 'dashboard' })
@@ -67,6 +69,9 @@ export default {
           this.error = err.response.data.message
         })
     },
+  },
+  computed: {
+    ...mapState('company', ['selectedCompanies']),
   },
 }
 </script>

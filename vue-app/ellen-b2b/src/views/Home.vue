@@ -9,8 +9,6 @@
     </div>
 
     <SearchForm />
-    <EmailCollect />
-
     <RegisterUser v-bind:captureName="false" />
   </div>
 </template>
@@ -18,7 +16,6 @@
 <script>
 import { authComputed } from '@/store/helpers.js'
 import SearchForm from '@/components/SearchForm.vue'
-import EmailCollect from '@/components/EmailCollect.vue'
 import RegisterUser from '@/views/RegisterUser.vue'
 
 export default {
@@ -27,7 +24,6 @@ export default {
   },
   components: {
     SearchForm,
-    EmailCollect,
     RegisterUser,
   },
 }

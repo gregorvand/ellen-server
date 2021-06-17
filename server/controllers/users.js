@@ -22,16 +22,23 @@ module.exports = {
     // do checks and then execute below if they all
     let errorsToSend = []
 
-    return User.create({
-      firstName: req?.body?.firstName || req?.data?.credentials.firstName || '',
-      lastName: req?.body?.lastName || req?.data?.credentials.lastName || '',
+    User.create({
+      firstName: req?.body?.firstName || '',
+      lastName: req?.body?.lastName || '',
       email: req.body.email || user.email,
       password: req.body.password || user.password,
       identifier: req.body.identifier || 'undefined',
     })
-      .then((user) => res.status(201).send({ user, token }))
+      .then((user) => {
+        console.log(user)
+        if (req.body?.userCompanies) {
+          console.log('the companies..', req.body.userCompanies)
+          user.setCompanies(req.body.userCompanies)
+        }
+        res.status(201).send({ user, token })
+      })
       .catch((error) => {
-        let errorMessage = error.errors[0].message
+        let errorMessage = error.errors[0].message || error.errors.message
         // this.errors = error.response.errors
         errorsToSend.push(errorMessage)
         // res.status(400).send(error)
