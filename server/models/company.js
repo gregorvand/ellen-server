@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       as: 'orders',
       onDelete: 'CASCADE',
     })
-    Company.belongsToMany(User, { through: 'UserCompanies' })
+    Company.belongsToMany(models.User, { through: 'UserCompanies' })
   }
   return Company
 }

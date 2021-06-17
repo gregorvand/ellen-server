@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'customerId',
       as: 'points',
     })
-    User.belongsToMany(Company, { through: 'UserCompany' })
+    User.belongsToMany(models.Company, { through: 'UserCompanies' })
     raw: true
   }
   return User
