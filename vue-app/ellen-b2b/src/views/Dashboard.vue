@@ -11,9 +11,8 @@
 </template>
 
 <script>
-// import axios from 'axios'
-
-import { mapState } from 'vuex'
+import axios from 'axios'
+// import { mapState } from 'vuex'
 import CompanySelector from '../components/CompanySelector'
 import PlanType from '../components/PlanType'
 export default {
@@ -21,16 +20,17 @@ export default {
   data() {
     return {
       // isLoading: true,
+      selectedCompanies: [],
     }
   },
-  computed: {
-    ...mapState('company', ['selectedCompanies']),
-  },
+  // computed: {
+  //   ...mapState('company', ['selectedCompanies']),
+  // },
   created() {
-    // axios.get('//localhost:8000/api/dashboard').then(({ data }) => {
-    //   this.events = data.events.events
-    //   this.isLoading = false
-    // })
+    axios.get('//localhost:8000/api/dashboard').then(({ data }) => {
+      this.selectedCompanies = data.companies
+      // this.isLoading = false
+    })
   },
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="company-selector-label">
-      {{ company.companyName }}
+      {{ company.nameIdentifier }}
       <span v-if="company.ticker">({{ company.ticker }})</span>
     </div>
     <input
