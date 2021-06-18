@@ -4,7 +4,7 @@
     <section class="selected-companies">
       <ul>
         <li v-for="company in selectedCompanies" :key="company.id">
-          <p>{{ company.companyName }}</p>
+          <CompanySelector :company="company" />
         </li>
       </ul>
     </section>

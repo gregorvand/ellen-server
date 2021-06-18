@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="company-selector">
     <div class="company-selector-label">
-      {{ companyName }}
+      <span>{{ companyName }}</span>
       <span v-if="company.ticker">({{ company.ticker }})</span>
     </div>
     <input
+      v-if="!disableCheckBox"
       class="select-company"
       type="checkbox"
       v-model="checked"
@@ -25,6 +26,10 @@ export default {
       default: () => ({}),
     },
     selected: {
+      type: Boolean,
+      default: false,
+    },
+    disableCheckBox: {
       type: Boolean,
       default: false,
     },
@@ -70,9 +75,19 @@ span {
   width: 100%;
 }
 
-.company-selector-label {
-  width: 65%;
-  font-size: 13px;
+.company-selector {
+  // view specifics
+  .dashboard & {
+    width: 500px;
+    height: 40px;
+    display: flex;
+  }
+
+  // subcomponents
+  &-label {
+    width: 65%;
+    font-size: 13px;
+  }
 }
 
 .company-type-label {
