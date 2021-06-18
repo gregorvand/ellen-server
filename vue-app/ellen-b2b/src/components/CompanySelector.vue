@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="company-selector-label">
-      {{ company.nameIdentifier }}
+      {{ companyName }}
       <span v-if="company.ticker">({{ company.ticker }})</span>
     </div>
     <input
@@ -47,6 +47,14 @@ export default {
       checked: this.$store.getters['company/userHasCompany'](this.company.id),
       isPublicCompany: this.company.ticker ? 'public' : 'private',
     }
+  },
+
+  computed: {
+    companyName() {
+      return this.company.companyName
+        ? this.company.companyName // elastic search
+        : this.company.nameIdentifier // ellen DB
+    },
   },
 }
 </script>
