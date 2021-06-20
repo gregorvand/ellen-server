@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :class="('app-wrapper ' + $route.name)">
+  <div id="app" :class="'app-wrapper ' + $route.name">
     <AppNav />
     <NotificationContainer />
     <router-view :key="$route.fullPath" />

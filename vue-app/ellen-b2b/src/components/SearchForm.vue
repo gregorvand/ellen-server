@@ -117,7 +117,7 @@ li {
 }
 
 .selected-companies {
-  border: solid red thin;
+  border: solid gray thin;
   height: 200px;
   overflow-y: scroll;
 }

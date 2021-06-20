@@ -9,7 +9,8 @@
     </div>
 
     <SearchForm />
-    <RegisterUser v-bind:captureName="false" />
+    <BaseSaveButton v-if="loggedIn" />
+    <RegisterUser v-if="!loggedIn" v-bind:captureName="false" />
   </div>
 </template>
 

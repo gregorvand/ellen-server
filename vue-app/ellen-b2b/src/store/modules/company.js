@@ -24,6 +24,9 @@ export const mutations = {
     )
     localStorage.setItem('companies', JSON.stringify(state.selectedCompanies))
   },
+  REMOVE_ALL(state) {
+    state.selectedCompanies = []
+  },
 }
 
 export const actions = {
@@ -32,6 +35,9 @@ export const actions = {
   },
   removeCompanySelection({ commit }, company) {
     commit('REMOVE', company)
+  },
+  clearCompanySelection({ commit }) {
+    commit('REMOVE_ALL')
   },
 }
 

@@ -172,6 +172,11 @@ module.exports = (app) => {
   app.put('/api/users/update/username/:id', usersController.update)
   app.get('/api/users', usersController.list)
   app.post('/api/users/subscribe', serviceKlaviyo.addSubscribersToList)
+  app.post(
+    '/api/users/update/companies',
+    auth.getToken,
+    usersController.updateByEmail
+  )
 
   app.post('/api/companies/update/:id', companiesController.update)
   app.post('/api/orders/update/:id', ordersController.update)

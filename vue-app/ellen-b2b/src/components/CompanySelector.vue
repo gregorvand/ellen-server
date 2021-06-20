@@ -81,6 +81,10 @@ span {
     width: 500px;
     height: 40px;
     display: flex;
+
+    &-label {
+      width: 100%;
+    }
   }
 
   // subcomponents
