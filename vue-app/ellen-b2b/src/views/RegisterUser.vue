@@ -71,7 +71,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('company', ['selectedCompanies']),
+    ...mapState('selectedCompanies', ['selectedCompanies']),
   },
 }
 </script>

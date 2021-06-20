@@ -16,13 +16,19 @@ export const mutations = {
       ...company,
       id: company.id,
     })
-    localStorage.setItem('companies', JSON.stringify(state.selectedCompanies))
+    localStorage.setItem(
+      'selectedCompanies',
+      JSON.stringify(state.selectedCompanies)
+    )
   },
   REMOVE(state, companyToRemove) {
     state.selectedCompanies = state.selectedCompanies.filter(
       (company) => company.id !== companyToRemove.id
     )
-    localStorage.setItem('companies', JSON.stringify(state.selectedCompanies))
+    localStorage.setItem(
+      'selectedCompanies',
+      JSON.stringify(state.selectedCompanies)
+    )
   },
   REMOVE_ALL(state) {
     state.selectedCompanies = []

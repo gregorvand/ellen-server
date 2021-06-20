@@ -39,9 +39,9 @@ export default {
     selectCompany() {
       if (!this.checked) {
         console.log('company?', this.company)
-        this.$store.dispatch('company/addCompanyToSelection', this.company)
+        this.$store.dispatch('selectedCompanies/addCompanyToSelection', this.company)
       } else {
-        this.$store.dispatch('company/removeCompanySelection', this.company)
+        this.$store.dispatch('selectedCompanies/removeCompanySelection', this.company)
       }
     },
   },
@@ -49,7 +49,9 @@ export default {
   data() {
     return {
       // if user has already selected this company, will return true, else false
-      checked: this.$store.getters['company/userHasCompany'](this.company.id),
+      checked: this.$store.getters['selectedCompanies/userHasCompany'](
+        this.company.id
+      ),
       isPublicCompany: this.company.ticker ? 'public' : 'private',
     }
   },

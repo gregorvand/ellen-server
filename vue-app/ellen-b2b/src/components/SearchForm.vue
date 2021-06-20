@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     ...mapState('search', ['results']),
-    ...mapState('company', ['selectedCompanies']),
+    ...mapState('selectedCompanies', ['selectedCompanies']),
   },
 }
 </script>

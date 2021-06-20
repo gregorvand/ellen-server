@@ -17,15 +17,16 @@ export default {
   methods: {
     // do this the proper way with EventService!
     saveCompanies() {
-      console.log(this.$store.getters['company/userCompanies'])
+      console.log(this.$store.getters['selectedCompanies/userCompanies'])
       axios({
         method: 'post',
         url: '//localhost:8000/api/users/update/companies',
         data: {
-          selectedCompanies: this.$store.getters['company/userCompanies'],
+          selectedCompanies:
+            this.$store.getters['selectedCompanies/userCompanies'],
         },
       }).then(({ data }) => {
-        this.$store.dispatch('company/clearCompanySelection') // ideally state becomes saved companies
+        this.$store.dispatch('selectedCompanies/clearCompanySelection') // ideally state becomes saved companies
         this.button_label = 'Saved!'
 
         const thisComponent = this // must set this outside of anon function below
