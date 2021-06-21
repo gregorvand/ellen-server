@@ -17,7 +17,6 @@ export default {
   methods: {
     // do this the proper way with EventService!
     saveCompanies() {
-      console.log(this.$store.getters['selectedCompanies/userCompanies'])
       axios({
         method: 'post',
         url: '//localhost:8000/api/users/update/companies',

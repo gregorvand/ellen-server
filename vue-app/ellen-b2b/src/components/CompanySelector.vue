@@ -47,7 +47,7 @@ export default {
   methods: {
     selectCompany() {
       if (!this.checked) {
-        console.log('company?', this.company)
+        // console.log('company?', this.company)
         this.$store.dispatch(
           'selectedCompanies/addCompanyToSelection',
           this.company
