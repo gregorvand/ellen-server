@@ -1,7 +1,16 @@
 <template>
   <div class="company-selector">
     <div class="company-selector-label">
-      <span>{{ companyName }}</span>
+      <router-link
+        v-if="this.$route.name == 'dashboard'"
+        :to="{
+          name: 'company',
+          params: { id: company.id },
+        }"
+      >
+        <span>{{ companyName }}</span>
+      </router-link>
+      <span v-else>{{ companyName }}</span>
       <span v-if="company.ticker">({{ company.ticker }})</span>
     </div>
     <input
@@ -39,9 +48,15 @@ export default {
     selectCompany() {
       if (!this.checked) {
         console.log('company?', this.company)
-        this.$store.dispatch('selectedCompanies/addCompanyToSelection', this.company)
+        this.$store.dispatch(
+          'selectedCompanies/addCompanyToSelection',
+          this.company
+        )
       } else {
-        this.$store.dispatch('selectedCompanies/removeCompanySelection', this.company)
+        this.$store.dispatch(
+          'selectedCompanies/removeCompanySelection',
+          this.company
+        )
       }
     },
   },
@@ -83,6 +98,8 @@ span {
     width: 500px;
     height: 40px;
     display: flex;
+    align-items: center;
+    margin-bottom: 5px;
 
     &-label {
       width: 100%;
