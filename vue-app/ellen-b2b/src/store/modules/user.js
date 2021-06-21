@@ -8,6 +8,7 @@ export const state = () => ({
 
 export const mutations = {
   SET_USER_DATA(state, userData) {
+    console.log('well', userData)
     state.user = userData
     localStorage.setItem('user', JSON.stringify(userData))
     axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`
@@ -35,6 +36,7 @@ export const actions = {
     return axios
       .post('//localhost:8000/api/login', credentials)
       .then(({ data }) => {
+        console.log('response..', data)
         commit('SET_USER_DATA', data)
       })
   },

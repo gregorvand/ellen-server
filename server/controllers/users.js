@@ -78,6 +78,7 @@ module.exports = {
             firstName: user.firstName,
             lastName: user.lastName,
           })
+          res.sendStatus(200)
         } else {
           res.status(400)
         }
