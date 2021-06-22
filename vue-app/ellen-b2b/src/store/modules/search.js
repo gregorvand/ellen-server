@@ -16,12 +16,6 @@ export const state = {
   currentQuery: '',
 }
 
-// export const getters = {
-//   getSearchResults: (state) => {
-//     return state.search.results
-//   },
-// }
-
 export const mutations = {
   SET_SEARCH_RESULTS(state, payload) {
     state.results = payload
@@ -44,7 +38,7 @@ export const actions = {
     }
 
     return searchClient
-      .post('csjoblist_prod/_search', searchQuery)
+      .post('csjoblist/_search', searchQuery)
       .then(({ data }) => {
         console.log(data)
         const results = data.hits['hits'].map((result) => result._source) // map from ES format

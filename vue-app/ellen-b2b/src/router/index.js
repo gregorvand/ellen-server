@@ -8,6 +8,7 @@ import Home from '@/views/Home.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import RegisterUser from '@/views/RegisterUser.vue'
 import LoginUser from '@/views/LoginUser.vue'
+import CompanySheet from '@/views/CompanySheet.vue'
 
 Vue.use(VueRouter)
 
@@ -48,6 +49,11 @@ const routes = [
     path: '/login',
     name: 'login',
     component: LoginUser,
+  },
+  {
+    path: '/company/:id',
+    name: 'company',
+    component: CompanySheet,
   },
 ]
 

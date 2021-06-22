@@ -1,45 +1,60 @@
+import CompanyService from '@/services/CompanyService.js'
+import FmpService from '@/services/FmpService'
+
 export const namespaced = true // ie user/[action]
 
-export const state = {
-  selectedCompanies: [],
-}
-
-// export const getters = {
-//   getterValue: (state) => {
-//     return state.value
-//   },
-// }
+export const state = () => ({
+  currentCompany: {},
+  publicData: {},
+})
 
 export const mutations = {
-  PUSH(state, company) {
-    state.selectedCompanies.push({
-      ...company,
-      id: company.id,
-    })
-    localStorage.setItem('companies', JSON.stringify(state.selectedCompanies))
+  SET_COMPANY(state, company) {
+    state.currentCompany = company
   },
-  REMOVE(state, companyToRemove) {
-    state.selectedCompanies = state.selectedCompanies.filter(
-      (company) => company.id !== companyToRemove.id
-    )
-    localStorage.setItem('companies', JSON.stringify(state.selectedCompanies))
+  SET_PUBLIC_DATA(state, data) {
+    state.publicData = data
   },
 }
 
 export const actions = {
-  addCompanyToSelection({ commit }, company) {
-    commit('PUSH', company)
+  fetchCompany({ commit, dispatch }, id) {
+    CompanyService.getCompany(id)
+      .then((response) => {
+        commit('SET_COMPANY', response.data)
+        if (response.data.ticker !== '') {
+          dispatch('fetchPublicCompanyRatios', response.data.ticker)
+        }
+      })
+      .catch((error) => {
+        const notification = {
+          type: 'error',
+          message:
+            'There was a problem fetching this company: ' + error.message,
+        }
+        dispatch('notification/add', notification, { root: true })
+      })
   },
-  removeCompanySelection({ commit }, company) {
-    commit('REMOVE', company)
+  // default 0 to return only latest period. Set as blank for all periods available
+  fetchPublicCompanyRatios({ commit, dispatch }, ticker, period = 0) {
+    FmpService.getRatios(ticker)
+      .then((response) => {
+        commit('SET_PUBLIC_DATA', [response.data[`${period}`]])
+      })
+      .catch((error) => {
+        const notification = {
+          type: 'error',
+          message:
+            'There was a problem fetching this company data from FMP: ' +
+            error.message,
+        }
+        dispatch('notification/add', notification, { root: true })
+      })
   },
 }
 
 export const getters = {
-  userHasCompany: (state) => (id) => {
-    return state.selectedCompanies.find((company) => company.id === id)
-  },
-  userCompanies: (state) => {
-    return state.selectedCompanies
+  getCompanyTicker: (state) => {
+    return state.currentCompany.ticker
   },
 }

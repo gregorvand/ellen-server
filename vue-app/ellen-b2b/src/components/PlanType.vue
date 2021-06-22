@@ -10,7 +10,7 @@
 export default {
   computed: {
     numberOfScrips() {
-      return this.$store.getters['company/userCompanies'].length * 10
+      return this.$store.getters['selectedCompanies/userCompanies'].length * 10
     },
   },
 }

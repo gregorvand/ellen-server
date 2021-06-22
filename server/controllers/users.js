@@ -1,6 +1,7 @@
 const User = require('../models').User
 const Order = require('../models').Order
 const jwt = require('jsonwebtoken')
+const { Op } = require('sequelize')
 
 module.exports = {
   create(req, res) {
@@ -15,24 +16,35 @@ module.exports = {
       }
     }
 
-    // Generate token
-    const data = JSON.stringify(req?.data?.credentials, null, 2)
-    const token = jwt.sign({ data }, process.env.USER_AUTH_SECRET)
-
     // do checks and then execute below if they all
     let errorsToSend = []
 
-    return User.create({
-      firstName: req.body.firstName || req.data.credentials.firstName,
-      lastName: req.body.lastName || req.data.credentials.lastName,
+    User.create({
+      firstName: req?.body?.firstName || '',
+      lastName: req?.body?.lastName || '',
       email: req.body.email || user.email,
       password: req.body.password || user.password,
       identifier: req.body.identifier || 'undefined',
     })
-      .then((user) => res.status(201).send({ user, token }))
+      .then((user) => {
+        console.log(user)
+        if (req.body?.userCompanies) {
+          console.log('the companies..', req.body.userCompanies)
+          user.setCompanies(req.body.userCompanies)
+        }
+
+        const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
+        // In a production app, you'll want the secret key to be an environment variable
+        res.json({
+          token,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        })
+        res.send(200)
+      })
       .catch((error) => {
-        let errorMessage = error.errors[0].message
-        console.error('yah', error.errors[0].message)
+        let errorMessage = error.errors[0].message || error.errors.message
         // this.errors = error.response.errors
         errorsToSend.push(errorMessage)
         // res.status(400).send(error)
@@ -58,23 +70,19 @@ module.exports = {
   checkUser(req, res) {
     return User.findOne({
       where: {
-        email: req.body.email,
-        password: req.body.password,
+        [Op.and]: [{ email: req.body.email }, { password: req.body.password }],
       },
     })
       .then((user) => {
-        if (user.email) {
-          const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
-          // In a production app, you'll want the secret key to be an environment variable
-          res.json({
-            token,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-          })
-        } else {
-          res.status(400)
-        }
+        const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
+        // In a production app, you'll want the secret key to be an environment variable
+        res.json({
+          token,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        })
+        res.send(200)
       })
       .catch((error) => {
         console.log(error)
@@ -88,13 +96,13 @@ module.exports = {
 
   update(req, res) {
     return User.findByPk(req.params.id)
-      .then((company) => {
-        if (!company) {
+      .then((user) => {
+        if (!user) {
           return res.status(404).send({
             message: 'User Not Found',
           })
         }
-        return company
+        return user
           .update({
             username: req.body.username,
           })
@@ -102,6 +110,37 @@ module.exports = {
           .catch((error) => res.status(400).send(error))
       })
       .catch((error) => res.status(400).send(error))
+  },
+
+  updateByEmail(req, res) {
+    jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
+      if (err) {
+        res.sendStatus(401)
+      } else {
+        return User.findOne({
+          where: {
+            email: req.headers.user,
+          },
+        })
+          .then((user) => {
+            if (!user) {
+              return res.status(404).send({
+                message: 'User Not Found',
+              })
+            }
+            console.log('req was', req.body.selectedCompanies)
+
+            const selectedCompanyIds = req.body.selectedCompanies.map(
+              (company) => company.id
+            )
+            user
+              .addCompanies(selectedCompanyIds) // get company IDs from state
+              .then((user) => res.status(200).send(user))
+              .catch((error) => res.status(400).send(error))
+          })
+          .catch((error) => res.status(400).send(error))
+      }
+    })
   },
 
   // takes an object from function calling it, e.g:

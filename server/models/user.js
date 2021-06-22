@@ -2,11 +2,11 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     firstName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     email: {
       type: DataTypes.STRING,
@@ -18,15 +18,15 @@ module.exports = (sequelize, DataTypes) => {
       is: /^[0-9a-f]{64}$/i,
       allowNull: false,
     },
-    status: {
-      type: DataTypes.STRING,
-      default: 'pending',
-    },
     identifier: {
       type: DataTypes.STRING,
     },
     username: {
       type: DataTypes.STRING,
+    },
+    activated: {
+      type: DataTypes.BOOLEAN,
+      default: false,
     },
   })
 
@@ -39,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'customerId',
       as: 'points',
     })
+    User.belongsToMany(models.Company, { through: 'UserCompanies' })
     raw: true
   }
   return User

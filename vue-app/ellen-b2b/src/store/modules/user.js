@@ -11,6 +11,7 @@ export const mutations = {
     state.user = userData
     localStorage.setItem('user', JSON.stringify(userData))
     axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`
+    axios.defaults.headers.common['User'] = `${userData.email}`
   },
   LOGOUT() {
     localStorage.removeItem('user')
@@ -20,7 +21,6 @@ export const mutations = {
 
 export const actions = {
   register({ commit }, credentials) {
-    console.log(credentials)
     return axios
       .post('//localhost:8000/api/users', credentials, {
         headers: {
@@ -35,6 +35,7 @@ export const actions = {
     return axios
       .post('//localhost:8000/api/login', credentials)
       .then(({ data }) => {
+        console.log('response..', data)
         commit('SET_USER_DATA', data)
       })
   },

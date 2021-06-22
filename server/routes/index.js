@@ -9,7 +9,6 @@ const serviceKlaviyo = require('../services/third_party/klaviyo')
 const serviceWinners = require('../services/winners/winner_calculators')
 const emailHelpers = require('../modules/emailHelpers')
 const auth = require('../middleware/getToken')
-const jwt = require('jsonwebtoken')
 
 module.exports = (app) => {
   // examples
@@ -161,25 +160,23 @@ module.exports = (app) => {
   app.post('/api/users', usersController.create)
   app.post('/api/login', usersController.checkUser)
 
-  const theEvents = require('../../vue-app/ellen-b2b/db/events.json')
+  // lookup userCompanies
+  // get company IDs
+  // look up Companies with those Ids
+
+  // const userCompanies = require('../../vue-app/ellen-b2b/db/events.json')
+
   // New routes for Vue auth
-  app.get('/api/dashboard', auth.getToken, (req, res) => {
-    console.log('also yep')
-    jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
-      if (err) {
-        res.sendStatus(401)
-      } else {
-        console.log('DID GET HERE')
-        res.json({
-          events: theEvents,
-        })
-      }
-    })
-  })
+  app.get('/api/dashboard', auth.getToken, companiesController.listByUser)
 
   app.put('/api/users/update/username/:id', usersController.update)
   app.get('/api/users', usersController.list)
   app.post('/api/users/subscribe', serviceKlaviyo.addSubscribersToList)
+  app.post(
+    '/api/users/update/companies',
+    auth.getToken,
+    usersController.updateByEmail
+  )
 
   app.post('/api/companies/update/:id', companiesController.update)
   app.post('/api/orders/update/:id', ordersController.update)

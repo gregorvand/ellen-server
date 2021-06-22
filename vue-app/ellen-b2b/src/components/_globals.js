@@ -32,5 +32,7 @@ requireComponent.keys().forEach((fileName) => {
     .join('')
 
   // Globally register the component
+  // console.log(componentName)
+  // Above useful to see what the name of the component is if any confusion
   Vue.component(componentName, componentConfig.default || componentConfig)
 })

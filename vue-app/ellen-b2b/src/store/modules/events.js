@@ -50,7 +50,7 @@ export const actions = {
   },
 
   fetchEvent({ commit, getters, dispatch }, id) {
-    var event = getters.getEventById(id)
+    let event = getters.getEventById(id)
 
     if (event) {
       commit('SET_EVENT', event)
