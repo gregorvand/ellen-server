@@ -8,11 +8,10 @@ export const state = () => ({
 
 export const mutations = {
   SET_USER_DATA(state, userData) {
-    console.log('well', userData)
     state.user = userData
     localStorage.setItem('user', JSON.stringify(userData))
     axios.defaults.headers.common['Authorization'] = `Bearer ${userData.token}`
-    axios.defaults.headers.common['User'] = `${userData.email}` // chage this to session token
+    axios.defaults.headers.common['User'] = `${userData.email}`
   },
   LOGOUT() {
     localStorage.removeItem('user')

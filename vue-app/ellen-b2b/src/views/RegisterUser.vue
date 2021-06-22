@@ -62,11 +62,11 @@ export default {
           password: this.password,
           userCompanies: this.selectedCompanies.map((company) => company.id),
         })
-        .then(() => {
+        .then((user) => {
           this.$router.push({ name: 'dashboard' })
         })
         .catch((err) => {
-          this.error = err.response.data.message
+          this.error = err?.response.data.message || err
         })
     },
   },

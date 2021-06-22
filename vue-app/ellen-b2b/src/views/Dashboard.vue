@@ -17,17 +17,12 @@ export default {
   components: { CompanySelector },
   data() {
     return {
-      // isLoading: true,
       selectedCompanies: [],
     }
   },
-  // computed: {
-  //   ...mapState('company', ['selectedCompanies']),
-  // },
   created() {
     axios.get('//localhost:8000/api/dashboard').then(({ data }) => {
       this.selectedCompanies = data.companies
-      // this.$store.dispatch('userCompany/addUserCompany', data.companies)
     })
   },
 }

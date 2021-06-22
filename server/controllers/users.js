@@ -1,6 +1,7 @@
 const User = require('../models').User
 const Order = require('../models').Order
 const jwt = require('jsonwebtoken')
+const { Op } = require('sequelize')
 
 module.exports = {
   create(req, res) {
@@ -14,10 +15,6 @@ module.exports = {
         // In a production app, you'll want to encrypt the password
       }
     }
-
-    // Generate token
-    const data = JSON.stringify(req?.data?.credentials, null, 2)
-    const token = jwt.sign({ data }, process.env.USER_AUTH_SECRET)
 
     // do checks and then execute below if they all
     let errorsToSend = []
@@ -35,7 +32,16 @@ module.exports = {
           console.log('the companies..', req.body.userCompanies)
           user.setCompanies(req.body.userCompanies)
         }
-        res.status(201).send({ user, token })
+
+        const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
+        // In a production app, you'll want the secret key to be an environment variable
+        res.json({
+          token,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        })
+        res.send(200)
       })
       .catch((error) => {
         let errorMessage = error.errors[0].message || error.errors.message
@@ -64,24 +70,19 @@ module.exports = {
   checkUser(req, res) {
     return User.findOne({
       where: {
-        email: req.body.email,
-        password: req.body.password,
+        [Op.and]: [{ email: req.body.email }, { password: req.body.password }],
       },
     })
       .then((user) => {
-        if (user.email) {
-          const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
-          // In a production app, you'll want the secret key to be an environment variable
-          res.json({
-            token,
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-          })
-          res.sendStatus(200)
-        } else {
-          res.status(400)
-        }
+        const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
+        // In a production app, you'll want the secret key to be an environment variable
+        res.json({
+          token,
+          email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        })
+        res.send(200)
       })
       .catch((error) => {
         console.log(error)
