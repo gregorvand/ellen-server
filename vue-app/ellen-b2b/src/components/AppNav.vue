@@ -2,6 +2,8 @@
   <div id="nav">
     <router-link to="/"> Home </router-link>
     <router-link v-if="loggedIn" to="/dashboard"> Dashboard </router-link>
+    <br />
+    <span v-if="loggedIn">{{ user.user.email }}</span>
     <router-link v-if="!loggedIn" to="/login" class="button">
       Login
     </router-link>
@@ -13,9 +15,11 @@
 
 <script>
 import { authComputed } from '@/store/helpers.js'
+import { mapState } from 'vuex'
 export default {
   computed: {
     ...authComputed,
+    ...mapState(['user']),
   },
 
   methods: {
