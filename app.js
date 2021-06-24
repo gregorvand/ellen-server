@@ -42,7 +42,7 @@ const app = express()
 // app.disable('view cache'); // DO NOT COMMIT THIS
 
 app.use(helmet())
-app.use(cors({ origin: ['http://localhost:8080'] }))
+app.use(cors({ origin: ['http://localhost:8080', 'http://localhost:8000'] }))
 
 app.use(
   helmet.contentSecurityPolicy({
@@ -53,6 +53,7 @@ app.use(
         "'unsafe-inline'",
         'cdnjs.cloudflare.com',
         'http://localhost:8000',
+        'http://localhost:8080',
         'https://alpha.ellen.me',
       ],
       styleSrc: [

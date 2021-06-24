@@ -181,6 +181,13 @@ module.exports = (app) => {
   app.post('/api/companies/update/:id', companiesController.update)
   app.post('/api/orders/update/:id', ordersController.update)
 
+  const eventEmitter = require('../services/eventBus').eventEmitter
+  app.post('/api/earnings/receive', function (req, res) {
+    console.log(req.body.body.data) // coming from FinnHub via parse at pipedream.com
+    eventEmitter.emit('somedata', req.body.body.data)
+    res.sendStatus(200)
+  })
+
   // For any other request method on companies, we're going to return "Method Not Allowed"
   app.all('/api/companies', (req, res) =>
     res.status(405).send({
