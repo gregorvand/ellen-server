@@ -49,12 +49,12 @@ async function populateDB() {
       id: company.id,
       companyName: company.nameIdentifier,
       ticker: company.ticker,
-      companyType: company.companyType
+      companyType: company.companyType,
     }
 
     bulk.push({
       index: {
-        _index: 'csjoblist', // or csjoblist for dev
+        _index: 'csjoblist', // or csjoblist_prod
         _type: 'jobs_list',
         _id: company.id,
       },
