@@ -1,7 +1,11 @@
 <template>
   <div id="nav">
     <router-link to="/"> Home </router-link>
-    <router-link v-if="loggedIn" to="/dashboard"> Dashboard </router-link>
+    <template v-if="loggedIn">
+      <router-link :to="{ name: 'dashboard' }"> Dashboard </router-link>
+      <router-link :to="{ name: 'earnings' }"> Earnings </router-link>
+    </template>
+
     <br />
     <span v-if="loggedIn">{{ user.user.email }}</span>
     <router-link v-if="!loggedIn" to="/login" class="button">
