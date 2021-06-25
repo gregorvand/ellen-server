@@ -16,10 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    orderSuffix: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     companyType: {
       type: DataTypes.STRING,
       validate: {
