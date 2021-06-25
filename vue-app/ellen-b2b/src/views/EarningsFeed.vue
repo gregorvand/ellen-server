@@ -1,10 +1,17 @@
 <template>
   <div>
     <h1>its Earnings time..</h1>
+    <BaseTriggerApiButton />
+
+    <!-- currently does not handle data structure if webhook received after get earnings -->
     <template v-if="liveEarnings !== []">
-      <ul v-for="earning in liveEarnings" :key="earning.symbol">
-        <li>{{ earning[0].symbol }}</li>
-        <li>{{ earning[0].date }}</li>
+      <ul
+        class="reverse-order"
+        v-for="earning in reversedEarnings"
+        :key="earning.symbol"
+      >
+        <li>{{ earning.symbol }}</li>
+        <li>{{ earning.date }}</li>
       </ul>
     </template>
   </div>
@@ -23,6 +30,9 @@ socket.on('earningsData', (fetchedData) => {
 export default {
   computed: {
     ...mapState('earnings', ['liveEarnings']),
+    reversedEarnings() {
+      return this.liveEarnings.slice().reverse()
+    },
   },
 }
 </script>

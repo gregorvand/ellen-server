@@ -1,6 +1,7 @@
 // const todosController = require('../controllers/todos');
 // const todoItemsController = require('../controllers/todoitems');
 const companiesController = require('../controllers/companies')
+const earningsController = require('../controllers/earnings')
 const ordersController = require('../controllers/orders')
 const usersController = require('../controllers/users')
 const pointsController = require('../controllers/points')
@@ -187,6 +188,12 @@ module.exports = (app) => {
     eventEmitter.emit('somedata', req.body.body.data)
     res.sendStatus(200)
   })
+
+  app.post(
+    '/api/earnings/yesterday',
+    auth.getToken,
+    earningsController.getYesterdayEarnings
+  )
 
   // For any other request method on companies, we're going to return "Method Not Allowed"
   app.all('/api/companies', (req, res) =>

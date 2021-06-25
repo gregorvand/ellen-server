@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export const namespaced = true
 
 export const state = {
@@ -12,8 +14,10 @@ export const getters = {
 
 export const mutations = {
   PUSH(state, report) {
-    state.liveEarnings.push({
-      ...report,
+    report.forEach((company) => {
+      state.liveEarnings.push({
+        ...company,
+      })
     })
   },
 }
