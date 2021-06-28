@@ -35,6 +35,11 @@ module.exports = (sequelize, DataTypes) => {
       as: 'orders',
       onDelete: 'CASCADE',
     })
+    Company.hasMany(models.Earning, {
+      foreignKey: 'companyId',
+      as: 'earnings',
+      onDelete: 'CASCADE',
+    })
     Company.belongsToMany(models.User, { through: 'UserCompanies' })
   }
   return Company
