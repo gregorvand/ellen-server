@@ -189,10 +189,25 @@ module.exports = (app) => {
     res.sendStatus(200)
   })
 
+  // no params
   app.post(
     '/api/earnings/yesterday',
     auth.getToken,
     earningsController.getYesterdayEarnings
+  )
+
+  // accepts req.body with all params for adding to DB
+  app.post(
+    '/api/earnings/quarterly/new',
+    auth.getToken,
+    earningsController.addQuarterlyEarning
+  )
+
+  // accepts req.body.ticker param
+  app.put(
+    '/api/earnings/quarterly',
+    // auth.getToken,
+    earningsController.getQuarterlyEarnings
   )
 
   // For any other request method on companies, we're going to return "Method Not Allowed"
