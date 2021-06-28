@@ -57,6 +57,7 @@ async function populateDB() {
         _index: 'csjoblist', // or csjoblist_prod
         _type: 'jobs_list',
         _id: company.id,
+        _ticker: company.ticker,
       },
     })
 
