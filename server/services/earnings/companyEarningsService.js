@@ -11,7 +11,6 @@ async function companyEarningBySymbol(ticker) {
 async function allYesterdayEarnings() {
   const today = new Date()
   const getYesterday = new Yesterday(today).dateYesterday()
-  console.log(getYesterday)
   // get yesterday, then convert to exchange timezone.. NYC...
   const marketYesterday = getYesterday
     .tz('America/New_York')
@@ -23,7 +22,6 @@ async function allYesterdayEarnings() {
     url: `https://finnhub.io/api/v1/calendar/earnings?from=${marketYesterday}&to=${marketYesterday}&token=c38tm4iad3ido5aka4e0`,
   })
 }
-
 
 module.exports.companyEarningBySymbol = companyEarningBySymbol
 module.exports.allYesterdayEarnings = allYesterdayEarnings
