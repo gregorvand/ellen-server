@@ -210,6 +210,18 @@ module.exports = (app) => {
     earningsController.getQuarterlyEarnings
   )
 
+  app.get(
+    '/api/earnings/quarterly/company',
+    // auth.getToken,
+    earningsController.getQuarterlyEarnings
+  )
+
+  app.get(
+    '/api/earnings/store',
+    // auth.getToken,
+    earningsController.getQuarterlyEarnings
+  )
+
   // For any other request method on companies, we're going to return "Method Not Allowed"
   app.all('/api/companies', (req, res) =>
     res.status(405).send({

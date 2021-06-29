@@ -3,6 +3,10 @@ const jwt = require('jsonwebtoken')
 const axios = require('axios')
 const Yesterday = require('../utils/getYesterday')
 
+const {
+  companyEarningBySymbol,
+} = require('../services/earnings/companyEarningsService')
+
 module.exports = {
   addQuarterlyEarning(req, res) {
     jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
@@ -36,11 +40,11 @@ module.exports = {
         const getYesterday = new Yesterday(today).dateYesterday()
         console.log(getYesterday)
         // get yesterday, then convert to exchange timezone.. NYC...
-        // const marketYesterday = getYesterday
-        //   .tz('America/New_York')
-        //   .format('YYYY-MM-DD')
+        const marketYesterday = getYesterday
+          .tz('America/New_York')
+          .format('YYYY-MM-DD')
 
-        const marketYesterday = '2021-06-25' // for test purposes if yesterday is non business day
+        // const marketYesterday = '2021-06-25' // for test purposes if yesterday is non business day
 
         axios({
           method: 'get',
@@ -70,20 +74,22 @@ module.exports = {
       }
     })
   },
+
   getQuarterlyEarnings(req, res) {
-    // jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
-    //   if (err) {
-    //     res.sendStatus(401)
-    //   } else {
-    return axios({
-      // return to debug
-      method: 'get',
-      url: `https://financialmodelingprep.com/api/v3/income-statement/${req.body.ticker}?period=quarter&limit=1&apikey=618a872a67c27ab884357f853a051837`,
+    jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
+      if (err) {
+        res.sendStatus(401)
+      } else {
+        companyEarningBySymbol(req.body.ticker).then((result) => {
+          res.send(result.data)
+        })
+      }
     })
-    // .then(({ data }) => {
-    //   res.send(data)
-    // })
-    // }
-    // })
+  },
+
+  getAndStoreQuarterlyEarnings(req, res) {
+    this.getQuarterlyEarnings.then((data) => {
+      res.send(data)
+    })
   },
 }
