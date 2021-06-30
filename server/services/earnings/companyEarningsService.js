@@ -1,10 +1,11 @@
 const axios = require('axios')
 const Yesterday = require('../../utils/getYesterday')
 
-async function companyEarningBySymbol(ticker) {
+// gets the latest 1 record for a compay's quarterly filing
+async function companyEarningBySymbol(ticker, numberOfFilings = 1) {
   return await axios({
     method: 'get',
-    url: `https://financialmodelingprep.com/api/v3/income-statement/${ticker}?period=quarter&limit=1&apikey=618a872a67c27ab884357f853a051837`,
+    url: `https://financialmodelingprep.com/api/v3/income-statement/${ticker}?period=quarter&limit=${numberOfFilings}&apikey=618a872a67c27ab884357f853a051837`,
   })
 }
 

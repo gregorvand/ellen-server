@@ -1,4 +1,5 @@
 const Earning = require('../models').Earning
+const Company = require('../models').Company
 const jwt = require('jsonwebtoken')
 
 const {
@@ -58,12 +59,15 @@ module.exports = {
         allEarningsSymbols.push(result.symbol)
       })
 
+      const numberOfQuartersToStore = 1
       // now make many requests for each company
       allEarningsSymbols.forEach((symbol) => {
-        companyEarningBySymbol(symbol)
+        companyEarningBySymbol(symbol, numberOfQuartersToStore)
           .then((result) => {
-            earningCreate(result.data[0]).then((dbResult) => {
-              console.log('created!', dbResult.ticker)
+            result.data.forEach((quarter) => {
+              earningCreate(quarter).then((dbResult) => {
+                console.log('created!', dbResult.ticker)
+              })
             })
           })
           .catch((err) => {
@@ -78,15 +82,24 @@ module.exports = {
 
 // Basic DB fuctions
 async function earningCreate(reqBody) {
-  return Earning.create({
-    ticker: reqBody.symbol,
-    filingDate: reqBody.fillingDate, // typo in the API response
-    period: reqBody.period,
-    revenue: reqBody.revenue,
-    costOfRevenue: reqBody.costOfRevenue,
-    grossProfit: reqBody.grossProfit,
-    grossProfitRatio: reqBody.grossProfitRatio,
-    ebitda: reqBody.ebitda,
-    ebitdaRatio: reqBody.ebitdaratio,
+  Company.findOne({
+    where: { ticker: reqBody.symbol },
   })
+    .then((ellenCompany) => {
+      return Earning.create({
+        ticker: reqBody.symbol,
+        filingDate: reqBody.fillingDate, // typo in the API response from FMP
+        period: reqBody.period,
+        revenue: reqBody.revenue,
+        costOfRevenue: reqBody.costOfRevenue,
+        grossProfit: reqBody.grossProfit,
+        grossProfitRatio: reqBody.grossProfitRatio,
+        ebitda: reqBody.ebitda,
+        ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
+        companyId: ellenCompany.id,
+      })
+    })
+    .catch((err) => {
+      console.log(`could not find an Ellen DB entry for ${reqBody.symbol}`)
+    })
 }
