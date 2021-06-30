@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.NUMERIC,
     },
     ebitda: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.NUMERIC,
     },
     ebitdaRatio: {
       type: DataTypes.NUMERIC,
