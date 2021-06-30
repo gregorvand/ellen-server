@@ -13,17 +13,7 @@ module.exports = {
         res.sendStatus(401)
       } else {
         let reqBody = req.body
-        return Earning.create({
-          ticker: reqBody.symbol,
-          filingDate: reqBody.fillingDate, // typo in the API response
-          period: reqBody.period,
-          revenue: reqBody.revenue,
-          costOfRevenue: reqBody.costOfRevenue,
-          grossProfit: reqBody.grossProfit,
-          grossProfitRatio: reqBody.grossProfitRatio,
-          ebitda: reqBody.ebitda,
-          ebitdaRatio: reqBody.ebitdaRatio,
-        })
+        earningCreate(reqBody, res)
           .then((company) => res.status(201).send(company))
           .catch((error) => res.status(400).send(error))
       }
@@ -53,9 +43,50 @@ module.exports = {
     })
   },
 
+  // get all symbols
+  // make requests for each set of earnings
+  // store earning
+  // on to the next
+  // return success
   getAndStoreQuarterlyEarnings(req, res) {
+    const allEarningsSymbols = []
+    allEarnings = []
+
+    // gets all symbols in one request
     allYesterdayEarnings().then((result) => {
-      res.send(result.data)
+      result.data.earningsCalendar.forEach((result) => {
+        allEarningsSymbols.push(result.symbol)
+      })
+
+      // now make many requests for each company
+      allEarningsSymbols.forEach((symbol) => {
+        companyEarningBySymbol(symbol)
+          .then((result) => {
+            earningCreate(result.data[0]).then((dbResult) => {
+              console.log('created!', dbResult.ticker)
+            })
+          })
+          .catch((err) => {
+            console.error(`failed on ${symbol}`, err)
+          })
+      })
     })
+
+    res.send(200)
   },
+}
+
+// Basic DB fuctions
+async function earningCreate(reqBody) {
+  return Earning.create({
+    ticker: reqBody.symbol,
+    filingDate: reqBody.fillingDate, // typo in the API response
+    period: reqBody.period,
+    revenue: reqBody.revenue,
+    costOfRevenue: reqBody.costOfRevenue,
+    grossProfit: reqBody.grossProfit,
+    grossProfitRatio: reqBody.grossProfitRatio,
+    ebitda: reqBody.ebitda,
+    ebitdaRatio: reqBody.ebitdaratio,
+  })
 }

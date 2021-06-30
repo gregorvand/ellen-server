@@ -218,8 +218,8 @@ module.exports = (app) => {
 
   app.get(
     '/api/earnings/store',
-    // auth.getToken,
-    earningsController.getQuarterlyEarnings
+    auth.getToken,
+    earningsController.getAndStoreQuarterlyEarnings
   )
 
   // For any other request method on companies, we're going to return "Method Not Allowed"
