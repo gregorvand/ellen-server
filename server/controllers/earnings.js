@@ -70,6 +70,7 @@ module.exports = {
       allCalendarResults.forEach((calendarResult) => {
         console.log(calendarResult)
 
+        // Lookup our DB first before making requests for reports, to reduce requests out to FMP
         Company.findOne({
           where: { ticker: calendarResult.symbol },
         })
@@ -77,6 +78,7 @@ module.exports = {
             if (ellenCompany !== null) {
               console.log(`found ${ellenCompany.ticker}`)
 
+              // Get earnings report from FMP
               const numberOfQuartersToStore = 1
               companyEarningBySymbol(
                 ellenCompany.ticker,
@@ -88,6 +90,7 @@ module.exports = {
                     const reportedPeriod = quarterlyEarning.period.split('Q')[1]
                     const calendarPeriod = calendarResult.quarter
 
+                    // and the years match (ie, only look at current year)
                     const thisYear = dayjs(new Date()).year()
                     const reportedPeriodYear = dayjs(
                       quarterlyEarning.date
@@ -95,7 +98,7 @@ module.exports = {
 
                     const reportIsThisYear = thisYear == reportedPeriodYear
 
-                    console.log(`checking ${calendarPeriod} ${reportedPeriod}`)
+                    // ..then store the earning in our DB
                     if (calendarPeriod == reportedPeriod && reportIsThisYear) {
                       earningCreate(quarterlyEarning, ellenCompany.id).then(
                         (dbResult) => {
