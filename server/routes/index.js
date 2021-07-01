@@ -193,7 +193,7 @@ module.exports = (app) => {
   app.post(
     '/api/earnings/yesterday',
     auth.getToken,
-    earningsController.getYesterdayEarnings
+    earningsController.getRecentEarnings
   )
 
   // accepts req.body with all params for adding to DB

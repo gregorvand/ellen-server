@@ -12,6 +12,7 @@
       >
         <li>{{ earning.symbol }}</li>
         <li>{{ earning.date }}</li>
+        <li>for Q{{ earning.quarter }}</li>
       </ul>
     </template>
   </div>

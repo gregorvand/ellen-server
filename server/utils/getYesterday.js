@@ -14,6 +14,10 @@ class Yesterday {
   dateYesterday() {
     return dayjs(this.date).add(-1, 'day')
   }
+
+  dateBeforeByDays(lookback) {
+    return dayjs(this.date).add(-lookback, 'day')
+  }
 }
 
 module.exports = Yesterday
