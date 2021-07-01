@@ -9,7 +9,7 @@ async function companyEarningBySymbol(ticker, numberOfFilings = 1) {
   })
 }
 
-async function allEarningsByPeriod(lookback = 2) {
+async function allEarningsByPeriod(lookback = 7) {
   const today = new Date()
   const pastDate = new Yesterday(today).dateBeforeByDays(lookback)
   // get yesterday, then convert to exchange timezone.. NYC...

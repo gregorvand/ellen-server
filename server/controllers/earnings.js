@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken')
 const Today = require('../utils/getToday')
 const { Op } = require('sequelize')
 
+const dayjs = require('dayjs')
+
 const {
   companyEarningBySymbol,
   allEarningsByPeriod,
@@ -53,28 +55,70 @@ module.exports = {
   // make requests for each set of earnings
   // store earning
   // on to the next
+
   getAndStoreQuarterlyEarnings(req, res) {
-    const allEarningsSymbols = []
+    const allCalendarResults = []
 
     // gets all symbols in one request
-    allEarningsByPeriod().then((result) => {
-      result.data.earningsCalendar.forEach((result) => {
-        allEarningsSymbols.push(result.symbol)
+    allEarningsByPeriod().then((companyList) => {
+      console.log(companyList)
+      companyList.data.earningsCalendar.forEach((calendarEntry) => {
+        allCalendarResults.push(calendarEntry)
       })
 
-      const numberOfQuartersToStore = 1
-      // now make many requests for each company
-      allEarningsSymbols.forEach((symbol) => {
-        companyEarningBySymbol(symbol, numberOfQuartersToStore)
-          .then((result) => {
-            result.data.forEach((quarterlyEarning) => {
-              earningCreate(quarterlyEarning).then((dbResult) => {
-                console.log('created!', dbResult)
-              })
-            })
+      // now make many requests for each company and store any earnigns that match period from calendar
+      allCalendarResults.forEach((calendarResult) => {
+        console.log(calendarResult)
+
+        Company.findOne({
+          where: { ticker: calendarResult.symbol },
+        })
+          .then((ellenCompany) => {
+            if (ellenCompany !== null) {
+              console.log(`found ${ellenCompany.ticker}`)
+
+              const numberOfQuartersToStore = 1
+              companyEarningBySymbol(
+                ellenCompany.ticker,
+                numberOfQuartersToStore
+              )
+                .then((fmpEarning) => {
+                  fmpEarning.data.forEach((quarterlyEarning) => {
+                    // if calendar Q matches latest earning Q
+                    const reportedPeriod = quarterlyEarning.period.split('Q')[1]
+                    const calendarPeriod = calendarResult.quarter
+
+                    const thisYear = dayjs(new Date()).year()
+                    const reportedPeriodYear = dayjs(
+                      quarterlyEarning.date
+                    ).year()
+
+                    const reportIsThisYear = thisYear == reportedPeriodYear
+
+                    console.log(`checking ${calendarPeriod} ${reportedPeriod}`)
+                    if (calendarPeriod == reportedPeriod && reportIsThisYear) {
+                      earningCreate(quarterlyEarning, ellenCompany.id).then(
+                        (dbResult) => {
+                          console.log(
+                            `created! for ${quarterlyEarning.period}`,
+                            dbResult
+                          )
+                        }
+                      )
+                    } else {
+                      console.log('did not match quarters')
+                    }
+
+                    sleep(100)
+                  })
+                })
+                .catch((err) => {
+                  console.error(`failed on ${calendarResult.symbol}`, err)
+                })
+            }
           })
           .catch((err) => {
-            console.error(`failed on ${symbol}`, err)
+            console.error(`db lookup error: ${err}`)
           })
       })
     })
@@ -119,29 +163,19 @@ module.exports = {
 }
 
 // Basic DB fuctions
-async function earningCreate(reqBody) {
-  Company.findOne({
-    where: { ticker: reqBody.symbol },
+async function earningCreate(reqBody, ellenCompanyId) {
+  return Earning.create({
+    ticker: reqBody.symbol,
+    filingDate: reqBody.fillingDate, // typo in the API response from FMP
+    period: reqBody.period,
+    revenue: reqBody.revenue,
+    costOfRevenue: reqBody.costOfRevenue,
+    grossProfit: reqBody.grossProfit,
+    grossProfitRatio: reqBody.grossProfitRatio,
+    ebitda: reqBody.ebitda,
+    ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
+    companyId: ellenCompanyId,
   })
-    .then((ellenCompany) => {
-      if (ellenCompany !== null) {
-        return Earning.create({
-          ticker: reqBody.symbol,
-          filingDate: reqBody.fillingDate, // typo in the API response from FMP
-          period: reqBody.period,
-          revenue: reqBody.revenue,
-          costOfRevenue: reqBody.costOfRevenue,
-          grossProfit: reqBody.grossProfit,
-          grossProfitRatio: reqBody.grossProfitRatio,
-          ebitda: reqBody.ebitda,
-          ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
-          companyId: ellenCompany.id,
-        })
-      }
-    })
-    .catch((err) => {
-      console.log(`could not find an Ellen DB entry for ${reqBody.symbol}`, err)
-    })
 }
 
 // assumes that Earning entry is added to DB and checked whether to send out, on the same day
@@ -156,4 +190,8 @@ async function findEarningByDate(date) {
       },
     },
   })
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
 }

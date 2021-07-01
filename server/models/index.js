@@ -38,6 +38,7 @@ if (config.use_env_variable) {
     database: config.database,
     sslmode: config.sslmode,
     dialectOptions: dialectOptions,
+    logging: false,
   })
 }
 
