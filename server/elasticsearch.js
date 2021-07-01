@@ -48,13 +48,16 @@ async function populateDB() {
     let data = {
       id: company.id,
       companyName: company.nameIdentifier,
+      ticker: company.ticker,
+      companyType: company.companyType,
     }
 
     bulk.push({
       index: {
-        _index: 'csjoblist_prod', // or csjoblist for dev
+        _index: 'csjoblist', // or csjoblist_prod
         _type: 'jobs_list',
         _id: company.id,
+        _ticker: company.ticker,
       },
     })
 
@@ -70,5 +73,5 @@ async function populateDB() {
   })
 }
 
-// populateDB()
+populateDB()
 // activate above to run a DB sync

@@ -1,6 +1,7 @@
 // const todosController = require('../controllers/todos');
 // const todoItemsController = require('../controllers/todoitems');
 const companiesController = require('../controllers/companies')
+const earningsController = require('../controllers/earnings')
 const ordersController = require('../controllers/orders')
 const usersController = require('../controllers/users')
 const pointsController = require('../controllers/points')
@@ -9,7 +10,6 @@ const serviceKlaviyo = require('../services/third_party/klaviyo')
 const serviceWinners = require('../services/winners/winner_calculators')
 const emailHelpers = require('../modules/emailHelpers')
 const auth = require('../middleware/getToken')
-const jwt = require('jsonwebtoken')
 
 module.exports = (app) => {
   // examples
@@ -161,28 +161,66 @@ module.exports = (app) => {
   app.post('/api/users', usersController.create)
   app.post('/api/login', usersController.checkUser)
 
-  const theEvents = require('../../vue-app/ellen-b2b/db/events.json')
+  // lookup userCompanies
+  // get company IDs
+  // look up Companies with those Ids
+
+  // const userCompanies = require('../../vue-app/ellen-b2b/db/events.json')
+
   // New routes for Vue auth
-  app.get('/api/dashboard', auth.getToken, (req, res) => {
-    console.log('also yep')
-    jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
-      if (err) {
-        res.sendStatus(401)
-      } else {
-        console.log('DID GET HERE')
-        res.json({
-          events: theEvents,
-        })
-      }
-    })
-  })
+  app.get('/api/dashboard', auth.getToken, companiesController.listByUser)
 
   app.put('/api/users/update/username/:id', usersController.update)
   app.get('/api/users', usersController.list)
   app.post('/api/users/subscribe', serviceKlaviyo.addSubscribersToList)
+  app.post(
+    '/api/users/update/companies',
+    auth.getToken,
+    usersController.updateByEmail
+  )
 
   app.post('/api/companies/update/:id', companiesController.update)
   app.post('/api/orders/update/:id', ordersController.update)
+
+  const eventEmitter = require('../services/eventBus').eventEmitter
+  app.post('/api/earnings/receive', function (req, res) {
+    console.log(req.body.body.data) // coming from FinnHub via parse at pipedream.com
+    eventEmitter.emit('somedata', req.body.body.data)
+    res.sendStatus(200)
+  })
+
+  // no params
+  app.post(
+    '/api/earnings/yesterday',
+    auth.getToken,
+    earningsController.getYesterdayEarnings
+  )
+
+  // accepts req.body with all params for adding to DB
+  app.post(
+    '/api/earnings/quarterly/new',
+    auth.getToken,
+    earningsController.addQuarterlyEarning
+  )
+
+  // accepts req.body.ticker param
+  app.put(
+    '/api/earnings/quarterly',
+    // auth.getToken,
+    earningsController.getQuarterlyEarnings
+  )
+
+  app.get(
+    '/api/earnings/quarterly/company',
+    // auth.getToken,
+    earningsController.getQuarterlyEarnings
+  )
+
+  app.get(
+    '/api/earnings/store',
+    auth.getToken,
+    earningsController.getAndStoreQuarterlyEarnings
+  )
 
   // For any other request method on companies, we're going to return "Method Not Allowed"
   app.all('/api/companies', (req, res) =>

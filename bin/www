@@ -1,24 +1,25 @@
 // This will be our application entry. We'll setup our server here.
 const app = require('../app');
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const server = require('http').createServer(app);
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: ["http://localhost:8080"],
+    methods: ["GET", "POST"]
+  }
+});
+
+const { eventEmitter } = require ('../server/services/eventBus')
+
+io.on("connection", socket => { 
+  eventEmitter.on('somedata', (data) => {
+    socket.emit("earningsData", data);
+  })
+});
+
+server.listen(8000);
 
 const { initPointsTransactionQueues } = require ('../server/services/bull-queues');
 
-
 const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
-});
-
-http.listen(8000, () => {
-  console.log('listening on', port);
-
-  initPointsTransactionQueues();
-});

@@ -38,7 +38,7 @@ export default {
           this.$router.push({ name: 'dashboard' })
         })
         .catch((err) => {
-          this.error = err.response.data
+          this.error = err?.response?.data || err
         })
     },
   },
