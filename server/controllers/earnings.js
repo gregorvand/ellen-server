@@ -7,6 +7,8 @@ const {
   allYesterdayEarnings,
 } = require('../services/earnings/companyEarningsService')
 
+const { sendAnEmail } = require('../services/email/sendgrid')
+
 module.exports = {
   addQuarterlyEarning(req, res) {
     jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
@@ -45,10 +47,10 @@ module.exports = {
   },
 
   // get all symbols
+  // return success to indicate received and processing
   // make requests for each set of earnings
   // store earning
   // on to the next
-  // return success
   getAndStoreQuarterlyEarnings(req, res) {
     const allEarningsSymbols = []
     allEarnings = []
@@ -77,6 +79,32 @@ module.exports = {
     })
 
     res.send(200)
+  },
+
+  sendEarningEmail(req, res) {
+    // send email to user in the req body
+
+    console.log(req.headers.user)
+
+
+    // for each earnings added today
+      // find earning with created today
+      // store object
+    // get company ID
+    // get users with those IDs subscribed
+
+    // for each user
+      // send earning data to that user
+
+    const message = {
+      to: req.body.recipient,
+      from: 'gregor@ellen.me', // Use the email address or domain you verified above
+      subject: req.body.subject,
+      text: req.body.emailPlain,
+      html: req.body.emailHtml,
+    }
+
+    // sendAnEmail(req, res, message)
   },
 }
 
