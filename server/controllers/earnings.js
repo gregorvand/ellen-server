@@ -86,15 +86,14 @@ module.exports = {
 
     console.log(req.headers.user)
 
-
     // for each earnings added today
-      // find earning with created today
-      // store object
+    // find earning with created today
+    // store object
     // get company ID
     // get users with those IDs subscribed
 
     // for each user
-      // send earning data to that user
+    // send earning data to that user
 
     const message = {
       to: req.body.recipient,
@@ -104,7 +103,7 @@ module.exports = {
       html: req.body.emailHtml,
     }
 
-    // sendAnEmail(req, res, message)
+    sendAnEmail(req, res, message)
   },
 }
 
