@@ -9,6 +9,7 @@ import Dashboard from '@/views/Dashboard.vue'
 import RegisterUser from '@/views/RegisterUser.vue'
 import LoginUser from '@/views/LoginUser.vue'
 import CompanySheet from '@/views/CompanySheet.vue'
+import EarningsFeed from '@/views/EarningsFeed.vue'
 
 Vue.use(VueRouter)
 
@@ -54,6 +55,11 @@ const routes = [
     path: '/company/:id',
     name: 'company',
     component: CompanySheet,
+  },
+  {
+    path: '/earnings',
+    name: 'earnings',
+    component: EarningsFeed,
   },
 ]
 

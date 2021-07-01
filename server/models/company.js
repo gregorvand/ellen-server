@@ -16,10 +16,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    orderSuffix: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     companyType: {
       type: DataTypes.STRING,
       validate: {
@@ -37,6 +33,11 @@ module.exports = (sequelize, DataTypes) => {
     Company.hasMany(models.Order, {
       foreignKey: 'companyId',
       as: 'orders',
+      onDelete: 'CASCADE',
+    })
+    Company.hasMany(models.Earning, {
+      foreignKey: 'companyId',
+      as: 'earnings',
       onDelete: 'CASCADE',
     })
     Company.belongsToMany(models.User, { through: 'UserCompanies' })

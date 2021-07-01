@@ -1,6 +1,7 @@
 // const todosController = require('../controllers/todos');
 // const todoItemsController = require('../controllers/todoitems');
 const companiesController = require('../controllers/companies')
+const earningsController = require('../controllers/earnings')
 const ordersController = require('../controllers/orders')
 const usersController = require('../controllers/users')
 const pointsController = require('../controllers/points')
@@ -180,6 +181,46 @@ module.exports = (app) => {
 
   app.post('/api/companies/update/:id', companiesController.update)
   app.post('/api/orders/update/:id', ordersController.update)
+
+  const eventEmitter = require('../services/eventBus').eventEmitter
+  app.post('/api/earnings/receive', function (req, res) {
+    console.log(req.body.body.data) // coming from FinnHub via parse at pipedream.com
+    eventEmitter.emit('somedata', req.body.body.data)
+    res.sendStatus(200)
+  })
+
+  // no params
+  app.post(
+    '/api/earnings/yesterday',
+    auth.getToken,
+    earningsController.getYesterdayEarnings
+  )
+
+  // accepts req.body with all params for adding to DB
+  app.post(
+    '/api/earnings/quarterly/new',
+    auth.getToken,
+    earningsController.addQuarterlyEarning
+  )
+
+  // accepts req.body.ticker param
+  app.put(
+    '/api/earnings/quarterly',
+    // auth.getToken,
+    earningsController.getQuarterlyEarnings
+  )
+
+  app.get(
+    '/api/earnings/quarterly/company',
+    // auth.getToken,
+    earningsController.getQuarterlyEarnings
+  )
+
+  app.get(
+    '/api/earnings/store',
+    auth.getToken,
+    earningsController.getAndStoreQuarterlyEarnings
+  )
 
   // For any other request method on companies, we're going to return "Method Not Allowed"
   app.all('/api/companies', (req, res) =>

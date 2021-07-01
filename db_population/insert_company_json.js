@@ -1,4 +1,4 @@
-const data = require('./nasdaq_populate_test.json')
+const data = require('./nyse_csvjson_ellen.json')
 const companiesController = require('../server/controllers/companies')
 
 data.forEach((company) => {

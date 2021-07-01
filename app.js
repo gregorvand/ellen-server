@@ -42,7 +42,16 @@ const app = express()
 // app.disable('view cache'); // DO NOT COMMIT THIS
 
 app.use(helmet())
-app.use(cors({ origin: ['http://localhost:8080'] }))
+app.use(
+  cors({
+    origin: [
+      'http://localhost:8080',
+      'http://localhost:8000',
+      'https://ellen-b2b.ngrok.io',
+      'https://datadtc.ngrok.io',
+    ],
+  })
+)
 
 app.use(
   helmet.contentSecurityPolicy({
@@ -53,7 +62,10 @@ app.use(
         "'unsafe-inline'",
         'cdnjs.cloudflare.com',
         'http://localhost:8000',
+        'http://localhost:8080',
+        'https://datadtc.ngrok.io',
         'https://alpha.ellen.me',
+        'https://ellen-b2b.ngrok.io',
       ],
       styleSrc: [
         "'self'",
@@ -62,6 +74,8 @@ app.use(
         'fonts.googleapis.com',
         'http://localhost:8000',
         'https://alpha.ellen.me',
+        'https://ellen-b2b.ngrok.io',
+        'https://datadtc.ngrok.io'
       ],
       fontSrc: [
         "'self'",
@@ -69,6 +83,8 @@ app.use(
         'https://fonts.gstatic.com',
         'http://localhost:8000',
         'https://alpha.ellen.me',
+        'https://ellen-b2b.ngrok.io',
+        'https://datadtc.ngrok.io'
       ],
       imgSrc: ["'self'"],
     },

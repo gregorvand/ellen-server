@@ -35,7 +35,6 @@ export const actions = {
     return axios
       .post('//localhost:8000/api/login', credentials)
       .then(({ data }) => {
-        console.log('response..', data)
         commit('SET_USER_DATA', data)
       })
   },
