@@ -1,5 +1,6 @@
+require('dotenv').config()
 const sgMail = require('@sendgrid/mail')
-sgMail.setApiKey(sgMail.setApiKey(process.env.SENDGRID_API_KEY))
+sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 const msg = {
   to: 'gregor@vand.hk',
   from: 'gregor@ellen.me', // Use the email address or domain you verified above
