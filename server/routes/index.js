@@ -193,7 +193,7 @@ module.exports = (app) => {
   app.post(
     '/api/earnings/yesterday',
     auth.getToken,
-    earningsController.getYesterdayEarnings
+    earningsController.getRecentEarnings
   )
 
   // accepts req.body with all params for adding to DB
@@ -220,6 +220,12 @@ module.exports = (app) => {
     '/api/earnings/store',
     auth.getToken,
     earningsController.getAndStoreQuarterlyEarnings
+  )
+
+  app.get(
+    '/api/earningemail/send',
+    auth.getToken,
+    earningsController.sendEarningEmail
   )
 
   // For any other request method on companies, we're going to return "Method Not Allowed"

@@ -9,20 +9,23 @@ async function companyEarningBySymbol(ticker, numberOfFilings = 1) {
   })
 }
 
-async function allYesterdayEarnings() {
+async function allEarningsByPeriod(lookback = 7) {
   const today = new Date()
-  const getYesterday = new Yesterday(today).dateYesterday()
+  const pastDate = new Yesterday(today).dateBeforeByDays(lookback)
   // get yesterday, then convert to exchange timezone.. NYC...
+  const marketBefore = pastDate.tz('America/New_York').format('YYYY-MM-DD')
+
+  // get yesterday, then convert to exchange timezone.. NYC...
+  const getYesterday = new Yesterday(today).dateYesterday()
   const marketYesterday = getYesterday
     .tz('America/New_York')
     .format('YYYY-MM-DD')
-
   // const marketYesterday = '2021-06-25' // for test purposes if yesterday is non business day
   return await axios({
     method: 'get',
-    url: `https://finnhub.io/api/v1/calendar/earnings?from=${marketYesterday}&to=${marketYesterday}&token=c38tm4iad3ido5aka4e0`,
+    url: `https://finnhub.io/api/v1/calendar/earnings?from=${marketBefore}&to=${marketYesterday}&token=c38tm4iad3ido5aka4e0`,
   })
 }
 
 module.exports.companyEarningBySymbol = companyEarningBySymbol
-module.exports.allYesterdayEarnings = allYesterdayEarnings
+module.exports.allEarningsByPeriod = allEarningsByPeriod

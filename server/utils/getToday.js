@@ -18,6 +18,10 @@ class Today {
   endOfToday() {
     return dayjs.tz(this.date).endOf('day').toISOString()
   }
+
+  startOfTodayServer() {
+    return dayjs(this.date).startOf('day').toISOString()
+  }
 }
 
 module.exports = Today
