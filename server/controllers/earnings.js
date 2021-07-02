@@ -140,12 +140,12 @@ module.exports = {
     let startofServerDay = new Today(today).startOfTodayServer()
 
     findEarningByDate(startofServerDay).then((earnings) => {
-      earnings.forEach((earning) => {
-        console.log('an earning', earning)
+      earnings.forEach((earningRaw) => {
+        console.log(earningRaw.dataValues)
       })
     })
 
-    res.send(200)
+    res.sendStatus(200)
     // store object
     // get company ID
     // get users with those IDs subscribed
