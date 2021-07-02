@@ -1,8 +1,14 @@
 const Earning = require('../models').Earning
 const Company = require('../models').Company
+// const User = require('../models').User
 const jwt = require('jsonwebtoken')
 const Today = require('../utils/getToday')
 const { Op } = require('sequelize')
+
+const {
+  getCompaniesFromTickers,
+  getUsersFromCompanies,
+} = require('../controllers/companies')
 
 const dayjs = require('dayjs')
 
@@ -129,21 +135,24 @@ module.exports = {
     res.send(200)
   },
 
-  sendEarningEmail(req, res) {
+  async sendEarningEmail(req, res) {
     // send email to user in the req body
-
+    let latestEarnings = []
     console.log(req.headers.user)
-
     // for each earnings added today
     // find earning with created today
     const today = new Date()
     let startofServerDay = new Today(today).startOfTodayServer()
 
-    findEarningByDate(startofServerDay).then((earnings) => {
-      earnings.forEach((earningRaw) => {
-        console.log(earningRaw.dataValues)
-      })
-    })
+    findEarningByDate(startofServerDay)
+      .then((earnings) =>
+        getCompaniesFromTickers(earnings.map((earning) => earning.ticker))
+      )
+      .then((companies) =>
+        companies.forEach((company) =>
+          getUsersFromCompanies(company.dataValues.id)
+        )
+      )
 
     res.sendStatus(200)
     // store object

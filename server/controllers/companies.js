@@ -1,7 +1,7 @@
 const Company = require('../models').Company
 const Order = require('../models').Order
 const User = require('../models').User
-
+const { Op } = require('sequelize')
 const jwt = require('jsonwebtoken')
 
 module.exports = {
@@ -101,5 +101,24 @@ module.exports = {
     return Company.findAll({ order: [['nameIdentifier', 'ASC']] })
       .then((companies) => companies)
       .catch((error) => res.status(400).send(error))
+  },
+
+  getCompaniesFromTickers(tickers = []) {
+    console.log(tickers)
+    return Company.findAll({
+      where: {
+        ticker: tickers,
+      },
+    })
+  },
+
+  getUsersFromCompanies(companyId) {
+    Company.findOne({
+      where: {
+        id: companyId,
+      },
+    }).then((companyObject) => {
+      companyObject.getUsers().then((UsersToEmail) => console.log(UsersToEmail))
+    })
   },
 }
