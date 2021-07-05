@@ -141,18 +141,33 @@ module.exports = {
     console.log(req.headers.user)
     // for each earnings added today
     // find earning with created today
-    const today = new Date()
+    const today = new Date('2021-06-29')
     let startofServerDay = new Today(today).startOfTodayServer()
 
-    findEarningByDate(startofServerDay)
-      .then((earnings) =>
-        getCompaniesFromTickers(earnings.map((earning) => earning.ticker))
-      )
-      .then((companies) =>
-        companies.forEach((company) =>
-          getUsersFromCompanies(company.dataValues.id)
-        )
-      )
+    const earnings = await findEarningByDate(startofServerDay)
+    const companiesThatEarned = await getCompaniesFromTickers(
+      earnings.map((earning) => earning.ticker)
+    )
+
+    // const usersToEmail = []
+    companiesThatEarned.forEach(async (company) => {
+      const users = await getUsersFromCompanies(company.dataValues.id)
+      users.forEach((user) => {
+        console.log(user.dataValues.email)
+      })
+    })
+
+    // console.log(usersToEmail)
+
+    // findEarningByDate(startofServerDay)
+    //   .then((earnings) =>
+    //     getCompaniesFromTickers(earnings.map((earning) => earning.ticker))
+    //   )
+    //   .then((companies) =>
+    //     companies.forEach((company) =>
+    //       getUsersFromCompanies(company.dataValues.id)
+    //     )
+    //   )
 
     res.sendStatus(200)
     // store object

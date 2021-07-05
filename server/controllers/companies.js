@@ -112,13 +112,14 @@ module.exports = {
     })
   },
 
-  getUsersFromCompanies(companyId) {
-    Company.findOne({
+  async getUsersFromCompanies(companyId) {
+    const companyObject = await Company.findOne({
       where: {
         id: companyId,
       },
-    }).then((companyObject) => {
-      companyObject.getUsers().then((UsersToEmail) => console.log(UsersToEmail))
     })
+
+    const userList = await companyObject.getUsers()
+    return userList
   },
 }
