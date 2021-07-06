@@ -15,10 +15,11 @@ export const mutations = {
   },
   LOGOUT() {
     localStorage.removeItem('user')
+    localStorage.removeItem('companies')
+    localStorage.removeItem('selectedCompanies')
     location.reload()
   },
 }
-
 export const actions = {
   register({ commit }, credentials) {
     return axios
