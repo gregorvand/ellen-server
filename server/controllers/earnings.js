@@ -62,74 +62,63 @@ module.exports = {
   // store earning
   // on to the next
 
-  getAndStoreQuarterlyEarnings(req, res) {
-    const allCalendarResults = []
+  async getAndStoreQuarterlyEarnings(req, res) {
+    // gets all symbols in one request and store array of all calendar entries 
+    const companyList = await allEarningsByPeriod()
+    const allCalendarResults = companyList.data.earningsCalendar
 
-    // gets all symbols in one request
-    allEarningsByPeriod().then((companyList) => {
-      console.log(companyList)
-      companyList.data.earningsCalendar.forEach((calendarEntry) => {
-        allCalendarResults.push(calendarEntry)
+    // now make many requests for each company and store any earnigns that match period from calendar
+    allCalendarResults.forEach((calendarResult) => {
+      console.log(calendarResult)
+
+      // Lookup our DB first before making requests for reports, to reduce requests out to FMP
+      Company.findOne({
+        where: { ticker: calendarResult.symbol },
       })
+        .then((ellenCompany) => {
+          if (ellenCompany !== null) {
+            console.log(`found ${ellenCompany.ticker}`)
 
-      // now make many requests for each company and store any earnigns that match period from calendar
-      allCalendarResults.forEach((calendarResult) => {
-        console.log(calendarResult)
+            // Get earnings report from FMP
+            const numberOfQuartersToStore = 1
+            companyEarningBySymbol(ellenCompany.ticker, numberOfQuartersToStore)
+              .then((fmpEarning) => {
+                fmpEarning.data.forEach((quarterlyEarning) => {
+                  // if calendar Q matches latest earning Q
+                  const reportedPeriod = quarterlyEarning.period.split('Q')[1]
+                  const calendarPeriod = calendarResult.quarter
 
-        // Lookup our DB first before making requests for reports, to reduce requests out to FMP
-        Company.findOne({
-          where: { ticker: calendarResult.symbol },
+                  // and the years match (ie, only look at current year)
+                  const thisYear = dayjs(new Date()).year()
+                  const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
+
+                  const reportIsThisYear = thisYear == reportedPeriodYear
+
+                  // ..then store the earning in our DB
+                  if (calendarPeriod == reportedPeriod && reportIsThisYear) {
+                    earningCreate(quarterlyEarning, ellenCompany.id).then(
+                      (dbResult) => {
+                        console.log(
+                          `created! for ${quarterlyEarning.period}`,
+                          dbResult
+                        )
+                      }
+                    )
+                  } else {
+                    console.log('did not match quarters')
+                  }
+
+                  sleep(100)
+                })
+              })
+              .catch((err) => {
+                console.error(`failed on ${calendarResult.symbol}`, err)
+              })
+          }
         })
-          .then((ellenCompany) => {
-            if (ellenCompany !== null) {
-              console.log(`found ${ellenCompany.ticker}`)
-
-              // Get earnings report from FMP
-              const numberOfQuartersToStore = 1
-              companyEarningBySymbol(
-                ellenCompany.ticker,
-                numberOfQuartersToStore
-              )
-                .then((fmpEarning) => {
-                  fmpEarning.data.forEach((quarterlyEarning) => {
-                    // if calendar Q matches latest earning Q
-                    const reportedPeriod = quarterlyEarning.period.split('Q')[1]
-                    const calendarPeriod = calendarResult.quarter
-
-                    // and the years match (ie, only look at current year)
-                    const thisYear = dayjs(new Date()).year()
-                    const reportedPeriodYear = dayjs(
-                      quarterlyEarning.date
-                    ).year()
-
-                    const reportIsThisYear = thisYear == reportedPeriodYear
-
-                    // ..then store the earning in our DB
-                    if (calendarPeriod == reportedPeriod && reportIsThisYear) {
-                      earningCreate(quarterlyEarning, ellenCompany.id).then(
-                        (dbResult) => {
-                          console.log(
-                            `created! for ${quarterlyEarning.period}`,
-                            dbResult
-                          )
-                        }
-                      )
-                    } else {
-                      console.log('did not match quarters')
-                    }
-
-                    sleep(100)
-                  })
-                })
-                .catch((err) => {
-                  console.error(`failed on ${calendarResult.symbol}`, err)
-                })
-            }
-          })
-          .catch((err) => {
-            console.error(`db lookup error: ${err}`)
-          })
-      })
+        .catch((err) => {
+          console.error(`db lookup error: ${err}`)
+        })
     })
 
     res.send(200)
