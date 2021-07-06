@@ -95,6 +95,9 @@ module.exports = {
           const reportIsThisYear = thisYear == reportedPeriodYear
 
           // ..then store the earning in our DB
+          // TODO: how to smartly look back and get past quarters into DB?
+          // potentially have node function file to just go and grab each co in DB quarters and let create function avoid duplicates
+
           if (calendarPeriod == reportedPeriod && reportIsThisYear) {
             const createdEarning = await earningCreate(
               quarterlyEarning,
