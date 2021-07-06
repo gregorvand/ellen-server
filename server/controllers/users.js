@@ -29,8 +29,12 @@ module.exports = {
       .then((user) => {
         console.log(user)
         if (req.body?.userCompanies) {
-          console.log('the companies..', req.body.userCompanies)
-          user.setCompanies(req.body.userCompanies)
+          const companiesToSet = req.body.userCompanies.map(
+            (company) => company.id
+          )
+          user.setCompanies(companiesToSet)
+        } else {
+          console.log('user did not have any associated companies on register')
         }
 
         const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
@@ -41,15 +45,14 @@ module.exports = {
           firstName: user.firstName,
           lastName: user.lastName,
         })
-        res.send(200)
       })
       .catch((error) => {
-        let errorMessage = error.errors[0].message || error.errors.message
+        let errorMessage = error
         // this.errors = error.response.errors
         errorsToSend.push(errorMessage)
         // res.status(400).send(error)
         res.status(400).send({
-          message: error.errors[0].message,
+          message: error,
         })
       })
   },

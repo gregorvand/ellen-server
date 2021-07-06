@@ -41,6 +41,7 @@ export default {
           lastName: this.lname,
           email: this.email,
           password: this.password,
+          userCompanies: this.$store.getters['selectedCompanies/userCompanies'],
         })
         .then(() => {
           this.$router.push({ name: 'dashboard' })
