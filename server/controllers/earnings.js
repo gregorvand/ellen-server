@@ -1,8 +1,14 @@
 const Earning = require('../models').Earning
 const Company = require('../models').Company
+// const User = require('../models').User
 const jwt = require('jsonwebtoken')
 const Today = require('../utils/getToday')
 const { Op } = require('sequelize')
+
+const {
+  getCompaniesFromTickers,
+  getUsersFromCompanies,
+} = require('../controllers/companies')
 
 const dayjs = require('dayjs')
 
@@ -129,39 +135,58 @@ module.exports = {
     res.send(200)
   },
 
-  sendEarningEmail(req, res) {
+  async sendEarningEmail(req, res) {
     // send email to user in the req body
-
+    let latestEarnings = []
     console.log(req.headers.user)
-
     // for each earnings added today
     // find earning with created today
     const today = new Date()
     let startofServerDay = new Today(today).startOfTodayServer()
 
-    findEarningByDate(startofServerDay).then((earnings) => {
-      earnings.forEach((earning) => {
-        console.log('an earning', earning)
+    const earnings = await findEarningByDate(startofServerDay)
+
+    // for each earning report
+    earnings.forEach(async (earning) => {
+      let usersToEmailForThisEarning = []
+
+      // get users who subscribed to underlying company
+      const users = await getUsersFromCompanies(earning.ticker)
+
+      users.forEach((user) => {
+        usersToEmailForThisEarning.push({ email: user.email })
       })
+
+      console.log(earning.ticker, usersToEmailForThisEarning)
+
+      const message = {
+        from: 'gregor@ellen.me', // Use the email address or domain you verified above
+        subject: `latest earning for ${earning.ticker}`,
+        text: `wow ${earning.ticker} earned ${earning.revenue}`,
+        personalizations: [
+          {
+            to: [
+              {
+                email: 'gregor+all@vand.hk',
+              },
+            ],
+            bcc: usersToEmailForThisEarning,
+          },
+        ],
+        html: `
+            <strong>
+              Yo!
+            </strong>
+            <p>
+              wow ${earning.ticker} earned ${earning.revenue}
+            </p>
+        `,
+      }
+
+      sendAnEmail(req, res, message, false)
     })
 
-    res.send(200)
-    // store object
-    // get company ID
-    // get users with those IDs subscribed
-
-    // for each user
-    // send earning data to that user
-
-    const message = {
-      to: req.body.recipient,
-      from: 'gregor@ellen.me', // Use the email address or domain you verified above
-      subject: req.body.subject,
-      text: req.body.emailPlain,
-      html: req.body.emailHtml,
-    }
-
-    // sendAnEmail(req, res, message)
+    res.sendStatus(200)
   },
 }
 
