@@ -112,13 +112,14 @@ module.exports = {
     })
   },
 
-  async getUsersFromCompanies(companyId) {
+  async getUsersFromCompanies(companyTicker) {
     const companyObject = await Company.findOne({
       where: {
-        id: companyId,
+        ticker: companyTicker,
       },
     })
 
+    console.log(companyObject.dataValues.ticker)
     const userList = await companyObject.getUsers()
     return userList
   },

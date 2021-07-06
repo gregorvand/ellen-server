@@ -141,51 +141,52 @@ module.exports = {
     console.log(req.headers.user)
     // for each earnings added today
     // find earning with created today
-    const today = new Date('2021-06-29')
+    const today = new Date()
     let startofServerDay = new Today(today).startOfTodayServer()
 
     const earnings = await findEarningByDate(startofServerDay)
-    const companiesThatEarned = await getCompaniesFromTickers(
-      earnings.map((earning) => earning.ticker)
-    )
 
-    // const usersToEmail = []
-    companiesThatEarned.forEach(async (company) => {
-      const users = await getUsersFromCompanies(company.dataValues.id)
+    // for each earning report
+    earnings.forEach(async (earning) => {
+      let usersToEmailForThisEarning = []
+
+      // get users who subscribed to underlying company
+      const users = await getUsersFromCompanies(earning.ticker)
+
       users.forEach((user) => {
-        console.log(user.dataValues.email)
+        usersToEmailForThisEarning.push({ email: user.email })
       })
+
+      console.log(earning.ticker, usersToEmailForThisEarning)
+
+      const message = {
+        from: 'gregor@ellen.me', // Use the email address or domain you verified above
+        subject: `latest earning for ${earning.ticker}`,
+        text: `wow ${earning.ticker} earned ${earning.revenue}`,
+        personalizations: [
+          {
+            to: [
+              {
+                email: 'gregor+all@vand.hk',
+              },
+            ],
+            bcc: usersToEmailForThisEarning,
+          },
+        ],
+        html: `
+            <strong>
+              Yo!
+            </strong>
+            <p>
+              wow ${earning.ticker} earned ${earning.revenue}
+            </p>
+        `,
+      }
+
+      sendAnEmail(req, res, message, false)
     })
 
-    // console.log(usersToEmail)
-
-    // findEarningByDate(startofServerDay)
-    //   .then((earnings) =>
-    //     getCompaniesFromTickers(earnings.map((earning) => earning.ticker))
-    //   )
-    //   .then((companies) =>
-    //     companies.forEach((company) =>
-    //       getUsersFromCompanies(company.dataValues.id)
-    //     )
-    //   )
-
     res.sendStatus(200)
-    // store object
-    // get company ID
-    // get users with those IDs subscribed
-
-    // for each user
-    // send earning data to that user
-
-    const message = {
-      to: req.body.recipient,
-      from: 'gregor@ellen.me', // Use the email address or domain you verified above
-      subject: req.body.subject,
-      text: req.body.emailPlain,
-      html: req.body.emailHtml,
-    }
-
-    // sendAnEmail(req, res, message)
   },
 }
 

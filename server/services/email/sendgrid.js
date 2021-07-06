@@ -1,10 +1,10 @@
 const sgMail = require('@sendgrid/mail')
+const { response } = require('express')
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
-
 
 //ES6
 module.exports = {
-  sendAnEmail(req, res, message) {
+  sendAnEmail(req, res, message, response = true) {
     sgMail.send(message).then(
       () => {},
       (error) => {
@@ -14,7 +14,11 @@ module.exports = {
           console.error(error.response.body)
         }
       },
-      res.sendStatus(200)
+      function () {
+        if (response) {
+          res.sendStatus(200)
+        }
+      }
     )
   },
 }
