@@ -62,74 +62,57 @@ module.exports = {
   // store earning
   // on to the next
 
-  getAndStoreQuarterlyEarnings(req, res) {
-    const allCalendarResults = []
+  async getAndStoreQuarterlyEarnings(req, res) {
+    // gets all symbols in one request and store array of all calendar entries
+    const companyList = await allEarningsByPeriod()
+    const allCalendarResults = companyList.data.earningsCalendar
 
-    // gets all symbols in one request
-    allEarningsByPeriod().then((companyList) => {
-      console.log(companyList)
-      companyList.data.earningsCalendar.forEach((calendarEntry) => {
-        allCalendarResults.push(calendarEntry)
+    // now make many requests for each company and store any earnigns that match period from calendar
+    allCalendarResults.forEach(async (calendarResult) => {
+      // Lookup our DB first before making requests for reports, to reduce requests out to FMP
+      const ellenCompany = await Company.findOne({
+        where: { ticker: calendarResult.symbol },
       })
 
-      // now make many requests for each company and store any earnigns that match period from calendar
-      allCalendarResults.forEach((calendarResult) => {
-        console.log(calendarResult)
+      if (ellenCompany !== null) {
+        console.log(`found ${ellenCompany.ticker}`)
+        // Now Get the latest recorded earning for company from FMP api
+        const numberOfQuartersToStore = 1
+        const fmpEarning = await companyEarningBySymbol(
+          ellenCompany.ticker,
+          numberOfQuartersToStore
+        )
 
-        // Lookup our DB first before making requests for reports, to reduce requests out to FMP
-        Company.findOne({
-          where: { ticker: calendarResult.symbol },
-        })
-          .then((ellenCompany) => {
-            if (ellenCompany !== null) {
-              console.log(`found ${ellenCompany.ticker}`)
+        fmpEarning.data.forEach(async (quarterlyEarning) => {
+          // if calendar Q matches latest earning Q
+          const reportedPeriod = quarterlyEarning.period.split('Q')[1]
+          const calendarPeriod = calendarResult.quarter
 
-              // Get earnings report from FMP
-              const numberOfQuartersToStore = 1
-              companyEarningBySymbol(
-                ellenCompany.ticker,
-                numberOfQuartersToStore
-              )
-                .then((fmpEarning) => {
-                  fmpEarning.data.forEach((quarterlyEarning) => {
-                    // if calendar Q matches latest earning Q
-                    const reportedPeriod = quarterlyEarning.period.split('Q')[1]
-                    const calendarPeriod = calendarResult.quarter
+          // and the years match (ie, only look at current year)
+          const thisYear = dayjs(new Date()).year()
+          const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
 
-                    // and the years match (ie, only look at current year)
-                    const thisYear = dayjs(new Date()).year()
-                    const reportedPeriodYear = dayjs(
-                      quarterlyEarning.date
-                    ).year()
+          const reportIsThisYear = thisYear == reportedPeriodYear
 
-                    const reportIsThisYear = thisYear == reportedPeriodYear
+          // ..then store the earning in our DB
+          // TODO: how to smartly look back and get past quarters into DB?
+          // potentially have node function file to just go and grab each co in DB quarters and let create function avoid duplicates
 
-                    // ..then store the earning in our DB
-                    if (calendarPeriod == reportedPeriod && reportIsThisYear) {
-                      earningCreate(quarterlyEarning, ellenCompany.id).then(
-                        (dbResult) => {
-                          console.log(
-                            `created! for ${quarterlyEarning.period}`,
-                            dbResult
-                          )
-                        }
-                      )
-                    } else {
-                      console.log('did not match quarters')
-                    }
-
-                    sleep(100)
-                  })
-                })
-                .catch((err) => {
-                  console.error(`failed on ${calendarResult.symbol}`, err)
-                })
+          if (calendarPeriod == reportedPeriod && reportIsThisYear) {
+            const createdEarning = await earningCreate(
+              quarterlyEarning,
+              ellenCompany.id
+            )
+            if (createdEarning?.dataValues?.id) {
+              console.log('stored for', createdEarning.dataValues.ticker)
             }
-          })
-          .catch((err) => {
-            console.error(`db lookup error: ${err}`)
-          })
-      })
+          } else {
+            console.log('did not match quarters')
+          }
+
+          sleep(100)
+        })
+      }
     })
 
     res.send(200)
@@ -192,18 +175,32 @@ module.exports = {
 
 // Basic DB fuctions
 async function earningCreate(reqBody, ellenCompanyId) {
-  return Earning.create({
-    ticker: reqBody.symbol,
-    filingDate: reqBody.fillingDate, // typo in the API response from FMP
-    period: reqBody.period,
-    revenue: reqBody.revenue,
-    costOfRevenue: reqBody.costOfRevenue,
-    grossProfit: reqBody.grossProfit,
-    grossProfitRatio: reqBody.grossProfitRatio,
-    ebitda: reqBody.ebitda,
-    ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
-    companyId: ellenCompanyId,
+  const existingEarning = await Earning.count({
+    where: {
+      [Op.and]: [
+        { ticker: reqBody.symbol },
+        { period: reqBody.period },
+        { revenue: reqBody.revenue },
+      ],
+    },
   })
+
+  if (existingEarning == 0) {
+    return Earning.create({
+      ticker: reqBody.symbol,
+      filingDate: reqBody.fillingDate, // typo in the API response from FMP
+      period: reqBody.period,
+      revenue: reqBody.revenue,
+      costOfRevenue: reqBody.costOfRevenue,
+      grossProfit: reqBody.grossProfit,
+      grossProfitRatio: reqBody.grossProfitRatio,
+      ebitda: reqBody.ebitda,
+      ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
+      companyId: ellenCompanyId,
+    })
+  } else {
+    console.log('skipping duplicate stored earning')
+  }
 }
 
 // assumes that Earning entry is added to DB and checked whether to send out, on the same day
