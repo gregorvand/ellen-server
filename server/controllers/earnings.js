@@ -83,7 +83,7 @@ module.exports = {
           numberOfQuartersToStore
         )
 
-        fmpEarning.data.forEach((quarterlyEarning) => {
+        fmpEarning.data.forEach(async (quarterlyEarning) => {
           // if calendar Q matches latest earning Q
           const reportedPeriod = quarterlyEarning.period.split('Q')[1]
           const calendarPeriod = calendarResult.quarter
@@ -96,11 +96,13 @@ module.exports = {
 
           // ..then store the earning in our DB
           if (calendarPeriod == reportedPeriod && reportIsThisYear) {
-            earningCreate(quarterlyEarning, ellenCompany.id).then(
-              (dbResult) => {
-                console.log(`created! for ${quarterlyEarning.period}`, dbResult)
-              }
+            const createdEarning = await earningCreate(
+              quarterlyEarning,
+              ellenCompany.id
             )
+            if (createdEarning?.dataValues?.id) {
+              console.log('stored for', createdEarning.dataValues.ticker)
+            }
           } else {
             console.log('did not match quarters')
           }
@@ -170,18 +172,32 @@ module.exports = {
 
 // Basic DB fuctions
 async function earningCreate(reqBody, ellenCompanyId) {
-  return Earning.create({
-    ticker: reqBody.symbol,
-    filingDate: reqBody.fillingDate, // typo in the API response from FMP
-    period: reqBody.period,
-    revenue: reqBody.revenue,
-    costOfRevenue: reqBody.costOfRevenue,
-    grossProfit: reqBody.grossProfit,
-    grossProfitRatio: reqBody.grossProfitRatio,
-    ebitda: reqBody.ebitda,
-    ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
-    companyId: ellenCompanyId,
+  const existingEarning = await Earning.count({
+    where: {
+      [Op.and]: [
+        { ticker: reqBody.symbol },
+        { period: reqBody.period },
+        { revenue: reqBody.revenue },
+      ],
+    },
   })
+
+  if (existingEarning == 0) {
+    return Earning.create({
+      ticker: reqBody.symbol,
+      filingDate: reqBody.fillingDate, // typo in the API response from FMP
+      period: reqBody.period,
+      revenue: reqBody.revenue,
+      costOfRevenue: reqBody.costOfRevenue,
+      grossProfit: reqBody.grossProfit,
+      grossProfitRatio: reqBody.grossProfitRatio,
+      ebitda: reqBody.ebitda,
+      ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
+      companyId: ellenCompanyId,
+    })
+  } else {
+    console.log('skipping duplicate stored earning')
+  }
 }
 
 // assumes that Earning entry is added to DB and checked whether to send out, on the same day
