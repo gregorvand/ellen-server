@@ -135,6 +135,9 @@ module.exports = {
 
       // get users who subscribed to underlying company
       const users = await getUsersFromCompanies(earning.ticker)
+      const companyRecord = await Company.findOne({
+        where: { ticker: earning.ticker },
+      })
 
       users.forEach((user) => {
         usersToEmailForThisEarning.push({ email: user.email })
@@ -144,26 +147,22 @@ module.exports = {
 
       const message = {
         from: 'gregor@ellen.me', // Use the email address or domain you verified above
-        subject: `latest earning for ${earning.ticker}`,
-        text: `wow ${earning.ticker} earned ${earning.revenue}`,
+        template_id: 'd-50dccf286985442db16dd2581e1ec2fe',
+        dynamic_template_data: {
+          company: companyRecord.nameIdentifier,
+          ticker: earning.ticker,
+          earning: earning.revenue,
+        },
         personalizations: [
           {
             to: [
               {
-                email: 'gregor+all@vand.hk',
+                email: 'gregor+noreply@ellen.me',
               },
             ],
             bcc: usersToEmailForThisEarning,
           },
         ],
-        html: `
-            <strong>
-              Yo!
-            </strong>
-            <p>
-              wow ${earning.ticker} earned ${earning.revenue}
-            </p>
-        `,
       }
 
       sendAnEmail(req, res, message, false)
