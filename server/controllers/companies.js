@@ -81,20 +81,26 @@ module.exports = {
       .catch((error) => res.status(400).send(error))
   },
 
-  internalCreate(name, email, company = null) {
-    return Company.create({
-      nameIdentifier: name,
-      emailIdentifier: email,
-      orderPrefix: '#',
-      orderSuffix: '',
-      ticker: company?.ticker,
-      companyType: company?.companyType,
+  async internalCreate(name, email, company = null) {
+    const existingCompany = await Company.count({
+      where: { ticker: company?.ticker },
     })
-      .then((company) => {
-        console.log('create', company.ticker)
-        return company
+
+    if (existingCompany == 0) {
+      return Company.create({
+        nameIdentifier: name,
+        emailIdentifier: email || 'n/a',
+        orderPrefix: '#',
+        orderSuffix: '',
+        ticker: company?.ticker,
+        companyType: company?.companyType,
       })
-      .catch((error) => res.status(400).send(error))
+        .then((company) => {
+          console.log('create', company.ticker)
+          return company
+        })
+        .catch((error) => res.status(400).send(error))
+    }
   },
 
   internalList(req, res) {
