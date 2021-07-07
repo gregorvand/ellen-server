@@ -1,4 +1,5 @@
-const data = require('./nyse_csvjson_ellen.json')
+require('dotenv').config()
+const data = require('./fmp_07072021_NASDAQ_ellen_import.json')
 const companiesController = require('../server/controllers/companies')
 
 data.forEach((company) => {

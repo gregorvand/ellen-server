@@ -94,12 +94,17 @@ module.exports = {
         orderSuffix: '',
         ticker: company?.ticker,
         companyType: company?.companyType,
+        sector: company?.sector,
+        industry: company?.industry,
+        exchangeShortName: company?.exchangeShortName,
       })
         .then((company) => {
           console.log('create', company.ticker)
           return company
         })
         .catch((error) => res.status(400).send(error))
+    } else {
+      console.log(`already had ${company.ticker }`)
     }
   },
 
