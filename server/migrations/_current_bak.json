@@ -96,7 +96,7 @@
                 },
                 "ebitda": {
                     "field": "ebitda",
-                    "seqType": "Sequelize.BIGINT"
+                    "seqType": "Sequelize.DECIMAL"
                 },
                 "ebitdaRatio": {
                     "field": "ebitdaRatio",
@@ -437,5 +437,5 @@
             "indexes": []
         }
     },
-    "revision": 6
+    "revision": 7
 }

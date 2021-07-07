@@ -40,6 +40,21 @@
                     "field": "ticker",
                     "seqType": "Sequelize.STRING"
                 },
+                "sector": {
+                    "allowNull": true,
+                    "field": "sector",
+                    "seqType": "Sequelize.STRING"
+                },
+                "industry": {
+                    "allowNull": true,
+                    "field": "industry",
+                    "seqType": "Sequelize.STRING"
+                },
+                "exchangeShortName": {
+                    "allowNull": true,
+                    "field": "exchangeShortName",
+                    "seqType": "Sequelize.STRING"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -437,5 +452,5 @@
             "indexes": []
         }
     },
-    "revision": 7
+    "revision": 8
 }
