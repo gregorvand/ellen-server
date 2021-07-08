@@ -2,19 +2,15 @@ const User = require('../models').User
 const Order = require('../models').Order
 const jwt = require('jsonwebtoken')
 const { Op } = require('sequelize')
+// const bcrypt = require('bcrypt')
 
 module.exports = {
-  create(req, res) {
+  async create(req, res) {
     // console.log('what is the req', req)
 
-    if (req.data) {
-      const user = {
-        // name: req.body.name,
-        email: req.data.credentials.email,
-        password: req.data.credentials.password,
-        // In a production app, you'll want to encrypt the password
-      }
-    }
+    const password = req.body?.password || user.password
+    // let hashedPassword = await bcrypt.hash(password, 15)
+    // console.log('hashed happened..', hashedPassword)
 
     // do checks and then execute below if they all
     let errorsToSend = []
@@ -23,7 +19,7 @@ module.exports = {
       firstName: req?.body?.firstName || '',
       lastName: req?.body?.lastName || '',
       email: req.body.email || user.email,
-      password: req.body.password || user.password,
+      password: password,
       identifier: req.body.identifier || 'undefined',
     })
       .then((user) => {
@@ -71,29 +67,35 @@ module.exports = {
   },
 
   checkUser(req, res) {
+    console.log(req.body.email)
+
+    // for sec do not expose to user which bit was incorrect
+    const genericMessage =
+      'Sorry we could not locate an account with that email or password'
     return User.findOne({
       where: {
-        [Op.and]: [{ email: req.body.email }, { password: req.body.password }],
+        email: req.body.email,
       },
     })
-      .then((user) => {
-        const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
-        // In a production app, you'll want the secret key to be an environment variable
-        res.json({
-          token,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-        })
-        res.send(200)
+      .then(async (user) => {
+        if (!user) {
+          res.status(400).send(genericMessage)
+        } else if (!(await user.validPassword(req.body.password))) {
+          res.status(400)
+          res.send(genericMessage)
+        } else {
+          const token = jwt.sign({ user }, process.env.USER_AUTH_SECRET)
+          res.json({
+            token,
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+          })
+        }
       })
       .catch((error) => {
         console.log(error)
-        res
-          .status(400)
-          .send(
-            'Sorry we could not locate an account with that email or password'
-          )
+        res.status(400).send(genericMessage)
       })
   },
 
