@@ -1,6 +1,14 @@
 // general helper functions
 
 module.exports = {
+   /**
+   * Fetchs a list of products from API
+   * @param {Array} array : array to filter
+   * @param {String} keyName : key to filter on
+   *
+   * @returns {Array}
+   */
+  
   removeDuplicates(array = [], keyName) {
     if (keyName == '') {
       console.error('no key supplied to filter on')
