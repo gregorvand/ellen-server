@@ -8,7 +8,6 @@ module.exports = {
    *
    * @returns {Array}
    */
-  
   removeDuplicates(array = [], keyName) {
     if (keyName == '') {
       console.error('no key supplied to filter on')
