@@ -26,8 +26,7 @@ export default {
         method: 'post',
         url: `//localhost:8000/api${this.apiPath}`,
       }).then(({ data }) => {
-        console.log(data.earningsCalendar)
-        store.dispatch('earnings/addReportToEarnings', data.earningsCalendar)
+        store.dispatch('earnings/addReportToEarnings', data)
       })
     },
   },
