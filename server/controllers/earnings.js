@@ -145,29 +145,30 @@ module.exports = {
 
       console.log(earning.ticker, usersToEmailForThisEarning)
 
-      const message = {
-        from: 'gregor@ellen.me', // Use the email address or domain you verified above
-        template_id: 'd-50dccf286985442db16dd2581e1ec2fe',
-        dynamic_template_data: {
-          company: companyRecord.nameIdentifier,
-          ticker: earning.ticker,
-          earning: earning.revenue,
-        },
-        personalizations: [
-          {
-            to: [
-              {
-                email: 'gregor+noreply@ellen.me',
-              },
-            ],
-            bcc: usersToEmailForThisEarning,
+      if (usersToEmailForThisEarning.length > 0) {
+        const message = {
+          from: 'gregor@ellen.me', // Use the email address or domain you verified above
+          template_id: 'd-50dccf286985442db16dd2581e1ec2fe',
+          dynamic_template_data: {
+            company: companyRecord.nameIdentifier,
+            ticker: earning.ticker,
+            earning: earning.revenue,
           },
-        ],
+          personalizations: [
+            {
+              to: [
+                {
+                  email: 'gregor+noreply@ellen.me',
+                },
+              ],
+              bcc: usersToEmailForThisEarning,
+            },
+          ],
+        }
+
+        sendAnEmail(req, res, message, false)
       }
-
-      sendAnEmail(req, res, message, false)
     })
-
     res.sendStatus(200)
   },
 }
