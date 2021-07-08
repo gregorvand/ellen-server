@@ -2,7 +2,7 @@
 
 module.exports = {
    /**
-   * Fetchs a list of products from API
+   * Filters an array of objects according to the supplied key name
    * @param {Array} array : array to filter
    * @param {String} keyName : key to filter on
    *
