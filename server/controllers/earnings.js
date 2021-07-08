@@ -5,10 +5,8 @@ const jwt = require('jsonwebtoken')
 const Today = require('../utils/getToday')
 const { Op } = require('sequelize')
 
-const {
-  getCompaniesFromTickers,
-  getUsersFromCompanies,
-} = require('../controllers/companies')
+const { getUsersFromCompanies } = require('../controllers/companies')
+const { removeDuplicates } = require('../utils/helpers')
 
 const dayjs = require('dayjs')
 
@@ -38,7 +36,12 @@ module.exports = {
         res.sendStatus(401)
       } else {
         allEarningsByPeriod().then((result) => {
-          res.send(result.data)
+          // API returns duplicates, filter these out first based on symbol (ticker) name
+          const filteredResult = removeDuplicates(
+            result.data.earningsCalendar,
+            'symbol'
+          )
+          res.send(filteredResult)
         })
       }
     })
