@@ -80,7 +80,7 @@ module.exports = {
       if (ellenCompany !== null) {
         console.log(`found ${ellenCompany.ticker}`)
         // Now Get the latest recorded earning for company from FMP api
-        const numberOfQuartersToStore = 1
+        const numberOfQuartersToStore = 4
         const fmpEarning = await companyEarningBySymbol(
           ellenCompany.ticker,
           numberOfQuartersToStore
@@ -139,6 +139,7 @@ module.exports = {
     // send email to user in the req body
     let latestEarnings = []
     console.log(req.headers.user)
+
     // for each earnings added today
     // find earning with created today
     const today = new Date()
