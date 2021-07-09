@@ -6,6 +6,8 @@ async function companyEarningBySymbol(ticker, numberOfFilings = 1) {
   return await axios({
     method: 'get',
     url: `https://financialmodelingprep.com/api/v3/income-statement/${ticker}?period=quarter&limit=${numberOfFilings}&apikey=618a872a67c27ab884357f853a051837`,
+  }).catch((err) => {
+    console.error(`FMP error for ${ticker}: ${err}`)
   })
 }
 

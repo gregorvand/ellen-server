@@ -84,37 +84,43 @@ module.exports = {
         const fmpEarning = await companyEarningBySymbol(
           ellenCompany.ticker,
           numberOfQuartersToStore
-        )
-
-        fmpEarning.data.forEach(async (quarterlyEarning) => {
-          // if calendar Q matches latest earning Q
-          const reportedPeriod = quarterlyEarning.period.split('Q')[1]
-          const calendarPeriod = calendarResult.quarter
-
-          // and the years match (ie, only look at current year)
-          const thisYear = dayjs(new Date()).year()
-          const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
-
-          const reportIsThisYear = thisYear == reportedPeriodYear
-
-          // ..then store the earning in our DB
-          // TODO: how to smartly look back and get past quarters into DB?
-          // potentially have node function file to just go and grab each co in DB quarters and let create function avoid duplicates
-
-          if (calendarPeriod == reportedPeriod && reportIsThisYear) {
-            const createdEarning = await earningCreate(
-              quarterlyEarning,
-              ellenCompany.id
-            )
-            if (createdEarning?.dataValues?.id) {
-              console.log('stored for', createdEarning.dataValues.ticker)
-            }
-          } else {
-            console.log('did not match quarters')
-          }
-
-          sleep(100)
+        ).catch((err) => {
+          console.error(`FMP error for ${ellenCompany.ticker}: ${err}`)
         })
+
+        try {
+          fmpEarning.data.forEach(async (quarterlyEarning) => {
+            // if calendar Q matches latest earning Q
+            const reportedPeriod = quarterlyEarning.period.split('Q')[1]
+            const calendarPeriod = calendarResult.quarter
+
+            // and the years match (ie, only look at current year)
+            const thisYear = dayjs(new Date()).year()
+            const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
+
+            const reportIsThisYear = thisYear == reportedPeriodYear
+
+            // ..then store the earning in our DB
+            // TODO: how to smartly look back and get past quarters into DB?
+            // potentially have node function file to just go and grab each co in DB quarters and let create function avoid duplicates
+
+            if (calendarPeriod == reportedPeriod && reportIsThisYear) {
+              const createdEarning = await earningCreate(
+                quarterlyEarning,
+                ellenCompany.id
+              )
+              if (createdEarning?.dataValues?.id) {
+                console.log('stored for', createdEarning.dataValues.ticker)
+              }
+            } else {
+              console.log('did not match quarters')
+            }
+
+            sleep(100)
+          })
+        } catch (err) {
+          console.error(`FMP error / no data: ${err}`)
+        }
       }
     })
 
