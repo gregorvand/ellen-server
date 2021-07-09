@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const Today = require('../utils/getToday')
 const { Op } = require('sequelize')
 
+const { getLastFourQuartersEarnings } = require('../utils/calcEarnings')
 const { getUsersFromCompanies } = require('../controllers/companies')
 const { removeDuplicates } = require('../utils/helpers')
 
@@ -14,8 +15,6 @@ const {
   companyEarningBySymbol,
   allEarningsByPeriod,
 } = require('../services/earnings/companyEarningsService')
-
-const { sendAnEmail } = require('../services/email/sendgrid')
 
 module.exports = {
   addQuarterlyEarning(req, res) {
@@ -135,59 +134,9 @@ module.exports = {
     res.send(200)
   },
 
-  async sendEarningEmail(req, res) {
-    // send email to user in the req body
-    console.log(req.headers.user)
-
-    // for each earnings added today
-    // find earning with created today
-    const today = new Date()
-    let startofServerDay = new Today(today).startOfTodayServer()
-
-    const earnings = await findEarningByDate(startofServerDay)
-
-    earnings.forEach(async (earning) => {
-      let usersToEmailForThisEarning = []
-
-      // get users who subscribed to underlying company
-      const users = await getUsersFromCompanies(earning.ticker)
-      const companyRecord = await Company.findOne({
-        where: { ticker: earning.ticker },
-      })
-
-      users.forEach((user) => {
-        usersToEmailForThisEarning.push({ email: user.email })
-      })
-
-      console.log(earning.ticker, usersToEmailForThisEarning)
-
-      if (usersToEmailForThisEarning.length > 0) {
-        const message = {
-          from: 'gregor@ellen.me', // Use the email address or domain you verified above
-          template_id: 'd-50dccf286985442db16dd2581e1ec2fe',
-          dynamic_template_data: {
-            company: companyRecord.nameIdentifier,
-            ticker: earning.ticker,
-            earning: earning.revenue,
-          },
-          personalizations: [
-            {
-              to: [
-                {
-                  email: 'gregor+noreply@ellen.me',
-                },
-              ],
-              bcc: usersToEmailForThisEarning,
-            },
-          ],
-        }
-
-        sendAnEmail(req, res, message, false)
-      }
-    })
-    res.sendStatus(200)
-  },
-
+  // takes in an array of tickers under req.body.tickers
+  // gets their latest earnings, does some calcs
+  // sends the email
   async sendEarningEmailv2(req, res) {
     jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
       if (err) {
@@ -197,16 +146,11 @@ module.exports = {
         console.log(tickers)
 
         tickers.forEach(async (companyTicker) => {
-          const earnings = await Earning.findAll({
-            where: {
-              ticker: companyTicker,
-            },
-            order: [['createdAt', 'DESC']],
-            limit: 4,
-          })
-
+          const earnings = await getLastFourQuartersEarnings(companyTicker)
           // send off all the earning data to function for formatting
           earnings.forEach((earning) => {
+            const earningData = earning.dataValues
+            console.log(earningData.revenue)
             // add stuff to an array .e.g all revenues
           })
 
