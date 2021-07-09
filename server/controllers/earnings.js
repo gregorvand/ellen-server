@@ -137,7 +137,6 @@ module.exports = {
 
   async sendEarningEmail(req, res) {
     // send email to user in the req body
-    let latestEarnings = []
     console.log(req.headers.user)
 
     // for each earnings added today
