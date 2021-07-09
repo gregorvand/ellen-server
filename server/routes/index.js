@@ -222,10 +222,10 @@ module.exports = (app) => {
     earningsController.getAndStoreQuarterlyEarnings
   )
 
-  app.get(
+  app.post(
     '/api/earningemail/send',
     auth.getToken,
-    earningsController.sendEarningEmail
+    earningsController.sendEarningEmailv2
   )
 
   // For any other request method on companies, we're going to return "Method Not Allowed"

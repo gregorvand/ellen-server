@@ -146,7 +146,6 @@ module.exports = {
 
     const earnings = await findEarningByDate(startofServerDay)
 
-    // for each earning report
     earnings.forEach(async (earning) => {
       let usersToEmailForThisEarning = []
 
@@ -187,6 +186,73 @@ module.exports = {
       }
     })
     res.sendStatus(200)
+  },
+
+  async sendEarningEmailv2(req, res) {
+    jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
+      if (err) {
+        res.sendStatus(401)
+      } else {
+        const tickers = req.body.tickers
+        console.log(tickers)
+
+        tickers.forEach(async (companyTicker) => {
+          const earnings = await Earning.findAll({
+            where: {
+              ticker: companyTicker,
+            },
+            order: [['createdAt', 'DESC']],
+            limit: 4,
+          })
+
+          // send off all the earning data to function for formatting
+          earnings.forEach((earning) => {
+            // add stuff to an array .e.g all revenues
+          })
+
+          // do stuff with above arrays like calc change in %
+          // variablize for the email
+
+          // get recipients
+          // get users who subscribed to underlying company
+          const users = await getUsersFromCompanies(companyTicker)
+          const companyRecord = await Company.findOne({
+            where: { ticker: companyTicker },
+          })
+
+          let usersToEmailForThisEarning = []
+          users.forEach((user) => {
+            usersToEmailForThisEarning.push({ email: user.email })
+          })
+
+          console.log(companyTicker, usersToEmailForThisEarning)
+          // send email
+          if (usersToEmailForThisEarning.length > 0) {
+            // const message = {
+            //   from: 'gregor@ellen.me', // Use the email address or domain you verified above
+            //   template_id: 'd-50dccf286985442db16dd2581e1ec2fe',
+            //   dynamic_template_data: {
+            //     company: companyRecord.nameIdentifier,
+            //     ticker: earning.ticker,
+            //     earning: earning.revenue,
+            //   },
+            //   personalizations: [
+            //     {
+            //       to: [
+            //         {
+            //           email: 'gregor+noreply@ellen.me',
+            //         },
+            //       ],
+            //       bcc: usersToEmailForThisEarning,
+            //     },
+            //   ],
+            // }
+            // sendAnEmail(req, res, message, false)
+          }
+        })
+        res.sendStatus(200)
+      }
+    })
   },
 }
 
