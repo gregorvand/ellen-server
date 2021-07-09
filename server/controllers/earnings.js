@@ -88,8 +88,12 @@ module.exports = {
           console.error(`FMP error for ${ellenCompany.ticker}: ${err}`)
         })
 
+        let storeEarning = false
+
         try {
-          fmpEarning.data.forEach(async (quarterlyEarning) => {
+          const quarterlyEarning = fmpEarning.data[0]
+          // wrap up the below into function
+          if (fmpEarning.data[0]) {
             // if calendar Q matches latest earning Q
             const reportedPeriod = quarterlyEarning.period.split('Q')[1]
             const calendarPeriod = calendarResult.quarter
@@ -97,14 +101,20 @@ module.exports = {
             // and the years match (ie, only look at current year)
             const thisYear = dayjs(new Date()).year()
             const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
-
             const reportIsThisYear = thisYear == reportedPeriodYear
 
-            // ..then store the earning in our DB
-            // TODO: how to smartly look back and get past quarters into DB?
-            // potentially have node function file to just go and grab each co in DB quarters and let create function avoid duplicates
+            if (
+              calendarPeriod == reportedPeriod && // matching what the latest reported quarter is
+              reportIsThisYear // and to be sure, this year
+            ) {
+              storeEarning = true
+            } else {
+              console.log('did not match quarters')
+            }
+          }
 
-            if (calendarPeriod == reportedPeriod && reportIsThisYear) {
+          if (storeEarning) {
+            fmpEarning.data.forEach(async (quarterlyEarning) => {
               const createdEarning = await earningCreate(
                 quarterlyEarning,
                 ellenCompany.id
@@ -112,15 +122,13 @@ module.exports = {
               if (createdEarning?.dataValues?.id) {
                 console.log('stored for', createdEarning.dataValues.ticker)
               }
-            } else {
-              console.log('did not match quarters')
-            }
-
-            sleep(100)
-          })
+            })
+          }
         } catch (err) {
           console.error(`FMP error / no data: ${err}`)
         }
+
+        sleep(100)
       }
     })
 
