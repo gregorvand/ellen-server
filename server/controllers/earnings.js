@@ -5,11 +5,14 @@ const jwt = require('jsonwebtoken')
 const Today = require('../utils/getToday')
 const { Op } = require('sequelize')
 
-const { getLastFourQuartersEarnings } = require('../utils/calcEarnings')
+const calcEarnings = require('../utils/calcEarnings')
 const { getUsersFromCompanies } = require('../controllers/companies')
 const { removeDuplicates } = require('../utils/helpers')
 
+const { sendAnEmail } = require('../services/email/sendgrid')
+
 const dayjs = require('dayjs')
+const { currencyFormatter } = require('../utils/currencyFormatter')
 
 const {
   companyEarningBySymbol,
@@ -146,16 +149,36 @@ module.exports = {
         console.log(tickers)
 
         tickers.forEach(async (companyTicker) => {
-          const earnings = await getLastFourQuartersEarnings(companyTicker)
-          // send off all the earning data to function for formatting
-          earnings.forEach((earning) => {
-            const earningData = earning.dataValues
-            console.log(earningData.revenue)
-            // add stuff to an array .e.g all revenues
-          })
+          const earnings = await calcEarnings.getLastFourQuartersEarnings(
+            companyTicker
+          )
 
           // do stuff with above arrays like calc change in %
           // variablize for the email
+
+          const revDifference =
+            earnings.length > 1
+              ? await calcEarnings.calculateDifferenceOfEarnings(earnings)
+              : null
+
+          // console.log(
+          //   revDifference !== 'undefined' ? revDifference : 'no values'
+          // )
+
+          // send off all the earning data to function for formatting
+          const earningsData = {
+            revenues: [],
+            ebitdas: [],
+          }
+
+          earnings.forEach((earning) => {
+            const data = earning.dataValues
+            earningsData['revenues'].push(data.revenue)
+            earningsData['ebitdas'].push(data.ebitda)
+            // add stuff to an array .e.g all revenues
+          })
+
+          console.log(`well? ${companyTicker} : ${earningsData.revenues}`)
 
           // get recipients
           // get users who subscribed to underlying company
@@ -169,29 +192,49 @@ module.exports = {
             usersToEmailForThisEarning.push({ email: user.email })
           })
 
+          // we can format the data style-wise before passing to template
+
+          let resultColour = 'green'
+          let upOrDown = '+'
+          if (revDifference < 0) {
+            resultColour = 'red'
+            upOrDown = ''
+          }
+
+          // the data
+          const revenueChangeHTML = `<span style="color: ${resultColour};">${upOrDown}${revDifference}%</span>`
+          const latestRevenue = currencyFormatter().format(
+            earningsData.revenues[0]
+          )
+          const latestEbitda = currencyFormatter().format(
+            earningsData.ebitdas[0]
+          )
+
           console.log(companyTicker, usersToEmailForThisEarning)
           // send email
           if (usersToEmailForThisEarning.length > 0) {
-            // const message = {
-            //   from: 'gregor@ellen.me', // Use the email address or domain you verified above
-            //   template_id: 'd-50dccf286985442db16dd2581e1ec2fe',
-            //   dynamic_template_data: {
-            //     company: companyRecord.nameIdentifier,
-            //     ticker: earning.ticker,
-            //     earning: earning.revenue,
-            //   },
-            //   personalizations: [
-            //     {
-            //       to: [
-            //         {
-            //           email: 'gregor+noreply@ellen.me',
-            //         },
-            //       ],
-            //       bcc: usersToEmailForThisEarning,
-            //     },
-            //   ],
-            // }
-            // sendAnEmail(req, res, message, false)
+            const message = {
+              from: 'gregor@ellen.me', // Use the email address or domain you verified above
+              template_id: 'd-50dccf286985442db16dd2581e1ec2fe',
+              dynamic_template_data: {
+                company: companyRecord.nameIdentifier,
+                ticker: companyTicker,
+                latestRevenue: latestRevenue, // latest revenue figure
+                latestEbitda: latestEbitda, // latest revenue figure
+                revenueChangeHTML: revenueChangeHTML,
+              },
+              personalizations: [
+                {
+                  to: [
+                    {
+                      email: 'gregor+noreply@ellen.me',
+                    },
+                  ],
+                  bcc: usersToEmailForThisEarning,
+                },
+              ],
+            }
+            sendAnEmail(req, res, message, false)
           }
         })
         res.sendStatus(200)
