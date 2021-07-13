@@ -73,14 +73,22 @@ module.exports = {
     const allCalendarResults = companyList.data.earningsCalendar
 
     // now make many requests for each company and store any earnigns that match period from calendar
+    let allEllenTickersPromise = []
     allCalendarResults.forEach(async (calendarResult) => {
       // Lookup our DB first before making requests for reports, to reduce requests out to FMP
-      const ellenCompany = await Company.findOne({
+      const ellenCompany = Company.findOne({
         where: { ticker: calendarResult.symbol },
       })
 
+      allEllenTickersPromise.push(ellenCompany)
+    })
+
+    // wait for DB lookups to finish then continue
+    const companiesToCheck = await Promise.all(allEllenTickersPromise)
+
+    companiesToCheck.forEach(async (ellenCompany) => {
       if (ellenCompany !== null) {
-        console.log(`found ${ellenCompany.ticker}`)
+        console.log(`ellen: ${ellenCompany.ticker}`)
         // Now Get the latest recorded earning for company from FMP api
         const numberOfQuartersToStore = 4
         const fmpEarning = await companyEarningBySymbol(
@@ -92,6 +100,9 @@ module.exports = {
 
         let storeEarning = false
 
+        const calendarResult = allCalendarResults.find(
+          ({ symbol }) => symbol === ellenCompany.ticker
+        )
         try {
           const quarterlyEarning = fmpEarning.data[0]
           // wrap up the below into function
@@ -245,6 +256,17 @@ module.exports = {
 
 // Basic DB fuctions
 async function earningCreate(reqBody, ellenCompanyId) {
+  // some companies come with decimal figures of the following which don't work for us
+  // we set those to zero
+  const check = ['revenue', 'costOfRevenue', 'grossProfit']
+  for (const [key, value] of Object.entries(reqBody)) {
+    if (check.includes(key)) {
+      if (value < 1) {
+        reqBody[key] = 0
+      }
+    }
+  }
+  // now check if that earning already exists in DB
   const existingEarning = await Earning.count({
     where: {
       [Op.and]: [
@@ -254,22 +276,25 @@ async function earningCreate(reqBody, ellenCompanyId) {
       ],
     },
   })
-
-  if (existingEarning == 0) {
-    return Earning.create({
-      ticker: reqBody.symbol,
-      filingDate: reqBody.fillingDate, // typo in the API response from FMP
-      period: reqBody.period,
-      revenue: reqBody.revenue,
-      costOfRevenue: reqBody.costOfRevenue,
-      grossProfit: reqBody.grossProfit,
-      grossProfitRatio: reqBody.grossProfitRatio,
-      ebitda: reqBody.ebitda,
-      ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
-      companyId: ellenCompanyId,
-    })
-  } else {
-    console.log('skipping duplicate stored earning')
+  try {
+    if (existingEarning == 0) {
+      return Earning.create({
+        ticker: reqBody.symbol,
+        filingDate: reqBody.fillingDate, // typo in the API response from FMP
+        period: reqBody.period,
+        revenue: reqBody.revenue,
+        costOfRevenue: reqBody.costOfRevenue,
+        grossProfit: reqBody.grossProfit,
+        grossProfitRatio: reqBody.grossProfitRatio,
+        ebitda: reqBody.ebitda,
+        ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
+        companyId: ellenCompanyId,
+      })
+    } else {
+      console.log('skipping duplicate stored earning')
+    }
+  } catch (e) {
+    console.error(`could not store for ${ticker}`, e)
   }
 }
 
