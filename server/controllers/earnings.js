@@ -4,6 +4,7 @@ const Company = require('../models').Company
 const jwt = require('jsonwebtoken')
 const Today = require('../utils/getToday')
 const { Op } = require('sequelize')
+const dailyEmailController = require('../controllers/dailyEmail')
 
 const calcEarnings = require('../utils/calcEarnings')
 const { getUsersFromCompanies } = require('../controllers/companies')
@@ -72,6 +73,7 @@ module.exports = {
     const companyList = await allEarningsByPeriod()
     const allCalendarResults = companyList.data.earningsCalendar
 
+    // -----------------------
     // now make many requests for each company and store any earnigns that match period from calendar
     let allEllenTickersPromise = []
     allCalendarResults.forEach(async (calendarResult) => {
@@ -83,11 +85,10 @@ module.exports = {
       allEllenTickersPromise.push(ellenCompany)
     })
 
+    // -----------------------
     // wait for DB lookups to finish then continue
     const companiesToCheck = await Promise.all(allEllenTickersPromise)
-
     let allRetrievedEarnings = []
-
     companiesToCheck.forEach(async (ellenCompany) => {
       if (ellenCompany !== null) {
         console.log(`ellen: ${ellenCompany.ticker}`)
@@ -105,9 +106,8 @@ module.exports = {
       }
     })
 
+    // -----------------------
     const earningsToCheckAndStore = await Promise.all(allRetrievedEarnings)
-    // console.log(earningsToCheckAndStore)
-
     let earningsForEmail = []
     earningsToCheckAndStore.forEach(async (fmpEarning) => {
       let storeEarning = false
@@ -156,8 +156,14 @@ module.exports = {
       }
     })
 
+    // -----------------------
     console.log(earningsForEmail)
     res.send(earningsForEmail)
+
+    // TODO: can remove promise output logging when suitable
+    dailyEmailController.create(earningsForEmail).then((result) => {
+      console.log('daily result', result)
+    })
   },
 
   // takes in an array of tickers under req.body.tickers
