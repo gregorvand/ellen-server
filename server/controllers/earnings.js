@@ -86,66 +86,78 @@ module.exports = {
     // wait for DB lookups to finish then continue
     const companiesToCheck = await Promise.all(allEllenTickersPromise)
 
+    let allRetrievedEarnings = []
+
     companiesToCheck.forEach(async (ellenCompany) => {
       if (ellenCompany !== null) {
         console.log(`ellen: ${ellenCompany.ticker}`)
         // Now Get the latest recorded earning for company from FMP api
         const numberOfQuartersToStore = 4
-        const fmpEarning = await companyEarningBySymbol(
+        const fmpEarning = companyEarningBySymbol(
           ellenCompany.ticker,
           numberOfQuartersToStore
         ).catch((err) => {
           console.error(`FMP error for ${ellenCompany.ticker}: ${err}`)
         })
 
-        let storeEarning = false
-
-        const calendarResult = allCalendarResults.find(
-          ({ symbol }) => symbol === ellenCompany.ticker
-        )
-        try {
-          const quarterlyEarning = fmpEarning.data[0]
-          // wrap up the below into function
-          if (fmpEarning.data[0]) {
-            // if calendar Q matches latest earning Q
-            const reportedPeriod = quarterlyEarning.period.split('Q')[1]
-            const calendarPeriod = calendarResult.quarter
-
-            // and the years match (ie, only look at current year)
-            const thisYear = dayjs(new Date()).year()
-            const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
-            const reportIsThisYear = thisYear == reportedPeriodYear
-
-            if (
-              calendarPeriod == reportedPeriod && // matching what the latest reported quarter is
-              reportIsThisYear // and to be sure, this year
-            ) {
-              storeEarning = true
-            } else {
-              console.log('did not match quarters')
-            }
-          }
-
-          if (storeEarning) {
-            fmpEarning.data.forEach(async (quarterlyEarning) => {
-              const createdEarning = await earningCreate(
-                quarterlyEarning,
-                ellenCompany.id
-              )
-              if (createdEarning?.dataValues?.id) {
-                console.log('stored for', createdEarning.dataValues.ticker)
-              }
-            })
-          }
-        } catch (err) {
-          console.error(`FMP error / no data: ${err}`)
-        }
-
         sleep(100)
+        allRetrievedEarnings.push(fmpEarning)
       }
     })
 
-    res.send(200)
+    const earningsToCheckAndStore = await Promise.all(allRetrievedEarnings)
+    // console.log(earningsToCheckAndStore)
+
+    let earningsForEmail = []
+    earningsToCheckAndStore.forEach(async (fmpEarning) => {
+      let storeEarning = false
+
+      const calendarResult = allCalendarResults.find(
+        ({ symbol }) => symbol === fmpEarning?.data[0]?.symbol
+      )
+
+      try {
+        const quarterlyEarning = fmpEarning.data[0]
+        // wrap up the below into function
+        if (fmpEarning.data[0]) {
+          // if calendar Q matches latest earning Q
+          const reportedPeriod = quarterlyEarning.period.split('Q')[1]
+          const calendarPeriod = calendarResult.quarter
+
+          // and the years match (ie, only look at current year)
+          const thisYear = dayjs(new Date()).year()
+          const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
+          const reportIsThisYear = thisYear == reportedPeriodYear
+
+          if (
+            calendarPeriod == reportedPeriod && // matching what the latest reported quarter is
+            reportIsThisYear // and to be sure, this year
+          ) {
+            storeEarning = true
+          } else {
+            console.log('did not match quarters')
+          }
+        }
+
+        if (storeEarning) {
+          earningsForEmail.push(quarterlyEarning.symbol)
+          fmpEarning.data.forEach(async (quarterlyEarning) => {
+            // need Ellen co. ID here
+            const ellenCompany = await Company.findOne({
+              where: { ticker: quarterlyEarning.symbol },
+            })
+
+            // TODO: this does not return a promise (yet) therefore cannot wait for it
+            earningCreate(quarterlyEarning, ellenCompany.id)
+          })
+        }
+      } catch (err) {
+        console.error(`FMP error / no data: ${err}`)
+      }
+    })
+
+    console.log(earningsForEmail)
+    res.send(earningsForEmail)
   },
 
   // takes in an array of tickers under req.body.tickers
