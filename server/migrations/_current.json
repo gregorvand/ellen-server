@@ -88,6 +88,14 @@
                     "field": "date",
                     "seqType": "Sequelize.DATE"
                 },
+                "sent": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "sent",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -485,5 +493,5 @@
             "indexes": []
         }
     },
-    "revision": 9
+    "revision": 10
 }
