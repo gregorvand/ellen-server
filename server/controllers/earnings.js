@@ -89,6 +89,7 @@ module.exports = {
     // wait for DB lookups to finish then continue
     const companiesToCheck = await Promise.all(allEllenTickersPromise)
     let allRetrievedEarnings = []
+
     companiesToCheck.forEach(async (ellenCompany) => {
       if (ellenCompany !== null) {
         console.log(`ellen: ${ellenCompany.ticker}`)
@@ -97,18 +98,16 @@ module.exports = {
         const fmpEarning = companyEarningBySymbol(
           ellenCompany.ticker,
           numberOfQuartersToStore
-        ).catch((err) => {
-          console.error(`FMP error for ${ellenCompany.ticker}: ${err}`)
-        })
+        )
 
-        sleep(100)
+        sleep(200)
         allRetrievedEarnings.push(fmpEarning)
       }
     })
 
     // -----------------------
     const earningsToCheckAndStore = await Promise.all(allRetrievedEarnings)
-    let earningsForEmail = []
+    let earningsToStore = []
     earningsToCheckAndStore.forEach(async (fmpEarning) => {
       let storeEarning = false
 
@@ -116,52 +115,73 @@ module.exports = {
         ({ symbol }) => symbol === fmpEarning?.data[0]?.symbol
       )
 
-      try {
-        const quarterlyEarning = fmpEarning.data[0]
+      const quarterlyEarning = fmpEarning?.data[0]
+      if (quarterlyEarning) {
         // wrap up the below into function
-        if (fmpEarning.data[0]) {
-          // if calendar Q matches latest earning Q
-          const reportedPeriod = quarterlyEarning.period.split('Q')[1]
-          const calendarPeriod = calendarResult.quarter
 
-          // and the years match (ie, only look at current year)
-          const thisYear = dayjs(new Date()).year()
-          const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
-          const reportIsThisYear = thisYear == reportedPeriodYear
+        // if calendar Q matches latest earning Q
+        const reportedPeriod = quarterlyEarning.period.split('Q')[1]
+        const calendarPeriod = calendarResult.quarter
 
-          if (
-            calendarPeriod == reportedPeriod && // matching what the latest reported quarter is
-            reportIsThisYear // and to be sure, this year
-          ) {
-            storeEarning = true
-          } else {
-            console.log('did not match quarters')
-          }
+        // and the years match (ie, only look at current year)
+        const thisYear = dayjs(new Date()).year()
+        const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
+        const reportIsThisYear = thisYear == reportedPeriodYear
+
+        if (
+          calendarPeriod == reportedPeriod && // matching what the latest reported quarter is
+          reportIsThisYear // and to be sure, this year
+        ) {
+          storeEarning = true
+        } else {
+          console.log('did not match quarters')
         }
 
         if (storeEarning) {
-          earningsForEmail.push(quarterlyEarning.symbol)
-          fmpEarning.data.forEach(async (quarterlyEarning) => {
-            // need Ellen co. ID here
-            const ellenCompany = await Company.findOne({
-              where: { ticker: quarterlyEarning.symbol },
-            })
-
-            // TODO: this does not return a promise (yet) therefore cannot wait for it
-            earningCreate(quarterlyEarning, ellenCompany.id)
-          })
+          earningsToStore.push(fmpEarning)
         }
-      } catch (err) {
-        console.error(`FMP error / no data: ${err}`)
       }
     })
 
+    let flattenedEarnings = []
+    earningsToStore.forEach((company) => {
+      company.data.forEach((earning) => {
+        flattenedEarnings.push(earning)
+      })
+    })
+
+    console.log('yoooo', flattenedEarnings)
+
+    //  ADD ELLEN IDS!!! :)
+    earningsForEmail = []
+    flattenedEarnings.forEach(async (eachEarning) => {
+      console.log('tick', eachEarning.symbol)
+      const created = earningCreate(eachEarning, 2)
+      earningsForEmail.push(created)
+    })
+
+    earningsForEmailTickers = []
+    const wait = await Promise.all(earningsForEmail)
+    wait.forEach((created) => {
+      earningsForEmailTickers.push(created?.dataValues?.ticker)
+    })
+
+    // GET THIS BIT FIXED AND ADD ELLEN IDS!!! :)
+    const noDuplicateTickers = earningsForEmailTickers.filter(function (
+      value,
+      index,
+      array
+    ) {
+      return array.indexOf(value) == index
+    })
+
+    console.log(noDuplicateTickers)
     // -----------------------
-    console.log(earningsForEmail)
-    res.send(earningsForEmail)
+    // show notification of sent email tickers
+    res.send(noDuplicateTickers)
 
     // TODO: can remove promise output logging when suitable
-    dailyEmailController.create(earningsForEmail).then((result) => {
+    dailyEmailController.create(noDuplicateTickers).then((result) => {
       console.log('daily result', result)
     })
   },
@@ -225,26 +245,37 @@ async function earningCreate(reqBody, ellenCompanyId) {
       ],
     },
   })
-  try {
-    if (existingEarning == 0) {
-      return Earning.create({
-        ticker: reqBody.symbol,
-        filingDate: reqBody.fillingDate, // typo in the API response from FMP
-        period: reqBody.period,
-        revenue: reqBody.revenue,
-        costOfRevenue: reqBody.costOfRevenue,
-        grossProfit: reqBody.grossProfit,
-        grossProfitRatio: reqBody.grossProfitRatio,
-        ebitda: reqBody.ebitda,
-        ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
-        companyId: ellenCompanyId,
-      })
-    } else {
-      console.log('skipping duplicate stored earning')
-    }
-  } catch (e) {
-    console.error(`could not store for ${ticker}`, e)
+  if (existingEarning == 0) {
+    return Earning.create({
+      ticker: reqBody.symbol,
+      filingDate: reqBody.fillingDate, // typo in the API response from FMP
+      period: reqBody.period,
+      revenue: reqBody.revenue,
+      costOfRevenue: reqBody.costOfRevenue,
+      grossProfit: reqBody.grossProfit,
+      grossProfitRatio: reqBody.grossProfitRatio,
+      ebitda: reqBody.ebitda,
+      ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
+      companyId: ellenCompanyId,
+    })
+  } else {
+    return Promise.resolve()
   }
+}
+
+function forceCreate(reqBody, ellenCompanyId) {
+  return Earning.create({
+    ticker: reqBody.symbol,
+    filingDate: reqBody.fillingDate, // typo in the API response from FMP
+    period: reqBody.period,
+    revenue: reqBody.revenue,
+    costOfRevenue: reqBody.costOfRevenue,
+    grossProfit: reqBody.grossProfit,
+    grossProfitRatio: reqBody.grossProfitRatio,
+    ebitda: reqBody.ebitda,
+    ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
+    companyId: ellenCompanyId,
+  })
 }
 
 // assumes that Earning entry is added to DB and checked whether to send out, on the same day
