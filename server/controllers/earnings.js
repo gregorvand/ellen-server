@@ -169,104 +169,35 @@ module.exports = {
   // takes in an array of tickers under req.body.tickers
   // gets their latest earnings, does some calcs
   // sends the email
-  async sendEarningEmailv2(req, res) {
+  async sendEmailFromTickers(req, res) {
     jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
       if (err) {
         res.sendStatus(401)
       } else {
         const tickers = req.body.tickers
         console.log(tickers)
-
-        tickers.forEach(async (companyTicker) => {
-          const earnings = await calcEarnings.getLastFourQuartersEarnings(
-            companyTicker
-          )
-
-          // do stuff with above arrays like calc change in %
-          // variablize for the email
-
-          const revDifference =
-            earnings.length > 1
-              ? await calcEarnings.calculateDifferenceOfEarnings(earnings)
-              : null
-
-          // console.log(
-          //   revDifference !== 'undefined' ? revDifference : 'no values'
-          // )
-
-          // send off all the earning data to function for formatting
-          const earningsData = {
-            revenues: [],
-            ebitdas: [],
-          }
-
-          earnings.forEach((earning) => {
-            const data = earning.dataValues
-            earningsData['revenues'].push(data.revenue)
-            earningsData['ebitdas'].push(data.ebitda)
-            // add stuff to an array .e.g all revenues
-          })
-
-          console.log(`well? ${companyTicker} : ${earningsData.revenues}`)
-
-          // get recipients
-          // get users who subscribed to underlying company
-          const users = await getUsersFromCompanies(companyTicker)
-          const companyRecord = await Company.findOne({
-            where: { ticker: companyTicker },
-          })
-
-          let usersToEmailForThisEarning = []
-          users.forEach((user) => {
-            usersToEmailForThisEarning.push({ email: user.email })
-          })
-
-          // we can format the data style-wise before passing to template
-
-          let resultColour = 'green'
-          let upOrDown = '+'
-          if (revDifference < 0) {
-            resultColour = 'red'
-            upOrDown = ''
-          }
-
-          // the data
-          const revenueChangeHTML = `<span style="color: ${resultColour};">${upOrDown}${revDifference}%</span>`
-          const latestRevenue = currencyFormatter().format(
-            earningsData.revenues[0]
-          )
-          const latestEbitda = currencyFormatter().format(
-            earningsData.ebitdas[0]
-          )
-
-          console.log(companyTicker, usersToEmailForThisEarning)
-          // send email
-          if (usersToEmailForThisEarning.length > 0) {
-            const message = {
-              from: 'gregor@ellen.me', // Use the email address or domain you verified above
-              template_id: 'd-50dccf286985442db16dd2581e1ec2fe',
-              dynamic_template_data: {
-                company: companyRecord.nameIdentifier,
-                ticker: companyTicker,
-                latestRevenue: latestRevenue, // latest revenue figure
-                latestEbitda: latestEbitda, // latest revenue figure
-                revenueChangeHTML: revenueChangeHTML,
-              },
-              personalizations: [
-                {
-                  to: [
-                    {
-                      email: 'gregor+noreply@ellen.me',
-                    },
-                  ],
-                  bcc: usersToEmailForThisEarning,
-                },
-              ],
-            }
-            sendAnEmail(req, res, message, false)
-          }
-        })
+        processTickersSendEmail(req, res, tickers)
         res.sendStatus(200)
+      }
+    })
+  },
+
+  // same as above but gets any unsent rows from DailyEmail for tickers
+  async sendEarningEmail(req, res) {
+    jwt.verify(req.token, process.env.USER_AUTH_SECRET, async (err) => {
+      if (err) {
+        res.sendStatus(401)
+      } else {
+        const unsentTickers = await dailyEmailController.unsent()
+        if (unsentTickers.length > 0) {
+          let tickers = unsentTickers[0].dataValues.tickers
+          console.log(tickers)
+          await processTickersSendEmail(req, res, tickers)
+          dailyEmailController.updateStatus(unsentTickers[0].dataValues.id)
+          res.send(`sent emails for ${tickers}`)
+        } else {
+          res.send('no unsent ticker emails')
+        }
       }
     })
   },
@@ -319,14 +250,104 @@ async function earningCreate(reqBody, ellenCompanyId) {
 // assumes that Earning entry is added to DB and checked whether to send out, on the same day
 // e.g earnings filings check done at 9am, adds any new reported earnings to DB
 // emails triggered at 10am
-async function findEarningByDate(date) {
-  console.log('datezzz', date)
-  return Earning.findAll({
-    where: {
-      createdAt: {
-        [Op.gt]: date,
-      },
-    },
+// async function findEarningByDate(date) {
+//   console.log('datezzz', date)
+//   return Earning.findAll({
+//     where: {
+//       createdAt: {
+//         [Op.gt]: date,
+//       },
+//     },
+//   })
+// }
+
+async function processTickersSendEmail(req, res, tickers) {
+  tickers.forEach(async (companyTicker) => {
+    console.log('checking ')
+    const earnings = await calcEarnings.getLastFourQuartersEarnings(
+      companyTicker
+    )
+    // do stuff with above arrays like calc change in %
+    // variablize for the email
+
+    const revDifference =
+      earnings.length > 1
+        ? await calcEarnings.calculateDifferenceOfEarnings(earnings)
+        : null
+
+    // console.log(
+    //   revDifference !== 'undefined' ? revDifference : 'no values'
+    // )
+
+    // send off all the earning data to function for formatting
+    const earningsData = {
+      revenues: [],
+      ebitdas: [],
+    }
+
+    earnings.forEach((earning) => {
+      const data = earning.dataValues
+      earningsData['revenues'].push(data.revenue)
+      earningsData['ebitdas'].push(data.ebitda)
+      // add stuff to an array .e.g all revenues
+    })
+
+    console.log(`well? ${companyTicker} : ${earningsData.revenues}`)
+
+    // get recipients
+    // get users who subscribed to underlying company
+    const users = await getUsersFromCompanies(companyTicker)
+    const companyRecord = await Company.findOne({
+      where: { ticker: companyTicker },
+    })
+
+    let usersToEmailForThisEarning = []
+    users.forEach((user) => {
+      usersToEmailForThisEarning.push({ email: user.email })
+    })
+
+    // we can format the data style-wise before passing to template
+
+    let resultColour = 'green'
+    let upOrDown = '+'
+    if (revDifference < 0) {
+      resultColour = 'red'
+      upOrDown = ''
+    }
+
+    // the data
+    const revenueChangeHTML = `<span style="color: ${resultColour};">${upOrDown}${revDifference}%</span>`
+    const latestRevenue = currencyFormatter().format(earningsData.revenues[0])
+    const latestEbitda = currencyFormatter().format(earningsData.ebitdas[0])
+
+    console.log(companyTicker, usersToEmailForThisEarning)
+    // send email
+    if (usersToEmailForThisEarning.length > 0) {
+      const message = {
+        from: 'gregor@ellen.me', // Use the email address or domain you verified above
+        template_id: 'd-50dccf286985442db16dd2581e1ec2fe',
+        dynamic_template_data: {
+          company: companyRecord.nameIdentifier,
+          ticker: companyTicker,
+          latestRevenue: latestRevenue, // latest revenue figure
+          latestEbitda: latestEbitda, // latest revenue figure
+          revenueChangeHTML: revenueChangeHTML,
+        },
+        personalizations: [
+          {
+            to: [
+              {
+                email: 'gregor+noreply@ellen.me',
+              },
+            ],
+            bcc: usersToEmailForThisEarning,
+          },
+        ],
+      }
+      sendAnEmail(req, res, message, false)
+    }
+
+    return 'completed'
   })
 }
 

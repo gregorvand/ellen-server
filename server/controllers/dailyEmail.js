@@ -21,4 +21,23 @@ module.exports = {
       console.error(e)
     }
   },
+
+  unsent() {
+    return DailyEmail.findAll({
+      where: {
+        sent: false,
+      },
+    })
+  },
+
+  updateStatus(id) {
+    return DailyEmail.update(
+      {
+        sent: true,
+      },
+      {
+        where: { id: id },
+      }
+    )
+  },
 }
