@@ -18,11 +18,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .notification-container {
   position: fixed;
   bottom: 0;
-  background-color: red;
   width: 100%;
   left: 0;
   color: white;
