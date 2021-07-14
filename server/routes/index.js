@@ -190,7 +190,7 @@ module.exports = (app) => {
   })
 
   // no params
-  app.post(
+  app.get(
     '/api/earnings/yesterday',
     auth.getToken,
     earningsController.getRecentEarnings
@@ -222,10 +222,18 @@ module.exports = (app) => {
     earningsController.getAndStoreQuarterlyEarnings
   )
 
+  // gets latest ticker entries from DB to email
+  app.get(
+    '/api/earningemail/send',
+    auth.getToken,
+    earningsController.sendEarningEmail
+  )
+
+  // post in an array of tickers to be emailed
   app.post(
     '/api/earningemail/send',
     auth.getToken,
-    earningsController.sendEarningEmailv2
+    earningsController.sendEmailFromTickers
   )
 
   // For any other request method on companies, we're going to return "Method Not Allowed"
