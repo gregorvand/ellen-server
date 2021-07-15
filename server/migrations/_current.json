@@ -109,6 +109,44 @@
             },
             "indexes": []
         },
+        "EarningCalendars": {
+            "tableName": "EarningCalendars",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "ticker": {
+                    "allowNull": false,
+                    "field": "ticker",
+                    "seqType": "Sequelize.ARRAY(Sequelize.STRING)"
+                },
+                "date": {
+                    "allowNull": false,
+                    "field": "date",
+                    "seqType": "Sequelize.DATE"
+                },
+                "quarter": {
+                    "allowNull": false,
+                    "field": "quarter",
+                    "seqType": "Sequelize.DECIMAL"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
         "Earnings": {
             "tableName": "Earnings",
             "schema": {
@@ -493,5 +531,5 @@
             "indexes": []
         }
     },
-    "revision": 10
+    "revision": 11
 }
