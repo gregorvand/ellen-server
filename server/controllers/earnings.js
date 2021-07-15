@@ -1,10 +1,12 @@
 const Earning = require('../models').Earning
 const Company = require('../models').Company
+const EarningCalendar = require('../models').EarningCalendar
 // const User = require('../models').User
 const jwt = require('jsonwebtoken')
 const Today = require('../utils/getToday')
 const { Op } = require('sequelize')
 const dailyEmailController = require('../controllers/dailyEmail')
+const earningCalendarController = require('../controllers/earningCalendar')
 
 const calcEarnings = require('../utils/calcEarnings')
 const { getUsersFromCompanies } = require('../controllers/companies')
@@ -66,20 +68,20 @@ module.exports = {
   // return success to indicate received and processing
   // make requests for each set of earnings
   // store earning
-  // on to the next
+  // on to the next\
 
   async getAndStoreQuarterlyEarnings(req, res) {
-    // gets all symbols in one request and store array of all calendar entries
-    const companyList = await allEarningsByPeriod()
-    const allCalendarResults = companyList.data.earningsCalendar
+    // look up earnings calendar
+    // pop off first 10 companies where storedEarning is false
+    // get those earnings
+    // update EarningCalendar result at the end
+    const earningsByBatch = await getNextEarnings()
 
-    // -----------------------
-    // now make many requests for each company and store any earnigns that match period from calendar
     let allEllenTickersPromise = []
-    allCalendarResults.forEach(async (calendarResult) => {
+    earningsByBatch.forEach(async (calendarResult) => {
       // Lookup our DB first before making requests for reports, to reduce requests out to FMP
       const ellenCompany = Company.findOne({
-        where: { ticker: calendarResult.symbol },
+        where: { ticker: calendarResult.ticker },
       })
 
       allEllenTickersPromise.push(ellenCompany)
@@ -88,11 +90,12 @@ module.exports = {
     // -----------------------
     // wait for DB lookups to finish then continue
     const companiesToCheck = await Promise.all(allEllenTickersPromise)
-    let allRetrievedEarnings = []
 
+    let allRetrievedEarnings = []
     companiesToCheck.forEach(async (ellenCompany) => {
       if (ellenCompany !== null) {
         console.log(`ellen: ${ellenCompany.ticker}`)
+
         // Now Get the latest recorded earning for company from FMP api
         const numberOfQuartersToStore = 4
         const fmpEarning = companyEarningBySymbol(
@@ -100,7 +103,6 @@ module.exports = {
           numberOfQuartersToStore
         )
 
-        sleep(200)
         allRetrievedEarnings.push(fmpEarning)
       }
     })
@@ -110,9 +112,8 @@ module.exports = {
     let earningsToStore = []
     earningsToCheckAndStore.forEach(async (fmpEarning) => {
       let storeEarning = false
-
-      const calendarResult = allCalendarResults.find(
-        ({ symbol }) => symbol === fmpEarning?.data[0]?.symbol
+      const calendarResult = earningsByBatch.find(
+        ({ ticker }) => ticker === fmpEarning?.data[0]?.symbol
       )
 
       const quarterlyEarning = fmpEarning?.data[0]
@@ -122,6 +123,8 @@ module.exports = {
         // if calendar Q matches latest earning Q
         const reportedPeriod = quarterlyEarning.period.split('Q')[1]
         const calendarPeriod = calendarResult.quarter
+
+        console.log(reportedPeriod, calendarPeriod)
 
         // and the years match (ie, only look at current year)
         const thisYear = dayjs(new Date()).year()
@@ -157,24 +160,39 @@ module.exports = {
       }
     })
 
-    earningsForEmail = []
-    flattenedEarnings.forEach(async (eachEarning) => {
+    const promises = flattenedEarnings.map(async (eachEarning) => {
       const ellenCompany = flattenedCompanies.find(
         ({ ticker }) => ticker === eachEarning.symbol
       )
 
       console.log('tick', eachEarning.symbol)
-      const created = earningCreate(eachEarning, ellenCompany.id)
-      earningsForEmail.push(created)
+      const earningBatchObject = earningsByBatch.find(
+        ({ ticker }) => ticker === eachEarning.symbol
+      )
+
+      console.log(eachEarning, earningBatchObject.id)
+
+      const created = await earningCreate(
+        eachEarning,
+        ellenCompany.id,
+        earningBatchObject.id
+      )
+
+      return created
     })
 
     earningsForEmailTickers = []
-    const wait = await Promise.all(earningsForEmail)
+    const wait = await Promise.all(promises)
+    console.log(wait)
+
     wait.forEach((created) => {
-      earningsForEmailTickers.push(created?.dataValues?.ticker)
+      const ticker = created?.dataValues?.ticker
+      if (ticker !== undefined) {
+        earningsForEmailTickers.push(ticker)
+        earningCalendarController.validate(ticker)
+      }
     })
 
-    // GET THIS BIT FIXED AND ADD ELLEN IDS!!! :)
     const noDuplicateTickers = earningsForEmailTickers.filter(function (
       value,
       index,
@@ -183,7 +201,6 @@ module.exports = {
       return array.indexOf(value) == index
     })
 
-    console.log(noDuplicateTickers)
     // -----------------------
     // show notification of sent email tickers
     res.send(noDuplicateTickers)
@@ -229,10 +246,23 @@ module.exports = {
   },
 }
 
+async function getNextEarnings() {
+  const earningsBatch = await EarningCalendar.findAll({
+    where: {
+      storedEarning: false,
+    },
+    limit: 40,
+    order: [['date', 'ASC']],
+  })
+
+  return earningsBatch
+}
+
 // Basic DB fuctions
-async function earningCreate(reqBody, ellenCompanyId) {
+async function earningCreate(reqBody, ellenCompanyId, earningCalendarId) {
   // some companies come with decimal figures of the following which don't work for us
   // we set those to zero
+
   const check = ['revenue', 'costOfRevenue', 'grossProfit']
   for (const [key, value] of Object.entries(reqBody)) {
     if (check.includes(key)) {
@@ -251,6 +281,7 @@ async function earningCreate(reqBody, ellenCompanyId) {
       ],
     },
   })
+  console.log(existingEarning)
   if (existingEarning == 0) {
     return Earning.create({
       ticker: reqBody.symbol,
@@ -263,6 +294,7 @@ async function earningCreate(reqBody, ellenCompanyId) {
       ebitda: reqBody.ebitda,
       ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
       companyId: ellenCompanyId,
+      earningCalendarId: earningCalendarId,
     })
   } else {
     return Promise.resolve()
@@ -271,7 +303,6 @@ async function earningCreate(reqBody, ellenCompanyId) {
 
 async function processTickersSendEmail(req, res, tickers) {
   tickers.forEach(async (companyTicker) => {
-    console.log('checking ')
     const earnings = await calcEarnings.getLastFourQuartersEarnings(
       companyTicker
     )
@@ -355,8 +386,4 @@ async function processTickersSendEmail(req, res, tickers) {
 
     return 'completed'
   })
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
 }

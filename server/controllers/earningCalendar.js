@@ -17,11 +17,7 @@ const getAndStore = async function (req, res) {
 // store if not
 const checkAndCreate = async function (req, res) {
   const allCalendarResults = req.earningsCalendar
-
-  let allCreations = []
   const promises = allCalendarResults.map(async (calendarResult) => {
-    // Lookup our DB first before making requests for reports, to reduce requests out to FMP
-
     const thisDate = new Date(calendarResult.date)
 
     const ellenCompany = await Company.count({
@@ -51,10 +47,23 @@ const checkAndCreate = async function (req, res) {
   console.log(response)
 }
 
+const validate = async function (ticker) {
+  const entry = await EarningCalendar.findOne({
+    where: {
+      ticker: ticker,
+    },
+    order: [['date', 'ASC']],
+  })
+
+  entry.storedEarning = true
+  entry.save()
+}
+
 // console test
 getAndStore()
 
 module.exports = {
   create: checkAndCreate,
   getAndStore: getAndStore,
+  validate: validate,
 }
