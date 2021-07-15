@@ -14,5 +14,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   })
 
+  EarningCalendar.associate = (models) => {
+    EarningCalendar.hasOne(models.Earning, {
+      foreignKey: 'earningCalendarId',
+      as: 'earning',
+      onDelete: 'CASCADE',
+    })
+  }
+
   return EarningCalendar
 }

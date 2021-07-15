@@ -122,7 +122,7 @@
                 "ticker": {
                     "allowNull": false,
                     "field": "ticker",
-                    "seqType": "Sequelize.ARRAY(Sequelize.STRING)"
+                    "seqType": "Sequelize.STRING"
                 },
                 "date": {
                     "allowNull": false,
@@ -215,6 +215,28 @@
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "field": "companyId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "earningId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "EarningCalendars",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "earningId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "earningCalendarId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "EarningCalendars",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "earningCalendarId",
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -531,5 +553,5 @@
             "indexes": []
         }
     },
-    "revision": 11
+    "revision": 13
 }
