@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const EarningCalendar = sequelize.define('EarningCalendar', {
     ticker: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.STRING,
       allowNull: false,
     },
     date: {

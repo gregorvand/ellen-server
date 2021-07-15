@@ -122,7 +122,7 @@
                 "ticker": {
                     "allowNull": false,
                     "field": "ticker",
-                    "seqType": "Sequelize.ARRAY(Sequelize.STRING)"
+                    "seqType": "Sequelize.STRING"
                 },
                 "date": {
                     "allowNull": false,
@@ -531,5 +531,5 @@
             "indexes": []
         }
     },
-    "revision": 11
+    "revision": 12
 }
