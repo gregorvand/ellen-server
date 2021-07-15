@@ -12,6 +12,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.NUMERIC,
       allowNull: false,
     },
+    storedEarning: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   })
 
   EarningCalendar.associate = (models) => {

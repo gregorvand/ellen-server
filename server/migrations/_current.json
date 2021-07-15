@@ -134,6 +134,14 @@
                     "field": "quarter",
                     "seqType": "Sequelize.DECIMAL"
                 },
+                "storedEarning": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "storedEarning",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -542,5 +550,5 @@
             "indexes": []
         }
     },
-    "revision": 14
+    "revision": 15
 }

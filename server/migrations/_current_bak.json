@@ -217,17 +217,6 @@
                     "field": "companyId",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "earningId": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "EarningCalendars",
-                        "key": "id"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "earningId",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "earningCalendarId": {
                     "allowNull": true,
                     "references": {
@@ -553,5 +542,5 @@
             "indexes": []
         }
     },
-    "revision": 13
+    "revision": 14
 }
