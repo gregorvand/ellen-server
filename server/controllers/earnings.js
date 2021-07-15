@@ -170,8 +170,6 @@ module.exports = {
         ({ ticker }) => ticker === eachEarning.symbol
       )
 
-      console.log(eachEarning, earningBatchObject.id)
-
       const created = await earningCreate(
         eachEarning,
         ellenCompany.id,
@@ -183,8 +181,6 @@ module.exports = {
 
     earningsForEmailTickers = []
     const wait = await Promise.all(promises)
-    console.log(wait)
-
     wait.forEach((created) => {
       const ticker = created?.dataValues?.ticker
       if (ticker !== undefined) {
@@ -205,8 +201,10 @@ module.exports = {
     // show notification of sent email tickers
     res.send(noDuplicateTickers)
 
+    if (noDuplicateTickers.length > 0) {
+      dailyEmailController.create(noDuplicateTickers)
+    }
     // TODO: can remove promise output logging when suitable
-    dailyEmailController.create(noDuplicateTickers)
   },
 
   // takes in an array of tickers under req.body.tickers
