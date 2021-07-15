@@ -150,13 +150,21 @@ module.exports = {
       })
     })
 
-    console.log('yoooo', flattenedEarnings)
+    let flattenedCompanies = []
+    companiesToCheck.forEach((company) => {
+      if (company !== null) {
+        flattenedCompanies.push(company?.dataValues)
+      }
+    })
 
-    //  ADD ELLEN IDS!!! :)
     earningsForEmail = []
     flattenedEarnings.forEach(async (eachEarning) => {
+      const ellenCompany = flattenedCompanies.find(
+        ({ ticker }) => ticker === eachEarning.symbol
+      )
+
       console.log('tick', eachEarning.symbol)
-      const created = earningCreate(eachEarning, 2)
+      const created = earningCreate(eachEarning, ellenCompany.id)
       earningsForEmail.push(created)
     })
 
@@ -181,9 +189,7 @@ module.exports = {
     res.send(noDuplicateTickers)
 
     // TODO: can remove promise output logging when suitable
-    dailyEmailController.create(noDuplicateTickers).then((result) => {
-      console.log('daily result', result)
-    })
+    dailyEmailController.create(noDuplicateTickers)
   },
 
   // takes in an array of tickers under req.body.tickers
@@ -263,35 +269,6 @@ async function earningCreate(reqBody, ellenCompanyId) {
   }
 }
 
-function forceCreate(reqBody, ellenCompanyId) {
-  return Earning.create({
-    ticker: reqBody.symbol,
-    filingDate: reqBody.fillingDate, // typo in the API response from FMP
-    period: reqBody.period,
-    revenue: reqBody.revenue,
-    costOfRevenue: reqBody.costOfRevenue,
-    grossProfit: reqBody.grossProfit,
-    grossProfitRatio: reqBody.grossProfitRatio,
-    ebitda: reqBody.ebitda,
-    ebitdaRatio: reqBody.ebitdaratio, // FMP response anomaly, not camelCase formatting
-    companyId: ellenCompanyId,
-  })
-}
-
-// assumes that Earning entry is added to DB and checked whether to send out, on the same day
-// e.g earnings filings check done at 9am, adds any new reported earnings to DB
-// emails triggered at 10am
-// async function findEarningByDate(date) {
-//   console.log('datezzz', date)
-//   return Earning.findAll({
-//     where: {
-//       createdAt: {
-//         [Op.gt]: date,
-//       },
-//     },
-//   })
-// }
-
 async function processTickersSendEmail(req, res, tickers) {
   tickers.forEach(async (companyTicker) => {
     console.log('checking ')
@@ -322,8 +299,6 @@ async function processTickersSendEmail(req, res, tickers) {
       earningsData['ebitdas'].push(data.ebitda)
       // add stuff to an array .e.g all revenues
     })
-
-    console.log(`well? ${companyTicker} : ${earningsData.revenues}`)
 
     // get recipients
     // get users who subscribed to underlying company
