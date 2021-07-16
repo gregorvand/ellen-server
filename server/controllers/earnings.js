@@ -72,10 +72,10 @@ module.exports = {
 
   async getAndStoreQuarterlyEarnings(req, res) {
     // look up earnings calendar
-    // pop off first 10 companies where storedEarning is false
+    // pop off first 10   companies where storedEarning is false
     // get those earnings
     // update EarningCalendar result at the end
-    const earningsByBatch = await getNextEarnings()
+    const earningsByBatch = req
 
     let allEllenTickersPromise = []
     earningsByBatch.forEach(async (calendarResult) => {
@@ -199,10 +199,13 @@ module.exports = {
 
     // -----------------------
     // show notification of sent email tickers
-    res.send(noDuplicateTickers)
+    // res.send(noDuplicateTickers)
+    console.log(noDuplicateTickers)
 
     if (noDuplicateTickers.length > 0) {
-      dailyEmailController.create(noDuplicateTickers)
+      dailyEmailController.create([
+        noDuplicateTickers[noDuplicateTickers.length - 1], // only take the last item since we are running this per company, not as a batch
+      ])
     }
     // TODO: can remove promise output logging when suitable
   },
@@ -242,18 +245,6 @@ module.exports = {
       }
     })
   },
-}
-
-async function getNextEarnings() {
-  const earningsBatch = await EarningCalendar.findAll({
-    where: {
-      storedEarning: false,
-    },
-    limit: 40,
-    order: [['date', 'ASC']],
-  })
-
-  return earningsBatch
 }
 
 // Basic DB fuctions

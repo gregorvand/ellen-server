@@ -19,7 +19,16 @@ io.on("connection", socket => {
 
 server.listen(8000);
 
-const { initPointsTransactionQueues } = require ('../server/services/bull-queues');
+const Queues = require ('../server/services/bull-queues');
+const initEarningsCron = require ('../server/services/bull-queues');
+const { initCronAddEarnings, initCronAddCalendarEvents } = require ('../server/services/earnings/earningsDailyQueue');
+
+Queues.initEarningsQueues()
+Queues.initProcessEarningsQueueCron()
+Queues.initGetCalendarEventsQueueCron()
+initCronAddEarnings()
+initCronAddCalendarEvents()
+
 
 const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);
