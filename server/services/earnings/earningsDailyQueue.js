@@ -15,17 +15,9 @@ async function addEventsForProcessing() {
 
   allToProcess.forEach((calendarEvent) => {
     console.log(calendarEvent.dataValues.ticker)
-    earningsQueue.add(
-      {
-        eventToProcess: calendarEvent.dataValues.id,
-      },
-      {
-        repeat: {
-          every: 20000,
-          limit: 2,
-        },
-      }
-    )
+    earningsQueue.add({
+      eventToProcess: calendarEvent.dataValues.id,
+    })
   })
 }
 
