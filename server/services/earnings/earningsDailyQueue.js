@@ -10,7 +10,7 @@ async function initCronAddEarnings() {
   console.log('init cron for getting events every hour')
   addEarningProcessingQueue.add(
     { event: 'activate initEarningsQueues' },
-    { repeat: { cron: '03 * * * *' } } // 1st minute of every hour, every day
+    { repeat: { cron: '03 * * * *' } } // 3rd minute of every hour, every day
   )
 }
 
