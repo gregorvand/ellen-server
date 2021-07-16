@@ -70,11 +70,10 @@ module.exports = {
   // store earning
   // on to the next\
 
-  async getAndStoreQuarterlyEarnings(req, res) {
-    // look up earnings calendar
-    // pop off first 10   companies where storedEarning is false
-    // get those earnings
-    // update EarningCalendar result at the end
+  async getAndStoreQuarterlyEarnings(req) {
+    // currently implemented based on a queue sending one ticker at a time
+    // can also handle an array of tickers
+    // res not active since this is not endpoint-based currently, only server-side queue
     const earningsByBatch = req
 
     let allEllenTickersPromise = []
