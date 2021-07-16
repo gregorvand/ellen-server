@@ -28,7 +28,7 @@ if (config.use_env_variable) {
     logging: false,
   })
 } else {
-  console.log('Seq got here')
+  console.log('init Sequelize')
   sequelize = new Sequelize({
     dialect: 'postgres',
     host: config.host,

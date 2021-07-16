@@ -7,7 +7,8 @@ const {
   allEarningsByPeriod,
 } = require('../services/earnings/companyEarningsService')
 
-const getAndStore = async function (req, res) {
+const getAndStoreCalendarEvents = async function (req, res) {
+  console.log('looking for new cal events')
   const companyList = await allEarningsByPeriod()
   checkAndCreate(companyList.data)
 }
@@ -60,10 +61,10 @@ const validate = async function (ticker) {
 }
 
 // console test
-getAndStore()
+getAndStoreCalendarEvents()
 
 module.exports = {
   create: checkAndCreate,
-  getAndStore: getAndStore,
+  getAndStoreCalendarEvents: getAndStoreCalendarEvents,
   validate: validate,
 }

@@ -203,7 +203,9 @@ module.exports = {
     console.log(noDuplicateTickers)
 
     if (noDuplicateTickers.length > 0) {
-      dailyEmailController.create(noDuplicateTickers)
+      dailyEmailController.create([
+        noDuplicateTickers[noDuplicateTickers.length - 1], // only take the last item since we are running this per company, not as a batch
+      ])
     }
     // TODO: can remove promise output logging when suitable
   },
@@ -243,18 +245,6 @@ module.exports = {
       }
     })
   },
-}
-
-async function getNextEarnings() {
-  const earningsBatch = await EarningCalendar.findAll({
-    where: {
-      storedEarning: false,
-    },
-    limit: 40,
-    order: [['date', 'ASC']],
-  })
-
-  return earningsBatch
 }
 
 // Basic DB fuctions
