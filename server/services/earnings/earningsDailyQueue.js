@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 // every [day] (test: minute) add all rows to queue from EarningCalendar where stored is false
 // batch through these 10 at a time using
 const EarningCalendar = require('../../../server/models').EarningCalendar
@@ -12,10 +14,18 @@ async function addEventsForProcessing() {
   })
 
   allToProcess.forEach((calendarEvent) => {
-    console.log(calendarEvent.dataValues.id)
-    earningsQueue.add({
-      eventToProcess: calendarEvent.dataValues.id,
-    })
+    console.log(calendarEvent.dataValues.ticker)
+    earningsQueue.add(
+      {
+        eventToProcess: calendarEvent.dataValues.id,
+      },
+      {
+        repeat: {
+          every: 20000,
+          limit: 2,
+        },
+      }
+    )
   })
 }
 

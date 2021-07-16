@@ -26,9 +26,19 @@ const initPointsTransactionQueues = async function () {
   // *------------------------------------------------*
 }
 
+const EarningCalendar = require('../models').EarningCalendar
+const { getAndStoreQuarterlyEarnings } = require('../controllers/earnings')
+
 const initEarningsQueues = async function () {
   earningsQueue.process(async (job) => {
-    return console.log('yow processed!', job.data.eventToProcess)
+    return EarningCalendar.findOne({
+      where: {
+        id: job.data.eventToProcess,
+      },
+    }).then((result) => {
+      console.log(result.dataValues.ticker)
+      getAndStoreQuarterlyEarnings([result])
+    })
   })
 }
 
