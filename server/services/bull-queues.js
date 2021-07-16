@@ -6,6 +6,7 @@ const earningsQueue = new Bull('earnings-to-process-queue', {
     duration: 1000,
   },
 })
+const addEventProcessingQueue = new Bull('event-processing-cron-queue')
 
 const initPointsTransactionQueues = async function () {
   pointsTransactionQueue.process(async (job) => {
@@ -42,9 +43,38 @@ const initEarningsQueues = async function () {
   })
 }
 
+// on a process, do function
+
+async function addEventsForProcessing() {
+  const allToProcess = await EarningCalendar.findAll({
+    where: {
+      storedEarning: false,
+    },
+    order: [['date', 'DESC']],
+  })
+
+  allToProcess.forEach((calendarEvent) => {
+    console.log(calendarEvent.dataValues.ticker)
+    earningsQueue.add({
+      eventToProcess: calendarEvent.dataValues.id,
+    })
+  })
+}
+
+const initProcessEarningsQueueCron = async function () {
+  addEventProcessingQueue.process(async (job) => {
+    // addEventsForProcessing()
+    console.log(job.data)
+    return addEventsForProcessing()
+  })
+}
+
 module.exports = {
   initPointsTransactionQueues: initPointsTransactionQueues,
   initEarningsQueues: initEarningsQueues,
+  initProcessEarningsQueueCron: initProcessEarningsQueueCron,
+  addEventsForProcessing: addEventsForProcessing,
   pointsTransactionQueue: pointsTransactionQueue,
   earningsQueue: earningsQueue,
+  addEventProcessingQueue: addEventProcessingQueue,
 }
