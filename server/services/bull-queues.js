@@ -1,6 +1,11 @@
 const Bull = require('bull')
 const pointsTransactionQueue = new Bull('points-queue-first')
-const earningsQueue = new Bull('earnings-to-process-queue')
+const earningsQueue = new Bull('earnings-to-process-queue', {
+  limiter: {
+    max: 10,
+    duration: 1000,
+  },
+})
 
 const initPointsTransactionQueues = async function () {
   pointsTransactionQueue.process(async (job) => {
@@ -14,12 +19,16 @@ const initPointsTransactionQueues = async function () {
   // repeatable.forEach(async (job) => {
   //     await pointsTransactionQueue.removeRepeatableByKey(job.key);
   // });
+  // const repeatable = await earningsQueue.getRepeatableJobs()
+  // repeatable.forEach(async (job) => {
+  //   await earningsQueue.removeRepeatableByKey(job.key)
+  // })
   // *------------------------------------------------*
 }
 
 const initEarningsQueues = async function () {
   earningsQueue.process(async (job) => {
-    return console.log('yow processed!', job.data)
+    return console.log('yow processed!', job.data.eventToProcess)
   })
 }
 

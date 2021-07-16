@@ -19,7 +19,9 @@ io.on("connection", socket => {
 
 server.listen(8000);
 
-const { initPointsTransactionQueues } = require ('../server/services/bull-queues');
+const Queues = require ('../server/services/bull-queues');
+
+Queues.initEarningsQueues()
 
 const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);
