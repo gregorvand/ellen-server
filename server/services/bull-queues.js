@@ -1,5 +1,6 @@
 const Bull = require('bull')
 const pointsTransactionQueue = new Bull('points-queue-first')
+const earningsQueue = new Bull('earnings-to-process-queue')
 
 const initPointsTransactionQueues = async function () {
   pointsTransactionQueue.process(async (job) => {
@@ -16,5 +17,15 @@ const initPointsTransactionQueues = async function () {
   // *------------------------------------------------*
 }
 
-module.exports.pointsTransactionQueue = pointsTransactionQueue
-module.exports.initPointsTransactionQueues = initPointsTransactionQueues
+const initEarningsQueues = async function () {
+  earningsQueue.process(async (job) => {
+    return console.log('yow processed!', job.data)
+  })
+}
+
+module.exports = {
+  initPointsTransactionQueues: initPointsTransactionQueues,
+  initEarningsQueues: initEarningsQueues,
+  pointsTransactionQueue: pointsTransactionQueue,
+  earningsQueue: earningsQueue,
+}
