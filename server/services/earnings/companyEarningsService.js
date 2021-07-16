@@ -1,15 +1,20 @@
 const axios = require('axios')
+const axiosRetry = require('axios-retry')
 const Yesterday = require('../../utils/getYesterday')
 
 // gets the latest 1 record for a compay's quarterly filing
 async function companyEarningBySymbol(ticker, numberOfFilings = 1) {
+  axiosRetry(axios, { retries: 3 })
+
   return await axios({
     method: 'get',
     url: `https://financialmodelingprep.com/api/v3/income-statement/${ticker}?period=quarter&limit=${numberOfFilings}&apikey=618a872a67c27ab884357f853a051837`,
+  }).catch((err) => {
+    console.error(`FMP error for ${ticker}: ${err}`)
   })
 }
 
-async function allEarningsByPeriod(lookback = 7) {
+async function allEarningsByPeriod(lookback = 15) {
   const today = new Date()
   const pastDate = new Yesterday(today).dateBeforeByDays(lookback)
   // get yesterday, then convert to exchange timezone.. NYC...

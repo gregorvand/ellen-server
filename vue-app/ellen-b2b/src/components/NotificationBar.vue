@@ -35,8 +35,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .notification-bar {
   margin: 1em 0 1em;
+  width: 100%;
+
+  &.-text-success {
+    background-color: green;
+  }
+
+  &.-text-error {
+    background-color: yellow;
+  }
 }
 </style>

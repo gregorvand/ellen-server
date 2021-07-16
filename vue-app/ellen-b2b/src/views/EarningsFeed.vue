@@ -1,7 +1,8 @@
 <template>
   <div>
     <h1>its Earnings time..</h1>
-    <BaseTriggerApiButton />
+    <BaseTriggerApiButton apiPath="/earnings/yesterday" />
+    <BaseTriggerApiButton apiPath="/earningemail/send" label="Email people" />
 
     <!-- currently does not handle data structure if webhook received after get earnings -->
     <template v-if="liveEarnings !== []">

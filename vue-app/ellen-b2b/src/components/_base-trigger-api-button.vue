@@ -16,17 +16,24 @@ export default {
     },
     apiPath: {
       type: String,
-      default: '/earnings/yesterday',
     },
   },
 
   methods: {
     triggerAPI() {
       axios({
-        method: 'post',
+        method: 'get',
         url: `//localhost:8000/api${this.apiPath}`,
       }).then(({ data }) => {
-        store.dispatch('earnings/addReportToEarnings', data)
+        if (Array.isArray(data)) {
+          store.dispatch('earnings/addReportToEarnings', data)
+        } else {
+          const notification = {
+            type: 'success',
+            message: data,
+          }
+          store.dispatch('notification/add', notification, { root: true })
+        }
       })
     },
   },

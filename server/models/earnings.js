@@ -37,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'companyId',
       onDelete: 'CASCADE',
     })
+    Earning.belongsTo(models.EarningCalendar, {
+      foreignKey: 'earningCalendarId',
+      onDelete: 'CASCADE',
+    })
   }
   return Earning
 }
