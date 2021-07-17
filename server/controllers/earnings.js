@@ -123,8 +123,6 @@ module.exports = {
         const reportedPeriod = quarterlyEarning.period.split('Q')[1]
         const calendarPeriod = calendarResult.quarter
 
-        console.log(reportedPeriod, calendarPeriod)
-
         // and the years match (ie, only look at current year)
         const thisYear = dayjs(new Date()).year()
         const reportedPeriodYear = dayjs(quarterlyEarning.date).year()
@@ -269,7 +267,6 @@ async function earningCreate(reqBody, ellenCompanyId, earningCalendarId) {
       ],
     },
   })
-  console.log(existingEarning)
   if (existingEarning == 0) {
     return Earning.create({
       ticker: reqBody.symbol,

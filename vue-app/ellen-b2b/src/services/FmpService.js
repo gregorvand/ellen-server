@@ -15,7 +15,6 @@ const apiClient = axios.create({
 
 export default {
   getRatios(ticker) {
-    console.log(ticker)
     return apiClient.get(
       `/ratios/${ticker}?period=quarter&limit=140&apikey=${apiKey}` // change to use real ticker
     )
