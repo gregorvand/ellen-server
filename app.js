@@ -47,7 +47,8 @@ app.use(
     origin: [
       'http://localhost:8080',
       'http://localhost:8000',
-      'https://ellen-b2b.ngrok.io',
+      'http://localhost:5000',
+      'http://ellenb2b.ngrok.io',
       'https://datadtc.ngrok.io',
     ],
   })
@@ -63,9 +64,10 @@ app.use(
         'cdnjs.cloudflare.com',
         'http://localhost:8000',
         'http://localhost:8080',
+        'http://localhost:5000',
         'https://datadtc.ngrok.io',
         'https://alpha.ellen.me',
-        'https://ellen-b2b.ngrok.io',
+        'http://ellenb2b.ngrok.io',
       ],
       styleSrc: [
         "'self'",
@@ -75,7 +77,7 @@ app.use(
         'http://localhost:8000',
         'https://alpha.ellen.me',
         'https://ellen-b2b.ngrok.io',
-        'https://datadtc.ngrok.io'
+        'https://datadtc.ngrok.io',
       ],
       fontSrc: [
         "'self'",
@@ -84,7 +86,7 @@ app.use(
         'http://localhost:8000',
         'https://alpha.ellen.me',
         'https://ellen-b2b.ngrok.io',
-        'https://datadtc.ngrok.io'
+        'https://datadtc.ngrok.io',
       ],
       imgSrc: ["'self'"],
     },

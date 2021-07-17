@@ -40,7 +40,6 @@ export const actions = {
     return searchClient
       .post('ellen_companies_dev/_search', searchQuery)
       .then(({ data }) => {
-        console.log(data)
         const results = data.hits['hits'].map((result) => result._source) // map from ES format
         commit('SET_SEARCH_RESULTS', results)
       })
