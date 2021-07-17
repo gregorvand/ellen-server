@@ -1,0 +1,472 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "title": "Beach Cleanup",
+      "date": "Aug 28 2018",
+      "time": "10:00",
+      "location": "Daytona Beach",
+      "description": "Let's clean up this beach.",
+      "organizer": "Adam Jahr",
+      "category": "sustainability",
+      "attendees": [
+        {
+          "id": "abc123",
+          "name": "Adam Jahr"
+        },
+        {
+          "id": "def456",
+          "name": "Gregg Pollack"
+        },
+        {
+          "id": "ghi789",
+          "name": "Beth Swanson"
+        },
+        {
+          "id": "jkl101",
+          "name": "Mary Gordon"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Park Cleanup",
+      "date": "Nov 12 2018",
+      "time": "12:00",
+      "location": "132 N Magnolia Street, Orlando, Florida",
+      "description": "We're going to clean up this park.",
+      "organizer": "Adam Jahr",
+      "category": "nature",
+      "attendees": [
+        {
+          "id": "ghi789",
+          "name": "Beth Swanson"
+        },
+        {
+          "id": "jkl101",
+          "name": "Mary Gordon"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Pet Adoption Day",
+      "date": "Dec 2 2018",
+      "time": "12:00",
+      "location": "132 N Magnolia Street, Orlando, Florida",
+      "description": "Help animals find new homes.",
+      "organizer": "Gregg Pollack",
+      "category": "animal welfare",
+      "attendees": [
+        {
+          "id": "abc123",
+          "name": "Adam Jahr"
+        },
+        {
+          "id": "ghi789",
+          "name": "Beth Swanson"
+        },
+        {
+          "id": "jkl101",
+          "name": "Mary Gordon"
+        }
+      ]
+    },
+    {
+      "id": 4638160,
+      "category": "education",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahr"
+      },
+      "title": "yoyoyo",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 1324754,
+      "category": "housing",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahr"
+      },
+      "title": "yoyoyo",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 2590927,
+      "category": "education",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahr"
+      },
+      "title": "yoyoyo",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 8447602,
+      "category": "housing",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahr"
+      },
+      "title": "yoyo4",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 3047364,
+      "category": "education",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahr"
+      },
+      "title": "yeaah",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 3047364,
+      "category": "education",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahr"
+      },
+      "title": "yeaah",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 3047364,
+      "category": "education",
+      "organizer": {
+        "id": "abc123",
+        "name": "AdamGrant"
+      },
+      "title": "yeaah",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 3047364,
+      "category": "education",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahrs"
+      },
+      "title": "yeaah",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 3047364,
+      "category": "education",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahrz"
+      },
+      "title": "yeaah",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 1450089,
+      "category": "food",
+      "organizer": {
+        "id": "abc123",
+        "name": "Adam Jahr"
+      },
+      "title": "Big eat thing",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 9965431,
+      "category": "education",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "big success",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 4361491,
+      "category": "housing",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "yeha yeah",
+      "description": "eeefef",
+      "location": "",
+      "date": "2021-07-02T07:38:00.000Z",
+      "time": "3:00",
+      "attendees": []
+    },
+    {
+      "id": 4514042,
+      "category": "animal welfare",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "success??",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 9667258,
+      "category": "education",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "wow success",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 3533690,
+      "category": "education",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "yesoslslsl",
+      "description": "ok",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 6052726,
+      "category": "housing",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "dwdwwdw",
+      "description": "dwdww",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 224709,
+      "category": "education",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "success2",
+      "description": "ok",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 761475,
+      "category": "community",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "dww",
+      "description": "dwdwdw",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 448860,
+      "category": "housing",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "dwww",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 3712096,
+      "category": "housing",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "wdwwdwdw",
+      "description": "wdwdw",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 1467450,
+      "category": "animal welfare",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "dww success",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 869990,
+      "category": "housing",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "notification 1",
+      "description": "yes",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 6474146,
+      "category": "food",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "wow success",
+      "description": "ok",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 373486,
+      "category": "education",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "yep",
+      "description": "ok",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 498623,
+      "category": "education",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "another",
+      "description": "mental",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    },
+    {
+      "id": 105270,
+      "category": "education",
+      "organizer": {
+        "user": {
+          "id": "abc123",
+          "name": "Adam"
+        }
+      },
+      "title": "yoyoyo",
+      "description": "",
+      "location": "",
+      "date": "",
+      "time": "",
+      "attendees": []
+    }
+  ]
+}

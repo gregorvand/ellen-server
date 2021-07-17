@@ -1,47 +1,47 @@
 module.exports = (sequelize, DataTypes) => {
   const Order = sequelize.define('Order', {
-    orderNumber: { 
+    orderNumber: {
       type: DataTypes.BIGINT,
-      allowNull: false
+      allowNull: false,
     },
     orderDate: {
       type: DataTypes.DATE,
-      allowNull: true
-    }, 
+      allowNull: true,
+    },
     fromEmail: {
       type: DataTypes.STRING,
-      allowNull: true
-    }, 
+      allowNull: true,
+    },
     customerEmail: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     plainContent: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: false,
     },
     subjectLine: {
       type: DataTypes.TEXT,
-      allowNull: true
+      allowNull: true,
     },
     totalValue: DataTypes.INTEGER,
-    currency: DataTypes.STRING
-  });
+    currency: DataTypes.STRING,
+  })
 
   Order.associate = (models) => {
     Order.belongsTo(models.Company, {
       foreignKey: 'companyId',
       onDelete: 'CASCADE',
-    });
-    Order.belongsTo(models.User, { 
+    })
+    Order.belongsTo(models.User, {
       foreignKey: 'customerId',
-      onDelete: 'CASCADE', 
-    });
+      onDelete: 'CASCADE',
+    })
     Order.hasMany(models.Point, {
       foreignKey: 'emailId',
       as: 'points',
-    });
-  };
+    })
+  }
 
-  return Order;
-};
+  return Order
+}

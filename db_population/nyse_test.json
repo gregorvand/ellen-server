@@ -1,0 +1,16 @@
+[
+  {
+    "ticker": "A",
+    "nameIdentifier": "Agilent Technologies, Inc. Common Stock",
+    "emailIdentifier": "n/a",
+    "orderPrefix": "#",
+    "companyType": "public"
+  },
+  {
+    "ticker": "AA",
+    "nameIdentifier": "Alcoa Inc. Common Stock",
+    "emailIdentifier": "",
+    "orderPrefix": "",
+    "companyType": "public"
+  }
+]
