@@ -8,8 +8,14 @@ const earningsQueue = new Bull('earnings-to-process-queue', {
     duration: 1000,
   }, //limit to help with FMP rate limit
 })
-const addEarningProcessingQueue = new Bull('event-processing-cron-queue')
-const addCalendarProcessingQueue = new Bull('get-calendar-events-cron-queue')
+const addEarningProcessingQueue = new Bull(
+  'event-processing-cron-queue',
+  'redis://206.189.182.91:6379'
+)
+const addCalendarProcessingQueue = new Bull(
+  'get-calendar-events-cron-queue',
+  'redis://206.189.182.91:6379'
+)
 
 const initPointsTransactionQueues = async function () {
   pointsTransactionQueue.process(async (job) => {
