@@ -50,6 +50,7 @@ app.use(
       'http://localhost:5000',
       'http://ellenb2b.ngrok.io',
       'https://datadtc.ngrok.io',
+      'http://206.189.182.91:8080',
     ],
   })
 )
@@ -68,6 +69,7 @@ app.use(
         'https://datadtc.ngrok.io',
         'https://alpha.ellen.me',
         'http://ellenb2b.ngrok.io',
+        'http://206.189.182.91:8080'
       ],
       styleSrc: [
         "'self'",
