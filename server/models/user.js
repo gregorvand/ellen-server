@@ -52,7 +52,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'points',
     })
     User.belongsToMany(models.Company, { through: 'UserCompanies' })
-    raw: true
   }
 
   User.prototype.validPassword = async function (password) {

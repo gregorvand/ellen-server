@@ -1,13 +1,10 @@
 const Bull = require('bull')
 
 // QUEUE SET UP
-const pointsTransactionQueue = new Bull(
-  'points-queue-first',
-  'redis://206.189.182.91:6379'
-)
+const pointsTransactionQueue = new Bull('points-queue-first')
 const earningsQueue = new Bull(
   'earnings-to-process-queue',
-  'redis://206.189.182.91:6379',
+  'redis://206.189.182.91:7001',
   {
     limiter: {
       max: 10,
@@ -17,11 +14,11 @@ const earningsQueue = new Bull(
 )
 const addEarningProcessingQueue = new Bull(
   'event-processing-cron-queue',
-  'redis://206.189.182.91:6379'
+  'redis://206.189.182.91:7001'
 )
 const addCalendarProcessingQueue = new Bull(
   'get-calendar-events-cron-queue',
-  'redis://206.189.182.91:6379'
+  'redis://206.189.182.91:7001'
 )
 
 const initPointsTransactionQueues = async function () {
