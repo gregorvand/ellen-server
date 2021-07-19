@@ -1,13 +1,20 @@
 const Bull = require('bull')
 
 // QUEUE SET UP
-const pointsTransactionQueue = new Bull('points-queue-first')
-const earningsQueue = new Bull('earnings-to-process-queue', {
-  limiter: {
-    max: 10,
-    duration: 1000,
-  }, //limit to help with FMP rate limit
-})
+const pointsTransactionQueue = new Bull(
+  'points-queue-first',
+  'redis://206.189.182.91:6379'
+)
+const earningsQueue = new Bull(
+  'earnings-to-process-queue',
+  'redis://206.189.182.91:6379',
+  {
+    limiter: {
+      max: 10,
+      duration: 1000,
+    }, //limit to help with FMP rate limit
+  }
+)
 const addEarningProcessingQueue = new Bull(
   'event-processing-cron-queue',
   'redis://206.189.182.91:6379'
