@@ -17,40 +17,6 @@ const client = new Client({
   },
 })
 
-// client.ping(
-//   {
-//     requestTimeout: 50000,
-//   },
-//   function (error) {
-//     if (error) {
-//       console.error('Cannot connect to Elasticsearch.')
-//     } else {
-//       console.log('Connected to Elasticsearch was successful!')
-//     }
-//   }
-// )
-// client.search(
-//   {
-//     index: 'csjoblist',
-//     type: 'jobs_list',
-//     body: {
-//       query: {
-//         match: { nameIdentifier: 'Brooklyn Tweed' },
-//       },
-//     },
-//   },
-//   function (error, response, status) {
-//     if (error) {
-//       console.log(error)
-//     } else {
-//       console.log(response)
-//       response.hits.hits.forEach(function (hit) {
-//         console.log(hit)
-//       })
-//     }
-//   }
-// )
-
 // Needed to update elasticsearch index
 async function populateDB() {
   let bulk = []
@@ -67,7 +33,7 @@ async function populateDB() {
 
     bulk.push({
       index: {
-        _index: 'ellen_companies_dev', // ellen_companies_prod
+        _index: 'ellen_companies_prod', // ellen_companies_prod
         _type: 'companies_list',
         _id: company.id,
       },

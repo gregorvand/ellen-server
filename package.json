@@ -21,6 +21,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@elastic/elasticsearch": "^7.13.0",
     "@sendgrid/mail": "^7.4.5",
     "@sentry/node": "^6.5.1",
     "@sentry/tracing": "^6.5.1",
@@ -40,7 +41,7 @@
     "dotenv": "^8.6.0",
     "ejs": "^3.1.6",
     "elasticsearch": "^16.7.2",
-    "eslint-plugin-vue": "^7.10.0",
+    "eslint-config-prettier": "^8.3.0",
     "events": "^3.3.0",
     "express": "^4.17.1",
     "express-flash": "0.0.2",
@@ -50,25 +51,28 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "node-klaviyo": "^1.1.1",
-    "node-sass": "^5.0.0",
+    "node-sass": "^6.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.6.2",
-    "sequelize-auto-migrations": "github:scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba",
     "socket.io": "^4.0.0",
     "unique-names-generator": "^4.5.0"
   },
   "devDependencies": {
     "@types/feather-icons": "^4.7.0",
     "@vue/eslint-config-prettier": "^6.0.0",
-    "eslint": "^7.27.0",
-    "eslint-config-prettier": "^8.3.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.31.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-prettier-vue": "^3.1.0",
+    "eslint-plugin-vue": "^7.13.0",
     "nodemon": "^2.0.7",
+    "prettier": "^2.3.2",
     "prettier-eslint": "^12.0.0",
     "sequelize-cli": "^6.2.0"
+  },
+  "resolutions": {
+    "eslint-loader": "2.1.2"
   }
 }
