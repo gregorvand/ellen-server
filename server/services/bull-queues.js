@@ -28,6 +28,11 @@ const addCalendarProcessingQueue = new Bull(
   `redis://${redisHost}`
 )
 
+const addEmailProcessingQueue = new Bull(
+  'email-public-earnings-cron-queue',
+  `redis://${redisHost}`
+)
+
 const initPointsTransactionQueues = async function () {
   pointsTransactionQueue.process(async (job) => {
     return console.log('yow processed!', job.data)
@@ -35,7 +40,10 @@ const initPointsTransactionQueues = async function () {
 }
 
 const EarningCalendar = require('../models').EarningCalendar
-const { getAndStoreQuarterlyEarnings } = require('../controllers/earnings')
+const {
+  getAndStoreQuarterlyEarnings,
+  sendEmailFromTickers,
+} = require('../controllers/earnings')
 const { getAndStoreCalendarEvents } = require('../controllers/earningCalendar')
 
 const initEarningsQueues = async function () {
@@ -79,8 +87,32 @@ const initProcessEarningsQueueCron = async function () {
 
 const initGetCalendarEventsQueueCron = async function () {
   addCalendarProcessingQueue.process(async (job) => {
-    console.log(job.data)
+    console.log('init addCalendarProcessingQueue completed', job.data)
     return getAndStoreCalendarEvents()
+  })
+}
+
+const DailyEmail = require('../models').DailyEmail
+const axios = require('axios')
+// now send
+axios.defaults.headers.common[
+  'Authorization'
+] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxNzksImZpcnN0TmFtZSI6IkciLCJsYXN0TmFtZSI6IlYiLCJlbWFpbCI6ImdyZWdvcis4MTdwd0BlbGxlbi5tZSIsInBhc3N3b3JkIjoiJDJiJDEwJGxGbE8wYXNzWEhyTlFXQnRJNHFYTE9wY044WTRKcnozMEhvUTI2bUk0UXMzU1kzSjU0QUxXIiwiaWRlbnRpZmllciI6InVuZGVmaW5lZCIsInVwZGF0ZWRBdCI6IjIwMjEtMDctMDlUMDA6MTc6MzguOTI3WiIsImNyZWF0ZWRBdCI6IjIwMjEtMDctMDlUMDA6MTc6MzguOTI3WiIsInVzZXJuYW1lIjpudWxsLCJhY3RpdmF0ZWQiOm51bGx9LCJpYXQiOjE2MjU3ODk4NTl9.ALi-9a_fzJK0R8nblutGEVHDpgyiUIxUxw2vfc60UNY`
+const initEmailPublicCompanyDataSend = async function () {
+  addEmailProcessingQueue.process(async (job) => {
+    console.log('nå processing')
+    const allEmailsToSend = await DailyEmail.findAll({
+      where: {
+        sent: false,
+      },
+    })
+
+    allTickers = []
+    allEmailsToSend.forEach(async (emailForCompany) => {
+      allTickers.push(emailForCompany.dataValues.tickers[0])
+    })
+
+    console.log(allTickers)
   })
 }
 
@@ -106,11 +138,13 @@ module.exports = {
   initEarningsQueues: initEarningsQueues,
   initProcessEarningsQueueCron: initProcessEarningsQueueCron,
   initGetCalendarEventsQueueCron: initGetCalendarEventsQueueCron,
+  initEmailPublicCompanyDataSend: initEmailPublicCompanyDataSend,
   addEventsForProcessing: addEventsForProcessing,
   pointsTransactionQueue: pointsTransactionQueue,
   earningsQueue: earningsQueue,
   addEarningProcessingQueue: addEarningProcessingQueue,
   addCalendarProcessingQueue: addCalendarProcessingQueue,
+  addEmailProcessingQueue: addEmailProcessingQueue,
 }
 
 // *------------------------------------------------*
