@@ -1,15 +1,32 @@
 const Bull = require('bull')
 
+let redisHost = ''
+if (process.env.NODE_ENV == 'development') {
+  redisHost = '127.0.0.1:6379'
+} else if (process.env.NODE_ENV == 'production') {
+  redisHost = '172.17.0.4:6379' // DO container IP: see readme
+}
+
 // QUEUE SET UP
 const pointsTransactionQueue = new Bull('points-queue-first')
-const earningsQueue = new Bull('earnings-to-process-queue', {
-  limiter: {
-    max: 10,
-    duration: 1000,
-  }, //limit to help with FMP rate limit
-})
-const addEarningProcessingQueue = new Bull('event-processing-cron-queue')
-const addCalendarProcessingQueue = new Bull('get-calendar-events-cron-queue')
+const earningsQueue = new Bull(
+  'earnings-to-process-queue',
+  `redis://${redisHost}`,
+  {
+    limiter: {
+      max: 10,
+      duration: 1000,
+    }, //limit to help with FMP rate limit
+  }
+)
+const addEarningProcessingQueue = new Bull(
+  'event-processing-cron-queue',
+  `redis://${redisHost}`
+)
+const addCalendarProcessingQueue = new Bull(
+  'get-calendar-events-cron-queue',
+  `redis://${redisHost}`
+)
 
 const initPointsTransactionQueues = async function () {
   pointsTransactionQueue.process(async (job) => {

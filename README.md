@@ -54,3 +54,17 @@ Renaming will require something like:
 ---
 
 Contact [gregorvand](https://github.com/gregorvand) for help with anything.
+
+
+## Running / accessing container-based redis on DO
+To run a redis container run:
+
+`sudo docker run --name my-redis-container -p 7001:6379 -d redis`
+
+This exposes redis on DO server IP at port 7001, and 'locally' at port 6379
+
+To get the docker container's local IP run:
+
+`docker inspect [container id] | grep IPAddress`
+
+Use the address provided as the `redis://` connect address for production with port `6379`
