@@ -48,8 +48,7 @@ app.use(
       'http://localhost:8080',
       'http://localhost:8000',
       'http://localhost:5000',
-      'http://ellenb2b.ngrok.io',
-      'https://datadtc.ngrok.io',
+      'http://206.189.182.91',
       'http://206.189.182.91:8080',
     ],
   })
@@ -66,10 +65,7 @@ app.use(
         'http://localhost:8000',
         'http://localhost:8080',
         'http://localhost:5000',
-        'https://datadtc.ngrok.io',
-        'https://alpha.ellen.me',
-        'http://ellenb2b.ngrok.io',
-        'http://206.189.182.91:8080'
+        'http://206.189.182.91:8080',
       ],
       styleSrc: [
         "'self'",
@@ -78,8 +74,6 @@ app.use(
         'fonts.googleapis.com',
         'http://localhost:8000',
         'https://alpha.ellen.me',
-        'https://ellen-b2b.ngrok.io',
-        'https://datadtc.ngrok.io',
       ],
       fontSrc: [
         "'self'",
@@ -87,8 +81,6 @@ app.use(
         'https://fonts.gstatic.com',
         'http://localhost:8000',
         'https://alpha.ellen.me',
-        'https://ellen-b2b.ngrok.io',
-        'https://datadtc.ngrok.io',
       ],
       imgSrc: ["'self'"],
     },
