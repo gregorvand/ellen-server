@@ -42,7 +42,7 @@ const initPointsTransactionQueues = async function () {
 const EarningCalendar = require('../models').EarningCalendar
 const {
   getAndStoreQuarterlyEarnings,
-  sendEmailFromTickers,
+  sendAllEarningEmails,
 } = require('../controllers/earnings')
 const { getAndStoreCalendarEvents } = require('../controllers/earningCalendar')
 
@@ -92,27 +92,10 @@ const initGetCalendarEventsQueueCron = async function () {
   })
 }
 
-const DailyEmail = require('../models').DailyEmail
-const axios = require('axios')
 // now send
-axios.defaults.headers.common[
-  'Authorization'
-] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoxNzksImZpcnN0TmFtZSI6IkciLCJsYXN0TmFtZSI6IlYiLCJlbWFpbCI6ImdyZWdvcis4MTdwd0BlbGxlbi5tZSIsInBhc3N3b3JkIjoiJDJiJDEwJGxGbE8wYXNzWEhyTlFXQnRJNHFYTE9wY044WTRKcnozMEhvUTI2bUk0UXMzU1kzSjU0QUxXIiwiaWRlbnRpZmllciI6InVuZGVmaW5lZCIsInVwZGF0ZWRBdCI6IjIwMjEtMDctMDlUMDA6MTc6MzguOTI3WiIsImNyZWF0ZWRBdCI6IjIwMjEtMDctMDlUMDA6MTc6MzguOTI3WiIsInVzZXJuYW1lIjpudWxsLCJhY3RpdmF0ZWQiOm51bGx9LCJpYXQiOjE2MjU3ODk4NTl9.ALi-9a_fzJK0R8nblutGEVHDpgyiUIxUxw2vfc60UNY`
 const initEmailPublicCompanyDataSend = async function () {
-  addEmailProcessingQueue.process(async (job) => {
-    console.log('nå processing')
-    const allEmailsToSend = await DailyEmail.findAll({
-      where: {
-        sent: false,
-      },
-    })
-
-    allTickers = []
-    allEmailsToSend.forEach(async (emailForCompany) => {
-      allTickers.push(emailForCompany.dataValues.tickers[0])
-    })
-
-    console.log(allTickers)
+  addEmailProcessingQueue.process(async () => {
+    sendAllEarningEmails(false, false) // internal request so req/res are false
   })
 }
 

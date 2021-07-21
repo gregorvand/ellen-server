@@ -26,8 +26,8 @@ async function initCronAddCalendarEvents() {
 async function initCronEmailPublicResults() {
   console.log('init cron for sending emails for public companies')
   addEmailProcessingQueue.add(
-    { event: 'activate initEmailQueues' }
-    // { repeat: { cron: '45 * * * *' } } // 1st minute of every hour, every day
+    { event: 'activate initEmailQueues' },
+    { repeat: { cron: '45 * * * *' } } // 1st minute of every hour, every day
   )
 }
 
