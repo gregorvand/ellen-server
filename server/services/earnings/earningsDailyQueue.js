@@ -4,6 +4,7 @@
 const {
   addEarningProcessingQueue,
   addCalendarProcessingQueue,
+  addEmailProcessingQueue,
 } = require('../bull-queues')
 
 async function initCronAddEarnings() {
@@ -22,8 +23,17 @@ async function initCronAddCalendarEvents() {
   )
 }
 
+async function initCronEmailPublicResults() {
+  console.log('init cron for sending emails for public companies')
+  addEmailProcessingQueue.add(
+    { event: 'activate initEmailQueues' },
+    { repeat: { cron: '45 * * * *' } } // 1st minute of every hour, every day
+  )
+}
+
 // test: this function should otherwise be started and not stopped
 module.exports = {
   initCronAddEarnings: initCronAddEarnings,
   initCronAddCalendarEvents: initCronAddCalendarEvents,
+  initCronEmailPublicResults: initCronEmailPublicResults,
 }

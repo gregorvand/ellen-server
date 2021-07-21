@@ -28,6 +28,11 @@ const addCalendarProcessingQueue = new Bull(
   `redis://${redisHost}`
 )
 
+const addEmailProcessingQueue = new Bull(
+  'email-public-earnings-cron-queue',
+  `redis://${redisHost}`
+)
+
 const initPointsTransactionQueues = async function () {
   pointsTransactionQueue.process(async (job) => {
     return console.log('yow processed!', job.data)
@@ -35,7 +40,10 @@ const initPointsTransactionQueues = async function () {
 }
 
 const EarningCalendar = require('../models').EarningCalendar
-const { getAndStoreQuarterlyEarnings } = require('../controllers/earnings')
+const {
+  getAndStoreQuarterlyEarnings,
+  sendAllEarningEmails,
+} = require('../controllers/earnings')
 const { getAndStoreCalendarEvents } = require('../controllers/earningCalendar')
 
 const initEarningsQueues = async function () {
@@ -79,8 +87,15 @@ const initProcessEarningsQueueCron = async function () {
 
 const initGetCalendarEventsQueueCron = async function () {
   addCalendarProcessingQueue.process(async (job) => {
-    console.log(job.data)
+    console.log('init addCalendarProcessingQueue completed', job.data)
     return getAndStoreCalendarEvents()
+  })
+}
+
+// now send
+const initEmailPublicCompanyDataSend = async function () {
+  addEmailProcessingQueue.process(async () => {
+    sendAllEarningEmails(false, false) // internal request so req/res are false
   })
 }
 
@@ -106,11 +121,13 @@ module.exports = {
   initEarningsQueues: initEarningsQueues,
   initProcessEarningsQueueCron: initProcessEarningsQueueCron,
   initGetCalendarEventsQueueCron: initGetCalendarEventsQueueCron,
+  initEmailPublicCompanyDataSend: initEmailPublicCompanyDataSend,
   addEventsForProcessing: addEventsForProcessing,
   pointsTransactionQueue: pointsTransactionQueue,
   earningsQueue: earningsQueue,
   addEarningProcessingQueue: addEarningProcessingQueue,
   addCalendarProcessingQueue: addCalendarProcessingQueue,
+  addEmailProcessingQueue: addEmailProcessingQueue,
 }
 
 // *------------------------------------------------*

@@ -27,6 +27,7 @@ module.exports = {
       where: {
         sent: false,
       },
+      order: [['createdAt', 'ASC']],
     })
   },
 

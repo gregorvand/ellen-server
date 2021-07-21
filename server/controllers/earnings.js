@@ -242,6 +242,23 @@ module.exports = {
       }
     })
   },
+
+  // same as above but send all emails
+  async sendAllEarningEmails(req, res) {
+    const unsentTickers = await dailyEmailController.unsent()
+    if (unsentTickers.length > 0) {
+      allTickers = []
+      unsentTickers.forEach(async (record) => {
+        console.log(record)
+        let tickers = record.dataValues.tickers
+        console.log(tickers)
+        processTickersSendEmail(req, res, tickers)
+        dailyEmailController.updateStatus(record.dataValues.id)
+      })
+    } else {
+      console.log('no emails to send')
+    }
+  },
 }
 
 // Basic DB fuctions
@@ -286,7 +303,7 @@ async function earningCreate(reqBody, ellenCompanyId, earningCalendarId) {
   }
 }
 
-async function processTickersSendEmail(req, res, tickers) {
+async function processTickersSendEmail(req, res = false, tickers) {
   tickers.forEach(async (companyTicker) => {
     const earnings = await calcEarnings.getLastFourQuartersEarnings(
       companyTicker
