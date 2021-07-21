@@ -5,7 +5,8 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server,
 options = {
   cors:true,
-  origins:["*"],
+  origins:["http://206.189.182.91", "*"],
+  credentials: false
  }
 );
 
