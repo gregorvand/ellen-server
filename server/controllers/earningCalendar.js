@@ -7,6 +7,17 @@ const {
   allEarningsByPeriod,
 } = require('../services/earnings/companyEarningsService')
 
+const getUpcomingEarnings = async function (req, res) {
+  const awaitedEarnings = await EarningCalendar.findAll({
+    where: {
+      storedEarning: false,
+    },
+    order: [['date', 'ASC']],
+  })
+
+  res.send(awaitedEarnings)
+}
+
 const getAndStoreCalendarEvents = async function (req, res) {
   console.log('looking for new cal events')
   const companyList = await allEarningsByPeriod()
@@ -27,14 +38,26 @@ const checkAndCreate = async function (req, res) {
 
   const promises = filteredallCalendarResults.map(async (calendarResult) => {
     const thisDate = new Date(calendarResult.date)
+    const thisYear = thisDate.getFullYear()
 
     const ellenCompany = await Company.count({
       where: { ticker: calendarResult.symbol },
     })
 
+    // Beacause API returns multiple entries per company,
+    // A subsequent pull may then try to add another entry for same ticker/year/quarter
+    // This stops it being added if ticker/year/quarter match
+    const sequelize = require('sequelize')
     const alreadyStored = await EarningCalendar.count({
       where: {
-        [Op.and]: [{ ticker: calendarResult.symbol }, { date: thisDate }],
+        [Op.and]: [
+          { ticker: calendarResult.symbol },
+          { quarter: calendarResult.quarter },
+          sequelize.where(
+            sequelize.fn('date_part', 'year', sequelize.col('date')),
+            thisYear
+          ),
+        ],
       },
     })
 
@@ -73,5 +96,6 @@ const validate = async function (ticker) {
 module.exports = {
   create: checkAndCreate,
   getAndStoreCalendarEvents: getAndStoreCalendarEvents,
+  getUpcomingEarnings: getUpcomingEarnings,
   validate: validate,
 }
