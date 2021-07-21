@@ -2,13 +2,12 @@
 const app = require('../app');
 const server = require('http').createServer(app);
 
-const io = require('socket.io')(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-    credentials: false
-  }
-});
+const io = require('socket.io')(server,
+options = {
+  cors:true,
+  origins:["*"],
+ }
+);
 
 const { eventEmitter } = require ('../server/services/eventBus')
 
