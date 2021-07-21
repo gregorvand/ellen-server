@@ -16,9 +16,16 @@ const getAndStoreCalendarEvents = async function (req, res) {
 // check if Ellen DB has company in DB
 // then check if we already have this earning event recorded
 // store if not
+const { removeDuplicates } = require('../utils/helpers')
 const checkAndCreate = async function (req, res) {
   const allCalendarResults = req.earningsCalendar
-  const promises = allCalendarResults.map(async (calendarResult) => {
+
+  const filteredallCalendarResults = removeDuplicates(
+    allCalendarResults,
+    'symbol'
+  )
+
+  const promises = filteredallCalendarResults.map(async (calendarResult) => {
     const thisDate = new Date(calendarResult.date)
 
     const ellenCompany = await Company.count({
@@ -61,7 +68,7 @@ const validate = async function (ticker) {
 }
 
 // console test
-getAndStoreCalendarEvents()
+// getAndStoreCalendarEvents()
 
 module.exports = {
   create: checkAndCreate,
