@@ -26,7 +26,12 @@ async function allEarningsByPeriod(lookback = 10) {
     .tz('America/New_York')
     .format('YYYY-MM-DD')
   // const marketYesterday = '2021-06-25' // for test purposes if yesterday is non business day
-  console.log(`Getting earnings calendar up to ${marketBefore}`)
+  console.log(
+    `
+    Getting earnings calendar from ${marketYesterday} up to ${marketBefore}
+    https://finnhub.io/api/v1/calendar/earnings?from=${marketBefore}&to=${marketYesterday}&token=c38tm4iad3ido5aka4e0
+    `
+  )
   return await axios({
     method: 'get',
     url: `https://finnhub.io/api/v1/calendar/earnings?from=${marketBefore}&to=${marketYesterday}&token=c38tm4iad3ido5aka4e0`,
