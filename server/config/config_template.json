@@ -2,17 +2,25 @@
   "development": {
     "username": "postgres",
     "password": null,
-    "database": "[db name]",
-    "host": "[db host server",
+    "database": "todos-dev",
+    "host": "127.0.0.1",
     "port": 5432,
     "dialect": "postgres"
   },
-  "test": {
-    "username": "postgres",
-    "password": null,
-    "database": "[db name]",
-    "host": "[db host server",
-    "port": 5432,
-    "dialect": "postgres"
-  }
+  "production": { 
+    "username": "[user]",
+    "password": "[password]",
+    "database": "defaultdb",
+    "host": "[DO host address or elsewhere]",
+    "port": 25060,
+    "dialect": "postgres",
+    "ssl": true,
+    "dialectOptions": {
+       "ssl": {
+          "require": true,
+          "rejectUnauthorized": false
+       }
+     }
+  },
+  "_comment": "Above production is intended for DigitalOcean hosted  Postgres. Other platforms may need different ssl"
 }
