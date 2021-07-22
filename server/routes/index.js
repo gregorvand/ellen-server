@@ -2,6 +2,7 @@
 // const todoItemsController = require('../controllers/todoitems');
 const companiesController = require('../controllers/companies')
 const earningsController = require('../controllers/earnings')
+const earningCalendarController = require('../controllers/earningCalendar')
 const ordersController = require('../controllers/orders')
 const usersController = require('../controllers/users')
 const pointsController = require('../controllers/points')
@@ -196,6 +197,11 @@ module.exports = (app) => {
     earningsController.getRecentEarnings
   )
 
+  app.get(
+    '/api/awaitedearningscalendar',
+    auth.getToken,
+    earningCalendarController.getUpcomingEarnings
+  )
   // accepts req.body with all params for adding to DB
   app.post(
     '/api/earnings/quarterly/new',

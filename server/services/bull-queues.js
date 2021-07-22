@@ -112,6 +112,12 @@ const clearRepeatable = async function () {
     const done = await addCalendarProcessingQueue.removeRepeatableByKey(job.key)
     console.log(done)
   })
+
+  const repeatable4 = await addEmailProcessingQueue.getRepeatableJobs()
+  repeatable4.forEach(async (job) => {
+    const done = await addEmailProcessingQueue.removeRepeatableByKey(job.key)
+    console.log(done)
+  })
 }
 
 // clearRepeatable()
