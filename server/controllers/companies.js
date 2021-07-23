@@ -104,7 +104,7 @@ module.exports = {
         })
         .catch((error) => res.status(400).send(error))
     } else {
-      console.log(`already had ${company.ticker}`)
+      console.log(`already had ${company.ticker }`)
     }
   },
 
@@ -133,25 +133,5 @@ module.exports = {
     console.log(companyObject.dataValues.ticker)
     const userList = await companyObject.getUsers()
     return userList
-  },
-
-  async setCategory(req, res) {
-    const company = await Company.findOne({
-      where: {
-        id: req.body.companyId,
-      },
-    })
-
-    console.log(company.id)
-
-    company
-      .addCompanyCategory(req.body.categoryListingId)
-      .then((created) => {
-        res.status(201).send(company)
-      })
-      .catch((err) => {
-        res.status(403).send('could not create category', err.code)
-        res.end()
-      })
   },
 }
