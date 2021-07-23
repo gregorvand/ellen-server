@@ -3,6 +3,7 @@
 const companiesController = require('../controllers/companies')
 const earningsController = require('../controllers/earnings')
 const earningCalendarController = require('../controllers/earningCalendar')
+const companyCategoryController = require('../controllers/companyCategory')
 const ordersController = require('../controllers/orders')
 const usersController = require('../controllers/users')
 const pointsController = require('../controllers/points')
@@ -181,6 +182,13 @@ module.exports = (app) => {
   )
 
   app.post('/api/companies/update/:id', companiesController.update)
+
+  app.post(
+    '/api/companies/setcategory',
+    auth.getToken,
+    companiesController.setCategory
+  )
+
   app.post('/api/orders/update/:id', ordersController.update)
 
   const eventEmitter = require('../services/eventBus').eventEmitter
@@ -248,4 +256,12 @@ module.exports = (app) => {
       message: 'Method Not Allowed',
     })
   )
+
+  app.post(
+    '/api/companycategory/create',
+    auth.getToken,
+    companyCategoryController.create
+  )
+
+  app.get('/api/companycategory/list', companyCategoryController.list)
 }
