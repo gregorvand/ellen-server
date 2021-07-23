@@ -6,17 +6,21 @@ var Sequelize = require('sequelize');
  * Actions summary:
  *
  * createTable "Companies", deps: []
+ * createTable "DailyEmails", deps: []
+ * createTable "EarningCalendars", deps: []
  * createTable "Users", deps: []
+ * createTable "Earnings", deps: [Companies, EarningCalendars]
  * createTable "Orders", deps: [Companies, Users]
  * createTable "Points", deps: [Orders, Users]
  * createTable "Winners", deps: [Users]
+ * createTable "UserCompanies", deps: [Companies, Users]
  *
  **/
 
 var info = {
     "revision": 1,
-    "name": "core-migration-6-5-21",
-    "created": "2021-05-06T13:32:11.776Z",
+    "name": "DB-reset-22-7",
+    "created": "2021-07-22T02:16:34.118Z",
     "comment": ""
 };
 
@@ -53,6 +57,124 @@ var migrationCommands = function(transaction) {
                         "field": "orderSuffix",
                         "allowNull": true
                     },
+                    "companyType": {
+                        "type": Sequelize.STRING,
+                        "field": "companyType",
+                        "allowNull": true
+                    },
+                    "ticker": {
+                        "type": Sequelize.STRING,
+                        "field": "ticker",
+                        "allowNull": true
+                    },
+                    "sector": {
+                        "type": Sequelize.STRING,
+                        "field": "sector",
+                        "allowNull": true
+                    },
+                    "industry": {
+                        "type": Sequelize.STRING,
+                        "field": "industry",
+                        "allowNull": true
+                    },
+                    "exchangeShortName": {
+                        "type": Sequelize.STRING,
+                        "field": "exchangeShortName",
+                        "allowNull": true
+                    },
+                    "createdAt": {
+                        "type": Sequelize.DATE,
+                        "field": "createdAt",
+                        "allowNull": false
+                    },
+                    "updatedAt": {
+                        "type": Sequelize.DATE,
+                        "field": "updatedAt",
+                        "allowNull": false
+                    }
+                },
+                {
+                    "transaction": transaction
+                }
+            ]
+        },
+        {
+            fn: "createTable",
+            params: [
+                "DailyEmails",
+                {
+                    "id": {
+                        "type": Sequelize.INTEGER,
+                        "field": "id",
+                        "autoIncrement": true,
+                        "primaryKey": true,
+                        "allowNull": false
+                    },
+                    "tickers": {
+                        "type": Sequelize.ARRAY(Sequelize.STRING),
+                        "field": "tickers",
+                        "allowNull": false
+                    },
+                    "date": {
+                        "type": Sequelize.DATE,
+                        "field": "date",
+                        "allowNull": false
+                    },
+                    "sent": {
+                        "type": Sequelize.BOOLEAN,
+                        "field": "sent",
+                        "defaultValue": false,
+                        "allowNull": false
+                    },
+                    "createdAt": {
+                        "type": Sequelize.DATE,
+                        "field": "createdAt",
+                        "allowNull": false
+                    },
+                    "updatedAt": {
+                        "type": Sequelize.DATE,
+                        "field": "updatedAt",
+                        "allowNull": false
+                    }
+                },
+                {
+                    "transaction": transaction
+                }
+            ]
+        },
+        {
+            fn: "createTable",
+            params: [
+                "EarningCalendars",
+                {
+                    "id": {
+                        "type": Sequelize.INTEGER,
+                        "field": "id",
+                        "autoIncrement": true,
+                        "primaryKey": true,
+                        "allowNull": false
+                    },
+                    "ticker": {
+                        "type": Sequelize.STRING,
+                        "field": "ticker",
+                        "allowNull": false
+                    },
+                    "date": {
+                        "type": Sequelize.DATE,
+                        "field": "date",
+                        "allowNull": false
+                    },
+                    "quarter": {
+                        "type": Sequelize.DECIMAL,
+                        "field": "quarter",
+                        "allowNull": false
+                    },
+                    "storedEarning": {
+                        "type": Sequelize.BOOLEAN,
+                        "field": "storedEarning",
+                        "defaultValue": false,
+                        "allowNull": false
+                    },
                     "createdAt": {
                         "type": Sequelize.DATE,
                         "field": "createdAt",
@@ -84,12 +206,12 @@ var migrationCommands = function(transaction) {
                     "firstName": {
                         "type": Sequelize.STRING,
                         "field": "firstName",
-                        "allowNull": false
+                        "allowNull": true
                     },
                     "lastName": {
                         "type": Sequelize.STRING,
                         "field": "lastName",
-                        "allowNull": false
+                        "allowNull": true
                     },
                     "email": {
                         "type": Sequelize.STRING,
@@ -103,14 +225,18 @@ var migrationCommands = function(transaction) {
                         "allowNull": false,
                         "is": {}
                     },
-                    "status": {
-                        "type": Sequelize.STRING,
-                        "field": "status",
-                        "default": "pending"
-                    },
                     "identifier": {
                         "type": Sequelize.STRING,
                         "field": "identifier"
+                    },
+                    "username": {
+                        "type": Sequelize.STRING,
+                        "field": "username"
+                    },
+                    "activated": {
+                        "type": Sequelize.BOOLEAN,
+                        "field": "activated",
+                        "default": false
                     },
                     "createdAt": {
                         "type": Sequelize.DATE,
@@ -121,6 +247,95 @@ var migrationCommands = function(transaction) {
                         "type": Sequelize.DATE,
                         "field": "updatedAt",
                         "allowNull": false
+                    }
+                },
+                {
+                    "transaction": transaction
+                }
+            ]
+        },
+        {
+            fn: "createTable",
+            params: [
+                "Earnings",
+                {
+                    "id": {
+                        "type": Sequelize.INTEGER,
+                        "field": "id",
+                        "autoIncrement": true,
+                        "primaryKey": true,
+                        "allowNull": false
+                    },
+                    "ticker": {
+                        "type": Sequelize.STRING,
+                        "field": "ticker",
+                        "allowNull": false
+                    },
+                    "filingDate": {
+                        "type": Sequelize.DATE,
+                        "field": "filingDate",
+                        "allowNull": false
+                    },
+                    "period": {
+                        "type": Sequelize.STRING,
+                        "field": "period",
+                        "allowNull": false
+                    },
+                    "revenue": {
+                        "type": Sequelize.BIGINT,
+                        "field": "revenue"
+                    },
+                    "costOfRevenue": {
+                        "type": Sequelize.BIGINT,
+                        "field": "costOfRevenue"
+                    },
+                    "grossProfit": {
+                        "type": Sequelize.BIGINT,
+                        "field": "grossProfit"
+                    },
+                    "grossProfitRatio": {
+                        "type": Sequelize.DECIMAL,
+                        "field": "grossProfitRatio"
+                    },
+                    "ebitda": {
+                        "type": Sequelize.DECIMAL,
+                        "field": "ebitda"
+                    },
+                    "ebitdaRatio": {
+                        "type": Sequelize.DECIMAL,
+                        "field": "ebitdaRatio"
+                    },
+                    "createdAt": {
+                        "type": Sequelize.DATE,
+                        "field": "createdAt",
+                        "allowNull": false
+                    },
+                    "updatedAt": {
+                        "type": Sequelize.DATE,
+                        "field": "updatedAt",
+                        "allowNull": false
+                    },
+                    "companyId": {
+                        "type": Sequelize.INTEGER,
+                        "field": "companyId",
+                        "onUpdate": "CASCADE",
+                        "onDelete": "CASCADE",
+                        "references": {
+                            "model": "Companies",
+                            "key": "id"
+                        },
+                        "allowNull": true
+                    },
+                    "earningCalendarId": {
+                        "type": Sequelize.INTEGER,
+                        "field": "earningCalendarId",
+                        "onUpdate": "CASCADE",
+                        "onDelete": "CASCADE",
+                        "references": {
+                            "model": "EarningCalendars",
+                            "key": "id"
+                        },
+                        "allowNull": true
                     }
                 },
                 {
@@ -348,6 +563,49 @@ var migrationCommands = function(transaction) {
                     "transaction": transaction
                 }
             ]
+        },
+        {
+            fn: "createTable",
+            params: [
+                "UserCompanies",
+                {
+                    "createdAt": {
+                        "type": Sequelize.DATE,
+                        "field": "createdAt",
+                        "allowNull": false
+                    },
+                    "updatedAt": {
+                        "type": Sequelize.DATE,
+                        "field": "updatedAt",
+                        "allowNull": false
+                    },
+                    "CompanyId": {
+                        "type": Sequelize.INTEGER,
+                        "field": "CompanyId",
+                        "onUpdate": "CASCADE",
+                        "onDelete": "CASCADE",
+                        "references": {
+                            "model": "Companies",
+                            "key": "id"
+                        },
+                        "primaryKey": true
+                    },
+                    "UserId": {
+                        "type": Sequelize.INTEGER,
+                        "field": "UserId",
+                        "onUpdate": "CASCADE",
+                        "onDelete": "CASCADE",
+                        "references": {
+                            "model": "Users",
+                            "key": "id"
+                        },
+                        "primaryKey": true
+                    }
+                },
+                {
+                    "transaction": transaction
+                }
+            ]
         }
     ];
 };
@@ -355,6 +613,24 @@ var rollbackCommands = function(transaction) {
     return [{
             fn: "dropTable",
             params: ["Companies", {
+                transaction: transaction
+            }]
+        },
+        {
+            fn: "dropTable",
+            params: ["DailyEmails", {
+                transaction: transaction
+            }]
+        },
+        {
+            fn: "dropTable",
+            params: ["EarningCalendars", {
+                transaction: transaction
+            }]
+        },
+        {
+            fn: "dropTable",
+            params: ["Earnings", {
                 transaction: transaction
             }]
         },
@@ -379,6 +655,12 @@ var rollbackCommands = function(transaction) {
         {
             fn: "dropTable",
             params: ["Winners", {
+                transaction: transaction
+            }]
+        },
+        {
+            fn: "dropTable",
+            params: ["UserCompanies", {
                 transaction: transaction
             }]
         }

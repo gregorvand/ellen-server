@@ -53,6 +53,9 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     })
     Company.belongsToMany(models.User, { through: 'UserCompanies' })
+    Company.belongsToMany(models.CompanyCategory, {
+      through: 'CategoryListings',
+    })
   }
   return Company
 }
