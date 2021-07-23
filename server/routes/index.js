@@ -263,9 +263,5 @@ module.exports = (app) => {
     companyCategoryController.create
   )
 
-  app.get(
-    '/api/companycategory/list',
-    auth.getToken,
-    companyCategoryController.list
-  )
+  app.get('/api/companycategory/list', companyCategoryController.list)
 }
