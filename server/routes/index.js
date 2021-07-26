@@ -173,7 +173,7 @@ module.exports = (app) => {
   app.get('/api/dashboard', auth.getToken, companiesController.listByUser)
 
   app.put('/api/users/update/username/:id', usersController.update)
-  app.get('/api/users', usersController.list)
+  app.get('/api/users', auth.getToken, usersController.list)
   app.post('/api/users/subscribe', serviceKlaviyo.addSubscribersToList)
   app.post(
     '/api/users/update/companies',
