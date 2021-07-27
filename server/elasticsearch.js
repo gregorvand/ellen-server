@@ -67,7 +67,7 @@ async function populateDB() {
 
     bulk.push({
       index: {
-        _index: 'ellen_companies_dev', // ellen_companies_prod
+        _index: 'ellen_companies_prod', // ellen_companies_prod
         _type: 'companies_list',
         _id: company.id,
       },
