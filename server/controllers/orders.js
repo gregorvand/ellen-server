@@ -7,6 +7,11 @@ const pointsTransactionQueue =
 const pointsHelper = require('../utils/getPointValues')
 const Sentry = require('@sentry/node')
 
+const getOrders =
+  require('../utils/order_volume_data/getOrdersForChart').getOrders
+const getOrderDifferenceIncrement =
+  require('../utils/order_volume_data/getOrderIncrement').getOrderDifferenceIncrement
+
 module.exports = {
   create(req, res, orderNumber) {
     return Order.create({
@@ -72,7 +77,20 @@ module.exports = {
     }
   },
 
-  list(req, res) {
+  async listByCompany(req, res) {
+    if (req.body.companyId) {
+      // get orders formatted as needed for the next bit
+      const allOrderData = await getOrders(req.body.companyId)
+
+      // now get all the avg data
+      const data = getOrderDifferenceIncrement(allOrderData)
+      res.send(data)
+    } else {
+      res.send('could not find company by Id').status(400)
+    }
+  },
+
+  listByCustomerEmail(req, res) {
     if (req.body.email) {
       return Order.findAll({
         where: {
