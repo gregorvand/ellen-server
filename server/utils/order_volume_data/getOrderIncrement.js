@@ -27,13 +27,13 @@ function getOrderDifferenceIncrement(orders) {
         // we shift the 'differece' value to line up with date1 so that
         // avg *starts* at that date
         const backDate = orderData[index - 1].t
-        newData.push({ y: avgOrderIncrement, t: backDate })
+        newData.push({ y: avgOrderIncrement, x: backDate }) // changed to 'x' from 't' for chartJS3 support
 
         // for stepped graph, we then need a final data point
         // that is the final date and a repeat of the avg order value
-        // also valid as 'extrapolation' technique for non-stepped
+        // also valid as '  extrapolation' technique for non-stepped
         if (index === totalDataPoints - 1) {
-          newData.push({ y: avgOrderIncrement, t: order.t })
+          newData.push({ y: avgOrderIncrement, x: order.t })
         }
       } else {
         console.log(`yikes we got two of the same!, ignoring ${order.y}`)
