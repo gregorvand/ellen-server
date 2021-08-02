@@ -99,12 +99,11 @@ module.exports = {
         exchangeShortName: company?.exchangeShortName,
       })
         .then((company) => {
-          console.log('create', company.ticker)
-          return company
+          console.log('create', company.nameIdentifier)
         })
         .catch((error) => res.status(400).send(error))
     } else {
-      console.log(`already had ${company.ticker}`)
+      console.log(`already had ${company.nameIdentifier}`)
     }
   },
 
