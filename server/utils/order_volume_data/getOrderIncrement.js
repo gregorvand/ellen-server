@@ -1,8 +1,22 @@
 // Params: Orders as per Order model
 const dayjs = require('dayjs')
+const { removeDuplicates } = require('../helpers')
 
 function getOrderDifferenceIncrement(orders) {
-  const orderData = orders.map((order) => order.dataValues)
+  // discard any duplcates based on data
+
+  // first map T value just to a date without time
+  const flattenedTimes = orders.map((order) => ({
+    t: dayjs(order.dataValues.t).startOf('day').toISOString(),
+    y: order.dataValues.y,
+  }))
+
+  const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 't')
+  console.log(flattenedTimesNoDuplicates)
+  console.log(flattenedTimesNoDuplicates.length)
+  console.log('reduced from', flattenedTimes.length)
+
+  const orderData = flattenedTimesNoDuplicates
   // console.log(orderData);
   totalDataPoints = orderData.length
   let newData = new Array()
@@ -14,6 +28,7 @@ function getOrderDifferenceIncrement(orders) {
       const date1 = dayjs(orderData[index - 1].t)
       const date2 = dayjs(order.t)
       const dayDifference = date2.diff(date1, 'day')
+
       const avgOrderIncrement = (
         (order.y - orderData[index - 1].y) /
         dayDifference
@@ -22,7 +37,14 @@ function getOrderDifferenceIncrement(orders) {
       // if we have two of the same date, discard the higher number (easier solution day one)
       if (!date1.isSame(date2, 'day')) {
         // GOOD DEBUG
-        // console.log('data stuff', order.y, date1, date2, dayDifference, avgOrderIncrement);
+        // console.log(
+        //   'data stuff',
+        //   order.y,
+        //   date1,
+        //   date2,
+        //   dayDifference,
+        //   avgOrderIncrement
+        // )
 
         // we shift the 'differece' value to line up with date1 so that
         // avg *starts* at that date
@@ -33,6 +55,7 @@ function getOrderDifferenceIncrement(orders) {
         // that is the final date and a repeat of the avg order value
         // also valid as '  extrapolation' technique for non-stepped
         if (index === totalDataPoints - 1) {
+          console.log(avgOrderIncrement)
           newData.push({ y: avgOrderIncrement, x: order.t })
         }
       } else {
@@ -40,7 +63,7 @@ function getOrderDifferenceIncrement(orders) {
       }
     }
 
-    console.log(newData)
+    // console.log(newData)
   })
 
   return newData
