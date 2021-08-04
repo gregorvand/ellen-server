@@ -4,7 +4,7 @@ let redisHost = ''
 if (process.env.NODE_ENV == 'development') {
   redisHost = '127.0.0.1:6379'
 } else if (process.env.NODE_ENV == 'production') {
-  redisHost = '10.210.121.115:6379' // DO container IP: see readme
+  redisHost = '10.210.121.115' // DO container IP: see readme
 }
 
 // QUEUE SET UP
