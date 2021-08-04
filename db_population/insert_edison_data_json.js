@@ -1,7 +1,7 @@
 require('dotenv').config()
 const Company = require('../server/models').Company
 // const data = require('./fmp_07072021_NASDAQ_ellen_import.json')
-const EdisonData = require('./EDISON_DATA_SAMPLE_2_ALLBIRDSFULL.json')
+const EdisonData = require('./data/EDISON_DATA_SAMPLE_2_ALLBIRDSFULL.json')
 const ordersControllerEdison = require('../server/controllers/ordersByEdison')
 
 async function insertEdisonData(data) {
