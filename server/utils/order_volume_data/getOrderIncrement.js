@@ -20,6 +20,9 @@ function getOrderDifferenceIncrement(orders) {
   // console.log(orderData);
   totalDataPoints = orderData.length
   let newData = new Array()
+
+  // track increment in case we need to use the last increment (instead of a zero)
+  let lastIncrement = 0
   orderData.forEach((order, index) => {
     if (index !== 0) {
       // get timestamp difference first and store as a day value, divide by no. of days between
@@ -49,14 +52,17 @@ function getOrderDifferenceIncrement(orders) {
         // we shift the 'differece' value to line up with date1 so that
         // avg *starts* at that date
         const backDate = orderData[index - 1].t
-        newData.push({ y: avgOrderIncrement, x: backDate }) // changed to 'x' from 't' for chartJS3 support
 
+        const normalizedIncrement =
+          avgOrderIncrement < 0 ? lastIncrement : avgOrderIncrement
+        newData.push({ y: normalizedIncrement, x: backDate }) // changed to 'x' from 't' for chartJS3 support
+        console.log(normalizedIncrement)
         // for stepped graph, we then need a final data point
         // that is the final date and a repeat of the avg order value
-        // also valid as '  extrapolation' technique for non-stepped
+        // also valid as ' extrapolation' technique for non-stepped
         if (index === totalDataPoints - 1) {
-          console.log(avgOrderIncrement)
           newData.push({ y: avgOrderIncrement, x: order.t })
+          lastIncrement = normalizedIncrement
         }
       } else {
         console.log(`yikes we got two of the same!, ignoring ${order.y}`)
