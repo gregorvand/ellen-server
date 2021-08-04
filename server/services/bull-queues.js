@@ -4,7 +4,7 @@ let redisHost = ''
 if (process.env.NODE_ENV == 'development') {
   redisHost = '127.0.0.1:6379'
 } else if (process.env.NODE_ENV == 'production') {
-  redisHost = 'https://ellen-alpha-redis-gppebs3mnq-nn.a.run.app' // DO container IP: see readme
+  redisHost = '10.210.121.115:6379' // DO container IP: see readme
 }
 
 // QUEUE SET UP
@@ -120,7 +120,7 @@ const clearRepeatable = async function () {
   })
 }
 
-// clearRepeatable()
+clearRepeatable()
 
 module.exports = {
   initPointsTransactionQueues: initPointsTransactionQueues,
