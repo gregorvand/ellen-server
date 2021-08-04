@@ -4,7 +4,7 @@ let redisHost = ''
 if (process.env.NODE_ENV == 'development') {
   redisHost = '127.0.0.1:6379'
 } else if (process.env.NODE_ENV == 'production') {
-  redisHost = '172.17.0.4:6379' // DO container IP: see readme
+  redisHost = 'https://ellen-alpha-redis-gppebs3mnq-nn.a.run.app' // DO container IP: see readme
 }
 
 // QUEUE SET UP
