@@ -1,18 +1,7 @@
 const Order = require('../models').Order
-const Company = require('../models').Company
 
-const insertOrderRow = async function (...edisonRow) {
+const insertEdisonRow = async function (companyId, ...edisonRow) {
   const edisonData = edisonRow[0]
-
-  // check if existing co, if not, add record and get ID
-
-  let companyId = false
-  let newCompany = false
-  const isACompany = await Company.findOne({
-    where: {
-      emailIdentifier: edisonData.from_domain,
-    },
-  })
 
   const isAnOrder = await Order.count({
     where: {
@@ -21,22 +10,6 @@ const insertOrderRow = async function (...edisonRow) {
   })
 
   console.log('is already added?', isAnOrder)
-
-  if (isACompany.id !== null) {
-    companyId = isACompany.id
-  } else {
-    console.log('got to new company..')
-    newCompany = await Company.create({
-      nameIdentifier: edisonData.item_reseller,
-      emailIdentifier: edisonData.from_domain,
-      orderPrefix: '#',
-      companyType: 'private',
-    }).then((newCompany) => newCompany)
-  }
-
-  newCompany ? (companyId = newCompany.id) : companyId
-
-  console.log('id is..', companyId)
 
   if (isAnOrder < 1) {
     await Order.create({
@@ -56,5 +29,5 @@ const insertOrderRow = async function (...edisonRow) {
 }
 
 module.exports = {
-  insertOrderRow: insertOrderRow,
+  insertEdisonRow: insertEdisonRow,
 }
