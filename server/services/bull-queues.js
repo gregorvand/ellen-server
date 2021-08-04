@@ -120,7 +120,7 @@ const clearRepeatable = async function () {
   })
 }
 
-clearRepeatable()
+// clearRepeatable()
 
 module.exports = {
   initPointsTransactionQueues: initPointsTransactionQueues,
