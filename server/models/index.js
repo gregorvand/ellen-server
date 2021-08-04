@@ -34,7 +34,7 @@ if (config.use_env_variable) {
     host: config.host,
     port: config.port,
     username: config.username,
-    password: config.password,
+    password: process.env.PROD_DB_PASS,
     database: config.database,
     sslmode: config.sslmode,
     dialectOptions: dialectOptions,

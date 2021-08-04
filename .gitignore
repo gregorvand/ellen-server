@@ -2,5 +2,4 @@
 /.sass-cache
 /node_modules
 .env
-/server/config/config.json
 /vue-app/ellen-b2b/db.json
