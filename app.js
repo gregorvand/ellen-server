@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const env = process.env.NODE_ENV || 'development'
-const config = require('./server/config/config.json')[env]
+const config = require('./server/config/config')[env]
 const express = require('express')
 const helmet = require('helmet')
 const cors = require('cors')
