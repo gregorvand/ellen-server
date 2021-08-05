@@ -17,9 +17,10 @@ const insertEdisonRow = async function (companyId, ...edisonRow) {
         fromEmail: edisonData.from_domain,
         customerEmail: edisonData.user_id,
         plainContent: 'not available',
-        // totalValue:
-        //   edisonData.order_total_amount == '' ? 0 : edisonData.order_total_amount, // run decimal migration
-        totalValue: 0,
+        totalValue:
+          edisonData.order_total_amount == ''
+            ? 0
+            : edisonData.order_total_amount, // run decimal migration
         companyId: companyId,
         orderDate: edisonData.email_time,
       })
