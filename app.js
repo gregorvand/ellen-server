@@ -51,6 +51,7 @@ app.use(
       'http://206.189.182.91',
       'http://206.189.182.91:8080',
       'http://192.168.0.104',
+      'https://ellen-alpha-gppebs3mnq-uw.a.run.app',
     ],
   })
 )
@@ -67,6 +68,7 @@ app.use(
         'http://localhost:8080',
         'http://localhost:5000',
         'http://206.189.182.91:8080',
+        'https://ellen-alpha-gppebs3mnq-uw.a.run.app',
       ],
       styleSrc: [
         "'self'",
