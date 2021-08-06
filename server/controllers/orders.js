@@ -80,8 +80,10 @@ module.exports = {
   async listByCompany(req, res) {
     if (req.body.companyId) {
       // get orders formatted as needed for the next bit
-      const dateLimit = req.body.dateLimit ? req.body.dateLimit : false
-      const allOrderData = await getOrders(req.body.companyId, dateLimit)
+      const lookbackMonths = req.body.lookbackMonths
+        ? req.body.lookbackMonths
+        : false
+      const allOrderData = await getOrders(req.body.companyId, lookbackMonths)
 
       // now get all the avg data
       const data = getOrderDifferenceIncrement(allOrderData)
