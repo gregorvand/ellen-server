@@ -10,7 +10,8 @@
     "db:makemigrations": "./node_modules/sequelize-auto-migrations/bin/makemigration.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "elastic-load:prod": "NODE_ENV=production node ./server/elasticsearch.js",
-    "edison-company-load:dev": "NODE_ENV=production node ./db_population/insert_edison_data_json.js",
+    "elastic-load:dev": "NODE_ENV=development node ./server/elasticsearch.js",
+    "edison-company-load:dev": "NODE_ENV=development node ./db_population/insert_edison_data_json.js",
     "edison-company-load:prod": "NODE_ENV=production node ./db_population/insert_edison_data_json.js"
   },
   "keywords": [],
