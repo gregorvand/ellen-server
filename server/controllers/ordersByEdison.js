@@ -11,7 +11,7 @@ const insertEdisonRow = async function (companyId, ...edisonRow) {
     })
 
     if (isAnOrder < 1) {
-      console.log(`inserting ${orderNumberIdentifier}`)
+      // console.log(`inserting ${orderNumberIdentifier}`)
       await Order.create({
         orderNumber: BigInt(orderNumberIdentifier),
         fromEmail: edisonData.from_domain,
