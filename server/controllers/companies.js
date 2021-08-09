@@ -17,7 +17,7 @@ module.exports = {
   },
 
   list(req, res) {
-    console.log('gots here')
+    console.log('got to list request')
     return Company.findAll({
       include: [
         {
@@ -44,12 +44,10 @@ module.exports = {
   },
 
   listByUser(req, res) {
-    console.log('also yep')
     jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
       if (err) {
         res.sendStatus(401)
       } else {
-        console.log('DID GET HERE', req.headers['user'])
         User.findOne({
           where: { email: req.headers['user'] },
         }).then((user) => {

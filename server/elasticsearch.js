@@ -65,9 +65,14 @@ async function populateDB() {
       companyIndustry: company.industry,
     }
 
+    let ES_index =
+      process.env.NODE_ENV === 'production'
+        ? 'ellen_companies_prod'
+        : 'ellen_companies_dev'
+
     bulk.push({
       index: {
-        _index: 'ellen_companies_prod', // ellen_companies_prod
+        _index: ES_index, // ellen_companies_prod
         _type: 'companies_list',
         _id: company.id,
       },

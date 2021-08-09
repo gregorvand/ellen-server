@@ -12,7 +12,7 @@ function getOrderDifferenceIncrement(orders) {
   }))
 
   const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 't')
-  console.log(flattenedTimesNoDuplicates)
+  // console.log(flattenedTimesNoDuplicates)
   console.log(flattenedTimesNoDuplicates.length)
   console.log('reduced from', flattenedTimes.length)
 
@@ -56,7 +56,7 @@ function getOrderDifferenceIncrement(orders) {
         const normalizedIncrement =
           avgOrderIncrement < 0 ? lastIncrement : avgOrderIncrement
         newData.push({ y: normalizedIncrement, x: backDate }) // changed to 'x' from 't' for chartJS3 support
-        console.log(normalizedIncrement)
+        // console.log(normalizedIncrement)
         // for stepped graph, we then need a final data point
         // that is the final date and a repeat of the avg order value
         // also valid as ' extrapolation' technique for non-stepped
