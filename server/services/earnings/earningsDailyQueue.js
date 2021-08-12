@@ -19,7 +19,7 @@ async function initCronAddCalendarEvents() {
   console.log('init cron for getting cal events every hour')
   addCalendarProcessingQueue.add(
     { event: 'activate initCalQueues' },
-    { repeat: { cron: '01 2,10 * * *' } } 
+    { repeat: { cron: '01 2,10 * * *' } }
   )
 }
 

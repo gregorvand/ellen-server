@@ -168,6 +168,7 @@ module.exports = {
       )
 
       const created = await earningCreate(
+        //TODO fix this BASED on integer logs from GCR
         eachEarning,
         ellenCompany.id,
         earningBatchObject.id

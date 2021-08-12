@@ -54,15 +54,16 @@ function getOrderDifferenceIncrement(orders) {
         const backDate = orderData[index - 1].t
 
         const normalizedIncrement =
-          avgOrderIncrement < 0 ? lastIncrement : avgOrderIncrement
+          avgOrderIncrement <= 0 ? lastIncrement : avgOrderIncrement
         newData.push({ y: normalizedIncrement, x: backDate }) // changed to 'x' from 't' for chartJS3 support
+        lastIncrement = normalizedIncrement
+
         // console.log(normalizedIncrement)
         // for stepped graph, we then need a final data point
         // that is the final date and a repeat of the avg order value
         // also valid as ' extrapolation' technique for non-stepped
         if (index === totalDataPoints - 1) {
           newData.push({ y: avgOrderIncrement, x: order.t })
-          lastIncrement = normalizedIncrement
         }
       } else {
         console.log(`yikes we got two of the same!, ignoring ${order.y}`)
