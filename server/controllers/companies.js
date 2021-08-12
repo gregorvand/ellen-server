@@ -51,7 +51,11 @@ module.exports = {
         User.findOne({
           where: { email: req.headers['user'] },
         }).then((user) => {
-          user.getCompanies().then((selectedCompanies) => {
+          let dbparams = {}
+          if (req.body.companyType) {
+            dbparams = { where: { companyType: 'private' } }
+          }
+          user.getCompanies(dbparams).then((selectedCompanies) => {
             res.json({
               companies: selectedCompanies,
             })

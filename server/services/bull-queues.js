@@ -77,28 +77,6 @@ async function addEventsForProcessing() {
   })
 }
 
-const initProcessEarningsQueueCron = async function () {
-  addEarningProcessingQueue.process(async (job) => {
-    // addEventsForProcessing()
-    console.log(job.data)
-    return addEventsForProcessing()
-  })
-}
-
-const initGetCalendarEventsQueueCron = async function () {
-  addCalendarProcessingQueue.process(async (job) => {
-    console.log('init addCalendarProcessingQueue completed', job.data)
-    return getAndStoreCalendarEvents()
-  })
-}
-
-// now send
-const initEmailPublicCompanyDataSend = async function () {
-  addEmailProcessingQueue.process(async () => {
-    sendAllEarningEmails(false, false) // internal request so req/res are false
-  })
-}
-
 // fire below event to clear daily repeats
 const clearRepeatable = async function () {
   const repeatable2 = await addEarningProcessingQueue.getRepeatableJobs()
@@ -120,7 +98,29 @@ const clearRepeatable = async function () {
   })
 }
 
-clearRepeatable()
+// clearRepeatable()
+
+const initProcessEarningsQueueCron = async function () {
+  addEarningProcessingQueue.process(async (job) => {
+    // addEventsForProcessing()
+    console.log(job.data)
+    return addEventsForProcessing()
+  })
+}
+
+const initGetCalendarEventsQueueCron = async function () {
+  addCalendarProcessingQueue.process(async (job) => {
+    console.log('init addCalendarProcessingQueue completed', job.data)
+    return getAndStoreCalendarEvents()
+  })
+}
+
+// now send
+const initEmailPublicCompanyDataSend = async function () {
+  addEmailProcessingQueue.process(async () => {
+    sendAllEarningEmails(false, false) // internal request so req/res are false
+  })
+}
 
 module.exports = {
   initPointsTransactionQueues: initPointsTransactionQueues,

@@ -170,7 +170,7 @@ module.exports = (app) => {
   // const userCompanies = require('../../vue-app/ellen-b2b/db/events.json')
 
   // New routes for Vue auth
-  app.get('/api/dashboard', auth.getToken, companiesController.listByUser)
+  app.post('/api/dashboard', auth.getToken, companiesController.listByUser)
 
   app.put('/api/users/update/username/:id', usersController.update)
   app.get('/api/users', auth.getToken, usersController.list)
