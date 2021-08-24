@@ -219,7 +219,7 @@
                 },
                 "costOfRevenue": {
                     "field": "costOfRevenue",
-                    "seqType": "Sequelize.BIGINT"
+                    "seqType": "Sequelize.DECIMAL"
                 },
                 "grossProfit": {
                     "field": "grossProfit",
@@ -659,5 +659,5 @@
             "indexes": []
         }
     },
-    "revision": 3
+    "revision": 4
 }

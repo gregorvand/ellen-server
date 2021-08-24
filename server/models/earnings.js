@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
     },
     costOfRevenue: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.NUMERIC,
     },
     grossProfit: {
       type: DataTypes.BIGINT,
