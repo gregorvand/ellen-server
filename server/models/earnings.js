@@ -13,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     revenue: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.NUMERIC,
     },
     costOfRevenue: {
       type: DataTypes.NUMERIC,
     },
     grossProfit: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.NUMERIC,
     },
     grossProfitRatio: {
       type: DataTypes.NUMERIC,
