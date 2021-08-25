@@ -11,7 +11,7 @@ async function initCronAddEarnings() {
   console.log('init cron for getting events every hour')
   addEarningProcessingQueue.add(
     { event: 'activate initEarningsQueues' },
-    { repeat: { cron: '03 2,10 * * *' } } // 3rd minute of 2nd/10th hours
+    { repeat: { cron: '03 * * * *' } } // 3rd minute of 2nd/10th hours
   )
 }
 
@@ -19,7 +19,7 @@ async function initCronAddCalendarEvents() {
   console.log('init cron for getting cal events every hour')
   addCalendarProcessingQueue.add(
     { event: 'activate initCalQueues' },
-    { repeat: { cron: '01 2,10 * * *' } }
+    { repeat: { cron: '01 * * * *' } }
   )
 }
 
@@ -27,7 +27,7 @@ async function initCronEmailPublicResults() {
   console.log('init cron for sending emails for public companies')
   addEmailProcessingQueue.add(
     { event: 'activate initEmailQueues' },
-    { repeat: { cron: '45 2,10 * * *' } }
+    { repeat: { cron: '45 * * * *' } }
   )
 }
 
