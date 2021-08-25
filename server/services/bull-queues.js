@@ -1,4 +1,6 @@
 const Bull = require('bull')
+const dayjs = require('dayjs')
+const { Op } = require('sequelize')
 
 let redisHost = ''
 if (process.env.NODE_ENV == 'development') {
@@ -64,7 +66,14 @@ const initEarningsQueues = async function () {
 async function addEventsForProcessing() {
   const allToProcess = await EarningCalendar.findAll({
     where: {
-      storedEarning: false,
+      [Op.and]: [
+        { storedEarning: false },
+        {
+          createdAt: {
+            [Op.gte]: dayjs().subtract(14, 'day').toISOString(),
+          },
+        },
+      ],
     },
     order: [['date', 'ASC']],
   })
@@ -121,6 +130,8 @@ const initEmailPublicCompanyDataSend = async function () {
     sendAllEarningEmails(false, false) // internal request so req/res are false
   })
 }
+
+addEventsForProcessing()
 
 module.exports = {
   initPointsTransactionQueues: initPointsTransactionQueues,
