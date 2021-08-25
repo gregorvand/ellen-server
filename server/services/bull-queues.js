@@ -131,8 +131,6 @@ const initEmailPublicCompanyDataSend = async function () {
   })
 }
 
-addEventsForProcessing()
-
 module.exports = {
   initPointsTransactionQueues: initPointsTransactionQueues,
   initEarningsQueues: initEarningsQueues,
