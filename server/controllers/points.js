@@ -1,8 +1,8 @@
-const Point = require('../models').Point;
-const User = require('../models').User;
-const { Op } = require('sequelize');
-const sequelize = require('sequelize');
-const Today = require('../utils/getToday');
+const Point = require('../models').Point
+const User = require('../models').User
+const { Op } = require('sequelize')
+const sequelize = require('sequelize')
+const Today = require('../utils/getToday')
 
 module.exports = {
   create(req, res) {
@@ -13,12 +13,12 @@ module.exports = {
           customerId: req.body.customerId || 0,
         })
           .then((transaction) => res.status(201).send(transaction))
-          .catch((error) => res.status(400).send('not possible!')); // obscure error message, stop people decoding API
+          .catch((error) => res.status(400).send('not possible!')) // obscure error message, stop people decoding API
       } catch (e) {
-        throw new error(e);
+        throw new error(e)
       }
     } else {
-      res.status(400).send('points submitted must be greater than zero');
+      res.status(400).send('points submitted must be greater than zero')
     }
   },
   internalCreate(pointsValue, customerId, activated, reason, orderIdentifier) {
@@ -36,29 +36,29 @@ module.exports = {
               `added points of, ${transaction.pointsValue}, activated: ${activated}`
             )
           )
-          .catch((error) => console.error(error)); // obscure error message, stop people decoding API
+          .catch((error) => console.error(error)) // obscure error message, stop people decoding API
       } catch (e) {
-        throw new error(e);
+        throw new error(e)
       }
     } else {
-      console.error('tried to add zero points');
+      console.error('tried to add zero points')
     }
   },
   internalUpdate(pointIdentifier, activated) {
     try {
       return Point.findByPk(pointIdentifier).then((pointTransaction) => {
         if (!pointTransaction) {
-          console.error('no points record found');
+          console.error('no points record found')
         }
         return pointTransaction
           .update({
             activated: activated || false,
           })
           .then(console.log(`updated ${pointIdentifier} as ${activated}`))
-          .catch((e) => console.log(e));
-      });
+          .catch((e) => console.log(e))
+      })
     } catch (e) {
-      console.error(e);
+      console.error(e)
     }
   },
   upsert(pointsValue, customerId, activated, reason, orderIdentifier) {
@@ -71,7 +71,7 @@ module.exports = {
           },
         }).then((obj) => {
           if (obj) {
-            this.internalUpdate(obj.id, obj.activated);
+            this.internalUpdate(obj.id, obj.activated)
           } else {
             return Point.create({
               pointsValue: pointsValue,
@@ -85,14 +85,14 @@ module.exports = {
                   `added points of ${transaction.pointsValue}, activated: ${activated}`
                 )
               )
-              .catch((error) => console.error(error)); // obscure error message, stop people decoding API
+              .catch((error) => console.error(error)) // obscure error message, stop people decoding API
           }
-        });
+        })
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     } else {
-      console.error('tried to add zero points');
+      console.error('tried to add zero points')
     }
   },
 
@@ -100,9 +100,9 @@ module.exports = {
     // find all points in by a specific day
     // summed by user
     // returned in order of most first
-    const today = new Date();
-    date1 = startTime || new Today(today).startOfToday();
-    date2 = endTime || new Today(today).endOfToday();
+    const today = new Date()
+    date1 = startTime || new Today(today).startOfToday()
+    date2 = endTime || new Today(today).endOfToday()
 
     return Point.findAll({
       where: { createdAt: { [Op.between]: [date1, date2] } },
@@ -118,7 +118,7 @@ module.exports = {
       ],
       group: ['User.id', 'Point.customerId'],
       order: [[sequelize.fn('sum', sequelize.col('pointsValue')), 'DESC']],
-    });
+    })
   },
 
   listByOrder(req, res) {
@@ -129,13 +129,13 @@ module.exports = {
           { emailId: req.body.emailId },
         ],
       },
-    });
+    })
   },
 
   returnDailyPointsByUser(req, res) {
-    let today = new Date();
-    const date1 = new Today(today).startOfToday();
-    const date2 = new Today(today).endOfToday();
+    let today = new Date()
+    const date1 = new Today(today).startOfToday()
+    const date2 = new Today(today).endOfToday()
 
     return Point.findAll({
       where: {
@@ -151,9 +151,9 @@ module.exports = {
           'totalDailyPoints',
         ],
       ],
-    });
+    })
   },
-};
+}
 
 // not an external API function (yet)
 // ie, validating points can only be done internally
@@ -172,10 +172,10 @@ async function validateAllPointsTransactionsForOrder(
         .update({
           activated: validate,
         })
-        .then((points) => console.log('updated points transaction', points.id));
-    });
-  });
+        .then((points) => console.log('updated points transaction', points.id))
+    })
+  })
 }
 
 module.exports.validateAllPointsTransactionsForOrder =
-  validateAllPointsTransactionsForOrder;
+  validateAllPointsTransactionsForOrder
