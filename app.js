@@ -53,6 +53,7 @@ app.use(
       'http://192.168.0.104',
       'https://ellen-alpha-gppebs3mnq-uw.a.run.app',
       'https://alpha2.ellen.me',
+      'https://ellenalpha2.ngrok.io',
     ],
   })
 )
@@ -176,6 +177,7 @@ app.use(function (req, res, next) {
 
 // Require our routes into the application.
 require('./server/routes')(app)
+require('./server/routes/stripeRoutes')(app)
 
 app.get('/users/login', checkAuthenticated, (req, res) => {
   res.render('login')

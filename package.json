@@ -61,6 +61,7 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.6.2",
     "socket.io": "^4.0.0",
+    "stripe": "^8.170.0",
     "unique-names-generator": "^4.5.0"
   },
   "devDependencies": {
