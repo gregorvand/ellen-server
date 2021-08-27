@@ -74,7 +74,8 @@
     "nodemon": "^2.0.7",
     "prettier": "^2.3.2",
     "prettier-eslint": "^12.0.0",
-    "sequelize-cli": "^6.2.0"
+    "sequelize-cli": "^6.2.0",
+    "sequelize-auto-migrations": "github:scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba"
   },
   "resolutions": {
     "eslint-loader": "2.1.2"
