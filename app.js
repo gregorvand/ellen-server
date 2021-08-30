@@ -158,13 +158,18 @@ app.use(flash())
 
 initPassport(passport)
 
-app.set('view engine', 'ejs')
-
-// Parse incoming requests data (https://github.com/expressjs/body-parser)
+app.set('view engine', 'ejs') // to be removed in time - old ssr f/e engine
 
 app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
 
+// !-- PARSE ROUTES ACCORDING TO THEIR NEED IN ORDER --!
+// Set any specific parsing (e.g raw for Stripe) first
+// then after set any catch-all parsing (e.g. json)
+
+require('./server/routes/stripeRoutes')(app)
+
+// Any routes that do not require specific parsing (ie json default) put after this
+app.use(express.json())
 app.use(function (req, res, next) {
   // could do a user lookup here and then store pertinent info for all views like name, email
   res.locals = {
@@ -173,11 +178,8 @@ app.use(function (req, res, next) {
     currentUser: req.user,
   }
   next()
-})
-
-// Require our routes into the application.
+}) // Require our routes into the application.
 require('./server/routes')(app)
-require('./server/routes/stripeRoutes')(app)
 
 app.get('/users/login', checkAuthenticated, (req, res) => {
   res.render('login')
