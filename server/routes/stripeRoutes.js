@@ -4,6 +4,7 @@ const stripe = require('stripe')(
 
 module.exports = (app) => {
   const calculateOrderAmount = (items) => {
+    console.log(items)
     // Replace this constant with a calculation of the order's amount
     // Calculate the order total on the server to prevent
     // people from directly manipulating the amount on the client
@@ -33,7 +34,7 @@ module.exports = (app) => {
       let event
       try {
         event = stripe.webhooks.constructEvent(
-          request.body,
+          request.body.token,
           sig,
           endpointSecret
         )
