@@ -34,7 +34,7 @@ module.exports = (app) => {
       let event
       try {
         event = stripe.webhooks.constructEvent(
-          request.body.token,
+          request.body,
           sig,
           endpointSecret
         )
