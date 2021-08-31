@@ -166,7 +166,7 @@ app.use(express.urlencoded({ extended: true }))
 // Set any specific parsing (e.g raw for Stripe) first
 // then after set any catch-all parsing (e.g. json)
 
-require('./server/routes/stripeRoutes')(app)
+require('./server/routes/stripeRoutes')(app, express)
 
 // Any routes that do not require specific parsing (ie json default) put after this
 app.use(express.json())
