@@ -1,7 +1,7 @@
 const User = require('../models').User
 const Order = require('../models').Order
 const jwt = require('jsonwebtoken')
-const { Op } = require('sequelize')
+const userHelpers = require('../utils/getUserFromToken')
 // const bcrypt = require('bcrypt')
 
 module.exports = {
@@ -119,10 +119,7 @@ module.exports = {
 
   async updateUserCompanies(req, res) {
     try {
-      const decoded = jwt.verify(req.token, process.env.USER_AUTH_SECRET)
-      const currentUser = await User.findOne({
-        where: { email: decoded.user.email },
-      })
+      const currentUser = userHelpers.currentUser()
       const selectedCompanyIds = req.body.selectedCompanies.map(
         (company) => company.id
       )

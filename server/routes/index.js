@@ -22,11 +22,9 @@ module.exports = (app) => {
   // direct/testing api paths
 
   app.post('/api/companies', companiesController.create)
-  app.get('/api/companies', companiesController.list)
   app.get('/api/companies/:companyId', companiesController.listByCompany)
 
   app.post('/api/orders', ordersController.create)
-  app.post('/api/companies/orders', ordersController.listByCompany)
 
   app.post('/api/points', pointsController.create)
   app.get('/api/points', function (req, res) {

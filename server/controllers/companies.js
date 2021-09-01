@@ -1,8 +1,6 @@
 const Company = require('../models').Company
 const Order = require('../models').Order
-const User = require('../models').User
-const { Op } = require('sequelize')
-const jwt = require('jsonwebtoken')
+const userHelpers = require('../utils/getUserFromToken')
 
 module.exports = {
   create(req, res) {
@@ -13,20 +11,6 @@ module.exports = {
       orderSuffix: req.body.suffix || '',
     })
       .then((company) => res.status(201).send(company))
-      .catch((error) => res.status(400).send(error))
-  },
-
-  list(req, res) {
-    console.log('got to list request')
-    return Company.findAll({
-      include: [
-        {
-          model: Order,
-          as: 'orders',
-        },
-      ],
-    })
-      .then((companies) => res.status(200).send(companies))
       .catch((error) => res.status(400).send(error))
   },
 
@@ -45,10 +29,7 @@ module.exports = {
 
   async listByUser(req, res) {
     try {
-      let decoded = jwt.verify(req.token, process.env.USER_AUTH_SECRET)
-      let currentUser = await User.findOne({
-        where: { email: decoded.user.email },
-      })
+      const currentUser = userHelpers.currentUser()
       let dbparams = {}
       if (req.body.companyType) {
         dbparams = { where: { companyType: 'private' } }
