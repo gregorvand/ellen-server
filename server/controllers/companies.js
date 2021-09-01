@@ -1,8 +1,6 @@
 const Company = require('../models').Company
 const Order = require('../models').Order
-const User = require('../models').User
-const { Op } = require('sequelize')
-const jwt = require('jsonwebtoken')
+const userHelpers = require('../utils/getUserFromToken')
 
 module.exports = {
   create(req, res) {
@@ -13,20 +11,6 @@ module.exports = {
       orderSuffix: req.body.suffix || '',
     })
       .then((company) => res.status(201).send(company))
-      .catch((error) => res.status(400).send(error))
-  },
-
-  list(req, res) {
-    console.log('got to list request')
-    return Company.findAll({
-      include: [
-        {
-          model: Order,
-          as: 'orders',
-        },
-      ],
-    })
-      .then((companies) => res.status(200).send(companies))
       .catch((error) => res.status(400).send(error))
   },
 
@@ -43,26 +27,22 @@ module.exports = {
       .catch((error) => res.status(400).send(error))
   },
 
-  listByUser(req, res) {
-    jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
-      if (err) {
-        res.sendStatus(401)
-      } else {
-        User.findOne({
-          where: { email: req.headers['user'] },
-        }).then((user) => {
-          let dbparams = {}
-          if (req.body.companyType) {
-            dbparams = { where: { companyType: 'private' } }
-          }
-          user.getCompanies(dbparams).then((selectedCompanies) => {
-            res.json({
-              companies: selectedCompanies,
-            })
-          })
-        })
+  async listByUser(req, res) {
+    try {
+      const currentUser = await userHelpers.currentUser(req.token)
+      console.log(currentUser)
+      let dbparams = {}
+      if (req.body.companyType) {
+        dbparams = { where: { companyType: 'private' } }
       }
-    })
+      currentUser.getCompanies(dbparams).then((selectedCompanies) => {
+        res.json({
+          companies: selectedCompanies,
+        })
+      })
+    } catch (err) {
+      res.sendStatus(401)
+    }
   },
 
   update(req, res) {
