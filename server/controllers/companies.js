@@ -46,7 +46,6 @@ module.exports = {
   async listByUser(req, res) {
     try {
       let decoded = jwt.verify(req.token, process.env.USER_AUTH_SECRET)
-      console.log(decoded)
       let currentUser = await User.findOne({
         where: { email: decoded.user.email },
       })

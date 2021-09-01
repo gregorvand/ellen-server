@@ -117,35 +117,22 @@ module.exports = {
       .catch((error) => res.status(400).send(error))
   },
 
-  updateByEmail(req, res) {
-    jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
-      if (err) {
-        res.sendStatus(401)
-      } else {
-        return User.findOne({
-          where: {
-            email: req.headers.user,
-          },
-        })
-          .then((user) => {
-            if (!user) {
-              return res.status(404).send({
-                message: 'User Not Found',
-              })
-            }
-            console.log('req was', req.body.selectedCompanies)
-
-            const selectedCompanyIds = req.body.selectedCompanies.map(
-              (company) => company.id
-            )
-            user
-              .addCompanies(selectedCompanyIds) // get company IDs from state
-              .then((user) => res.status(200).send(user))
-              .catch((error) => res.status(400).send(error))
-          })
-          .catch((error) => res.status(400).send(error))
-      }
-    })
+  async updateUserCompanies(req, res) {
+    try {
+      const decoded = jwt.verify(req.token, process.env.USER_AUTH_SECRET)
+      const currentUser = await User.findOne({
+        where: { email: decoded.user.email },
+      })
+      const selectedCompanyIds = req.body.selectedCompanies.map(
+        (company) => company.id
+      )
+      currentUser
+        .addCompanies(selectedCompanyIds) // get company IDs from state
+        .then((user) => res.status(200).send(user))
+        .catch((error) => res.status(400).send(error))
+    } catch (err) {
+      res.status(401)
+    }
   },
 
   // takes an object from function calling it, e.g:

@@ -178,7 +178,7 @@ module.exports = (app) => {
   app.post(
     '/api/users/update/companies',
     auth.getToken,
-    usersController.updateByEmail
+    usersController.updateUserCompanies
   )
 
   app.post('/api/companies/update/:id', companiesController.update)
