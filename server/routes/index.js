@@ -6,6 +6,7 @@ const earningCalendarController = require('../controllers/earningCalendar')
 const companyCategoryController = require('../controllers/companyCategory')
 const ordersController = require('../controllers/orders')
 const usersController = require('../controllers/users')
+const creditTransactionController = require('../controllers/creditTransaction')
 const pointsController = require('../controllers/points')
 const winnersController = require('../controllers/winners')
 const serviceKlaviyo = require('../services/third_party/klaviyo')
@@ -181,9 +182,9 @@ module.exports = (app) => {
   )
 
   app.get(
-    '/user/credit-balance/:id',
+    '/api/user/credit-balance',
     auth.getToken,
-    earningsController.sendEarningEmail
+    creditTransactionController.getTotal
   )
 
   app.post('/api/companies/update/:id', companiesController.update)
