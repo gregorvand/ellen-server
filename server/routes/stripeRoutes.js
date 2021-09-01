@@ -8,7 +8,7 @@ module.exports = (app, express) => {
     // Replace this constant with a calculation of the order's amount
     // Calculate the order total on the server to prevent
     // people from directly manipulating the amount on the client
-    return chargeAmount * 1
+    return chargeAmount * (process.env.TOKEN_COST_USD || 20) * 100 // default of $20 if env is not set
   }
   app.post('/create-payment-intent', express.json(), async (req, res) => {
     // const { chargeAmount } =
