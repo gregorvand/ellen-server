@@ -43,26 +43,25 @@ module.exports = {
       .catch((error) => res.status(400).send(error))
   },
 
-  listByUser(req, res) {
-    jwt.verify(req.token, process.env.USER_AUTH_SECRET, (err) => {
-      if (err) {
-        res.sendStatus(401)
-      } else {
-        User.findOne({
-          where: { email: req.headers['user'] },
-        }).then((user) => {
-          let dbparams = {}
-          if (req.body.companyType) {
-            dbparams = { where: { companyType: 'private' } }
-          }
-          user.getCompanies(dbparams).then((selectedCompanies) => {
-            res.json({
-              companies: selectedCompanies,
-            })
-          })
-        })
+  async listByUser(req, res) {
+    try {
+      let decoded = jwt.verify(req.token, process.env.USER_AUTH_SECRET)
+      console.log(decoded)
+      let currentUser = await User.findOne({
+        where: { email: decoded.user.email },
+      })
+      let dbparams = {}
+      if (req.body.companyType) {
+        dbparams = { where: { companyType: 'private' } }
       }
-    })
+      currentUser.getCompanies(dbparams).then((selectedCompanies) => {
+        res.json({
+          companies: selectedCompanies,
+        })
+      })
+    } catch (err) {
+      res.sendStatus(401)
+    }
   },
 
   update(req, res) {
