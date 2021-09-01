@@ -1,14 +1,16 @@
+const chargeHelpers = require('../utils/calculateCredits')
+const creditTransationController = require('../controllers/creditTransaction')
+
 const stripe = require('stripe')(
   'sk_test_51JS9eTG3YpE4JrlJc6uQRxZLkXszTng6xf8F45KN2kqO3yZctOoOn2djQaT5mkZe7hmLmMNLWwLYunIZ7EVxSw5E00KbgNEgMZ'
 )
 
 module.exports = (app, express) => {
   const calculateOrderAmount = (chargeAmount) => {
-    console.log(chargeAmount)
     // Replace this constant with a calculation of the order's amount
     // Calculate the order total on the server to prevent
     // people from directly manipulating the amount on the client
-    return chargeAmount * (process.env.TOKEN_COST_USD || 20) * 100 // default of $20 if env is not set
+    return chargeHelpers.calculateChargeFromCredits(chargeAmount)
   }
   app.post('/create-payment-intent', express.json(), async (req, res) => {
     // const { chargeAmount } =
@@ -51,7 +53,12 @@ module.exports = (app, express) => {
           console.log(
             `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
           )
-          // TODO: INSERT CHARGE RECORD (NEED MODEL) AND UPDATE POINTS ACCORDINGLY
+          console.log(
+            'would have added',
+            chargeHelpers.calculateCreditsFromCharge(
+              chargeObject.amount_captured
+            )
+          )
           break
         case 'payment_method.attached':
           const paymentMethod = event.data.object
