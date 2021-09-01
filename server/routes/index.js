@@ -181,6 +181,12 @@ module.exports = (app) => {
     usersController.updateByEmail
   )
 
+  app.get(
+    '/user/credit-balance/:id',
+    auth.getToken,
+    earningsController.sendEarningEmail
+  )
+
   app.post('/api/companies/update/:id', companiesController.update)
 
   app.post(

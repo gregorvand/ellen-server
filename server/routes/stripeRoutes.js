@@ -13,8 +13,6 @@ module.exports = (app, express) => {
     return chargeHelpers.calculateChargeFromCredits(chargeAmount)
   }
   app.post('/create-payment-intent', express.json(), async (req, res) => {
-    // const { chargeAmount } =
-    // console.log('yew', req)
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
       // amount: calculateOrderAmount(req.body.chargeAmount),
@@ -26,12 +24,13 @@ module.exports = (app, express) => {
     })
   })
 
+  const User = require('../models').User
   const endpointSecret = process.env.STRIPE_WEBHOOK_AUTH_SEC
   // Use body-parser to retrieve the raw body as a buffer
   app.post(
     '/stripe-webhook',
     require('body-parser').raw({ type: '*/*' }),
-    (request, response) => {
+    async (request, response) => {
       const sig = request.headers['stripe-signature']
       console.log('sig', sig)
 
@@ -47,18 +46,32 @@ module.exports = (app, express) => {
         response.status(400).send(`Webhook Error: ${err.message}`)
       }
 
+      const chargeObject = event.data.object
+      console.log(chargeObject.billing_details)
+
+      const user = await User.findOne({
+        where: {
+          email: chargeObject.billing_details.email,
+        },
+      })
+
+      const userId = user.dataValues.id
+
       switch (event.type) {
         case 'charge.succeeded':
-          const chargeObject = event.data.object
+          const creditsToAdd = chargeHelpers.calculateCreditsFromCharge(
+            chargeObject.amount_captured
+          )
           console.log(
             `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
           )
-          console.log(
-            'would have added',
-            chargeHelpers.calculateCreditsFromCharge(
-              chargeObject.amount_captured
-            )
-          )
+          console.log('adding', creditsToAdd)
+          creditTransationController.create({
+            creditValue: creditsToAdd,
+            activated: true,
+            method: 'internal',
+            customerId: userId,
+          })
           break
         case 'payment_method.attached':
           const paymentMethod = event.data.object
