@@ -29,7 +29,8 @@ module.exports = {
 
   async listByUser(req, res) {
     try {
-      const currentUser = userHelpers.currentUser()
+      const currentUser = await userHelpers.currentUser(req.token)
+      console.log(currentUser)
       let dbparams = {}
       if (req.body.companyType) {
         dbparams = { where: { companyType: 'private' } }

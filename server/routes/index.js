@@ -26,6 +26,7 @@ module.exports = (app) => {
 
   app.post('/api/orders', ordersController.create)
 
+  app.post('/api/companies/orders', ordersController.listByCompany)
   app.post('/api/points', pointsController.create)
   app.get('/api/points', function (req, res) {
     pointsController

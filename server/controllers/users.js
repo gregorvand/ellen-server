@@ -119,7 +119,7 @@ module.exports = {
 
   async updateUserCompanies(req, res) {
     try {
-      const currentUser = userHelpers.currentUser()
+      const currentUser = await userHelpers.currentUser(req.token)
       const selectedCompanyIds = req.body.selectedCompanies.map(
         (company) => company.id
       )
