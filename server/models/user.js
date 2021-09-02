@@ -51,6 +51,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'customerId',
       as: 'points',
     })
+    User.hasMany(models.CreditTransaction, {
+      foreignKey: 'customerId',
+      as: 'credits',
+    })
     User.belongsToMany(models.Company, { through: 'UserCompanies' })
   }
 

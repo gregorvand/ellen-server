@@ -6,6 +6,7 @@ const earningCalendarController = require('../controllers/earningCalendar')
 const companyCategoryController = require('../controllers/companyCategory')
 const ordersController = require('../controllers/orders')
 const usersController = require('../controllers/users')
+const creditTransactionController = require('../controllers/creditTransaction')
 const pointsController = require('../controllers/points')
 const winnersController = require('../controllers/winners')
 const serviceKlaviyo = require('../services/third_party/klaviyo')
@@ -180,6 +181,12 @@ module.exports = (app) => {
     usersController.updateUserCompanies
   )
 
+  app.get(
+    '/api/user/credit-balance',
+    auth.getToken,
+    creditTransactionController.getTotal
+  )
+
   app.post('/api/companies/update/:id', companiesController.update)
 
   app.post(
@@ -190,6 +197,7 @@ module.exports = (app) => {
 
   app.post('/api/orders/update/:id', ordersController.update)
 
+  // this is for the webhook, not the earnings button
   const eventEmitter = require('../services/eventBus').eventEmitter
   app.post('/api/earnings/receive', function (req, res) {
     console.log(req.body.body.data) // coming from FinnHub via parse at pipedream.com
