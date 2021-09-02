@@ -19,6 +19,9 @@ You will need a redis server running (ie in termninal `redis-server`) on the def
 
 We are not using Sequelize `.sync()` since this is not suitable once the app gets to Production, so we are doing migrations from day 1. However, to make these easier to generate we are using a recommended fork of `sequelize-auto-migrations` as per [this post](https://stackoverflow.com/a/59021807/707747) and follow the instructions 7-10 from this post for modifying the DB via the Models.
 
+### Dependency
+Ensure you have run `npm i -g github:scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba` before running the below
+
 Those steps in the link above were captured at commit time as:
 
 1. Delete all old migrations if any exist.
