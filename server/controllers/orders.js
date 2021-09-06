@@ -7,8 +7,10 @@ const pointsTransactionQueue =
 const pointsHelper = require('../utils/getPointValues')
 const Sentry = require('@sentry/node')
 
-const getOrders =
-  require('../utils/order_volume_data/getOrdersForChart').getOrders
+const {
+  getOrders,
+  getOrdersByMonth,
+} = require('../utils/order_volume_data/getOrdersForChart')
 const getOrderDifferenceIncrement =
   require('../utils/order_volume_data/getOrderIncrement').getOrderDifferenceIncrement
 
@@ -84,6 +86,24 @@ module.exports = {
         ? req.body.lookbackMonths
         : false
       const allOrderData = await getOrders(req.body.companyId, lookbackMonths)
+
+      // now get all the avg data
+      const data = getOrderDifferenceIncrement(allOrderData)
+      res.send(data)
+    } else {
+      res.send('could not find company by Id').status(400)
+    }
+  },
+
+  async companyDataByMonth(req, res) {
+    if (req.body.companyId) {
+      const allOrderData = await getOrdersByMonth(
+        req.body.companyId,
+        req.body.dateStart,
+        req.body.dateEnd
+      )
+
+      console.log(allOrderData)
 
       // now get all the avg data
       const data = getOrderDifferenceIncrement(allOrderData)
