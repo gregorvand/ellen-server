@@ -45,8 +45,6 @@ async function getOrders(id, lookbackMonths = false) {
 }
 
 async function getOrdersByMonth(id, dateStart, dateEnd) {
-  const formattedStartDate = dayjs(dateStart).toISOString()
-  const formattedEndDate = dayjs(dateEnd).toISOString()
   return Order.findAll({
     where: {
       companyId: id,
@@ -54,7 +52,7 @@ async function getOrdersByMonth(id, dateStart, dateEnd) {
         [Op.gt]: 1,
       },
       orderDate: {
-        [Op.between]: [formattedStartDate, formattedEndDate], // default for all dates
+        [Op.between]: [dateStart, dateEnd], // default for all dates
       },
     },
     attributes: [
