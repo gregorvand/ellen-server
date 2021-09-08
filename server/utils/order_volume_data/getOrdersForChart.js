@@ -44,6 +44,28 @@ async function getOrders(id, lookbackMonths = false) {
     .catch((error) => console.error('error with company page lookup', error))
 }
 
+async function getOrdersByMonth(id, dateStart, dateEnd) {
+  return Order.findAll({
+    where: {
+      companyId: id,
+      orderNumber: {
+        [Op.gt]: 1,
+      },
+      orderDate: {
+        [Op.between]: [dateStart, dateEnd], // default for all dates
+      },
+    },
+    attributes: [
+      ['orderDate', 't'],
+      ['orderNumber', 'y'],
+    ],
+    order: [['orderDate', 'ASC']],
+  })
+    .then((orders) => orders)
+    .catch((error) => console.error('error with company page lookup', error))
+}
+
 module.exports = {
   getOrders: getOrders,
+  getOrdersByMonth: getOrdersByMonth,
 }
