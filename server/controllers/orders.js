@@ -6,6 +6,7 @@ const pointsTransactionQueue =
   require('../services/bull-queues').pointsTransactionQueue
 const pointsHelper = require('../utils/getPointValues')
 const Sentry = require('@sentry/node')
+const db = require('../models/index')
 
 const {
   getOrders,
@@ -176,6 +177,28 @@ module.exports = {
           .catch((error) => res.status(400).send(error))
       })
       .catch((error) => res.status(400).send(error))
+  },
+
+  // pass in company, year
+  // get the months from that year that have data
+  // constructed with help via https://stackoverflow.com/questions/69127003/mixing-distinct-with-group-by-postgres
+  async monthsAvailableByYear(req, res) {
+    const [results, metadata] = await db.sequelize.query(
+      `SELECT
+          DATE_PART('month', "orderDate") AS month,
+          COUNT(DISTINCT "orderDate"::date) AS count
+      FROM "Orders"
+      WHERE
+        "companyId" = ${req.body.companyId} AND
+        "orderNumber" != 1 AND
+        DATE_PART('year', "orderDate") = ${req.body.year}
+      GROUP BY
+        DATE_PART('month', "orderDate")
+      HAVING
+        COUNT(DISTINCT "orderDate"::date) > 1;`
+    )
+
+    res.send(results).status(200)
   },
 }
 

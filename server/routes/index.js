@@ -274,5 +274,10 @@ module.exports = (app) => {
     companyCategoryController.create
   )
 
+  app.post(
+    '/api/orders/dates-available',
+    ordersController.monthsAvailableByYear
+  )
+
   app.get('/api/companycategory/list', companyCategoryController.list)
 }
