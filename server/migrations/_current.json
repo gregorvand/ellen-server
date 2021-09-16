@@ -207,7 +207,7 @@
                 "datasetId": {
                     "allowNull": false,
                     "field": "datasetId",
-                    "seqType": "Sequelize.INTEGER"
+                    "seqType": "Sequelize.DECIMAL"
                 },
                 "expiry": {
                     "allowNull": false,
@@ -755,5 +755,5 @@
             "indexes": []
         }
     },
-    "revision": 7
+    "revision": 8
 }
