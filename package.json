@@ -60,6 +60,7 @@
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.6.2",
+    "sequelize-auto-migrations": "git://github.com/scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba",
     "socket.io": "^4.0.0",
     "stripe": "^8.170.0",
     "unique-names-generator": "^4.5.0"
