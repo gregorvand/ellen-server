@@ -224,6 +224,17 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
+                "companyId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Companies",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "companyId",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "customerId": {
                     "allowNull": true,
                     "references": {
@@ -755,5 +766,5 @@
             "indexes": []
         }
     },
-    "revision": 8
+    "revision": 9
 }

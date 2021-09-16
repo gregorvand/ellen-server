@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const DatasetAccess = sequelize.define('DatasetAccess', {
     datasetId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.NUMERIC,
       allowNull: false,
     },
     expiry: {
@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
   DatasetAccess.associate = (models) => {
     DatasetAccess.belongsTo(models.User, {
       foreignKey: 'customerId',
+      onDelete: 'CASCADE',
+    })
+    DatasetAccess.belongsTo(models.Company, {
+      foreignKey: 'companyId',
       onDelete: 'CASCADE',
     })
   }
