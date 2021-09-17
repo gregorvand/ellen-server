@@ -294,5 +294,11 @@ module.exports = (app) => {
     datasetAccessController.getUserAccessListByCompany
   )
 
+  app.post(
+    '/api/dataset-access/charge',
+    auth.getToken,
+    datasetAccessController.datasetAccessCharge
+  )
+
   app.get('/api/companycategory/list', companyCategoryController.list)
 }
