@@ -290,6 +290,7 @@ module.exports = (app) => {
 
   app.get(
     '/api/dataset-access/company-by-user',
+    auth.getToken,
     datasetAccessController.getUserAccessListByCompany
   )
 

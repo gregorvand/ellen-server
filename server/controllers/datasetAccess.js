@@ -1,5 +1,5 @@
 const DatasetAccess = require('../models').DatasetAccess
-const User = require('../models').User
+const userHelpers = require('../utils/getUserFromToken')
 
 module.exports = {
   create(req, res) {
@@ -21,11 +21,11 @@ module.exports = {
     }
   },
 
-  getUserAccessListByCompany(req, res) {
-    console.log(req.query)
+  async getUserAccessListByCompany(req, res) {
+    const currentUser = await userHelpers.currentUser(req.token)
     try {
       return DatasetAccess.findAll({
-        where: { companyId: req.query.companyId, customerId: req.query.userId },
+        where: { companyId: req.query.companyId, customerId: currentUser.id },
       })
         .then((dataAccess) => res.send(dataAccess))
         .catch((error) =>
