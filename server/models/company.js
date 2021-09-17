@@ -52,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'earnings',
       onDelete: 'CASCADE',
     })
+    Company.hasMany(models.DatasetAccess, {
+      foreignKey: 'companyId',
+      as: 'datasets',
+    })
     Company.belongsToMany(models.User, { through: 'UserCompanies' })
     Company.belongsToMany(models.CompanyCategory, {
       through: 'CategoryListings',

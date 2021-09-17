@@ -101,6 +101,58 @@
             },
             "indexes": []
         },
+        "CreditTransactions": {
+            "tableName": "CreditTransactions",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "value": {
+                    "allowNull": false,
+                    "field": "value",
+                    "seqType": "Sequelize.DECIMAL"
+                },
+                "activated": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "activated",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "method": {
+                    "allowNull": true,
+                    "field": "method",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "customerId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "customerId",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
         "DailyEmails": {
             "tableName": "DailyEmails",
             "schema": {
@@ -138,6 +190,50 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "DatasetAccesses": {
+            "tableName": "DatasetAccesses",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "datasetId": {
+                    "allowNull": false,
+                    "field": "datasetId",
+                    "seqType": "Sequelize.DECIMAL"
+                },
+                "expiry": {
+                    "allowNull": false,
+                    "field": "expiry",
+                    "seqType": "Sequelize.DATE"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "customerId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "customerId",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -659,5 +755,5 @@
             "indexes": []
         }
     },
-    "revision": 5
+    "revision": 8
 }

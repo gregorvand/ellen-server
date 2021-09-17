@@ -4,6 +4,7 @@ const companiesController = require('../controllers/companies')
 const earningsController = require('../controllers/earnings')
 const earningCalendarController = require('../controllers/earningCalendar')
 const companyCategoryController = require('../controllers/companyCategory')
+const datasetAccessController = require('../controllers/datasetAccess')
 const ordersController = require('../controllers/orders')
 const usersController = require('../controllers/users')
 const creditTransactionController = require('../controllers/creditTransaction')
@@ -26,6 +27,7 @@ module.exports = (app) => {
   app.get('/api/companies/:companyId', companiesController.listByCompany)
   app.post(
     '/api/companies/orders-by-month',
+    auth.getToken,
     ordersController.companyDataByMonth
   )
 
@@ -276,7 +278,20 @@ module.exports = (app) => {
 
   app.post(
     '/api/orders/dates-available',
+    auth.getToken,
     ordersController.monthsAvailableByYear
+  )
+
+  app.post(
+    '/api/dataset-access/purchase',
+    auth.getToken,
+    datasetAccessController.create
+  )
+
+  app.get(
+    '/api/dataset-access/company-by-user',
+    auth.getToken,
+    datasetAccessController.getUserAccessListByCompany
   )
 
   app.get('/api/companycategory/list', companyCategoryController.list)

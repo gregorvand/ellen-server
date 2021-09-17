@@ -183,7 +183,7 @@ module.exports = {
   // get the months from that year that have data
   // constructed with help via https://stackoverflow.com/questions/69127003/mixing-distinct-with-group-by-postgres
   async monthsAvailableByYear(req, res) {
-    const [results, metadata] = await db.sequelize.query(
+    const [results] = await db.sequelize.query(
       `SELECT
           DATE_PART('month', "orderDate") AS month,
           COUNT(DISTINCT "orderDate"::date) AS count
@@ -197,7 +197,6 @@ module.exports = {
       HAVING
         COUNT(DISTINCT "orderDate"::date) > 1;`
     )
-
     res.send(results).status(200)
   },
 }
