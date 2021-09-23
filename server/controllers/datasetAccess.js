@@ -63,10 +63,6 @@ module.exports = {
       console.log('purchase was not possible, likely insufficent funds')
       res.status(433).send('not enough credits')
     }
-
-    // if ok update with new record
-
-    // return success
   },
 }
 
