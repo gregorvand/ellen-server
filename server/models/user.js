@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'customerId',
       as: 'credits',
     })
+    User.hasMany(models.DatasetAccess, {
+      foreignKey: 'customerId',
+      as: 'datasets',
+    })
     User.belongsToMany(models.Company, { through: 'UserCompanies' })
   }
 

@@ -23,12 +23,20 @@ module.exports = {
 
   async getTotal(req, res) {
     const currentUser = await userHelpers.currentUser(req.token)
-    return CreditTransaction.findAll({
-      where: { customerId: currentUser.id },
-      attributes: [
-        [sequelize.fn('sum', sequelize.col('value')), 'credit_balance'],
-      ],
-      group: ['customerId'],
-    }).then((balance) => res.status(200).send(balance))
+    getCreditBalance(currentUser).then((balance) =>
+      res.status(200).send(balance)
+    )
   },
 }
+
+async function getCreditBalance(currentUser) {
+  return CreditTransaction.findAll({
+    where: { customerId: currentUser.id },
+    attributes: [
+      [sequelize.fn('sum', sequelize.col('value')), 'credit_balance'],
+    ],
+    group: ['customerId'],
+  })
+}
+
+module.exports.getCreditBalance = getCreditBalance
