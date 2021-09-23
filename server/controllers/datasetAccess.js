@@ -66,7 +66,7 @@ module.exports = {
       })
     } else {
       console.log('purchase was not possible, likely insufficent funds')
-      res.sendStatus(403)
+      res.status(433).send('not enough credits')
     }
 
     // if ok update with new record
