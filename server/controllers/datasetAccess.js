@@ -5,7 +5,6 @@ const creditTransactionController = require('../controllers/creditTransaction')
 
 module.exports = {
   create(req, res) {
-    console.log(req.body)
     try {
       createDatasetAccess(req.body)
         .then((dataAcess) => res.status(201).send(dataAcess))
@@ -35,7 +34,6 @@ module.exports = {
   async datasetAccessCharge(req, res) {
     const currentUser = await userHelpers.currentUser(req.token)
     const tokenCost = process.env.DATASET_COST_TOKEN
-    console.log(req.body)
 
     // check credit balance
     let creditResult = await creditTransactionController.getCreditBalance(
@@ -43,8 +41,6 @@ module.exports = {
     )
     const currentBalance = creditResult[0].dataValues.credit_balance
     if (parseInt(currentBalance) - tokenCost >= 0) {
-      console.log('great! proceed!')
-
       try {
         await creditTransactionController.create({
           creditValue: -tokenCost,
@@ -53,7 +49,6 @@ module.exports = {
           customerId: currentUser.id,
         })
       } catch (e) {
-        console.log('darn, issue with charging')
         res.send(400)
       }
 
