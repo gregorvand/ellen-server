@@ -573,6 +573,12 @@
                     "field": "activated",
                     "seqType": "Sequelize.BOOLEAN"
                 },
+                "stripeCustomerId": {
+                    "allowNull": true,
+                    "unique": true,
+                    "field": "stripeCustomerId",
+                    "seqType": "Sequelize.STRING"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -766,5 +772,5 @@
             "indexes": []
         }
     },
-    "revision": 9
+    "revision": 10
 }

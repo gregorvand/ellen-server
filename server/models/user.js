@@ -31,6 +31,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         default: false,
       },
+      stripeCustomerId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
     },
     {
       hooks: {
