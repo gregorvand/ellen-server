@@ -64,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'customerId',
       as: 'datasets',
     })
+    User.hasOne(models.Subscription, {
+      foreignKey: 'customerId',
+      as: 'subscriptions',
+    })
     User.belongsToMany(models.Company, { through: 'UserCompanies' })
   }
 
