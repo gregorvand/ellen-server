@@ -14,6 +14,7 @@ module.exports = (app, express) => {
     // people from directly manipulating the amount on the client
     return chargeHelpers.calculateChargeFromCredits(chargeAmount)
   }
+
   app.post('/create-payment-intent', express.json(), async (req, res) => {
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
@@ -90,25 +91,83 @@ module.exports = (app, express) => {
       response.json({ received: true })
     }
   )
-
   // only create if customer does not already have a stripe customer ID
   app.post('/create-stripe-customer', auth.getToken, async (req, res) => {
     // Create a new customer object
     const currentUser = await userHelpers.currentUser(req.token)
 
-    const stripeCustomer = await stripe.customers.create({
-      email: currentUser.email,
-    })
+    try {
+      if (!currentUser.stripeCustomerId) {
+        const stripeCustomer = await stripe.customers.create({
+          email: currentUser.email,
+        })
 
+        const dbUser = await User.findOne({
+          where: {
+            id: currentUser.id,
+          },
+        })
+
+        dbUser.stripeCustomerId = stripeCustomer.id
+        await dbUser.save()
+
+        res.send({ stripeCustomer })
+      } else {
+        res.send(`${currentUser.email} already has Stripe ID`)
+      }
+    } catch (error) {
+      res.send('cannot create stripe customer', error).status(400)
+    }
+  })
+
+  // CREATE SUBSCRIPTION
+  const Subscription = require('../models').Subscription
+  app.use(express.json())
+  app.post('/create-subscription', auth.getToken, async (req, res) => {
+    const priceId = req.body.priceId
+    const quantity = req.body.quantity
+    const currentUser = await userHelpers.currentUser(req.token)
     const dbUser = await User.findOne({
       where: {
         id: currentUser.id,
       },
     })
 
-    dbUser.stripeCustomerId = stripeCustomer.id
-    await dbUser.save()
+    const stripeCustomerId = dbUser.stripeCustomerId
 
-    res.send({ stripeCustomer })
+    try {
+      // Create the subscription. Note we're expanding the Subscription's
+      // latest invoice and that invoice's payment_intent
+      // so we can pass it to the front end to confirm the payment
+
+      const subscription = await stripe.subscriptions.create({
+        customer: stripeCustomerId,
+        items: [
+          {
+            price: priceId,
+            quantity: quantity,
+          },
+        ],
+        payment_behavior: 'default_incomplete',
+        expand: ['latest_invoice.payment_intent'],
+      })
+
+      console.log('what', subscription)
+
+      Subscription.create({
+        stripe_sub_id: subscription.id,
+        current_period_end: subscription.current_period_end,
+        customer: subscription.customer,
+        customerId: currentUser.id,
+      })
+
+      res.send({
+        subscriptionId: subscription.id,
+        clientSecret: subscription.latest_invoice.payment_intent.client_secret,
+      })
+    } catch (error) {
+      // console.log('yerp', error)
+      return res.status(400).send({ error: { message: error.message } })
+    }
   })
 }
