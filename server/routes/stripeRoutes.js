@@ -48,40 +48,28 @@ module.exports = (app, express) => {
       }
 
       switch (event.type) {
-        case 'charge.succeeded':
-          const chargeObject = event.data.object
-          console.log(chargeObject.billing_details)
-
-          const user = await User.findOne({
-            where: {
-              email: chargeObject.billing_details.email,
-            },
-          })
-
-          const userId = user.dataValues.id
-
-          const creditsToAdd = chargeHelpers.calculateCreditsFromCharge(
-            chargeObject.amount_captured
-          )
-          console.log(
-            `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
-          )
-          console.log('adding', creditsToAdd)
-          creditTransationController.create({
-            creditValue: creditsToAdd,
-            activated: true,
-            method: 'internal',
-            customerId: userId,
-          })
-          break
-        case 'payment_method.attached':
-          const paymentMethod = event.data.object
-          console.log('PaymentMethod was attached to a Customer!')
-          break
-        // ... handle other event types
         case 'invoice.payment_succeeded':
           // sets the card used as the default payment method for subscription
           const dataObject = event.data.object
+          console.log('what is data?', dataObject)
+          const creditsPurchased = dataObject.lines.data[0].quantity
+
+          const subscriptionUser = await User.findOne({
+            where: {
+              email: dataObject.customer_email,
+            },
+          })
+
+          const subscriptionUserId = subscriptionUser.dataValues.id
+
+          console.log('adding', creditsPurchased)
+          creditTransationController.create({
+            creditValue: creditsPurchased,
+            activated: true,
+            method: 'subscription',
+            customerId: subscriptionUserId,
+          })
+
           if (dataObject['billing_reason'] == 'subscription_create') {
             const subscription_id = dataObject['subscription']
             const payment_intent_id = dataObject['payment_intent']
@@ -99,6 +87,18 @@ module.exports = (app, express) => {
             )
             break
           }
+        case 'charge.succeeded':
+          const chargeObject = event.data.object
+          console.log(chargeObject)
+          console.log(
+            `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
+          )
+          break
+        case 'payment_method.attached':
+          const paymentMethod = event.data.object
+          console.log('PaymentMethod was attached to a Customer!')
+          break
+        // ... handle other event types
         default:
           console.log(`Unhandled event type ${event.type}`)
       }
@@ -167,8 +167,6 @@ module.exports = (app, express) => {
         payment_behavior: 'default_incomplete',
         expand: ['latest_invoice.payment_intent'],
       })
-
-      console.log('what', subscription)
 
       Subscription.create({
         stripe_sub_id: subscription.id,
