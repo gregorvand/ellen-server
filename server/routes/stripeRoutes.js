@@ -1,5 +1,7 @@
 const chargeHelpers = require('../utils/calculateCredits')
 const creditTransationController = require('../controllers/creditTransaction')
+const userHelpers = require('../utils/getUserFromToken')
+const auth = require('../middleware/getToken')
 
 const stripe = require('stripe')(
   'sk_test_51JS9eTG3YpE4JrlJc6uQRxZLkXszTng6xf8F45KN2kqO3yZctOoOn2djQaT5mkZe7hmLmMNLWwLYunIZ7EVxSw5E00KbgNEgMZ'
@@ -88,4 +90,25 @@ module.exports = (app, express) => {
       response.json({ received: true })
     }
   )
+
+  // only create if customer does not already have a stripe customer ID
+  app.post('/create-stripe-customer', auth.getToken, async (req, res) => {
+    // Create a new customer object
+    const currentUser = await userHelpers.currentUser(req.token)
+
+    const stripeCustomer = await stripe.customers.create({
+      email: currentUser.email,
+    })
+
+    const dbUser = await User.findOne({
+      where: {
+        id: currentUser.id,
+      },
+    })
+
+    dbUser.stripeCustomerId = stripeCustomer.id
+    await dbUser.save()
+
+    res.send({ stripeCustomer })
+  })
 }
