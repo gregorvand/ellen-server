@@ -35,7 +35,6 @@ module.exports = (app, express) => {
     require('body-parser').raw({ type: '*/*' }),
     async (request, response) => {
       const sig = request.headers['stripe-signature']
-      console.log('sig', sig)
 
       let event
       try {
@@ -44,24 +43,23 @@ module.exports = (app, express) => {
           sig,
           endpointSecret
         )
-        console.log('yerp', event)
       } catch (err) {
         response.status(400).send(`Webhook Error: ${err.message}`)
       }
 
-      const chargeObject = event.data.object
-      console.log(chargeObject.billing_details)
-
-      const user = await User.findOne({
-        where: {
-          email: chargeObject.billing_details.email,
-        },
-      })
-
-      const userId = user.dataValues.id
-
       switch (event.type) {
         case 'charge.succeeded':
+          const chargeObject = event.data.object
+          console.log(chargeObject.billing_details)
+
+          const user = await User.findOne({
+            where: {
+              email: chargeObject.billing_details.email,
+            },
+          })
+
+          const userId = user.dataValues.id
+
           const creditsToAdd = chargeHelpers.calculateCreditsFromCharge(
             chargeObject.amount_captured
           )
@@ -81,11 +79,29 @@ module.exports = (app, express) => {
           console.log('PaymentMethod was attached to a Customer!')
           break
         // ... handle other event types
+        case 'invoice.payment_succeeded':
+          // sets the card used as the default payment method for subscription
+          const dataObject = event.data.object
+          if (dataObject['billing_reason'] == 'subscription_create') {
+            const subscription_id = dataObject['subscription']
+            const payment_intent_id = dataObject['payment_intent']
+
+            // Retrieve the payment intent used to pay the subscription
+            const payment_intent = await stripe.paymentIntents.retrieve(
+              payment_intent_id
+            )
+
+            const subscription = await stripe.subscriptions.update(
+              subscription_id,
+              {
+                default_payment_method: payment_intent.payment_method,
+              }
+            )
+            break
+          }
         default:
           console.log(`Unhandled event type ${event.type}`)
       }
-
-      // Handle the event
 
       // Return a response to acknowledge receipt of the event
       response.json({ received: true })
