@@ -184,4 +184,19 @@ module.exports = (app, express) => {
       return res.status(400).send({ error: { message: error.message } })
     }
   })
+
+  app.get('/current-cards-subscriptions', auth.getToken, async (req, res) => {
+    const currentUser = await userHelpers.currentUser(req.token)
+
+    const paymentMethods = await stripe.paymentMethods.list({
+      customer: currentUser.stripeCustomerId,
+      type: 'card',
+    })
+
+    const subscriptions = await stripe.subscriptions.list({
+      customer: currentUser.stripeCustomerId,
+    })
+
+    res.send({ cards: paymentMethods.data, subscriptions: subscriptions })
+  })
 }
