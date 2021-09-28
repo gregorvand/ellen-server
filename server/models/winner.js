@@ -1,35 +1,35 @@
 module.exports = (sequelize, DataTypes) => {
   const Winner = sequelize.define('Winner', {
-    endDate: { 
+    endDate: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
     },
-    prizeType: { 
+    prizeType: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
-    prizeValue: { 
+    prizeValue: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
     },
-    prizePosition: { 
+    prizePosition: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 0,
     },
-    pointsAtWin: { 
+    pointsAtWin: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 0
+      defaultValue: 0,
     },
-  });
+  })
 
   Winner.associate = (models) => {
     Winner.belongsTo(models.User, {
       foreignKey: 'customerId',
       onDelete: 'CASCADE',
-    });
-  };
+    })
+  }
 
-  return Winner;
-};
+  return Winner
+}

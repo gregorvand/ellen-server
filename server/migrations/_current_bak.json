@@ -224,6 +224,17 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
+                "companyId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Companies",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "companyId",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "customerId": {
                     "allowNull": true,
                     "references": {
@@ -562,6 +573,12 @@
                     "field": "activated",
                     "seqType": "Sequelize.BOOLEAN"
                 },
+                "stripeCustomerId": {
+                    "allowNull": true,
+                    "unique": true,
+                    "field": "stripeCustomerId",
+                    "seqType": "Sequelize.STRING"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -755,5 +772,5 @@
             "indexes": []
         }
     },
-    "revision": 8
+    "revision": 10
 }

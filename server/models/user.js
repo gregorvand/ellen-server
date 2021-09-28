@@ -31,6 +31,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         default: false,
       },
+      stripeCustomerId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+      },
     },
     {
       hooks: {
@@ -58,6 +63,10 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.DatasetAccess, {
       foreignKey: 'customerId',
       as: 'datasets',
+    })
+    User.hasOne(models.Subscription, {
+      foreignKey: 'customerId',
+      as: 'subscriptions',
     })
     User.belongsToMany(models.Company, { through: 'UserCompanies' })
   }

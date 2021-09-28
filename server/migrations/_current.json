@@ -528,6 +528,55 @@
             },
             "indexes": []
         },
+        "Subscriptions": {
+            "tableName": "Subscriptions",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "stripe_sub_id": {
+                    "allowNull": false,
+                    "field": "stripe_sub_id",
+                    "seqType": "Sequelize.STRING"
+                },
+                "current_period_end": {
+                    "allowNull": false,
+                    "field": "current_period_end",
+                    "seqType": "Sequelize.DECIMAL"
+                },
+                "customer": {
+                    "allowNull": false,
+                    "field": "customer",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "customerId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "customerId",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
         "Users": {
             "tableName": "Users",
             "schema": {
@@ -572,6 +621,12 @@
                     "default": false,
                     "field": "activated",
                     "seqType": "Sequelize.BOOLEAN"
+                },
+                "stripeCustomerId": {
+                    "allowNull": true,
+                    "unique": true,
+                    "field": "stripeCustomerId",
+                    "seqType": "Sequelize.STRING"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -766,5 +821,5 @@
             "indexes": []
         }
     },
-    "revision": 9
+    "revision": 11
 }
