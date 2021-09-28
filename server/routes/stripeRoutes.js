@@ -199,4 +199,9 @@ module.exports = (app, express) => {
 
     res.send({ cards: paymentMethods.data, subscriptions: subscriptions })
   })
+
+  app.delete('/subscription', auth.getToken, async (req, res) => {
+    const deleted = await stripe.subscriptions.del(req.body.subId)
+    res.send(deleted)
+  })
 }
