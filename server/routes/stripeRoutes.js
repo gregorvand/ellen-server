@@ -43,68 +43,13 @@ module.exports = (app, express) => {
           sig,
           endpointSecret
         )
+        handleStripeWebook(event)
+        response.json({ received: true })
       } catch (err) {
         response.status(400).send(`Webhook Error: ${err.message}`)
       }
 
-      switch (event.type) {
-        case 'invoice.payment_succeeded':
-          // sets the card used as the default payment method for subscription
-          const dataObject = event.data.object
-          console.log('what is data?', dataObject)
-          const creditsPurchased = dataObject.lines.data[0].quantity
-
-          const subscriptionUser = await User.findOne({
-            where: {
-              email: dataObject.customer_email,
-            },
-          })
-
-          const subscriptionUserId = subscriptionUser.dataValues.id
-
-          console.log('adding', creditsPurchased)
-          creditTransationController.create({
-            creditValue: creditsPurchased,
-            activated: true,
-            method: 'subscription',
-            customerId: subscriptionUserId,
-          })
-
-          if (dataObject['billing_reason'] == 'subscription_create') {
-            const subscription_id = dataObject['subscription']
-            const payment_intent_id = dataObject['payment_intent']
-
-            // Retrieve the payment intent used to pay the subscription
-            const payment_intent = await stripe.paymentIntents.retrieve(
-              payment_intent_id
-            )
-
-            const subscription = await stripe.subscriptions.update(
-              subscription_id,
-              {
-                default_payment_method: payment_intent.payment_method,
-              }
-            )
-            break
-          }
-        case 'charge.succeeded':
-          const chargeObject = event.data.object
-          console.log(chargeObject)
-          console.log(
-            `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
-          )
-          break
-        case 'payment_method.attached':
-          const paymentMethod = event.data.object
-          console.log('PaymentMethod was attached to a Customer!')
-          break
-        // ... handle other event types
-        default:
-          console.log(`Unhandled event type ${event.type}`)
-      }
-
-      // Return a response to acknowledge receipt of the event
-      response.json({ received: true })
+      // Return a response to acknowledge receipt of the even
     }
   )
   // only create if customer does not already have a stripe customer ID
@@ -204,4 +149,62 @@ module.exports = (app, express) => {
     const deleted = await stripe.subscriptions.del(req.body.subId)
     res.send(deleted)
   })
+
+  const handleStripeWebook = async function (event) {
+    switch (event.type) {
+      case 'invoice.payment_succeeded':
+        // sets the card used as the default payment method for subscription
+        const dataObject = event.data.object
+        console.log('what is data?', dataObject)
+        const creditsPurchased = dataObject.lines.data[0].quantity
+
+        const subscriptionUser = await User.findOne({
+          where: {
+            email: dataObject.customer_email,
+          },
+        })
+
+        const subscriptionUserId = subscriptionUser.dataValues.id
+
+        console.log('adding', creditsPurchased)
+        creditTransationController.create({
+          creditValue: creditsPurchased,
+          activated: true,
+          method: 'subscription',
+          customerId: subscriptionUserId,
+        })
+
+        if (dataObject['billing_reason'] == 'subscription_create') {
+          const subscription_id = dataObject['subscription']
+          const payment_intent_id = dataObject['payment_intent']
+
+          // Retrieve the payment intent used to pay the subscription
+          const payment_intent = await stripe.paymentIntents.retrieve(
+            payment_intent_id
+          )
+
+          const subscription = await stripe.subscriptions.update(
+            subscription_id,
+            {
+              default_payment_method: payment_intent.payment_method,
+            }
+          )
+          break
+        }
+      case 'charge.succeeded':
+        const chargeObject = event.data.object
+        console.log(chargeObject)
+        console.log(
+          `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
+        )
+        break
+      case 'payment_method.attached':
+        const paymentMethod = event.data.object
+        console.log('PaymentMethod was attached to a Customer!')
+        break
+      // ... handle other event types
+      default:
+        console.log(`Unhandled event type ${event.type}`)
+    }
+  }
 }
