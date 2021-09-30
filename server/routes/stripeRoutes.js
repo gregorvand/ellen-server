@@ -3,9 +3,7 @@ const creditTransationController = require('../controllers/creditTransaction')
 const userHelpers = require('../utils/getUserFromToken')
 const auth = require('../middleware/getToken')
 
-const stripe = require('stripe')(
-  'sk_test_51JS9eTG3YpE4JrlJc6uQRxZLkXszTng6xf8F45KN2kqO3yZctOoOn2djQaT5mkZe7hmLmMNLWwLYunIZ7EVxSw5E00KbgNEgMZ'
-)
+const stripe = require('stripe')(process.env.STRIPE_API_SEC)
 
 module.exports = (app, express) => {
   const calculateOrderAmount = (chargeAmount) => {
@@ -125,7 +123,6 @@ module.exports = (app, express) => {
         clientSecret: subscription.latest_invoice.payment_intent.client_secret,
       })
     } catch (error) {
-      // console.log('yerp', error)
       return res.status(400).send({ error: { message: error.message } })
     }
   })
@@ -155,7 +152,7 @@ module.exports = (app, express) => {
       case 'invoice.payment_succeeded':
         // sets the card used as the default payment method for subscription
         const dataObject = event.data.object
-        console.log('what is data?', dataObject)
+        console.log('sub data: ', dataObject)
         const creditsPurchased = dataObject.lines.data[0].quantity
 
         const subscriptionUser = await User.findOne({
@@ -193,7 +190,6 @@ module.exports = (app, express) => {
         }
       case 'charge.succeeded':
         const chargeObject = event.data.object
-        console.log(chargeObject)
         console.log(
           `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
         )
