@@ -52,12 +52,21 @@ module.exports = {
         res.send(400)
       }
 
-      createDatasetAccess({
-        userId: currentUser.id,
-        datasetId: req.body.datasetId,
-        companyId: req.body.companyId,
-      }).then((result) => {
-        res.send(result)
+      const dataSetsToPurchase = JSON.parse(req.body.datasetIdArray)
+
+      let allPromises = []
+
+      dataSetsToPurchase.forEach((dataSetId) => {
+        let thePromise = createDatasetAccess({
+          userId: currentUser.id,
+          datasetId: dataSetId,
+          companyId: req.body.companyId,
+        })
+
+        allPromises.push(thePromise)
+      })
+      await Promise.all(allPromises).then((values) => {
+        res.send(values)
       })
     } else {
       console.log('purchase was not possible, likely insufficent funds')
