@@ -33,7 +33,8 @@ module.exports = {
 
   async datasetAccessCharge(req, res) {
     const currentUser = await userHelpers.currentUser(req.token)
-    const tokenCost = process.env.DATASET_COST_TOKEN
+    const dataSetsToPurchase = req.body.datasetIdArray
+    const tokenCost = process.env.DATASET_COST_TOKEN * dataSetsToPurchase.length
 
     // check credit balance
     let creditResult = await creditTransactionController.getCreditBalance(
@@ -52,12 +53,19 @@ module.exports = {
         res.send(400)
       }
 
-      createDatasetAccess({
-        userId: currentUser.id,
-        datasetId: req.body.datasetId,
-        companyId: req.body.companyId,
-      }).then((result) => {
-        res.send(result)
+      let allPromises = []
+
+      dataSetsToPurchase.forEach((dataSetId) => {
+        let thePromise = createDatasetAccess({
+          userId: currentUser.id,
+          datasetId: dataSetId,
+          companyId: req.body.companyId,
+        })
+
+        allPromises.push(thePromise)
+      })
+      await Promise.all(allPromises).then((values) => {
+        res.send(values)
       })
     } else {
       console.log('purchase was not possible, likely insufficent funds')
