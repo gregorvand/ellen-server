@@ -33,7 +33,8 @@ module.exports = {
 
   async datasetAccessCharge(req, res) {
     const currentUser = await userHelpers.currentUser(req.token)
-    const tokenCost = process.env.DATASET_COST_TOKEN
+    const dataSetsToPurchase = req.body.datasetIdArray
+    const tokenCost = process.env.DATASET_COST_TOKEN * dataSetsToPurchase.length
 
     // check credit balance
     let creditResult = await creditTransactionController.getCreditBalance(
@@ -51,8 +52,6 @@ module.exports = {
       } catch (e) {
         res.send(400)
       }
-
-      const dataSetsToPurchase = JSON.parse(req.body.datasetIdArray)
 
       let allPromises = []
 
