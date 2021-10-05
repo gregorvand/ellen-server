@@ -104,8 +104,6 @@ module.exports = {
         req.body.dateEnd
       )
 
-      console.log(allOrderData)
-
       // now get all the avg data
       const data = getOrderDifferenceIncrement(allOrderData)
       res.send(data)
