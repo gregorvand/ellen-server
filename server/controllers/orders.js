@@ -1,5 +1,7 @@
 const Order = require('../models').Order
 const Company = require('../models').Company
+
+const DatasetAccess = require('../controllers/datasetAccess')
 const pointsController = require('../controllers/points')
 const { Op } = require('sequelize')
 const pointsTransactionQueue =
@@ -7,6 +9,10 @@ const pointsTransactionQueue =
 const pointsHelper = require('../utils/getPointValues')
 const Sentry = require('@sentry/node')
 const db = require('../models/index')
+const dayjs = require('dayjs')
+
+const userHelpers = require('../utils/getUserFromToken')
+const dataUtilties = require('../utils/dateIdentifier.js')
 
 const {
   getOrders,
@@ -97,18 +103,41 @@ module.exports = {
   },
 
   async companyDataByMonth(req, res) {
-    if (req.body.companyId) {
-      const allOrderData = await getOrdersByMonth(
-        req.body.companyId,
-        req.body.dateStart,
-        req.body.dateEnd
-      )
+    const { companyId, dateStart, dateEnd } = req.body
 
-      // now get all the avg data
-      const data = getOrderDifferenceIncrement(allOrderData)
-      res.send(data)
+    const month = dayjs(dateStart).get('month')
+    const year = dayjs(dateStart).get('year')
+    const dataIdToCheck = dataUtilties.constructDateIdentifier(
+      companyId,
+      month,
+      year
+    )
+    const currentUser = await userHelpers.currentUser(req.token)
+    console.log(currentUser.id)
+    console.log(dataIdToCheck)
+
+    const accessGranted = await DatasetAccess.getAccessCheck(
+      currentUser.id,
+      dataIdToCheck
+    )
+
+    if (accessGranted) {
+      if (req.body.companyId) {
+        const allOrderData = await getOrdersByMonth(
+          req.body.companyId,
+          req.body.dateStart,
+          req.body.dateEnd
+        )
+
+        // now get all the avg data
+        const data = getOrderDifferenceIncrement(allOrderData)
+        res.send(data)
+      } else {
+        res.send('could not find company by Id').status(400)
+      }
     } else {
-      res.send('could not find company by Id').status(400)
+      // not authorized, ie user does not have access to this dataset
+      res.sendStatus(401)
     }
   },
 

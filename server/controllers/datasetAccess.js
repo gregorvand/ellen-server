@@ -72,6 +72,13 @@ module.exports = {
       res.status(433).send('not enough credits')
     }
   },
+
+  // internal
+  async getAccessCheck(userId, datasetId) {
+    return DatasetAccess.findOne({
+      where: { customerId: userId, datasetId: datasetId },
+    }).then((result) => result)
+  },
 }
 
 async function createDatasetAccess(accessProperties) {

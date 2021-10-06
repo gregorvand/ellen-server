@@ -7,6 +7,7 @@ module.exports = {
     const user = await User.findOne({
       where: { email: decoded.user.email },
     })
+    console.log(user.email)
     return user
   },
 }
