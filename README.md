@@ -30,10 +30,10 @@ For local environments you will need a tunnel running via [ngrok.io](ngrok.io) o
 **charge**
 - succeeded
 
-**payment_method
+**payment_method**
 - attached
 
-**Invoice
+**invoice**
 - payment_succeeded
 
 
