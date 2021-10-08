@@ -26,9 +26,15 @@ For any new instance (prod / local) go to the [Stripe webhook dashboard](https:/
 
 For local environments you will need a tunnel running via [ngrok.io](ngrok.io) or similar to receive these
 
-### Webhooks required (as of 2/9/2021)
-**Charge**
-- Succeeded
+### Webhooks required (as of 1/10/2021)
+**charge**
+- succeeded
+
+**payment_method
+- attached
+
+**Invoice
+- payment_succeeded
 
 
  ----
