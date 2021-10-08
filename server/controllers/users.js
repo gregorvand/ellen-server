@@ -132,6 +132,19 @@ module.exports = {
     }
   },
 
+  async removeUserCompanies(req, res) {
+    try {
+      const currentUser = await userHelpers.currentUser(req.token)
+      const selectedCompanyId = req.body.selectedCompany
+      currentUser
+        .removeCompanies(selectedCompanyId)
+        .then(() => res.sendStatus(201))
+        .catch((error) => res.status(400).send(error))
+    } catch (err) {
+      res.status(401)
+    }
+  },
+
   // takes an object from function calling it, e.g:
   // {'email': email}
   // where the first is a string to match DB column name, second is the object to compare

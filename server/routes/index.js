@@ -187,6 +187,12 @@ module.exports = (app) => {
     usersController.updateUserCompanies
   )
 
+  app.put(
+    '/api/users/update/companies',
+    auth.getToken,
+    usersController.removeUserCompanies
+  )
+
   app.get(
     '/api/user/credit-balance',
     auth.getToken,
