@@ -3,3 +3,4 @@
 /node_modules
 .env
 /vue-app/ellen-b2b/db.json
+/edison_data
