@@ -1,16 +1,19 @@
 const Order = require('../../models').Order
+
+const Company = require('../../models').Company
 const { Op } = require('sequelize')
 const dayjs = require('dayjs')
 
 async function getOrders(id, lookbackMonths = false) {
   let dateRange = lookbackMonths ? lookbackMonths : 0
+  const company = await Company.findOne({ where: { id: id } })
 
   // if a timebound has been supplied, we need to figure what the latest
   // date of an Order we have is
   if (lookbackMonths) {
     const latestDate = await Order.findOne({
       where: {
-        companyId: id,
+        fromEmail: company.emailIdentifier,
         orderNumber: {
           [Op.gt]: 1,
         },
@@ -26,7 +29,7 @@ async function getOrders(id, lookbackMonths = false) {
 
   return Order.findAll({
     where: {
-      companyId: id,
+      fromEmail: company.emailIdentifier,
       orderNumber: {
         [Op.gt]: 1,
       },
@@ -45,9 +48,11 @@ async function getOrders(id, lookbackMonths = false) {
 }
 
 async function getOrdersByMonth(id, dateStart, dateEnd) {
+  const company = await Company.findOne({ where: { id: id } })
+  console.log('COMPANY!!', company.nameIdentifier)
   return Order.findAll({
     where: {
-      companyId: id,
+      fromEmail: company.emailIdentifier,
       orderNumber: {
         [Op.gt]: 1,
       },

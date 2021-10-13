@@ -1,4 +1,5 @@
 const Company = require('./models').Company
+const { Op } = require('sequelize')
 // const elasticsearch = require('elasticsearch')
 
 // const client = new elasticsearch.Client({
@@ -54,7 +55,13 @@ const client = new Client({
 // Needed to update elasticsearch index
 async function populateDB() {
   let bulk = []
-  const companies = await Company.findAll()
+  const companies = await Company.findAll({
+    where: {
+      orderSuffix: {
+        [Op.or]: [null, ''],
+      },
+    },
+  })
 
   companies.forEach((company, i) => {
     let data = {
