@@ -1,3 +1,4 @@
+require('dotenv').config()
 const Company = require('./models').Company
 // const elasticsearch = require('elasticsearch')
 
