@@ -3,7 +3,7 @@ const Company = require('../server/models').Company
 const csv = require('csvtojson')
 
 // get data
-const csvFilePath = '../edison_data/export_nfbij_024.csv'
+const csvFilePath = '../edison_data/2021_10_09_sellers.csv'
 
 async function convertCSV() {
   const jsonArray = await csv({

@@ -39,6 +39,12 @@ if (config.use_env_variable) {
     sslmode: config.sslmode,
     dialectOptions: dialectOptions,
     logging: false,
+    pool: {
+      max: 15,
+      min: 0,
+      acquire: 30000,
+      idle: 10000,
+    },
   })
 }
 

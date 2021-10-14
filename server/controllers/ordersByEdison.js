@@ -45,29 +45,16 @@ const insertEdisonRowNoId = async function (...edisonRow) {
     sanitizedOrderNumber !== '' &&
     sanitizedOrderNumber > 0
   ) {
-    const isAnOrder = await Order.count({
-      where: {
-        orderNumber: parseInt(sanitizedOrderNumber),
-        fromEmail: edisonData.from_domain,
-      },
+    return await Order.create({
+      orderNumber: parseInt(sanitizedOrderNumber),
+      fromEmail: edisonData.from_domain,
+      customerEmail: edisonData.user_id,
+      plainContent: 'not available',
+      totalValue:
+        edisonData.order_total_amount == '' ? 0 : edisonData.order_total_amount, // run decimal migration
+      companyId: 2,
+      orderDate: edisonData.email_time,
     })
-
-    if (isAnOrder < 1) {
-      return await Order.create({
-        orderNumber: parseInt(sanitizedOrderNumber),
-        fromEmail: edisonData.from_domain,
-        customerEmail: edisonData.user_id,
-        plainContent: 'not available',
-        totalValue:
-          edisonData.order_total_amount == ''
-            ? 0
-            : edisonData.order_total_amount, // run decimal migration
-        companyId: 2,
-        orderDate: edisonData.email_time,
-      })
-    } else {
-      // console.log('already had order', orderNumberIdentifier)
-    }
   } else {
     // console.log('invalid order number', orderNumberIdentifier)
   }

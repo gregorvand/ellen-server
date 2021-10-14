@@ -2,23 +2,11 @@ require('dotenv').config()
 const csv = require('csvtojson')
 const cliProgress = require('cli-progress')
 const ordersControllerEdison = require('../server/controllers/ordersByEdison')
-let throttle = require('lodash.throttle')
 
 const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 
 // get data
-const csvFilePath = '../edison_data/export_ujgly_002.csv'
-const csvFilesPathsArray = [
-  '../edison_data/export_clbcf_012.csv',
-  '../edison_data/export_clbcf_013.csv',
-]
-// const csvFilePath = '../edison_data/export_hypershop.csv'
-
-async function convertAndHandleCSVtoDB(csvFilesPathsArray) {
-  csvFilesPathsArray.forEach((csvFile) => {
-    importAllCSVToOrders(csvFile)
-  })
-}
+const csvFilePath = '../edison_data/2021_10_09_000.csv'
 
 // convertAndHandleCSVtoDB(csvFilesPathsArray)
 importAllCSVToOrders(csvFilePath)

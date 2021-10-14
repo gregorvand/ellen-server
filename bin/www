@@ -1,37 +1,41 @@
 // This will be our application entry. We'll setup our server here.
-const app = require('../app');
-const server = require('http').createServer(app);
+const app = require('../app')
+const server = require('http').createServer(app)
 
-const io = require('socket.io')(server,
-options = {
-  cors:true,
-  origins:["http://206.189.182.91:8080", "http://192.168.0.104:8080", "*"],
-  credentials: false
- }
-);
-
-const { eventEmitter } = require ('../server/services/eventBus')
-
-io.on("connection", socket => { 
-  eventEmitter.on('somedata', (data) => {
-    socket.emit("earningsData", data);
+const io = require('socket.io')(
+  server,
+  (options = {
+    cors: true,
+    origins: ['http://206.189.182.91:8080', 'http://192.168.0.104:8080', '*'],
+    credentials: false,
   })
-});
+)
 
-server.listen(8000);
+const { eventEmitter } = require('../server/services/eventBus')
 
-const Queues = require ('../server/services/bull-queues');
-const { initCronAddEarnings, initCronAddCalendarEvents, initCronEmailPublicResults } = require ('../server/services/earnings/earningsDailyQueue');
+io.on('connection', (socket) => {
+  eventEmitter.on('somedata', (data) => {
+    socket.emit('earningsData', data)
+  })
+})
 
-initCronAddEarnings()
-initCronAddCalendarEvents()
-initCronEmailPublicResults()
+server.listen(8000)
 
-Queues.initEarningsQueues()
-Queues.initProcessEarningsQueueCron()
-Queues.initGetCalendarEventsQueueCron()
-Queues.initEmailPublicCompanyDataSend()
+// const Queues = require('../server/services/bull-queues')
+// const {
+//   initCronAddEarnings,
+//   initCronAddCalendarEvents,
+//   initCronEmailPublicResults,
+// } = require('../server/services/earnings/earningsDailyQueue')
 
+// initCronAddEarnings()
+// initCronAddCalendarEvents()
+// initCronEmailPublicResults()
 
-const port = parseInt(process.env.PORT, 10) || 8000;
-app.set('port', port);
+// Queues.initEarningsQueues()
+// Queues.initProcessEarningsQueueCron()
+// Queues.initGetCalendarEventsQueueCron()
+// Queues.initEmailPublicCompanyDataSend()
+
+const port = parseInt(process.env.PORT, 10) || 8000
+app.set('port', port)
