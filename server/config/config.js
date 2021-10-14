@@ -11,8 +11,8 @@ module.exports = {
   production: {
     username: 'doadmin',
     password: `${process.env.PROD_DB_PASS}`,
-    database: 'defaultdb',
-    host: 'ellen-cluster-1-do-user-8723588-0.b.db.ondigitalocean.com',
+    database: 'todos-dev',
+    host: 'db-postgresql-sfo2-79931-do-user-8723588-0.b.db.ondigitalocean.com',
     port: 25060,
     dialect: 'postgres',
     ssl: true,
