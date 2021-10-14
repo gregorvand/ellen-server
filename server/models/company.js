@@ -42,11 +42,6 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   Company.associate = (models) => {
-    Company.hasMany(models.Order, {
-      foreignKey: 'companyId',
-      as: 'orders',
-      onDelete: 'CASCADE',
-    })
     Company.hasMany(models.Earning, {
       foreignKey: 'companyId',
       as: 'earnings',
