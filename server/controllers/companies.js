@@ -15,14 +15,7 @@ module.exports = {
   },
 
   listByCompany(req, res) {
-    return Company.findByPk(req.params.companyId, {
-      include: [
-        {
-          model: Order,
-          as: 'orders',
-        },
-      ],
-    })
+    return Company.findByPk(req.params.companyId)
       .then((company) => res.status(200).send(company))
       .catch((error) => res.status(400).send(error))
   },
