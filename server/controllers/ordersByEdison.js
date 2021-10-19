@@ -45,18 +45,24 @@ const insertEdisonRowNoId = async function (...edisonRow) {
     sanitizedOrderNumber !== '' &&
     sanitizedOrderNumber > 0
   ) {
-    return await Order.create({
-      orderNumber: parseInt(sanitizedOrderNumber),
-      fromEmail: edisonData.from_domain,
-      customerEmail: edisonData.user_id,
-      plainContent: 'not available',
-      totalValue:
-        edisonData.order_total_amount == '' ? 0 : edisonData.order_total_amount, // run decimal migration
-      companyId: 2,
-      orderDate: edisonData.email_time,
-    })
+    try {
+      return await Order.create({
+        orderNumber: parseInt(sanitizedOrderNumber),
+        fromEmail: edisonData.from_domain,
+        customerEmail: edisonData.user_id,
+        plainContent: 'not available',
+        totalValue:
+          edisonData.order_total_amount == ''
+            ? 0
+            : edisonData.order_total_amount, // run decimal migration
+        companyId: 2,
+        orderDate: edisonData.email_time,
+      })
+    } catch (e) {
+      console.log(' could not add row')
+    }
   } else {
-    // console.log('invalid order number', orderNumberIdentifier)
+    console.log('invalid order number', orderNumberIdentifier)
   }
 }
 
