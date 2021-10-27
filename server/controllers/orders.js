@@ -131,7 +131,23 @@ module.exports = {
 
         // now get all the avg data
         const data = getOrderDifferenceIncrement(allOrderData)
-        res.send(data)
+        let total = 0
+        const { removeDuplicates } = require('../utils/helpers')
+
+        let filteredData = removeDuplicates(data, 'y')
+        parseNegative = filteredData.filter((data) => {
+          if (parseInt(data.y) > 0) {
+            return data
+          }
+        })
+
+        filteredData = parseNegative.map((dataPoint) => {
+          total += parseInt(dataPoint.y)
+        })
+        const monthAvg = [
+          { y: parseInt(total / filteredData.length), x: req.body.dateEnd },
+        ]
+        res.send({ daily: data, monthly: monthAvg })
       } else {
         res.send('could not find company by Id').status(400)
       }
