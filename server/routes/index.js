@@ -6,6 +6,7 @@ const earningCalendarController = require('../controllers/earningCalendar')
 const companyCategoryController = require('../controllers/companyCategory')
 const datasetAccessController = require('../controllers/datasetAccess')
 const ordersController = require('../controllers/orders')
+const edisonController = require('../controllers/edisonOrders')
 const usersController = require('../controllers/users')
 const creditTransactionController = require('../controllers/creditTransaction')
 const pointsController = require('../controllers/points')
@@ -304,6 +305,12 @@ module.exports = (app) => {
     '/api/dataset-access/charge',
     auth.getToken,
     datasetAccessController.datasetAccessCharge
+  )
+
+  app.get(
+    '/api/edison-test',
+    auth.getToken,
+    edisonController.edisonOrdersUnqiueOrderNumber
   )
 
   app.get('/api/companycategory/list', companyCategoryController.list)

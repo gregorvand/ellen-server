@@ -102,6 +102,9 @@ module.exports = {
     }
   },
 
+  // Returns the data for a given company
+  // Checks user's subcriptions first
+  // If granted
   async companyDataByMonth(req, res) {
     const { companyId, dateStart, dateEnd } = req.body
 
