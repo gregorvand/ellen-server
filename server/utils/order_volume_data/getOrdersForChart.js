@@ -1,7 +1,9 @@
-const Order = require('../../models').Order
+// const Order = require('../../models').Order
+const EdisonOrder = require('../../models').EdisonOrder
 
 const Company = require('../../models').Company
 const { Op } = require('sequelize')
+const db = require('../../models/index')
 const dayjs = require('dayjs')
 
 async function getOrders(id, lookbackMonths = false) {
@@ -11,60 +13,78 @@ async function getOrders(id, lookbackMonths = false) {
   // if a timebound has been supplied, we need to figure what the latest
   // date of an Order we have is
   if (lookbackMonths) {
-    const latestDate = await Order.findOne({
+    const latestDate = await EdisonOrder.findOne({
       where: {
-        fromEmail: company.emailIdentifier,
+        fromDomain: company.emailIdentifier,
         orderNumber: {
           [Op.gt]: 1,
         },
       },
-      attributes: ['orderDate'],
-      order: [['orderDate', 'DESC']],
+      attributes: ['emailDate'],
+      order: [['emailDate', 'DESC']],
     })
 
-    let dateToUse = dayjs(latestDate.orderDate)
+    let dateToUse = dayjs(latestDate.emailDate)
     const earlierDate = dateToUse.subtract(lookbackMonths, 'month')
     dateRange = earlierDate.toISOString()
   }
 
-  return Order.findAll({
+  return EdisonOrder.findAll({
     where: {
-      fromEmail: company.emailIdentifier,
+      fromDomain: company.emailIdentifier,
       orderNumber: {
         [Op.gt]: 1,
       },
-      orderDate: {
+      emailDate: {
         [Op.gt]: dateRange, // default for all dates
       },
     },
     attributes: [
-      ['orderDate', 't'],
+      ['emailDate', 't'],
       ['orderNumber', 'y'],
     ],
-    order: [['orderDate', 'ASC']],
+    order: [['emailDate', 'ASC']],
   })
     .then((orders) => orders)
     .catch((error) => console.error('error with company page lookup', error))
 }
 
+// async function getOrdersByMonth(id, dateStart, dateEnd) {
+//   const company = await Company.findOne({ where: { id: id } })
+//   console.log('COMPANY!!', company.nameIdentifier)
+//   const [results] = await db.sequelize.query(
+//     `SELECT
+//         DISTINCT ON ("orderNumber") *
+//       FROM
+//         "EdisonOrders"
+//       WHERE
+//         "fromDomain" = 'support@fragrantjewels.com'
+//         and "orderNumber" ~ '^\\d+$'
+//       ORDER BY
+//         "orderNumber",
+//         "emailDate"`
+//   )
+//   return results
+// }
+
 async function getOrdersByMonth(id, dateStart, dateEnd) {
   const company = await Company.findOne({ where: { id: id } })
   console.log('COMPANY!!', company.nameIdentifier)
-  return Order.findAll({
+  return EdisonOrder.findAll({
     where: {
-      fromEmail: company.emailIdentifier,
+      fromDomain: company.emailIdentifier,
       orderNumber: {
-        [Op.gt]: 1,
+        [Op.regexp]: '^\\d+$',
       },
-      orderDate: {
+      emailDate: {
         [Op.between]: [dateStart, dateEnd], // default for all dates
       },
     },
     attributes: [
-      ['orderDate', 't'],
+      ['emailDate', 't'],
       ['orderNumber', 'y'],
     ],
-    order: [['orderDate', 'ASC']],
+    order: [['emailDate', 'ASC']],
   })
     .then((orders) => orders)
     .catch((error) => console.error('error with company page lookup', error))
