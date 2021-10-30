@@ -39,6 +39,8 @@ if (config.use_env_variable) {
     sslmode: config.sslmode,
     dialectOptions: dialectOptions,
     logging: false,
+    dialectOptions: { useUTC: false },
+    timezone: '+08:00',
     pool: {
       max: 15,
       min: 0,
