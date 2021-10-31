@@ -34,7 +34,9 @@ module.exports = (app) => {
 
   app.post('/api/orders', ordersController.create)
 
-  app.post('/api/companies/orders', ordersController.listByCompany)
+  // Below endpoint deprecated?
+  // app.post('/api/companies/orders', ordersController.listByCompany)
+
   app.post('/api/points', pointsController.create)
   app.get('/api/points', function (req, res) {
     pointsController
@@ -286,7 +288,7 @@ module.exports = (app) => {
   app.post(
     '/api/orders/dates-available',
     auth.getToken,
-    ordersController.monthsAvailableByYear
+    edisonController.monthsAvailableByYear
   )
 
   app.post(
@@ -310,7 +312,7 @@ module.exports = (app) => {
   app.get(
     '/api/edison-test',
     auth.getToken,
-    edisonController.edisonOrdersUnqiueOrderNumber
+    edisonController.edisonOrdersUniqueOrderNumber
   )
 
   app.get('/api/companycategory/list', companyCategoryController.list)
