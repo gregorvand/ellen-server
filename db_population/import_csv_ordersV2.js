@@ -14,8 +14,8 @@ function padNumber(num, len = 3) {
   return `${num}`.padStart(len, '0')
 }
 
-const START_AT_FILE = 2 // filenumber to start at. e.g. '1' for xxxx_001.csv
-const DOWNLOAD_IDENTIFIER = 'wagbp' // csvexplorer adds a unique identifier to exports
+const START_AT_FILE = 1 // filenumber to start at. e.g. '1' for xxxx_001.csv
+const DOWNLOAD_IDENTIFIER = 'xxxxx' // csvexplorer adds a unique identifier to exports
 
 // Run the below function when file is run
 importAllCSVToOrders()
