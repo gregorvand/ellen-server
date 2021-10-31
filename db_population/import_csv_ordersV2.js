@@ -1,22 +1,32 @@
+// For use with EdisonOrder model
+
 require('dotenv').config()
 const csv = require('csvtojson')
 const cliProgress = require('cli-progress')
 const ordersControllerEdison = require('../server/controllers/edisonOrders')
 
 const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
+const fs = require('fs')
+const dirLength = fs.readdirSync('../edison_data').length
 
 // get data
-const csvFilePath = '../edison_data/export_fkdru_004.csv'
 
-// convertAndHandleCSVtoDB(csvFilesPathsArray)
-importAllCSVToOrders(csvFilePath)
-
-async function convertCSV(csvFilePath) {
-  const jsonArray = await csv().fromFile(csvFilePath)
-  return jsonArray
+function padNumber(num, len = 3) {
+  return `${num}`.padStart(len, '0')
 }
 
-async function importAllCSVToOrders(csvFilePath) {
+importAllCSVToOrders()
+
+async function importAllCSVToOrders(fileIterator = 1) {
+  const csvFilePath = `../edison_data/export_wagbp_${padNumber(
+    fileIterator
+  )}.csv`
+
+  async function convertCSV(csvFilePath) {
+    const jsonArray = await csv().fromFile(csvFilePath)
+    return jsonArray
+  }
+
   const data = await convertCSV(csvFilePath)
 
   // purely for console output formatting
@@ -36,7 +46,15 @@ async function importAllCSVToOrders(csvFilePath) {
         bar1.stop()
         console.log('added', insertCount)
         console.log(`processed ${fileName[fileName.length - 1]}`)
-        process.exit(1)
+
+        // chunk through every file in the directory
+        if (fileIterator < dirLength) {
+          fileIterator += 1
+          // callback
+          importAllCSVToOrders(fileIterator)
+        } else {
+          process.exit(1)
+        }
       }
     })
   })
