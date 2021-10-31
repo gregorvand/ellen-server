@@ -19,7 +19,10 @@ const db = {}
 let dialectOptions = false
 
 if (env == 'production') {
-  dialectOptions = { ssl: { rejectUnauthorized: false } }
+  dialectOptions = {
+    ssl: { rejectUnauthorized: false },
+    useUTC: false,
+  }
 }
 
 let sequelize
@@ -39,7 +42,6 @@ if (config.use_env_variable) {
     sslmode: config.sslmode,
     dialectOptions: dialectOptions,
     logging: false,
-    dialectOptions: { useUTC: false },
     timezone: '+08:00',
     pool: {
       max: 15,
