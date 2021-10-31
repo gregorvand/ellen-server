@@ -9,16 +9,19 @@ const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 const fs = require('fs')
 const dirLength = fs.readdirSync('../edison_data').length
 
-// get data
-
+// padds iterator to match filename syntax
 function padNumber(num, len = 3) {
   return `${num}`.padStart(len, '0')
 }
 
+const START_AT_FILE = 2 // filenumber to start at. e.g. '1' for xxxx_001.csv
+const DOWNLOAD_IDENTIFIER = 'wagbp' // csvexplorer adds a unique identifier to exports
+
+// Run the below function when file is run
 importAllCSVToOrders()
 
-async function importAllCSVToOrders(fileIterator = 1) {
-  const csvFilePath = `../edison_data/export_wagbp_${padNumber(
+async function importAllCSVToOrders(fileIterator = START_AT_FILE) {
+  const csvFilePath = `../edison_data/export_${DOWNLOAD_IDENTIFIER}_${padNumber(
     fileIterator
   )}.csv`
 
