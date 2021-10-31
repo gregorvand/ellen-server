@@ -5,14 +5,15 @@ const { removeDuplicates } = require('../helpers')
 function getOrderDifferenceIncrement(orders) {
   // discard any duplcates based on data
 
+  // useful debug for unfiltered dates/data
+  // console.log('all data considered', orders)
   // first map T value just to a date without time
   const flattenedTimes = orders.map((order) => ({
-    t: dayjs(order.dataValues.t).startOf('day').toISOString(),
-    y: order.dataValues.y,
+    t: dayjs(order.t).startOf('day').toISOString(),
+    y: order.y,
   }))
 
   const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 't')
-  // console.log(flattenedTimesNoDuplicates)
   console.log(flattenedTimesNoDuplicates.length)
   console.log('reduced from', flattenedTimes.length)
 
@@ -40,14 +41,14 @@ function getOrderDifferenceIncrement(orders) {
       // if we have two of the same date, discard the higher number (easier solution day one)
       if (!date1.isSame(date2, 'day')) {
         // GOOD DEBUG
-        // console.log(
-        //   'data stuff',
-        //   order.y,
-        //   date1,
-        //   date2,
-        //   dayDifference,
-        //   avgOrderIncrement
-        // )
+        console.log(
+          'data stuff',
+          order.y,
+          date1.format('YYYY-MM-DD'),
+          date2.format('YYYY-MM-DD'),
+          dayDifference,
+          avgOrderIncrement
+        )
 
         // we shift the 'differece' value to line up with date1 so that
         // avg *starts* at that date

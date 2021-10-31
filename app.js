@@ -106,7 +106,8 @@ app.use(express.static(__dirname + '/node_modules'))
 // this dropped console logs so needs better integration before activatomg
 // app.use(Sentry.Handlers.requestHandler());
 
-console.log('env??', env)
+process.env.TZ = 'Asia/Hong_Kong'
+console.log('env/timezone:', `${env}, ${process.env.TZ}`)
 // Production (DigitalOcean-based) and dev Session store PG connections / parameters
 if (env === 'production') {
   app.use(
