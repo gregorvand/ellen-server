@@ -379,6 +379,64 @@
             },
             "indexes": []
         },
+        "EdisonOrders": {
+            "tableName": "EdisonOrders",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userId": {
+                    "allowNull": true,
+                    "field": "userId",
+                    "seqType": "Sequelize.STRING"
+                },
+                "orderNumber": {
+                    "allowNull": false,
+                    "field": "orderNumber",
+                    "seqType": "Sequelize.STRING"
+                },
+                "emailDate": {
+                    "allowNull": false,
+                    "field": "emailDate",
+                    "seqType": "Sequelize.DATE"
+                },
+                "fromDomain": {
+                    "allowNull": true,
+                    "field": "fromDomain",
+                    "seqType": "Sequelize.STRING"
+                },
+                "itemReseller": {
+                    "allowNull": false,
+                    "field": "itemReseller",
+                    "seqType": "Sequelize.STRING"
+                },
+                "checksum": {
+                    "allowNull": false,
+                    "field": "checksum",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "subjectLine": {
+                    "allowNull": true,
+                    "field": "subjectLine",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
         "Orders": {
             "tableName": "Orders",
             "schema": {
@@ -810,5 +868,5 @@
             "indexes": []
         }
     },
-    "revision": 13
+    "revision": 14
 }

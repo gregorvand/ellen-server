@@ -6,6 +6,7 @@ const earningCalendarController = require('../controllers/earningCalendar')
 const companyCategoryController = require('../controllers/companyCategory')
 const datasetAccessController = require('../controllers/datasetAccess')
 const ordersController = require('../controllers/orders')
+const edisonController = require('../controllers/edisonOrders')
 const usersController = require('../controllers/users')
 const creditTransactionController = require('../controllers/creditTransaction')
 const pointsController = require('../controllers/points')
@@ -33,7 +34,9 @@ module.exports = (app) => {
 
   app.post('/api/orders', ordersController.create)
 
-  app.post('/api/companies/orders', ordersController.listByCompany)
+  // Below endpoint deprecated?
+  // app.post('/api/companies/orders', ordersController.listByCompany)
+
   app.post('/api/points', pointsController.create)
   app.get('/api/points', function (req, res) {
     pointsController
@@ -285,7 +288,7 @@ module.exports = (app) => {
   app.post(
     '/api/orders/dates-available',
     auth.getToken,
-    ordersController.monthsAvailableByYear
+    edisonController.monthsAvailableByYear
   )
 
   app.post(
@@ -304,6 +307,12 @@ module.exports = (app) => {
     '/api/dataset-access/charge',
     auth.getToken,
     datasetAccessController.datasetAccessCharge
+  )
+
+  app.get(
+    '/api/edison-test',
+    auth.getToken,
+    edisonController.edisonOrdersUniqueOrderNumber
   )
 
   app.get('/api/companycategory/list', companyCategoryController.list)

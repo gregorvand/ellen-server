@@ -45,12 +45,8 @@ module.exports = {
     subject,
     emailPlainContent
   ) {
-    // emailHelpers.returnOrderNumber(req);
-    // emailHelpers.parseSubjectForOrder(req);
     console.log(customerEmail)
-
-    // get customerEmail
-    // let customerByEmail = await User.findOne({ where: { email: customerByEmail } }); // what about customer identifer to find customer?
+    // what about customer identifer to find customer?
 
     try {
       return Order.create({
@@ -102,6 +98,9 @@ module.exports = {
     }
   },
 
+  // Returns the data for a given company
+  // Checks user's subcriptions first
+  // If granted
   async companyDataByMonth(req, res) {
     const { companyId, dateStart, dateEnd } = req.body
 
@@ -227,20 +226,19 @@ module.exports = {
   // constructed with help via https://stackoverflow.com/questions/69127003/mixing-distinct-with-group-by-postgres
   async monthsAvailableByYear(req, res) {
     const company = await Company.findOne({ where: { id: req.body.companyId } })
-
     const [results] = await db.sequelize.query(
       `SELECT
-          DATE_PART('month', "orderDate") AS month,
-          COUNT(DISTINCT "orderDate"::date) AS count
-      FROM "Orders"
+          DATE_PART('month', "emailDate") AS month,
+          COUNT(DISTINCT "emailDate"::date) AS count
+      FROM "EdisonOrders"
       WHERE
-        "fromEmail" = '${company.emailIdentifier}' AND
-        "orderNumber" != 1 AND
-        DATE_PART('year', "orderDate") = ${req.body.year}
+        "orderNumber" ~ '^\\d+$' AND
+        "fromDomain" = '${company.emailIdentifier}' AND
+        DATE_PART('year', "emailDate") = '${req.body.year}'
       GROUP BY
-        DATE_PART('month', "orderDate")
+        DATE_PART('month', "emailDate")
       HAVING
-        COUNT(DISTINCT "orderDate"::date) > 1;`
+        COUNT(DISTINCT DATE_PART('day', "emailDate")) > 2;`
     )
     res.send(results).status(200)
   },
