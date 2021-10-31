@@ -70,24 +70,17 @@ async function getOrders(id, lookbackMonths = false) {
 async function getOrdersByMonth(id, dateStart, dateEnd) {
   const company = await Company.findOne({ where: { id: id } })
   console.log('COMPANY!!', company.nameIdentifier)
-  return EdisonOrder.findAll({
-    where: {
-      fromDomain: company.emailIdentifier,
-      orderNumber: {
-        [Op.regexp]: '^\\d+$',
-      },
-      emailDate: {
-        [Op.between]: [dateStart, dateEnd], // default for all dates
-      },
-    },
-    attributes: [
-      ['emailDate', 't'],
-      ['orderNumber', 'y'],
-    ],
-    order: [['emailDate', 'ASC']],
-  })
-    .then((orders) => orders)
-    .catch((error) => console.error('error with company page lookup', error))
+  const [results] = await db.sequelize.query(
+    `select distinct on ("orderNumber")
+    "orderNumber" "y",
+    "emailDate" "t"
+    from public."EdisonOrders"
+    where "fromDomain" = '${company.emailIdentifier}'
+    and "orderNumber" ~ '^\\d+$'
+    and "emailDate" between '${dateStart}'::timestamp and '${dateEnd}'::timestamp
+    order by "orderNumber", "emailDate"`
+  )
+  return results
 }
 
 module.exports = {
