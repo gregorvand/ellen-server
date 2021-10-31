@@ -34,16 +34,6 @@ const insertEdisonRowNoId = async function (...edisonRow) {
 }
 
 const edisonOrdersUniqueOrderNumber = async function (req, res) {
-  // const [results] = await db.sequelize.query(
-  //   `select distinct on ("orderNumber") *
-  //   from public."EdisonOrders"
-  //   where "fromDomain" = '${req.body.companyEmail}'
-  //   order by "orderNumber", "emailDate"`
-  // )
-  // res.send(results).status(200)
-
-  console.log(`${req.body.dateStart.toString()}`)
-
   const [results] = await db.sequelize.query(
     `select distinct on ("orderNumber")
     "orderNumber" "y",
@@ -55,27 +45,6 @@ const edisonOrdersUniqueOrderNumber = async function (req, res) {
     order by "orderNumber", "emailDate"`
   )
   res.send(results).status(200)
-
-  // and "emailDate" between ${toString(
-  //   dayjs(req.body.dateStart).format('YYYY-MM-DD')
-  // )} and ${toString(dayjs(req.body.dateEnd).format('YYYY-MM-DD'))}
-
-  // const company = await Company.findOne({ where: { id: req.body.id } })
-  // return EdisonOrder.findAll({
-  //   where: {
-  //     fromDomain: company.emailIdentifier,
-  //     orderNumber: {
-  //       [Op.regexp]: '^\\d+$',
-  //     },
-  //     emailDate: {
-  //       [Op.between]: [req.body.dateStart, req.body.dateEnd], // default for all dates
-  //     },
-  //   },
-  //   order: ['orderNumber', 'id'],
-  //   // order: [['emailDate', 'ASC']],
-  // })
-  //   .then((orders) => res.send(orders))
-  //   .catch((error) => console.error('error with company page lookup', error))
 }
 
 // pass in company, year
