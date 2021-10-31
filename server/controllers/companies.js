@@ -1,5 +1,4 @@
 const Company = require('../models').Company
-const Order = require('../models').Order
 const userHelpers = require('../utils/getUserFromToken')
 
 module.exports = {
