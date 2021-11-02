@@ -72,6 +72,8 @@ const monthsAvailableByYear = async function (req, res) {
 
 const userHelpers = require('../utils/getUserFromToken')
 const DatasetAccess = require('../controllers/datasetAccess')
+const { removeDuplicates } = require('../utils/helpers')
+const dayjs = require('dayjs')
 
 const edisonOrdersByYear = async function (req, res) {
   console.log(req.body)
@@ -119,7 +121,15 @@ const edisonOrdersByYear = async function (req, res) {
     return result.y.match(regex)
   })
 
-  let matchResultsWithAccess = resultsRegex.filter((result) => {
+  // Align dates to same times, to compare, and be able to remove duplicates
+  const flattenedTimes = resultsRegex.map((order) => ({
+    t: dayjs(order.t).startOf('day').toISOString(),
+    y: order.y,
+  }))
+
+  const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 't')
+
+  let matchResultsWithAccess = flattenedTimesNoDuplicates.filter((result) => {
     const date = new Date(result.t)
     const month = date.getMonth()
     return monthsToOpen.find((access) => access == month)

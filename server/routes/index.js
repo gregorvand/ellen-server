@@ -315,5 +315,11 @@ module.exports = (app) => {
     edisonController.edisonOrdersByYear
   )
 
+  app.get(
+    '/api/dataset-year-company-v2',
+    auth.getToken,
+    edisonController.edisonOrdersByYear
+  )
+
   app.get('/api/companycategory/list', companyCategoryController.list)
 }
