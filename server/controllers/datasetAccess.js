@@ -79,6 +79,12 @@ module.exports = {
       where: { customerId: userId, datasetId: datasetId },
     }).then((result) => result)
   },
+
+  async userAccessByCompany(userId, companyId) {
+    return DatasetAccess.findAll({
+      where: { customerId: userId, companyId: companyId },
+    }).then((result) => result)
+  },
 }
 
 async function createDatasetAccess(accessProperties) {
