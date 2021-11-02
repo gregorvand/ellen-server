@@ -70,8 +70,31 @@ const monthsAvailableByYear = async function (req, res) {
   res.send(results).status(200)
 }
 
+const edisonOrdersByYear = async function (req, res) {
+  const [results] = await db.sequelize.query(
+    `select
+    distinct on ("orderNumber") "orderNumber" "y",
+    "emailDate" "t"
+  from
+    public."EdisonOrders"
+  where
+    EXTRACT(YEAR FROM "emailDate") = 2020
+    and "fromDomain" = 'support@fragrantjewels.com'
+  order by
+    "orderNumber" asc,
+    "emailDate"`
+  )
+
+  // which months does user have access to for this company?
+
+    
+
+  res.send(results).status(200)
+}
+
 module.exports = {
   insertEdisonRowNoId: insertEdisonRowNoId,
   edisonOrdersUniqueOrderNumber: edisonOrdersUniqueOrderNumber,
   monthsAvailableByYear: monthsAvailableByYear,
+  edisonOrdersByYear: edisonOrdersByYear,
 }

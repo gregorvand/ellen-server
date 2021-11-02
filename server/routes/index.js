@@ -312,7 +312,7 @@ module.exports = (app) => {
   app.get(
     '/api/edison-test',
     auth.getToken,
-    edisonController.edisonOrdersUniqueOrderNumber
+    edisonController.edisonOrdersByYear
   )
 
   app.get('/api/companycategory/list', companyCategoryController.list)
