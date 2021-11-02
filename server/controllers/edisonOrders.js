@@ -70,8 +70,77 @@ const monthsAvailableByYear = async function (req, res) {
   res.send(results).status(200)
 }
 
+const userHelpers = require('../utils/getUserFromToken')
+const DatasetAccess = require('../controllers/datasetAccess')
+const { removeDuplicates } = require('../utils/helpers')
+const dayjs = require('dayjs')
+
+const edisonOrdersByYear = async function (req, res) {
+  console.log(req.body)
+  const [results] = await db.sequelize.query(
+    `select
+    distinct on ("orderNumber") "orderNumber" "y",
+    "emailDate" "t"
+  from
+    public."EdisonOrders"
+  where
+    EXTRACT(YEAR FROM "emailDate") = ${req.body.year}
+    and "fromDomain" = '${req.body.companyEmail}'
+  order by
+    "orderNumber" asc,
+    "emailDate"`
+  )
+
+  // which months does user have access to for this company?
+  const currentUser = await userHelpers.currentUser(req.token)
+  console.log(currentUser.id)
+
+  const accessGranted = await DatasetAccess.userAccessByCompany(
+    currentUser.id,
+    req.body.companyId
+  )
+
+  // allMonths is an array of just which dataset access IDs they have
+  // for a given company and requested year
+  let allMonths = accessGranted
+    .filter((access) => {
+      const id = access.dataValues.datasetId
+      let year = id.slice(-4)
+      if (year == req.body.year) return id
+    })
+    .map((filtered) => filtered.datasetId)
+
+  let monthsToOpen = allMonths.map((dataset) => {
+    return dataset.substr(-8).substring(0, 2)
+  })
+
+  console.log(monthsToOpen)
+
+  const regex = `^\\d+$`
+  let resultsRegex = results.filter((result) => {
+    return result.y.match(regex)
+  })
+
+  // Align dates to same times, to compare, and be able to remove duplicates
+  const flattenedTimes = resultsRegex.map((order) => ({
+    t: dayjs(order.t).startOf('day').toISOString(),
+    y: order.y,
+  }))
+
+  const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 't')
+
+  let matchResultsWithAccess = flattenedTimesNoDuplicates.filter((result) => {
+    const date = new Date(result.t)
+    const month = date.getMonth()
+    return monthsToOpen.find((access) => access == month)
+  })
+
+  res.send(matchResultsWithAccess).status(200)
+}
+
 module.exports = {
   insertEdisonRowNoId: insertEdisonRowNoId,
   edisonOrdersUniqueOrderNumber: edisonOrdersUniqueOrderNumber,
   monthsAvailableByYear: monthsAvailableByYear,
+  edisonOrdersByYear: edisonOrdersByYear,
 }
