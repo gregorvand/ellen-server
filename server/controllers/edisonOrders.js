@@ -5,6 +5,7 @@ const EdisonOrder = require('../models').EdisonOrder
 const Company = require('../models').Company
 const db = require('../models/index')
 const { Op } = require('sequelize')
+var _ = require('lodash')
 
 const insertEdisonRowNoId = async function (...edisonRow) {
   const edisonData = edisonRow[0]
@@ -136,31 +137,39 @@ const edisonOrdersByYear = async function (req, res) {
     y: order.y,
   }))
 
+  // remove duplicate dats based on same day
   const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 'x')
 
+  // ensure user has access to the given months and return those
   let matchResultsWithAccess = flattenedTimesNoDuplicates.filter((result) => {
     const date = new Date(result.x)
-    const month = date.getMonth()
+    const month = date.getMonth() + 1
     return monthsToOpen.find((access) => access == month)
   })
 
+  // get order increcements
   const incrementDataSet = getOrderDifferenceIncrementV2(matchResultsWithAccess)
+  console.log(incrementDataSet)
 
-  parseNegative = incrementDataSet.filter((data) => {
-    if (parseInt(data.y) > 0) {
-      return data
-    }
+  // group increments into an array by month
+  var sortedResult = _(incrementDataSet)
+    .groupBy((x) => new Date(x.x).getMonth())
+    .map((value, key) => ({ x: parseFloat(key) + 1, y: value }))
+    .value()
+
+  console.log(sortedResult)
+
+  // find the mean of all months
+  let meanValuesByMonth = sortedResult.map((month) => {
+    let allMonths = flattenArrayByKey(month.y)
+    console.log(allMonths)
+    let theMean = _.mean(allMonths)
+    return { x: month.x, y: theMean }
   })
 
-  let totalIncrements = 0
-  filteredData = parseNegative.map((dataPoint) => {
-    totalIncrements += parseInt(dataPoint.y)
-  })
-  const monthAvg = [
-    { y: parseInt(totalIncrements / filteredData.length), x: req.body.dateEnd },
-  ]
-
-  res.send({ daily: incrementDataSet, monthly: monthAvg }).status(200)
+  res
+    .send({ company: parseInt(companyId), monthly: meanValuesByMonth })
+    .status(200)
 }
 
 module.exports = {
@@ -168,4 +177,14 @@ module.exports = {
   edisonOrdersUniqueOrderNumber: edisonOrdersUniqueOrderNumber,
   monthsAvailableByYear: monthsAvailableByYear,
   edisonOrdersByYear: edisonOrdersByYear,
+}
+
+// group all objects together by key
+function flattenArrayByKey(array) {
+  return array.reduce(function (acc, obj) {
+    if (obj.y) {
+      acc.push(parseInt(obj.y))
+    }
+    return acc
+  }, [])
 }
