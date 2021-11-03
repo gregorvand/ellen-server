@@ -72,11 +72,16 @@ const monthsAvailableByYear = async function (req, res) {
 
 const userHelpers = require('../utils/getUserFromToken')
 const DatasetAccess = require('../controllers/datasetAccess')
+const getOrderDifferenceIncrementV2 =
+  require('../utils/order_volume_data/getOrderIncrement').getOrderDifferenceIncrementV2
 const { removeDuplicates } = require('../utils/helpers')
 const dayjs = require('dayjs')
 
 const edisonOrdersByYear = async function (req, res) {
-  console.log(req.body)
+  // console.log(req)
+  const { companyId, year } = req.query
+  const company = await Company.findOne({ where: { id: companyId } })
+  console.log(`${company.emailIdentifier} ${companyId} ${year}`)
   const [results] = await db.sequelize.query(
     `select
     distinct on ("orderNumber") "orderNumber" "y",
@@ -84,21 +89,25 @@ const edisonOrdersByYear = async function (req, res) {
   from
     public."EdisonOrders"
   where
-    EXTRACT(YEAR FROM "emailDate") = ${req.body.year}
-    and "fromDomain" = '${req.body.companyEmail}'
+    EXTRACT(YEAR FROM "emailDate") = ${year}
+    and "fromDomain" = '${company.emailIdentifier}'
   order by
     "orderNumber" asc,
     "emailDate"`
   )
 
+  console.log(results)
+
   // which months does user have access to for this company?
   const currentUser = await userHelpers.currentUser(req.token)
-  console.log(currentUser.id)
+  // console.log(currentUser.id)
 
   const accessGranted = await DatasetAccess.userAccessByCompany(
     currentUser.id,
-    req.body.companyId
+    companyId
   )
+
+  console.log(accessGranted)
 
   // allMonths is an array of just which dataset access IDs they have
   // for a given company and requested year
@@ -106,7 +115,7 @@ const edisonOrdersByYear = async function (req, res) {
     .filter((access) => {
       const id = access.dataValues.datasetId
       let year = id.slice(-4)
-      if (year == req.body.year) return id
+      if (year == year) return id
     })
     .map((filtered) => filtered.datasetId)
 
@@ -123,19 +132,35 @@ const edisonOrdersByYear = async function (req, res) {
 
   // Align dates to same times, to compare, and be able to remove duplicates
   const flattenedTimes = resultsRegex.map((order) => ({
-    t: dayjs(order.t).startOf('day').toISOString(),
+    x: dayjs(order.t).startOf('day').toISOString(),
     y: order.y,
   }))
 
-  const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 't')
+  const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 'x')
 
   let matchResultsWithAccess = flattenedTimesNoDuplicates.filter((result) => {
-    const date = new Date(result.t)
+    const date = new Date(result.x)
     const month = date.getMonth()
     return monthsToOpen.find((access) => access == month)
   })
 
-  res.send(matchResultsWithAccess).status(200)
+  const incrementDataSet = getOrderDifferenceIncrementV2(matchResultsWithAccess)
+
+  parseNegative = incrementDataSet.filter((data) => {
+    if (parseInt(data.y) > 0) {
+      return data
+    }
+  })
+
+  let totalIncrements = 0
+  filteredData = parseNegative.map((dataPoint) => {
+    totalIncrements += parseInt(dataPoint.y)
+  })
+  const monthAvg = [
+    { y: parseInt(totalIncrements / filteredData.length), x: req.body.dateEnd },
+  ]
+
+  res.send({ daily: incrementDataSet, monthly: monthAvg }).status(200)
 }
 
 module.exports = {
