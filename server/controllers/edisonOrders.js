@@ -77,6 +77,8 @@ const getOrderDifferenceIncrementV2 =
   require('../utils/order_volume_data/getOrderIncrement').getOrderDifferenceIncrementV2
 const { removeDuplicates } = require('../utils/helpers')
 const dayjs = require('dayjs')
+var objectSupport = require('dayjs/plugin/objectSupport')
+dayjs.extend(objectSupport)
 
 const edisonOrdersByYear = async function (req, res) {
   // console.log(req)
@@ -147,24 +149,30 @@ const edisonOrdersByYear = async function (req, res) {
     return monthsToOpen.find((access) => access == month)
   })
 
-  // get order increcements
-  const incrementDataSet = getOrderDifferenceIncrementV2(matchResultsWithAccess)
-  console.log(incrementDataSet)
+  // TODO: get order **increcements**
+  // const incrementDataSet = getOrderDifferenceIncrementV2(matchResultsWithAccess)
+  // console.log(incrementDataSet)
+  // to get mean of avg daily: sort by date, then map using
+  // let allData = flattenArrayByKey(dataset.y)
+  // let theMean = _.mean(allData)
 
   // group increments into an array by month
-  var sortedResult = _(incrementDataSet)
+  var sortedResult = _(matchResultsWithAccess)
     .groupBy((x) => new Date(x.x).getMonth())
     .map((value, key) => ({ x: parseFloat(key) + 1, y: value }))
     .value()
 
-  console.log(sortedResult)
-
   // find the mean of all months
-  let meanValuesByMonth = sortedResult.map((month) => {
-    let allMonths = flattenArrayByKey(month.y)
-    console.log(allMonths)
-    let theMean = _.mean(allMonths)
-    return { x: month.x, y: theMean }
+  let meanValuesByMonth = sortedResult.map((dataset, index) => {
+    let allData = flattenArrayByKey(dataset.y)
+
+    const firstDataPoint = allData[0]
+    const lastDataPoint = allData[allData.length - 1]
+    const differentFirstLast = lastDataPoint - firstDataPoint
+
+    let dataDate = dayjs({ year: year, month: dataset.x - 1 })
+    console.log(dataDate.year())
+    return { x: dataDate.format('YYYY-MM'), y: differentFirstLast } // << why same month???
   })
 
   res
