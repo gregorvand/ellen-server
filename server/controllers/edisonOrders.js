@@ -75,7 +75,7 @@ const userHelpers = require('../utils/getUserFromToken')
 const DatasetAccess = require('../controllers/datasetAccess')
 const getOrderDifferenceIncrementV2 =
   require('../utils/order_volume_data/getOrderIncrement').getOrderDifferenceIncrementV2
-const { removeDuplicates } = require('../utils/helpers')
+const { removeDuplicates, flattenArrayByKey } = require('../utils/helpers')
 const dayjs = require('dayjs')
 var objectSupport = require('dayjs/plugin/objectSupport')
 dayjs.extend(objectSupport)
@@ -186,14 +186,4 @@ module.exports = {
   edisonOrdersUniqueOrderNumber: edisonOrdersUniqueOrderNumber,
   monthsAvailableByYear: monthsAvailableByYear,
   edisonOrdersByYear: edisonOrdersByYear,
-}
-
-// group all objects together by key
-function flattenArrayByKey(array) {
-  return array.reduce(function (acc, obj) {
-    if (obj.y) {
-      acc.push(parseInt(obj.y))
-    }
-    return acc
-  }, [])
 }

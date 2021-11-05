@@ -4,7 +4,8 @@ require('dotenv').config()
 const cliProgress = require('cli-progress')
 const EdisonOrder = require('../server/models').EdisonOrder
 const indexedEdisonOrders = require('../server/controllers/indexedEdisonOrders')
-
+const { Op } = require('sequelize')
+const dayjs = require('dayjs')
 const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 
 // trial 1: get all records for a given company, store in memory, then reinsert based on indexed
@@ -20,13 +21,19 @@ const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 //   console.log(`retrieved ${allCompanyRows.length} record`, allCompanyRows[0])
 // }
 
-const COMPANY_DOMAIN = 'support@fragrantjewels.com'
+const COMPANY_DOMAIN = 'stat@wearfigs.com'
 async function transformOrdersIndexed() {
   const allCompanyRows = await EdisonOrder.findAll({
     where: {
-      fromDomain: COMPANY_DOMAIN,
+      // fromDomain: COMPANY_DOMAIN,
+      emailDate: {
+        [Op.gte]: dayjs('2020-07-01').toDate(),
+        [Op.lte]: dayjs('2020-08-01').toDate(),
+      },
     },
   })
+
+  console.log(allCompanyRows.length)
 
   let barProgress = 1
   bar1.start(allCompanyRows.length, 0)

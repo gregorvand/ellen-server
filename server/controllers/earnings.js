@@ -4,7 +4,7 @@ const EarningCalendar = require('../models').EarningCalendar
 // const User = require('../models').User
 const jwt = require('jsonwebtoken')
 const Today = require('../utils/getToday')
-const { Op } = require('sequelize')
+
 const dailyEmailController = require('../controllers/dailyEmail')
 const earningCalendarController = require('../controllers/earningCalendar')
 

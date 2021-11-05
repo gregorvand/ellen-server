@@ -7,6 +7,7 @@ const companyCategoryController = require('../controllers/companyCategory')
 const datasetAccessController = require('../controllers/datasetAccess')
 const ordersController = require('../controllers/orders')
 const edisonController = require('../controllers/edisonOrders')
+const indexedEdisonController = require('../controllers/indexedEdisonOrders')
 const usersController = require('../controllers/users')
 const creditTransactionController = require('../controllers/creditTransaction')
 const pointsController = require('../controllers/points')
@@ -319,6 +320,12 @@ module.exports = (app) => {
     '/api/dataset-year-company-v2',
     auth.getToken,
     edisonController.edisonOrdersByYear
+  )
+
+  app.get(
+    '/api/dataset-year-company-indexed',
+    auth.getToken,
+    indexedEdisonController.indexedEdisonOrdersByYear
   )
 
   app.get('/api/companycategory/list', companyCategoryController.list)
