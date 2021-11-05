@@ -437,6 +437,59 @@
             },
             "indexes": []
         },
+        "IndexedEdisonOrders": {
+            "tableName": "IndexedEdisonOrders",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "orderNumber": {
+                    "allowNull": false,
+                    "field": "orderNumber",
+                    "seqType": "Sequelize.STRING"
+                },
+                "emailDate": {
+                    "allowNull": false,
+                    "field": "emailDate",
+                    "seqType": "Sequelize.DATE"
+                },
+                "fromDomain": {
+                    "allowNull": false,
+                    "field": "fromDomain",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": {
+                "6aeb77a1f64771501d637eda0a4028fce688ba88": {
+                    "unique": true,
+                    "fields": [
+                        "orderNumber",
+                        "fromDomain"
+                    ],
+                    "name": "indexed_edison_orders_order_number_from_domain",
+                    "options": {
+                        "indexName": "indexed_edison_orders_order_number_from_domain",
+                        "name": "indexed_edison_orders_order_number_from_domain",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
+        },
         "Orders": {
             "tableName": "Orders",
             "schema": {
@@ -868,5 +921,5 @@
             "indexes": []
         }
     },
-    "revision": 14
+    "revision": 16
 }

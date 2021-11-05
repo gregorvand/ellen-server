@@ -379,6 +379,117 @@
             },
             "indexes": []
         },
+        "EdisonOrders": {
+            "tableName": "EdisonOrders",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userId": {
+                    "allowNull": true,
+                    "field": "userId",
+                    "seqType": "Sequelize.STRING"
+                },
+                "orderNumber": {
+                    "allowNull": false,
+                    "field": "orderNumber",
+                    "seqType": "Sequelize.STRING"
+                },
+                "emailDate": {
+                    "allowNull": false,
+                    "field": "emailDate",
+                    "seqType": "Sequelize.DATE"
+                },
+                "fromDomain": {
+                    "allowNull": true,
+                    "field": "fromDomain",
+                    "seqType": "Sequelize.STRING"
+                },
+                "itemReseller": {
+                    "allowNull": false,
+                    "field": "itemReseller",
+                    "seqType": "Sequelize.STRING"
+                },
+                "checksum": {
+                    "allowNull": false,
+                    "field": "checksum",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "subjectLine": {
+                    "allowNull": true,
+                    "field": "subjectLine",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "EdisonOrderIndexeds": {
+            "tableName": "EdisonOrderIndexeds",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "orderNumber": {
+                    "allowNull": false,
+                    "field": "orderNumber",
+                    "seqType": "Sequelize.STRING"
+                },
+                "emailDate": {
+                    "allowNull": false,
+                    "field": "emailDate",
+                    "seqType": "Sequelize.DATE"
+                },
+                "fromDomain": {
+                    "allowNull": false,
+                    "field": "fromDomain",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": {
+                "bf33ea1108bf89ac747c0a9ccc72b94724e052b3": {
+                    "unique": true,
+                    "fields": [
+                        "orderNumber",
+                        "fromDomain"
+                    ],
+                    "name": "edison_order_indexeds_order_number_from_domain",
+                    "options": {
+                        "indexName": "edison_order_indexeds_order_number_from_domain",
+                        "name": "edison_order_indexeds_order_number_from_domain",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
+        },
         "Orders": {
             "tableName": "Orders",
             "schema": {
@@ -810,5 +921,5 @@
             "indexes": []
         }
     },
-    "revision": 13
+    "revision": 15
 }

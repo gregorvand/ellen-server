@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const EdisonOrderIndexed = sequelize.define(
-    'EdisonOrderIndexed',
+  const IndexedEdisonOrders = sequelize.define(
+    'IndexedEdisonOrders',
     {
       orderNumber: {
         type: DataTypes.STRING,
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       fromDomain: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
       },
     },
     {
@@ -26,5 +26,5 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
 
-  return EdisonOrderIndexed
+  return IndexedEdisonOrders
 }
