@@ -83,6 +83,7 @@ dayjs.extend(objectSupport)
 const edisonOrdersByYear = async function (req, res) {
   // console.log(req)
   const { companyId, year } = req.query
+  const dataYear = year
   const company = await Company.findOne({ where: { id: companyId } })
   console.log(`${company.emailIdentifier} ${companyId} ${year}`)
   const [results] = await db.sequelize.query(
@@ -92,7 +93,7 @@ const edisonOrdersByYear = async function (req, res) {
   from
     public."EdisonOrders"
   where
-    EXTRACT(YEAR FROM "emailDate") = ${year}
+    EXTRACT(YEAR FROM "emailDate") = ${dataYear}
     and "fromDomain" = '${company.emailIdentifier}'
   order by
     "orderNumber" asc,
@@ -118,7 +119,7 @@ const edisonOrdersByYear = async function (req, res) {
     .filter((access) => {
       const id = access.dataValues.datasetId
       let year = id.slice(-4)
-      if (year == year) return id
+      if (dataYear == year) return id
     })
     .map((filtered) => filtered.datasetId)
 
@@ -172,7 +173,7 @@ const edisonOrdersByYear = async function (req, res) {
 
     let dataDate = dayjs({ year: year, month: dataset.x - 1 })
     console.log(dataDate.year())
-    return { x: dataDate.format('YYYY-MM'), y: differentFirstLast } // << why same month???
+    return { x: dataDate.format('YYYY-MM'), y: differentFirstLast }
   })
 
   res
