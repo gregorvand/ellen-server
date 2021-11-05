@@ -8,19 +8,6 @@ const { Op } = require('sequelize')
 const dayjs = require('dayjs')
 const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 
-// trial 1: get all records for a given company, store in memory, then reinsert based on indexed
-
-// async function getData() {
-//   const allCompanyRows = await EdisonOrder.findAll({
-//     where: {
-//       fromDomain: 'support@fragrantjewels.com',
-//     },
-//     limit: 1,
-//   })
-
-//   console.log(`retrieved ${allCompanyRows.length} record`, allCompanyRows[0])
-// }
-
 const COMPANY_DOMAIN = 'stat@wearfigs.com'
 async function transformOrdersIndexed() {
   const allCompanyRows = await EdisonOrder.findAll({
