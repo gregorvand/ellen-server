@@ -51,6 +51,8 @@ const edisonOrdersUniqueOrderNumber = async function (req, res) {
 // pass in company, year
 // get the months from that year that have data
 // constructed with help via https://stackoverflow.com/questions/69127003/mixing-distinct-with-group-by-postgres
+
+// change below to use EdisonOrdersIndexed???
 const monthsAvailableByYear = async function (req, res) {
   const company = await Company.findOne({ where: { id: req.body.companyId } })
   console.log(company.emailIdentifier)
@@ -58,7 +60,7 @@ const monthsAvailableByYear = async function (req, res) {
     `SELECT
         DATE_PART('month', "emailDate") AS month,
         COUNT(DISTINCT "emailDate"::date) AS count
-    FROM "EdisonOrders"
+    FROM "IndexedEdisonOrders"
     WHERE
       "orderNumber" ~ '^\\d+$' AND
       "fromDomain" = '${company.emailIdentifier}' AND
