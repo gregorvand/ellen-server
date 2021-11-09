@@ -437,8 +437,8 @@
             },
             "indexes": []
         },
-        "EdisonOrderIndexeds": {
-            "tableName": "EdisonOrderIndexeds",
+        "IndexedEdisonOrders": {
+            "tableName": "IndexedEdisonOrders",
             "schema": {
                 "id": {
                     "allowNull": false,
@@ -474,16 +474,16 @@
                 }
             },
             "indexes": {
-                "bf33ea1108bf89ac747c0a9ccc72b94724e052b3": {
+                "6aeb77a1f64771501d637eda0a4028fce688ba88": {
                     "unique": true,
                     "fields": [
                         "orderNumber",
                         "fromDomain"
                     ],
-                    "name": "edison_order_indexeds_order_number_from_domain",
+                    "name": "indexed_edison_orders_order_number_from_domain",
                     "options": {
-                        "indexName": "edison_order_indexeds_order_number_from_domain",
-                        "name": "edison_order_indexeds_order_number_from_domain",
+                        "indexName": "indexed_edison_orders_order_number_from_domain",
+                        "name": "indexed_edison_orders_order_number_from_domain",
                         "indicesType": "UNIQUE",
                         "type": "UNIQUE"
                     }
@@ -921,5 +921,5 @@
             "indexes": []
         }
     },
-    "revision": 15
+    "revision": 16
 }

@@ -66,7 +66,21 @@
                     "seqType": "Sequelize.DATE"
                 }
             },
-            "indexes": []
+            "indexes": {
+                "df6c6adc27d6a8fa4f693b9e353b59c2e924a449": {
+                    "unique": true,
+                    "fields": [
+                        "emailIdentifier"
+                    ],
+                    "name": "companies_email_identifier",
+                    "options": {
+                        "indexName": "companies_email_identifier",
+                        "name": "companies_email_identifier",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
         },
         "CompanyCategories": {
             "tableName": "CompanyCategories",
@@ -921,5 +935,5 @@
             "indexes": []
         }
     },
-    "revision": 16
+    "revision": 17
 }
