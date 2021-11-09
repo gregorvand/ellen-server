@@ -8,14 +8,16 @@ const { Op } = require('sequelize')
 const dayjs = require('dayjs')
 const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 
-const COMPANY_DOMAIN = 'stat@wearfigs.com'
+// const COMPANY_DOMAIN = 'stat@wearfigs.com'
+const START_DATE = '2020-10-20'
+const END_DATE = '2020-10-31'
 async function transformOrdersIndexed() {
   const allCompanyRows = await EdisonOrder.findAll({
     where: {
       // fromDomain: COMPANY_DOMAIN,
       emailDate: {
-        [Op.gte]: dayjs('2020-07-01').toDate(),
-        [Op.lte]: dayjs('2020-08-01').toDate(),
+        [Op.gte]: dayjs(START_DATE).toDate(),
+        [Op.lte]: dayjs(END_DATE).toDate(),
       },
     },
   })
@@ -34,7 +36,9 @@ async function transformOrdersIndexed() {
       bar1.update(barProgress++)
       if (barProgress == allCompanyRows.length + 1) {
         bar1.stop()
-        console.log(`processed ${allCompanyRows.length} for ${COMPANY_DOMAIN}`)
+        console.log(
+          `processed ${allCompanyRows.length} for ${START_DATE} to ${END_DATE} `
+        )
         process.exit(1)
       }
     })
