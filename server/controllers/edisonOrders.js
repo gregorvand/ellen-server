@@ -52,19 +52,14 @@ const edisonOrdersUniqueOrderNumber = async function (req, res) {
 // get the months from that year that have data
 // constructed with help via https://stackoverflow.com/questions/69127003/mixing-distinct-with-group-by-postgres
 
+const generateCompanyRegex = require('../utils/generateCompanyRegex')
 // change below to use EdisonOrdersIndexed???
 const monthsAvailableByYear = async function (req, res) {
   const company = await Company.findOne({ where: { id: req.body.companyId } })
   const { emailIdentifier, orderPrefix } = company
   console.log(emailIdentifier, orderPrefix)
 
-  let regex = `^\\d+$`
-  if (orderPrefix !== '#') {
-    console.log('other')
-    regex = `${orderPrefix}\\d+$`
-  }
-
-  console.log(regex)
+  let regex = generateCompanyRegex(orderPrefix)
   const [results] = await db.sequelize.query(
     `SELECT
         DATE_PART('month', "emailDate") AS month,
@@ -84,15 +79,13 @@ const monthsAvailableByYear = async function (req, res) {
 
 const userHelpers = require('../utils/getUserFromToken')
 const DatasetAccess = require('../controllers/datasetAccess')
-const getOrderDifferenceIncrementV2 =
-  require('../utils/order_volume_data/getOrderIncrement').getOrderDifferenceIncrementV2
+
 const { removeDuplicates, flattenArrayByKey } = require('../utils/helpers')
 const dayjs = require('dayjs')
 var objectSupport = require('dayjs/plugin/objectSupport')
 dayjs.extend(objectSupport)
 
 const edisonOrdersByYear = async function (req, res) {
-  // console.log(req)
   const { companyId, year } = req.query
   const dataYear = year
   const company = await Company.findOne({ where: { id: companyId } })
