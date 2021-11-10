@@ -1,5 +1,4 @@
-const Company = require('./models').Company
-const { Op } = require('sequelize')
+const db = require('./models/index')
 // const elasticsearch = require('elasticsearch')
 
 // const client = new elasticsearch.Client({
@@ -53,20 +52,23 @@ const client = new Client({
 // )
 
 // Needed to update elasticsearch index
+
 async function populateDB() {
   let bulk = []
-  const companies = await Company.findAll({
-    where: {
-      orderSuffix: {
-        [Op.or]: [null, ''],
-      },
-    },
-  })
+  const [companies] = await db.sequelize.query(
+    `SELECT * FROM public."Companies"
+    WHERE  
+      "emailIdentifier" ~ '^([a-zA-Z0-9_]+)@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.)|(?!hotmail|gmail|yahoo|qq)(([a-zA-Z0-9-]+.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(]?)$' 
+    AND "industry" = 'Apparel Retail'`
+  )
+
+  console.log('indexing', companies.length)
 
   companies.forEach((company, i) => {
     let data = {
       id: company.id,
       companyName: company.nameIdentifier,
+      companyEmail: company.emailIdentifier,
       ticker: company.ticker,
       companyType: company.companyType,
       companyIndustry: company.industry,
