@@ -310,17 +310,11 @@ module.exports = (app) => {
     datasetAccessController.datasetAccessCharge
   )
 
-  app.get(
-    '/api/edison-test',
-    auth.getToken,
-    edisonController.edisonOrdersByYear
-  )
-
-  app.get(
-    '/api/dataset-year-company-v2',
-    auth.getToken,
-    edisonController.edisonOrdersByYear
-  )
+  // app.get(
+  //   '/api/dataset-year-company-v2',
+  //   auth.getToken,
+  //   edisonController.edisonOrdersByYear
+  // )
 
   app.get(
     '/api/dataset-year-company-indexed',
@@ -329,4 +323,11 @@ module.exports = (app) => {
   )
 
   app.get('/api/companycategory/list', companyCategoryController.list)
+
+  // debug endpoint
+  // app.get(
+  //   '/api/edison-test',
+  //   auth.getToken,
+  //   edisonController.edisonOrdersByYear
+  // )
 }

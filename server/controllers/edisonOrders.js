@@ -57,7 +57,6 @@ const generateCompanyRegex = require('../utils/generateCompanyRegex')
 const monthsAvailableByYear = async function (req, res) {
   const company = await Company.findOne({ where: { id: req.body.companyId } })
   const { emailIdentifier, orderPrefix } = company
-  console.log(emailIdentifier, orderPrefix)
 
   let regex = generateCompanyRegex(orderPrefix)
   const [results] = await db.sequelize.query(
@@ -85,109 +84,105 @@ const dayjs = require('dayjs')
 var objectSupport = require('dayjs/plugin/objectSupport')
 dayjs.extend(objectSupport)
 
-const edisonOrdersByYear = async function (req, res) {
-  const { companyId, year } = req.query
-  const dataYear = year
-  const company = await Company.findOne({ where: { id: companyId } })
-  console.log(`${company.emailIdentifier} ${companyId} ${year}`)
-  const [results] = await db.sequelize.query(
-    `select
-    distinct on ("orderNumber") "orderNumber" "y",
-    "emailDate" "t"
-  from
-    public."EdisonOrders"
-  where
-    EXTRACT(YEAR FROM "emailDate") = ${dataYear}
-    and "fromDomain" = '${company.emailIdentifier}'
-  order by
-    "orderNumber" asc,
-    "emailDate"`
-  )
+// const edisonOrdersByYear = async function (req, res) {
+//   const { companyId, year } = req.query
+//   const dataYear = year
+//   const company = await Company.findOne({ where: { id: companyId } })
+//   const [results] = await db.sequelize.query(
+//     `select
+//     distinct on ("orderNumber") "orderNumber" "y",
+//     "emailDate" "t"
+//   from
+//     public."EdisonOrders"
+//   where
+//     EXTRACT(YEAR FROM "emailDate") = ${dataYear}
+//     and "fromDomain" = '${company.emailIdentifier}'
+//   order by
+//     "orderNumber" asc,
+//     "emailDate"`
+//   )
 
-  console.log(results)
+//   if (process.env.NODE_ENV === 'dev') {
+//     console.log(results)
+//   }
 
-  // which months does user have access to for this company?
-  const currentUser = await userHelpers.currentUser(req.token)
-  // console.log(currentUser.id)
+//   // which months does user have access to for this company?
+//   const currentUser = await userHelpers.currentUser(req.token)
+//   // console.log(currentUser.id)
 
-  const accessGranted = await DatasetAccess.userAccessByCompany(
-    currentUser.id,
-    companyId
-  )
+//   const accessGranted = await DatasetAccess.userAccessByCompany(
+//     currentUser.id,
+//     companyId
+//   )
 
-  console.log(accessGranted)
+//   // allMonths is an array of just which dataset access IDs they have
+//   // for a given company and requested year
+//   let allMonths = accessGranted
+//     .filter((access) => {
+//       const id = access.dataValues.datasetId
+//       let year = id.slice(-4)
+//       if (dataYear == year) return id
+//     })
+//     .map((filtered) => filtered.datasetId)
 
-  // allMonths is an array of just which dataset access IDs they have
-  // for a given company and requested year
-  let allMonths = accessGranted
-    .filter((access) => {
-      const id = access.dataValues.datasetId
-      let year = id.slice(-4)
-      if (dataYear == year) return id
-    })
-    .map((filtered) => filtered.datasetId)
+//   let monthsToOpen = allMonths.map((dataset) => {
+//     return dataset.substr(-8).substring(0, 2)
+//   })
 
-  let monthsToOpen = allMonths.map((dataset) => {
-    return dataset.substr(-8).substring(0, 2)
-  })
+//   const regex = `^\\d+$`
+//   let resultsRegex = results.filter((result) => {
+//     return result.y.match(regex)
+//   })
 
-  console.log(monthsToOpen)
+//   // Align dates to same times, to compare, and be able to remove duplicates
+//   const flattenedTimes = resultsRegex.map((order) => ({
+//     x: dayjs(order.t).startOf('day').toISOString(),
+//     y: order.y,
+//   }))
 
-  const regex = `^\\d+$`
-  let resultsRegex = results.filter((result) => {
-    return result.y.match(regex)
-  })
+//   // remove duplicate dats based on same day
+//   const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 'x')
 
-  // Align dates to same times, to compare, and be able to remove duplicates
-  const flattenedTimes = resultsRegex.map((order) => ({
-    x: dayjs(order.t).startOf('day').toISOString(),
-    y: order.y,
-  }))
+//   // ensure user has access to the given months and return those
+//   let matchResultsWithAccess = flattenedTimesNoDuplicates.filter((result) => {
+//     const date = new Date(result.x)
+//     const month = date.getMonth() + 1
+//     return monthsToOpen.find((access) => access == month)
+//   })
 
-  // remove duplicate dats based on same day
-  const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 'x')
+//   // TODO: get order **increcements**
+//   // const incrementDataSet = getOrderDifferenceIncrementV2(matchResultsWithAccess)
+//   // console.log(incrementDataSet)
+//   // to get mean of avg daily: sort by date, then map using
+//   // let allData = flattenArrayByKey(dataset.y)
+//   // let theMean = _.mean(allData)
 
-  // ensure user has access to the given months and return those
-  let matchResultsWithAccess = flattenedTimesNoDuplicates.filter((result) => {
-    const date = new Date(result.x)
-    const month = date.getMonth() + 1
-    return monthsToOpen.find((access) => access == month)
-  })
+//   // group increments into an array by month
+//   var sortedResult = _(matchResultsWithAccess)
+//     .groupBy((x) => new Date(x.x).getMonth())
+//     .map((value, key) => ({ x: parseFloat(key) + 1, y: value }))
+//     .value()
 
-  // TODO: get order **increcements**
-  // const incrementDataSet = getOrderDifferenceIncrementV2(matchResultsWithAccess)
-  // console.log(incrementDataSet)
-  // to get mean of avg daily: sort by date, then map using
-  // let allData = flattenArrayByKey(dataset.y)
-  // let theMean = _.mean(allData)
+//   // find the mean of all months
+//   let meanValuesByMonth = sortedResult.map((dataset, index) => {
+//     let allData = flattenArrayByKey(dataset.y)
 
-  // group increments into an array by month
-  var sortedResult = _(matchResultsWithAccess)
-    .groupBy((x) => new Date(x.x).getMonth())
-    .map((value, key) => ({ x: parseFloat(key) + 1, y: value }))
-    .value()
+//     const firstDataPoint = allData[0]
+//     const lastDataPoint = allData[allData.length - 1]
+//     const differentFirstLast = lastDataPoint - firstDataPoint
 
-  // find the mean of all months
-  let meanValuesByMonth = sortedResult.map((dataset, index) => {
-    let allData = flattenArrayByKey(dataset.y)
+//     let dataDate = dayjs({ year: year, month: dataset.x - 1 })
+//     return { x: dataDate.format('YYYY-MM'), y: differentFirstLast }
+//   })
 
-    const firstDataPoint = allData[0]
-    const lastDataPoint = allData[allData.length - 1]
-    const differentFirstLast = lastDataPoint - firstDataPoint
-
-    let dataDate = dayjs({ year: year, month: dataset.x - 1 })
-    console.log(dataDate.year())
-    return { x: dataDate.format('YYYY-MM'), y: differentFirstLast }
-  })
-
-  res
-    .send({ company: parseInt(companyId), monthly: meanValuesByMonth })
-    .status(200)
-}
+//   res
+//     .send({ company: parseInt(companyId), monthly: meanValuesByMonth })
+//     .status(200)
+// }
 
 module.exports = {
   insertEdisonRowNoId: insertEdisonRowNoId,
   edisonOrdersUniqueOrderNumber: edisonOrdersUniqueOrderNumber,
   monthsAvailableByYear: monthsAvailableByYear,
-  edisonOrdersByYear: edisonOrdersByYear,
+  // edisonOrdersByYear: edisonOrdersByYear,
 }

@@ -31,11 +31,17 @@ const DatasetAccess = require('../controllers/datasetAccess')
 const { removeDuplicates, flattenArrayByKey } = require('../utils/helpers')
 var objectSupport = require('dayjs/plugin/objectSupport')
 dayjs.extend(objectSupport)
+
+const generateCompanyRegex = require('../utils/generateCompanyRegex')
+
 const indexedEdisonOrdersByYear = async function (req, res) {
   // console.log(req)
   const { companyId, year } = req.query
   const dataYear = year
   const company = await Company.findOne({ where: { id: companyId } })
+
+  const { emailIdentifier, orderPrefix } = company
+
   console.log(`${company.emailIdentifier} ${companyId} ${year}`)
   const [results] = await db.sequelize.query(
     `select
@@ -45,7 +51,7 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     public."IndexedEdisonOrders"
   where
     EXTRACT(YEAR FROM "emailDate") = ${dataYear}
-    and "fromDomain" = '${company.emailIdentifier}'
+    and "fromDomain" = '${emailIdentifier}'
   order by
     "orderNumber" asc,
     "emailDate"`
@@ -59,8 +65,6 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     currentUser.id,
     companyId
   )
-
-  console.log(accessGranted)
 
   // allMonths is an array of just which dataset access IDs they have
   // for a given company and requested year
@@ -76,12 +80,19 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     return dataset.substr(-8).substring(0, 2)
   })
 
-  const regex = `^\\d+$`
+  // Use standard regex generator to decide which datapoints to evaluate
+  const regex = generateCompanyRegex(orderPrefix)
   let resultsRegex = results.filter((result) => {
     return result.y.match(regex)
   })
 
-  console.log('yoo', resultsRegex)
+  // if regex is not default, then remap these to have removed the orderPrefix
+  if (orderPrefix !== '#') {
+    resultsRegex = results.map((result) => {
+      const removePrefix = result.y.split(orderPrefix)
+      return { t: result.t, y: removePrefix[1] }
+    })
+  }
 
   // Align dates to same times, to compare, and be able to remove duplicates
   const flattenedTimes = resultsRegex.map((order) => ({
@@ -92,7 +103,9 @@ const indexedEdisonOrdersByYear = async function (req, res) {
   // remove duplicate dats based on same day
   const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 'x')
 
-  console.log(flattenedTimesNoDuplicates)
+  if (process.env.NODE_ENV === 'dev') {
+    console.log(flattenedTimesNoDuplicates)
+  }
   // ensure user has access to the given months and return those
   let matchResultsWithAccess = flattenedTimesNoDuplicates.filter((result) => {
     const date = new Date(result.x)
@@ -112,13 +125,15 @@ const indexedEdisonOrdersByYear = async function (req, res) {
 
     const firstDataPoint = allData[0]
     const lastDataPoint = allData[allData.length - 1]
-
-    console.log(firstDataPoint, lastDataPoint)
     const differentFirstLast = lastDataPoint - firstDataPoint
-
     let dataDate = dayjs({ year: year, month: dataset.x - 1 })
-    console.log(dataDate.year())
-    return { x: dataDate.format('YYYY-MM'), y: differentFirstLast }
+    const dataDateEnd = dataDate.endOf('month')
+
+    if (process.env.NODE_ENV === 'dev') {
+      console.log(firstDataPoint, lastDataPoint)
+    }
+
+    return { x: dataDateEnd.format('YYYY-MM-DD'), y: differentFirstLast }
   })
 
   res
