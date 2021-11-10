@@ -55,15 +55,24 @@ const edisonOrdersUniqueOrderNumber = async function (req, res) {
 // change below to use EdisonOrdersIndexed???
 const monthsAvailableByYear = async function (req, res) {
   const company = await Company.findOne({ where: { id: req.body.companyId } })
-  console.log(company.emailIdentifier)
+  const { emailIdentifier, orderPrefix } = company
+  console.log(emailIdentifier, orderPrefix)
+
+  let regex = `^\\d+$`
+  if (orderPrefix !== '#') {
+    console.log('other')
+    regex = `${orderPrefix}\\d+$`
+  }
+
+  console.log(regex)
   const [results] = await db.sequelize.query(
     `SELECT
         DATE_PART('month', "emailDate") AS month,
         COUNT(DISTINCT "emailDate"::date) AS count
     FROM "IndexedEdisonOrders"
     WHERE
-      "orderNumber" ~ '^\\d+$' AND
-      "fromDomain" = '${company.emailIdentifier}' AND
+      "orderNumber" ~ '${regex}' AND
+      "fromDomain" = '${emailIdentifier}' AND
       DATE_PART('year', "emailDate") = '${req.body.year}'
     GROUP BY
       DATE_PART('month', "emailDate")
