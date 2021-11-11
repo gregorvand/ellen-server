@@ -103,9 +103,6 @@ const indexedEdisonOrdersByYear = async function (req, res) {
   // remove duplicate dats based on same day
   const flattenedTimesNoDuplicates = removeDuplicates(flattenedTimes, 'x')
 
-  if (process.env.NODE_ENV === 'dev') {
-    console.log(flattenedTimesNoDuplicates)
-  }
   // ensure user has access to the given months and return those
   let matchResultsWithAccess = flattenedTimesNoDuplicates.filter((result) => {
     const date = new Date(result.x)
@@ -119,9 +116,19 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     .map((value, key) => ({ x: parseFloat(key) + 1, y: value }))
     .value()
 
+  if (process.env.NODE_ENV === 'development') {
+    console.log(sortedResult)
+  }
+
   // find the order totals for a given month
   let meanValuesByMonth = sortedResult.map((dataset, index) => {
-    let allData = flattenArrayByKey(dataset.y)
+    // sort the dataset by date
+    let sortedDataset = _.sortBy(dataset.y, 'x')
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(sortedDataset)
+    }
+    let allData = sortedDataset.map((data) => data.y)
 
     const firstDataPoint = allData[0]
     const lastDataPoint = allData[allData.length - 1]
@@ -129,7 +136,7 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     let dataDate = dayjs({ year: year, month: dataset.x - 1 })
     const dataDateEnd = dataDate.endOf('month')
 
-    if (process.env.NODE_ENV === 'dev') {
+    if (process.env.NODE_ENV === 'development') {
       console.log(firstDataPoint, lastDataPoint)
     }
 
