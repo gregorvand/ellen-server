@@ -26,25 +26,30 @@ async function createCompany(dataRow) {
 
   return createdRecord
 }
-
 async function insertEdisonCompanies() {
   const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
   const data = await convertCSV()
   let barProgress = 1
   let success = 0
+  let skipped = 0
   bar1.start(data.length, 0)
 
   // MULTI ROW
   // comment out below and enable @ 60 to debug one row
   data.map(async (edisonRow) => {
     try {
-      await createCompany(edisonRow)
+      let insertedRow = await createCompany(edisonRow)
+      // console.log(insertedRow)
+      if (insertedRow[0].length > 0) {
+        success++
+      } else {
+        skipped++
+      }
       bar1.update(barProgress)
       barProgress++
-      success++
       if (barProgress === data.length + 1) {
         bar1.stop()
-        console.log(`\nSuccessfully evaluated ${success} companies`)
+        console.log(`\nAdded ${success} new companies, skipped ${skipped}\n`)
         process.exit(1)
       }
     } catch (error) {

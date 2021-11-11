@@ -48,7 +48,7 @@ async function importAllCSVToOrders(fileIterator = START_AT_FILE) {
       if (barProgress == data.length + 1) {
         bar1.stop()
         console.log('added', insertCount)
-        console.log(`processed ${fileName[fileName.length - 1]}`)
+        console.log(`processed ${fileName[fileName.length - 1]}\n`)
 
         // chunk through every file in the directory
         if (fileIterator < dirLength - 1) {

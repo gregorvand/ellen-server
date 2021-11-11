@@ -8,13 +8,13 @@ const { Op } = require('sequelize')
 const dayjs = require('dayjs')
 const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 
-// const COMPANY_DOMAIN = 'stat@wearfigs.com'
-const START_DATE = '2020-10-20'
-const END_DATE = '2020-10-31'
+const COMPANY_DOMAIN = 'service@rhone.com'
+const START_DATE = '2017-01-01'
+const END_DATE = '2021-11-01'
 async function transformOrdersIndexed() {
   const allCompanyRows = await EdisonOrder.findAll({
     where: {
-      // fromDomain: COMPANY_DOMAIN,
+      fromDomain: COMPANY_DOMAIN,
       emailDate: {
         [Op.gte]: dayjs(START_DATE).toDate(),
         [Op.lte]: dayjs(END_DATE).toDate(),
@@ -26,22 +26,24 @@ async function transformOrdersIndexed() {
 
   let barProgress = 1
   bar1.start(allCompanyRows.length, 0)
-  let insertCount = 0
   let readCount = 0
   let skippedCount = 0
   allCompanyRows.map(async (edisonRow) => {
-    indexedEdisonOrders.insertEdisonRowIndexed(edisonRow).then((result) => {
-      result?.orderNumber != undefined ? insertCount++ : skippedCount++
+    if (/Refund|refund|Return|return|delivered/.test(edisonRow.subjectLine)) {
+      // console.log(`ignoring ${edisonRow.orderNumber} ${edisonRow.subjectLine}`)
+      skippedCount++
+    } else {
+      await indexedEdisonOrders.insertEdisonRowIndexed(edisonRow)
       readCount++
-      bar1.update(barProgress++)
-      if (barProgress == allCompanyRows.length + 1) {
-        bar1.stop()
-        console.log(
-          `processed ${allCompanyRows.length} for ${START_DATE} to ${END_DATE} `
-        )
-        process.exit(1)
-      }
-    })
+    }
+    bar1.update(barProgress++)
+    if (barProgress == allCompanyRows.length + 1) {
+      console.log(
+        `processed ${allCompanyRows.length} for ${START_DATE} to ${END_DATE} | skipped ${skippedCount}\n`
+      )
+      bar1.stop()
+      process.exit(1)
+    }
   })
 }
 
