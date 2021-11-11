@@ -55,6 +55,14 @@
                     "field": "exchangeShortName",
                     "seqType": "Sequelize.STRING"
                 },
+                "data_verified": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "data_verified",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -935,5 +943,5 @@
             "indexes": []
         }
     },
-    "revision": 17
+    "revision": 18
 }
