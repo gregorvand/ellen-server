@@ -56,10 +56,20 @@ const client = new Client({
 async function populateDB() {
   let bulk = []
   const [companies] = await db.sequelize.query(
-    `SELECT * FROM public."Companies"
-    WHERE  
-      "emailIdentifier" ~ '^([a-zA-Z0-9_]+)@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.)|(?!hotmail|gmail|yahoo|qq)(([a-zA-Z0-9-]+.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(]?)$' 
-    AND "industry" = 'Apparel Retail'`
+    // `SELECT * FROM public."Companies"
+    // WHERE
+    //   "emailIdentifier" ~ '/^([a-zA-Z0-9_]+)@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.)|(?!hotmail|gmail|yahoo|qq|marketplace|outlook|relay|ebay|members)(([a-zA-Z0-9-]+.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(]?)$'
+    // AND "industry" = 'Shopify'`
+    
+    // `SELECT * FROM public."Companies"
+    // WHERE
+    // "createdAt" > current_date - interval '1' hour
+    // AND "emailIdentifier" ~ '^([a-zA-Z0-9_]+)@(([[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.)|(?!hotmail|gmail|yahoo|qq|marketplace|outlook|relay|ebay|members)(([a-zA-Z0-9-]+.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(]?)$'
+    // AND "industry" = 'Shopify'`
+    
+    // `SELECT * FROM public."Companies"
+    // WHERE  
+    // "id" = '6'`
   )
 
   console.log('indexing', companies.length)
