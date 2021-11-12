@@ -4,7 +4,7 @@ const cliProgress = require('cli-progress')
 const db = require('../server/models/index')
 
 // get data
-const csvFilePath = '../edison_data/export_ozfmn.csv'
+const csvFilePath = '../edison_data/export_mobnq.csv'
 
 async function convertCSV() {
   const jsonArray = await csv().fromFile(csvFilePath)
@@ -39,8 +39,8 @@ async function insertEdisonCompanies() {
   data.map(async (edisonRow) => {
     try {
       let insertedRow = await createCompany(edisonRow)
-      // console.log(insertedRow)
-      if (insertedRow[0].length > 0) {
+      // console.log(insertedRow[1])
+      if (insertedRow[1] == 1) {
         success++
       } else {
         skipped++
