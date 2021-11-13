@@ -1,62 +1,61 @@
 require('dotenv').config()
-const Company = require('../server/models').Company
 const csv = require('csvtojson')
+const cliProgress = require('cli-progress')
+const db = require('../server/models/index')
 
 // get data
-const csvFilePath = '../edison_data/2021_10_09_sellers.csv'
+const csvFilePath = '../edison_data/export_mobnq.csv'
 
 async function convertCSV() {
-  const jsonArray = await csv({
-    // parse order number here to number format for later checks
-    colParser: { order_number: 'number' },
-  }).fromFile(csvFilePath)
+  const jsonArray = await csv().fromFile(csvFilePath)
   return jsonArray
 }
 
 async function createCompany(dataRow) {
-  const isACompany = await Company.findOne({
-    where: {
-      emailIdentifier: dataRow.from_domain,
-    },
-  })
+  let itemResllerEscaped = dataRow.item_reseller.replace(/'/g, "''")
+  const createdRecord = await db.sequelize.query(
+    `INSERT INTO public."Companies" (
+      "nameIdentifier", "emailIdentifier", "orderPrefix", "industry",
+    "createdAt", "updatedAt"
+  ) VALUES (
+      '${itemResllerEscaped}', '${dataRow.from_domain}', '#', 'Shopify',
+      NOW(), NOW()
+  ) 
+ ON CONFLICT ("emailIdentifier") DO NOTHING`
+  )
 
-  if (isACompany !== null) {
-    console.log('skipping, already have', dataRow.item_reseller)
-    return
-  } else {
-    const isADuplicate = await Company.findOne({
-      where: {
-        nameIdentifier: dataRow.item_reseller,
-      },
-    })
-
-    const duplicateMarker = isADuplicate !== null ? 'duplicate' : ''
-
-    console.log('duplicate?', isADuplicate)
-    const newCompany = await Company.create({
-      nameIdentifier: dataRow.item_reseller,
-      emailIdentifier: dataRow.from_domain,
-      orderPrefix: '#',
-      orderSuffix: duplicateMarker,
-      companyType: 'private',
-      industry: 'Shopify',
-    }).then((newCompany) => newCompany)
-
-    return newCompany
-  }
+  return createdRecord
 }
-
 async function insertEdisonCompanies() {
+  const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
   const data = await convertCSV()
-  // console.log(rowOneData)
+  let barProgress = 1
+  let success = 0
+  let skipped = 0
+  bar1.start(data.length, 0)
 
   // MULTI ROW
   // comment out below and enable @ 60 to debug one row
   data.map(async (edisonRow) => {
-    const company = await createCompany(edisonRow)
-    company
-      ? console.log('created:', company.nameIdentifier)
-      : console.log('moving on..')
+    try {
+      let insertedRow = await createCompany(edisonRow)
+      // console.log(insertedRow[1])
+      if (insertedRow[1] == 1) {
+        success++
+      } else {
+        skipped++
+      }
+      bar1.update(barProgress)
+      barProgress++
+      if (barProgress === data.length + 1) {
+        bar1.stop()
+        console.log(`\nAdded ${success} new companies, skipped ${skipped}\n`)
+        process.exit(1)
+      }
+    } catch (error) {
+      barProgress++
+      console.log(error)
+    }
   })
 }
 

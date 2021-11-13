@@ -5,9 +5,9 @@ const pg = require('pg')
 console.log('current ENV', process.env.NODE_ENV)
 
 console.log('more env', env)
-if (env != 'development') {
-  pg.defaults.ssl = true
-}
+// if (env != 'development') {
+//   pg.defaults.ssl = true
+// }
 
 const fs = require('fs')
 const path = require('path')
@@ -20,18 +20,22 @@ let dialectOptions = false
 
 if (env == 'production') {
   dialectOptions = {
-    ssl: { rejectUnauthorized: false },
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
     useUTC: false,
   }
 }
 
 let sequelize
 if (config.use_env_variable) {
+  console.log('using env var')
   sequelize = new Sequelize(process.env[config.use_env_variable], config, {
     logging: true,
   })
 } else {
-  console.log('init Sequelize')
+  console.log('init Sequelizezzz', process.env.PROD_DB_PASS) // does not work?
   sequelize = new Sequelize({
     dialect: 'postgres',
     host: config.host,

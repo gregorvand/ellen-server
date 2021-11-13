@@ -19,4 +19,13 @@ module.exports = {
       return filtered
     }
   },
+  // group all objects together by key
+  flattenArrayByKey(array) {
+    return array.reduce(function (acc, obj) {
+      if (obj.y) {
+        acc.push(parseInt(obj.y))
+      }
+      return acc
+    }, [])
+  },
 }

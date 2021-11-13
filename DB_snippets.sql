@@ -27,3 +27,25 @@ where
 order by
   "orderNumber",
   "emailDate"
+-- Override date value if older
+INSERT INTO
+  public."EdisonOrderIndexeds" (
+    "orderNumber",
+    "emailDate",
+    "fromDomain",
+    "createdAt",
+    "updatedAt"
+  )
+VALUES
+  (
+    '1111002',
+    '2017-01-01',
+    'gregor@vand.hk',
+    NOW(),
+    NOW()
+  ) ON CONFLICT ("orderNumber") DO
+UPDATE
+SET
+  "emailDate" = excluded."emailDate"
+WHERE
+  excluded."emailDate" < "EdisonOrderIndexeds"."emailDate"
