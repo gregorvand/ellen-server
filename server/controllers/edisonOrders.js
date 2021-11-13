@@ -186,5 +186,4 @@ module.exports = {
   insertEdisonRowNoId: insertEdisonRowNoId,
   edisonOrdersUniqueOrderNumber: edisonOrdersUniqueOrderNumber,
   monthsAvailableByYear: monthsAvailableByYear,
-  // edisonOrdersByYear: edisonOrdersByYear,
 }
