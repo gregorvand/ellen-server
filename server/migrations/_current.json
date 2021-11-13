@@ -90,6 +90,76 @@
                 }
             }
         },
+        "IndexedCompanies": {
+            "tableName": "IndexedCompanies",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nameIdentifier": {
+                    "allowNull": false,
+                    "field": "nameIdentifier",
+                    "seqType": "Sequelize.STRING"
+                },
+                "emailIdentifier": {
+                    "allowNull": false,
+                    "field": "emailIdentifier",
+                    "seqType": "Sequelize.STRING"
+                },
+                "orderPrefix": {
+                    "allowNull": false,
+                    "field": "orderPrefix",
+                    "seqType": "Sequelize.STRING"
+                },
+                "orderSuffix": {
+                    "allowNull": true,
+                    "field": "orderSuffix",
+                    "seqType": "Sequelize.STRING"
+                },
+                "industry": {
+                    "allowNull": true,
+                    "field": "industry",
+                    "seqType": "Sequelize.STRING"
+                },
+                "data_verified": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "data_verified",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": {
+                "840dbadc87882d00238a4c7ad7a948e86d0350d7": {
+                    "unique": true,
+                    "fields": [
+                        "emailIdentifier"
+                    ],
+                    "name": "indexed_companies_email_identifier",
+                    "options": {
+                        "indexName": "indexed_companies_email_identifier",
+                        "name": "indexed_companies_email_identifier",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
+        },
         "CompanyCategories": {
             "tableName": "CompanyCategories",
             "schema": {
@@ -943,5 +1013,5 @@
             "indexes": []
         }
     },
-    "revision": 18
+    "revision": 20
 }

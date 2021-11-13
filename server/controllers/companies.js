@@ -1,4 +1,5 @@
 const Company = require('../models').Company
+const IndexedCompany = require('../models').IndexedCompany
 const userHelpers = require('../utils/getUserFromToken')
 
 module.exports = {
@@ -125,5 +126,14 @@ module.exports = {
         res.status(403).send('could not create category', err.code)
         res.end()
       })
+  },
+
+  async getIndexedCompany(req, res) {
+    const company = await IndexedCompany.findOne({
+      where: {
+        id: req.query.id,
+      },
+    })
+    res.send(company)
   },
 }

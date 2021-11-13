@@ -1,6 +1,6 @@
 // For use with EdisonOrder model
-
 require('dotenv').config()
+const csv = require('csvtojson')
 const cliProgress = require('cli-progress')
 const EdisonOrder = require('../server/models').EdisonOrder
 const indexedEdisonOrders = require('../server/controllers/indexedEdisonOrders')
@@ -12,6 +12,7 @@ const COMPANY_DOMAIN = 'support@darntough.com'
 const START_DATE = '2017-01-01'
 const END_DATE = '2021-11-01'
 async function transformOrdersIndexed() {
+  // From local DB
   const allCompanyRows = await EdisonOrder.findAll({
     where: {
       fromDomain: COMPANY_DOMAIN,
@@ -21,6 +22,9 @@ async function transformOrdersIndexed() {
       },
     },
   })
+
+  // from file
+  // const allCompanyRows = await csv().fromFile('../edison_data/new_test.csv')
 
   console.log(allCompanyRows.length)
 

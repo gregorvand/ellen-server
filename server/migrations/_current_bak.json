@@ -55,6 +55,14 @@
                     "field": "exchangeShortName",
                     "seqType": "Sequelize.STRING"
                 },
+                "data_verified": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "data_verified",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -76,6 +84,77 @@
                     "options": {
                         "indexName": "companies_email_identifier",
                         "name": "companies_email_identifier",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
+        },
+        "IndexedCompanies": {
+            "tableName": "IndexedCompanies",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nameIdentifier": {
+                    "allowNull": false,
+                    "field": "nameIdentifier",
+                    "seqType": "Sequelize.STRING"
+                },
+                "emailIdentifier": {
+                    "allowNull": false,
+                    "field": "emailIdentifier",
+                    "seqType": "Sequelize.STRING"
+                },
+                "orderPrefix": {
+                    "allowNull": false,
+                    "field": "orderPrefix",
+                    "seqType": "Sequelize.STRING"
+                },
+                "orderSuffix": {
+                    "allowNull": true,
+                    "field": "orderSuffix",
+                    "seqType": "Sequelize.STRING"
+                },
+                "industry": {
+                    "allowNull": true,
+                    "field": "industry",
+                    "seqType": "Sequelize.STRING"
+                },
+                "data_verified": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "data_verified",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": {
+                "ec6f5e2756d6bf6a779bbeae6a2434b2dace26f9": {
+                    "unique": true,
+                    "fields": [
+                        "emailIdentifier",
+                        "nameIdentifier"
+                    ],
+                    "name": "indexed_companies_email_identifier_name_identifier",
+                    "options": {
+                        "indexName": "indexed_companies_email_identifier_name_identifier",
+                        "name": "indexed_companies_email_identifier_name_identifier",
                         "indicesType": "UNIQUE",
                         "type": "UNIQUE"
                     }
@@ -935,5 +1014,5 @@
             "indexes": []
         }
     },
-    "revision": 17
+    "revision": 19
 }

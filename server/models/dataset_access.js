@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     })
     DatasetAccess.belongsTo(models.Company, {
       foreignKey: 'companyId',
-      onDelete: 'CASCADE',
+      onDelete: 'DO NOTHING',
     })
   }
 

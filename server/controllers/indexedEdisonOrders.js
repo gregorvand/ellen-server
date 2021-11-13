@@ -24,25 +24,26 @@ const insertEdisonRowIndexed = async function (edisonRow) {
   return createdRecord
 }
 
-const Company = require('../models').Company
+const Company = require('../models').IndexedCompany
 var _ = require('lodash')
 const userHelpers = require('../utils/getUserFromToken')
 const DatasetAccess = require('../controllers/datasetAccess')
-const { removeDuplicates, flattenArrayByKey } = require('../utils/helpers')
+const { removeDuplicates } = require('../utils/helpers')
 var objectSupport = require('dayjs/plugin/objectSupport')
 dayjs.extend(objectSupport)
 
 const generateCompanyRegex = require('../utils/generateCompanyRegex')
 
 const indexedEdisonOrdersByYear = async function (req, res) {
-  // console.log(req)
-  const { companyId, year } = req.query
+  const { companyId, year, identifier } = req.query
   const dataYear = year
-  const company = await Company.findOne({ where: { id: companyId } })
+  const company = await Company.findOne({
+    where: { emailIdentifier: identifier },
+  })
 
   const { emailIdentifier, orderPrefix } = company
 
-  console.log(`${company.emailIdentifier} ${companyId} ${year}`)
+  console.log(`${emailIdentifier} ${companyId} ${year}`)
   const [results] = await db.sequelize.query(
     `select
     "orderNumber" "y",
@@ -94,6 +95,21 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     })
   }
 
+  // WIP FOR removing suffixes
+  // console.log(resultsRegex)
+
+  // if (
+  //   orderSuffix !== null ||
+  //   orderSuffix !== undefined ||
+  //   orderSuffix !== 'duplicate'
+  // ) {
+  //   resultsRegex = resultsRegex.map((result) => {
+  //     console.log(result)
+  //     const removePrefix = result.y.split(orderSuffix) || false
+  //     return { t: result.t, y: removePrefix[0] || result.y }
+  //   })
+  // }
+
   // Align dates to same times, to compare, and be able to remove duplicates
   const flattenedTimes = resultsRegex.map((order) => ({
     x: dayjs(order.t).startOf('day').toISOString(),
@@ -133,12 +149,16 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     const firstDataPoint = allData[0]
     const lastDataPoint = allData[allData.length - 1]
     const differentFirstLast = lastDataPoint - firstDataPoint
+
     let dataDate = dayjs({ year: year, month: dataset.x - 1 })
     const dataDateEnd = dataDate.endOf('month')
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(firstDataPoint, lastDataPoint)
+      console.log(firstDataPoint, lastDataPoint, differentFirstLast)
     }
+
+    // TODO: check if we are on the current year/month. If so, date
+    // should be latest datapoint date, not auto-generated end of month date
 
     return { x: dataDateEnd.format('YYYY-MM-DD'), y: differentFirstLast }
   })

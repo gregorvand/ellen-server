@@ -310,6 +310,12 @@ module.exports = (app) => {
     datasetAccessController.datasetAccessCharge
   )
 
+  app.get(
+    '/api/get-company',
+    auth.getToken,
+    companiesController.getIndexedCompany
+  )
+
   // app.get(
   //   '/api/dataset-year-company-v2',
   //   auth.getToken,

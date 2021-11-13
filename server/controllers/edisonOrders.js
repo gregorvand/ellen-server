@@ -3,6 +3,7 @@
 
 const EdisonOrder = require('../models').EdisonOrder
 const Company = require('../models').Company
+const IndexedCompany = require('../models').IndexedCompany
 const db = require('../models/index')
 const { Op } = require('sequelize')
 var _ = require('lodash')
@@ -53,9 +54,10 @@ const edisonOrdersUniqueOrderNumber = async function (req, res) {
 // constructed with help via https://stackoverflow.com/questions/69127003/mixing-distinct-with-group-by-postgres
 
 const generateCompanyRegex = require('../utils/generateCompanyRegex')
-// change below to use EdisonOrdersIndexed???
 const monthsAvailableByYear = async function (req, res) {
-  const company = await Company.findOne({ where: { id: req.body.companyId } })
+  const company = await IndexedCompany.findOne({
+    where: { emailIdentifier: req.body.identifier },
+  })
   const { emailIdentifier, orderPrefix } = company
 
   let regex = generateCompanyRegex(orderPrefix)
