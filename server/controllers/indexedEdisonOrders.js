@@ -64,7 +64,7 @@ const indexedEdisonOrdersByYear = async function (req, res) {
 
   const accessGranted = await DatasetAccess.userAccessByCompany(
     currentUser.id,
-    companyId
+    company.id
   )
 
   // allMonths is an array of just which dataset access IDs they have
