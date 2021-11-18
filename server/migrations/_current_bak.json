@@ -93,13 +93,6 @@
         "IndexedCompanies": {
             "tableName": "IndexedCompanies",
             "schema": {
-                "id": {
-                    "allowNull": false,
-                    "primaryKey": true,
-                    "autoIncrement": true,
-                    "field": "id",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "nameIdentifier": {
                     "allowNull": false,
                     "field": "nameIdentifier",
@@ -107,6 +100,8 @@
                 },
                 "emailIdentifier": {
                     "allowNull": false,
+                    "unique": true,
+                    "primaryKey": true,
                     "field": "emailIdentifier",
                     "seqType": "Sequelize.STRING"
                 },
@@ -974,6 +969,44 @@
             },
             "indexes": []
         },
+        "UserIndexedCompanies": {
+            "tableName": "UserIndexedCompanies",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "emailIdentifier": {
+                    "primaryKey": true,
+                    "field": "emailIdentifier",
+                    "references": {
+                        "model": "IndexedCompanies",
+                        "key": "emailIdentifier"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.STRING"
+                },
+                "UserId": {
+                    "primaryKey": true,
+                    "field": "UserId",
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
         "UserCategories": {
             "tableName": "UserCategories",
             "schema": {
@@ -1013,5 +1046,5 @@
             "indexes": []
         }
     },
-    "revision": 20
+    "revision": 21
 }

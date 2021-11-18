@@ -93,6 +93,11 @@
         "IndexedCompanies": {
             "tableName": "IndexedCompanies",
             "schema": {
+                "id": {
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "nameIdentifier": {
                     "allowNull": false,
                     "field": "nameIdentifier",
@@ -1046,5 +1051,5 @@
             "indexes": []
         }
     },
-    "revision": 21
+    "revision": 22
 }

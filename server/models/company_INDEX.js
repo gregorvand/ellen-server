@@ -2,6 +2,10 @@ module.exports = (sequelize, DataTypes) => {
   const IndexedCompany = sequelize.define(
     'IndexedCompany',
     {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+      },
       nameIdentifier: {
         type: DataTypes.STRING,
         allowNull: false,
