@@ -120,11 +120,12 @@ module.exports = {
   async updateUserCompanies(req, res) {
     try {
       const currentUser = await userHelpers.currentUser(req.token)
-      const selectedCompanyIds = req.body.selectedCompanies.map(
-        (company) => company.id
+      const selectedCompanyEmails = req.body.selectedCompanies.map(
+        (company) => company.companyEmail
       )
+
       currentUser
-        .addCompanies(selectedCompanyIds) // get company IDs from state
+        .addIndexedCompanies(selectedCompanyEmails) // get company Email identifiers from state
         .then((user) => res.status(200).send(user))
         .catch((error) => res.status(400).send(error))
     } catch (err) {

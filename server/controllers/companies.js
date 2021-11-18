@@ -23,17 +23,14 @@ module.exports = {
   async listByUser(req, res) {
     try {
       const currentUser = await userHelpers.currentUser(req.token)
-      let dbparams = {}
-      if (req.body.companyType) {
-        dbparams = { where: { companyType: 'private' } }
-      }
-      currentUser.getCompanies(dbparams).then((selectedCompanies) => {
+      currentUser.getIndexedCompanies().then((selectedCompanies) => {
+        console.log(selectedCompanies)
         res.json({
           companies: selectedCompanies,
         })
       })
     } catch (err) {
-      res.sendStatus(401)
+      res.send(err)
     }
   },
 

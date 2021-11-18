@@ -69,6 +69,9 @@ module.exports = (sequelize, DataTypes) => {
       as: 'subscriptions',
     })
     User.belongsToMany(models.Company, { through: 'UserCompanies' })
+    User.belongsToMany(models.IndexedCompany, {
+      through: 'UserIndexedCompanies',
+    })
   }
 
   User.prototype.validPassword = async function (password) {
