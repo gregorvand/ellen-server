@@ -50,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'emailIdentifier',
       constraints: false,
     })
+    IndexedCompany.hasMany(models.DatasetAccess, {
+      foreignKey: 'emailIdentifier',
+      as: 'datasets',
+    })
   }
+
   return IndexedCompany
 }

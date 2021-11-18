@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'customerId',
       onDelete: 'CASCADE',
     })
-    DatasetAccess.belongsTo(models.Company, {
-      foreignKey: 'companyId',
+    DatasetAccess.belongsTo(models.IndexedCompany, {
+      foreignKey: 'emailIdentifier',
       onDelete: 'DO NOTHING',
     })
   }

@@ -20,7 +20,10 @@ module.exports = {
     const currentUser = await userHelpers.currentUser(req.token)
     try {
       return DatasetAccess.findAll({
-        where: { companyId: req.query.companyId, customerId: currentUser.id },
+        where: {
+          emailIdentifier: req.query.identifier,
+          customerId: currentUser.id,
+        },
       })
         .then((dataAccess) => res.send(dataAccess))
         .catch((error) =>
@@ -35,6 +38,7 @@ module.exports = {
     const currentUser = await userHelpers.currentUser(req.token)
     const dataSetsToPurchase = req.body.datasetIdArray
     const tokenCost = process.env.DATASET_COST_TOKEN * dataSetsToPurchase.length
+    const companyIdentifier = req.body.identifier
 
     // check credit balance
     let creditResult = await creditTransactionController.getCreditBalance(
@@ -59,7 +63,7 @@ module.exports = {
         let thePromise = createDatasetAccess({
           userId: currentUser.id,
           datasetId: dataSetId,
-          companyId: req.body.companyId,
+          identifier: companyIdentifier,
         })
 
         allPromises.push(thePromise)
@@ -80,19 +84,20 @@ module.exports = {
     }).then((result) => result)
   },
 
-  async userAccessByCompany(userId, companyId) {
+  async userAccessByCompany(userId, identifier) {
     return DatasetAccess.findAll({
-      where: { customerId: userId, companyId: companyId },
+      where: { customerId: userId, emailIdentifier: identifier },
     }).then((result) => result)
   },
 }
 
 async function createDatasetAccess(accessProperties) {
-  const { userId, datasetId, expiry, companyId } = accessProperties
+  const { userId, datasetId, expiry, identifier } = accessProperties
+  console.log('!!!', identifier)
   return DatasetAccess.create({
     datasetId: datasetId,
     customerId: userId,
     expiry: expiry || new Date(),
-    companyId: companyId,
+    emailIdentifier: identifier,
   })
 }
