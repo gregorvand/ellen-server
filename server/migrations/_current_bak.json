@@ -145,16 +145,15 @@
                 }
             },
             "indexes": {
-                "ec6f5e2756d6bf6a779bbeae6a2434b2dace26f9": {
+                "840dbadc87882d00238a4c7ad7a948e86d0350d7": {
                     "unique": true,
                     "fields": [
-                        "emailIdentifier",
-                        "nameIdentifier"
+                        "emailIdentifier"
                     ],
-                    "name": "indexed_companies_email_identifier_name_identifier",
+                    "name": "indexed_companies_email_identifier",
                     "options": {
-                        "indexName": "indexed_companies_email_identifier_name_identifier",
-                        "name": "indexed_companies_email_identifier_name_identifier",
+                        "indexName": "indexed_companies_email_identifier",
+                        "name": "indexed_companies_email_identifier",
                         "indicesType": "UNIQUE",
                         "type": "UNIQUE"
                     }
@@ -1014,5 +1013,5 @@
             "indexes": []
         }
     },
-    "revision": 19
+    "revision": 20
 }
