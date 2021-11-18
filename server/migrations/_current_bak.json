@@ -93,13 +93,6 @@
         "IndexedCompanies": {
             "tableName": "IndexedCompanies",
             "schema": {
-                "id": {
-                    "allowNull": false,
-                    "primaryKey": true,
-                    "autoIncrement": true,
-                    "field": "id",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "nameIdentifier": {
                     "allowNull": false,
                     "field": "nameIdentifier",
@@ -107,6 +100,8 @@
                 },
                 "emailIdentifier": {
                     "allowNull": false,
+                    "unique": true,
+                    "primaryKey": true,
                     "field": "emailIdentifier",
                     "seqType": "Sequelize.STRING"
                 },
@@ -145,16 +140,15 @@
                 }
             },
             "indexes": {
-                "ec6f5e2756d6bf6a779bbeae6a2434b2dace26f9": {
+                "840dbadc87882d00238a4c7ad7a948e86d0350d7": {
                     "unique": true,
                     "fields": [
-                        "emailIdentifier",
-                        "nameIdentifier"
+                        "emailIdentifier"
                     ],
-                    "name": "indexed_companies_email_identifier_name_identifier",
+                    "name": "indexed_companies_email_identifier",
                     "options": {
-                        "indexName": "indexed_companies_email_identifier_name_identifier",
-                        "name": "indexed_companies_email_identifier_name_identifier",
+                        "indexName": "indexed_companies_email_identifier",
+                        "name": "indexed_companies_email_identifier",
                         "indicesType": "UNIQUE",
                         "type": "UNIQUE"
                     }
@@ -975,6 +969,44 @@
             },
             "indexes": []
         },
+        "UserIndexedCompanies": {
+            "tableName": "UserIndexedCompanies",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "emailIdentifier": {
+                    "primaryKey": true,
+                    "field": "emailIdentifier",
+                    "references": {
+                        "model": "IndexedCompanies",
+                        "key": "emailIdentifier"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.STRING"
+                },
+                "UserId": {
+                    "primaryKey": true,
+                    "field": "UserId",
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
         "UserCategories": {
             "tableName": "UserCategories",
             "schema": {
@@ -1014,5 +1046,5 @@
             "indexes": []
         }
     },
-    "revision": 19
+    "revision": 21
 }

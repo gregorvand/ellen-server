@@ -2,6 +2,10 @@ module.exports = (sequelize, DataTypes) => {
   const IndexedCompany = sequelize.define(
     'IndexedCompany',
     {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+      },
       nameIdentifier: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -9,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       emailIdentifier: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
+        primaryKey: true,
       },
       orderPrefix: {
         type: DataTypes.STRING,
@@ -38,5 +44,12 @@ module.exports = (sequelize, DataTypes) => {
       ],
     }
   )
+  IndexedCompany.associate = (models) => {
+    IndexedCompany.belongsToMany(models.User, {
+      through: 'UserIndexedCompanies',
+      foreignKey: 'emailIdentifier',
+      constraints: false,
+    })
+  }
   return IndexedCompany
 }
