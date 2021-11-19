@@ -108,6 +108,11 @@ app.use(express.static(__dirname + '/node_modules'))
 
 process.env.TZ = 'Asia/Hong_Kong'
 console.log('env/timezone:', `${env}, ${process.env.TZ}`)
+if (process.env.DATA_ENV === 'unverified') {
+  console.log(
+    '\n**REMINDER**: DATA_ENV is unverified - you are looking up the Companies table\n'
+  )
+}
 // Production (DigitalOcean-based) and dev Session store PG connections / parameters
 if (env === 'production') {
   app.use(

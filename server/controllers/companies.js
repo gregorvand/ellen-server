@@ -126,7 +126,13 @@ module.exports = {
   },
 
   async getIndexedCompany(req, res) {
-    const company = await IndexedCompany.findOne({
+    let companyDataObject
+    if (process.env.DATA_ENV === 'unverified') {
+      companyDataObject = Company
+    } else {
+      companyDataObject = IndexedCompany
+    }
+    const company = await companyDataObject.findOne({
       where: {
         id: req.query.id,
       },

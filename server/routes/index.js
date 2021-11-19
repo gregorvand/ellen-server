@@ -316,12 +316,6 @@ module.exports = (app) => {
     companiesController.getIndexedCompany
   )
 
-  // app.get(
-  //   '/api/dataset-year-company-v2',
-  //   auth.getToken,
-  //   edisonController.edisonOrdersByYear
-  // )
-
   app.get(
     '/api/dataset-year-company-indexed',
     auth.getToken,
