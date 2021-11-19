@@ -83,7 +83,7 @@ Renaming will require something like:
 
 ### Data environments
 
-A .env variable of `DATA_ENV=unverified` can be set. What does this do?
+A `.env` file variable of `DATA_ENV=unverified` can be set. What does this do?
 
 - It allows a user with `username` of `admin` to by-pass purchasing data and just see all datapoints available for that year, rendered on the chart.
 - Company DB lookup (ie the ID) will correspond to the master `Company` table and not the transformed (ie verified) `IndexedCompany` table
