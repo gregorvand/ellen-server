@@ -91,6 +91,8 @@ A .env variable of `DATA_ENV=unverified` can be set. What does this do?
 
 So, we use the above to enable someone to verify company data, before marking the `Company` as `verified` which in turn sets it up for populating in the `IndexedCompany` table which is what production uses as its record of companies, and what is synced to `_prod` ES index. 
 
+Remember to restart the server when enabling or disabling for this to take effect ;)
+
 Note the ES index being looked up, is set from the [front-end repo](https://github.com/gregorvand/ellen-vue) ENV variables.
 
 ---

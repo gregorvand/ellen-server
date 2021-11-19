@@ -77,7 +77,6 @@ const indexedEdisonOrdersByYear = async function (req, res) {
   // for a given company and requested year
   let allMonths = accessGranted
     .filter((access) => {
-      console.log(access.dataValues.datasetId)
       const id = access.dataValues.datasetId
       let year = id.slice(-4)
       if (dataYear == year) return id
