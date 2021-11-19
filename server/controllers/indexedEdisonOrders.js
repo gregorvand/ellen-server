@@ -24,7 +24,13 @@ const insertEdisonRowIndexed = async function (edisonRow) {
   return createdRecord
 }
 
-const Company = require('../models').IndexedCompany
+let Company
+if (process.env.DATA_ENV === 'unverified') {
+  Company = require('../models').Company
+} else {
+  Company = require('../models').IndexedCompany
+}
+
 var _ = require('lodash')
 const userHelpers = require('../utils/getUserFromToken')
 const DatasetAccess = require('../controllers/datasetAccess')
@@ -71,15 +77,41 @@ const indexedEdisonOrdersByYear = async function (req, res) {
   // for a given company and requested year
   let allMonths = accessGranted
     .filter((access) => {
+      console.log(access.dataValues.datasetId)
       const id = access.dataValues.datasetId
       let year = id.slice(-4)
       if (dataYear == year) return id
     })
     .map((filtered) => filtered.datasetId)
 
-  let monthsToOpen = allMonths.map((dataset) => {
-    return dataset.substr(-8).substring(0, 2)
-  })
+  // A designated admin should be able to just access all data without going through purchasing flow
+  // So long as env is 'unverified' data env set up for checking
+  let monthsToOpen = []
+  if (
+    currentUser.username !== 'admin' ||
+    process.env.DATA_ENV !== 'unverified'
+  ) {
+    // If not an admin, generate unlocked months from dataset access
+    monthsToOpen = allMonths.map((dataset) => {
+      return dataset.substr(-8).substring(0, 2)
+    })
+  } else {
+    // else just open all months
+    monthsToOpen = [
+      '01',
+      '02',
+      '03',
+      '04',
+      '05',
+      '06',
+      '07',
+      '08',
+      '09',
+      '10',
+      '11',
+      '12',
+    ]
+  }
 
   // Use standard regex generator to decide which datapoints to evaluate
   const regex = generateCompanyRegex(orderPrefix)

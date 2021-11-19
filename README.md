@@ -81,6 +81,18 @@ Renaming will require something like:
 }
 ```
 
+### Data environments
+
+A .env variable of `DATA_ENV=unverified` can be set. What does this do?
+
+- It allows a user with `username` of `admin` to by-pass purchasing data and just see all datapoints available for that year, rendered on the chart.
+- Company DB lookup (ie the ID) will correspond to the master `Company` table and not the transformed (ie verified) `IndexedCompany` table
+- However, all datapoints will be shown from `IndexedEdisonOrders` regardless, since at least one transform of the raw data is what we are needing to check
+
+So, we use the above to enable someone to verify company data, before marking the `Company` as `verified` which in turn sets it up for populating in the `IndexedCompany` table which is what production uses as its record of companies, and what is synced to `_prod` ES index. 
+
+Note the ES index being looked up, is set from the [front-end repo](https://github.com/gregorvand/ellen-vue) ENV variables.
+
 ---
 
 

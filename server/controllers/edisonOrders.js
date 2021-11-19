@@ -55,9 +55,18 @@ const edisonOrdersUniqueOrderNumber = async function (req, res) {
 
 const generateCompanyRegex = require('../utils/generateCompanyRegex')
 const monthsAvailableByYear = async function (req, res) {
+  // Depending on data env we look up the Company email either from
+  // unverified or verified table
+  // However always checking IndexedEdisonOrder table which has had at least one transformation
+  let companyDataObject
+  if (process.env.DATA_ENV === 'unverified') {
+    companyDataObject = Company
+  } else {
+    companyDataObject = IndexedCompany
+  }
   if (req.body.identifier) {
     try {
-      const company = await IndexedCompany.findOne({
+      const company = await Company.findOne({
         where: { emailIdentifier: req.body.identifier },
       })
       const { emailIdentifier, orderPrefix } = company
