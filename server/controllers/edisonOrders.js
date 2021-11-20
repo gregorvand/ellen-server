@@ -66,7 +66,7 @@ const monthsAvailableByYear = async function (req, res) {
   }
   if (req.body.identifier) {
     try {
-      const company = await Company.findOne({
+      const company = await companyDataObject.findOne({
         where: { emailIdentifier: req.body.identifier },
       })
       const { emailIdentifier, orderPrefix } = company
