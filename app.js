@@ -114,51 +114,8 @@ if (process.env.DATA_ENV === 'unverified') {
   )
 }
 // Production (DigitalOcean-based) and dev Session store PG connections / parameters
-if (env === 'production') {
-  app.use(
-    session(
-      {
-        store: new (require('connect-pg-simple')(session))({
-          conObject: {
-            connectionString: process.env.SESSION_PG_CONNECTION, // DigitalOcean DB connection string without ssl param
-            ssl: { require: true, rejectUnauthorized: false },
-          },
-        }),
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false, // change to true if we want to identify recurring visitors who are logged out
-        cookie: { maxAge: 14 * 24 * 60 * 60 * 1000 }, // 14 days
-      },
-      console.log('using prod session connect')
-    )
-  )
-} else {
-  app.use(
-    session(
-      {
-        store: new (require('connect-pg-simple')(session))({
-          conString:
-            'pg://' +
-            config.username +
-            ':' +
-            config.password +
-            '@' +
-            config.host +
-            '/' +
-            config.database,
-        }),
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false, // change to true if we want to identify recurring visitors who are logged out
-        cookie: { maxAge: 14 * 24 * 60 * 60 * 1000 }, // 14 days
-      },
-      console.log('using dev session connect')
-    )
-  )
-}
 
 app.use(passport.initialize())
-app.use(passport.session())
 
 app.use(flash())
 
