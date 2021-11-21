@@ -190,9 +190,7 @@ module.exports = (app, express) => {
         }
       case 'charge.succeeded':
         const chargeObject = event.data.object
-        console.log(
-          `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
-        )
+        console.log(`Charge was successful! from ${chargeObject}`)
         break
       case 'payment_method.attached':
         const paymentMethod = event.data.object

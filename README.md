@@ -97,6 +97,21 @@ Note the ES index being looked up, is set from the [front-end repo](https://gith
 
 ---
 
+## Steps for updating DB with new data
+When new 'Indexed' data (ie transformed EdisonOrders and Companies) are ready to be added to the live environment, follow these steps:
+
+- Put live app in maintenance mode (`npm run start:maintenance`) (temp solution for now)
+- Run `TRUNCATE public.IndexedEdisonOrders;` to clear out the current order data. Old orders may have been remove or reformatted, and since we have a unique constraint on Order numbers, this is needed to ensure all data will be the most up to date
+- Perform a `Backup` from PGadmin of the IndexedEdisonOrders table 
+- Restore this backup to live db on the IndexedEdisonOrders table
+- Run `node companyToIndexed.js` using the dev settings, to add verified companies to IndexedCompanies
+- Export a CSV of the IndexedCompanies result
+- Use this CSV as the source to update both ES prod index and the `IndexedCompanies` table in prod:
+ - `NODE_ENV=production node companyToIndexed.js`
+ - `node elasticsearch_prod.js`
+ 
+** Rememember the with both of the above, ensure the CSV generated is the source **
+
 
 ## Running / accessing container-based redis on DO 
 ### (legacy - we use Google Cloud Run now)
