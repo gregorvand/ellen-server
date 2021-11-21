@@ -54,11 +54,13 @@ module.exports = (app, express) => {
   app.post('/create-stripe-customer', auth.getToken, async (req, res) => {
     // Create a new customer object
     const currentUser = await userHelpers.currentUser(req.token)
+    console.log('got a user...', currentUser)
+    console.log(currentUser.dataValues.email)
 
     try {
-      if (!currentUser.stripeCustomerId) {
+      if (!currentUser.dataValues.stripeCustomerId) {
         const stripeCustomer = await stripe.customers.create({
-          email: currentUser.email,
+          email: currentUser.dataValues.email,
         })
 
         const dbUser = await User.findOne({
@@ -189,11 +191,9 @@ module.exports = (app, express) => {
           break
         }
       case 'charge.succeeded':
-        const chargeObject = event.data.object
-        console.log(`Charge was successful! from ${chargeObject}`)
+        console.log(`Charge was successful! from ${event}`)
         break
       case 'payment_method.attached':
-        const paymentMethod = event.data.object
         console.log('PaymentMethod was attached to a Customer!')
         break
       // ... handle other event types
