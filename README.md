@@ -106,10 +106,11 @@ When new 'Indexed' data (ie transformed EdisonOrders and Companies) are ready to
 - Restore this backup to live db on the IndexedEdisonOrders table
 - Run `node companyToIndexed.js` using the dev settings, to add verified companies to IndexedCompanies
 - Export a CSV of the IndexedCompanies result
-- Use this CSV as the source to update both ES prod index and the `IndexedCompanies` table in prod:
+- Use this CSV as the source to update `IndexedCompanies` table in prod
  - `NODE_ENV=production node companyToIndexed.js`
+- Subsequently, do a same export on the prod table for IndexedCompanies, and use this as the source for ES prod update (since the IDs may be different between dev and prod tables)
  - `node elasticsearch_prod.js`
- 
+
 ** Rememember the with both of the above, ensure the CSV generated is the source **
 
 
