@@ -14,7 +14,10 @@ async function transformCompaniesIndexed() {
   //   },
   // })
 
-  const allCompanies = await csv().fromFile('../edison_data/new_test.csv')
+  // For prod - from csv
+  // const allCompanies = await csv().fromFile(
+  //   '../edison_data/ellen_indexedco_21-11.csv'
+  // )
 
   console.log(allCompanies.length)
 

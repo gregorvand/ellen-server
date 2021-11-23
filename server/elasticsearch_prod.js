@@ -1,5 +1,7 @@
 require('dotenv').config()
-const Company = require('./models').Company
+const csv = require('csvtojson')
+const db = require('./models/index')
+// const Company = require('./models').Company
 // const elasticsearch = require('elasticsearch')
 
 // const client = new elasticsearch.Client({
@@ -21,14 +23,21 @@ const client = new Client({
 // Needed to update elasticsearch index
 async function populateDB() {
   let bulk = []
-  const companies = await Company.findAll()
+  // const [companies] = await db.sequelize.query(
+  //   `SELECT * FROM public."IndexedCompanies"`
+  // )
+
+  // from file
+  const companies = await csv().fromFile(
+    '../edison_data/ellen_indexedco_prod_21-11.csv'
+  )
 
   companies.forEach((company, i) => {
+    console.log(company.nameIdentifier)
     let data = {
       id: company.id,
       companyName: company.nameIdentifier,
-      ticker: company.ticker,
-      companyType: company.companyType,
+      companyEmail: company.emailIdentifier,
       companyIndustry: company.industry,
     }
 
