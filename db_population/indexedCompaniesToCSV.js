@@ -15,7 +15,7 @@ async function getAndConvertCompaniesToCSV() {
     return company.dataValues
   })
 
-  let fileAppend = process.env.NODE_ENV == 'production' ? '_prod' : 'local'
+  let fileAppend = process.env.NODE_ENV == 'production' ? '_prod' : '_local'
   const csv = parse(flattened)
   createWriteStream(
     `../../ellen_db_dumps/indexedCompanies_${today}${fileAppend}.csv`

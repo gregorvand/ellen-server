@@ -1,13 +1,7 @@
 'use strict'
+require('dotenv').config()
+console.log('current ENV', process.env.NODE_ENV || 'development')
 const env = process.env.NODE_ENV || 'development'
-const pg = require('pg')
-
-console.log('current ENV', process.env.NODE_ENV)
-
-console.log('more env', env)
-// if (env != 'development') {
-//   pg.defaults.ssl = true
-// }
 
 const fs = require('fs')
 const path = require('path')
@@ -35,13 +29,13 @@ if (config.use_env_variable) {
     logging: true,
   })
 } else {
-  console.log('init Sequelizezzz', process.env.PROD_DB_PASS) // does not work?
+  console.log('init Sequelize', process.env.PGPASSWORD) // does not work?
   sequelize = new Sequelize({
     dialect: 'postgres',
     host: config.host,
     port: config.port,
     username: config.username,
-    password: process.env.PROD_DB_PASS,
+    password: process.env.PGPASSWORD,
     database: config.database,
     sslmode: config.sslmode,
     dialectOptions: dialectOptions,
