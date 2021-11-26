@@ -1,6 +1,7 @@
 require('dotenv').config()
 const csv = require('csvtojson')
 const db = require('./models/index')
+const { textDate } = require('../server/utils/getToday')
 // const Company = require('./models').Company
 // const elasticsearch = require('elasticsearch')
 
@@ -8,6 +9,8 @@ const db = require('./models/index')
 //   // hosts: ['http://localhost:9200'],
 //   hosts: ['http://ellen-search.ngrok.io'],
 // })
+
+const today = textDate()
 
 const { Client } = require('@elastic/elasticsearch')
 const client = new Client({
@@ -29,7 +32,7 @@ async function populateDB() {
 
   // from file
   const companies = await csv().fromFile(
-    '../edison_data/ellen_indexedco_prod_21-11.csv'
+    `../../ellen_db_dumps/indexedCompanies_${today}_prod.csv`
   )
 
   companies.forEach((company, i) => {
