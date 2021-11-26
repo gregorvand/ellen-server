@@ -24,4 +24,8 @@ class Today {
   }
 }
 
-module.exports = Today
+function textDate(date) {
+  return dayjs(date).format('YYYY-MM-DD')
+}
+
+module.exports = { Today, textDate }

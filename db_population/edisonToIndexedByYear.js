@@ -8,9 +8,9 @@ const { Op } = require('sequelize')
 const dayjs = require('dayjs')
 const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 
-const COMPANY_DOMAIN = 'support@darntough.com'
-const START_DATE = '2017-01-01'
-const END_DATE = '2021-11-01'
+// const COMPANY_DOMAIN = 'info@soylent.com'
+// const START_DATE = '2017-01-01'
+// const END_DATE = '2021-11-01'
 async function transformOrdersIndexed() {
   // From local DB
   const allCompanyRows = await EdisonOrder.findAll({
@@ -33,7 +33,14 @@ async function transformOrdersIndexed() {
   let readCount = 0
   let skippedCount = 0
   allCompanyRows.map(async (edisonRow) => {
-    if (/Refund|refund|Return|return/.test(edisonRow.subjectLine)) {
+    if (
+      /Refund|refund|Return|return/.test(
+        edisonRow.subjectLine
+      )
+
+      // Or any other conditions
+      // || edisonRow.itemReseller !== 'Nisolo'
+    ) {
       // console.log(`ignoring ${edisonRow.orderNumber} ${edisonRow.subjectLine}`)
       skippedCount++
       barProgress++
@@ -41,10 +48,10 @@ async function transformOrdersIndexed() {
       // ***OPTIONS**
 
       // 1 Replace parts of ordernumber if required as a patch
-      // edisonRow.fromDomain = edisonRow.orderNumber.replace('#', '')
+      // edisonRow.orderNumber = edisonRow.orderNumber.replace('', '')
 
       // 2 Remap one email to another
-      // edisonRow.fromDomain = '[email]'
+      // edisonRow.fromDomain = 'XXXX'
 
       await indexedEdisonOrders.insertEdisonRowIndexed(edisonRow)
       readCount++

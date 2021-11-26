@@ -1,11 +1,16 @@
 require('dotenv').config()
-const Company = require('./models').Company
+const csv = require('csvtojson')
+const db = require('./models/index')
+const { textDate } = require('../server/utils/getToday')
+// const Company = require('./models').Company
 // const elasticsearch = require('elasticsearch')
 
 // const client = new elasticsearch.Client({
 //   // hosts: ['http://localhost:9200'],
 //   hosts: ['http://ellen-search.ngrok.io'],
 // })
+
+const today = textDate()
 
 const { Client } = require('@elastic/elasticsearch')
 const client = new Client({
@@ -21,14 +26,21 @@ const client = new Client({
 // Needed to update elasticsearch index
 async function populateDB() {
   let bulk = []
-  const companies = await Company.findAll()
+  // const [companies] = await db.sequelize.query(
+  //   `SELECT * FROM public."IndexedCompanies"`
+  // )
+
+  // from file
+  const companies = await csv().fromFile(
+    `../../ellen_db_dumps/indexedCompanies_${today}_prod.csv`
+  )
 
   companies.forEach((company, i) => {
+    console.log(company.nameIdentifier)
     let data = {
       id: company.id,
       companyName: company.nameIdentifier,
-      ticker: company.ticker,
-      companyType: company.companyType,
+      companyEmail: company.emailIdentifier,
       companyIndustry: company.industry,
     }
 

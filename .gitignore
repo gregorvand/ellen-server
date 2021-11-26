@@ -1,6 +1,7 @@
 /.idea
 /.sass-cache
 /node_modules
-.env
+*.env
+*.env.production
 /vue-app/ellen-b2b/db.json
 /edison_data
