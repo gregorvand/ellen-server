@@ -11,8 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "elastic-load:prod": "NODE_ENV=production node ./server/elasticsearch.js",
     "elastic-load:dev": "NODE_ENV=development node ./server/elasticsearch.js",
-    "edison-company-load:dev": "NODE_ENV=development node ./db_population/insert_edison_data_json.js",
-    "edison-company-load:prod": "NODE_ENV=production node ./db_population/insert_edison_data_json.js"
+    "edison-company-load:dev": "NODE_ENV=development node ./db_population/insert_edison_data_json.js"
   },
   "keywords": [],
   "author": "GV",
@@ -39,6 +38,7 @@
     "cheerio": "^1.0.0-rc.9",
     "cli-progress": "^3.9.1",
     "clipboard": "^2.0.8",
+    "commander": "^7.2.0",
     "connect-pg-simple": "^6.2.1",
     "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
@@ -52,8 +52,8 @@
     "express-flash": "0.0.2",
     "express-session": "^1.17.2",
     "formidable": "^1.2.2",
-    "fs": "^0.0.1-security",
     "helmet": "^4.6.0",
+    "json2csv": "^5.0.6",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "morgan": "^1.10.0",
@@ -61,9 +61,10 @@
     "node-sass": "^6.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "pg": "^8.6.0",
+    "pg": "^8.7.1",
     "pg-hstore": "^2.3.3",
     "sequelize": "^6.6.2",
+    "shelljs": "^0.8.4",
     "socket.io": "^4.0.0",
     "stripe": "^8.170.0",
     "unique-names-generator": "^4.5.0"
@@ -78,6 +79,7 @@
     "nodemon": "^2.0.7",
     "prettier": "^2.3.2",
     "prettier-eslint": "^12.0.0",
+    "sequelize-auto-migrations": "github:scimonster/sequelize-auto-migrations#a063aa6535a3f580623581bf866cef2d609531ba",
     "sequelize-cli": "^6.2.0"
   },
   "resolutions": {
