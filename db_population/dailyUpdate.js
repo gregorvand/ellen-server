@@ -3,10 +3,11 @@ const csv = require('csvtojson')
 const scriptConstants = require('./script_constants')
 
 const { textDate } = require('../server/utils/getToday')
-const date = textDate()
-console.log('generated..', date)
+// const date = textDate()
+// console.log('generated..', date)
 
 const fileDateIdentifier = scriptConstants.FILE_DATE_IDENTIFIER
+console.log('checking', fileDateIdentifier)
 
 // Script to run every day to update the database with the latest data
 // 1 Get the correct file from Edison S3

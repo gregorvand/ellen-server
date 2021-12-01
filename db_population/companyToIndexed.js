@@ -47,7 +47,6 @@ async function transformCompaniesIndexed() {
 
   let allCompanies = await getAllCompanies()
 
-
   let barProgress = 1
   bar1.start(allCompanies.length, 0)
   let skippedCount = 0
@@ -70,7 +69,8 @@ async function transformCompaniesIndexed() {
     ) VALUES (
         '${nameIdentifierEsc}', '${emailIdentifier}', '${orderPrefix}', '${orderSuffix}', '${industry}', '${data_verified}', NOW(), NOW()
     )
-    ON CONFLICT ("emailIdentifier") DO NOTHING`
+    ON CONFLICT ("emailIdentifier") DO UPDATE SET 
+      "orderPrefix"=excluded."orderPrefix";`
     )
 
     bar1.update(barProgress++)
