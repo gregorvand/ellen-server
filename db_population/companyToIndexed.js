@@ -1,4 +1,5 @@
 // For use with EdisonOrder model
+// Pass in -l flag for running locally, while -p is used for production
 
 require('dotenv').config()
 const csv = require('csvtojson')
