@@ -12,9 +12,9 @@ const date = textDate()
 // 1
 // DUMP THE INDEXED ORDERS DB
 // console.log('\n Step 1')
-// shell.exec(
-//   `pg_dump --file "../../ellen_db_dumps/IndexedEdisonOrders_${date}" --host "127.0.0.1" --port "5432" --username "postgres" --no-password --verbose --format=c --blobs --t 'public."IndexedEdisonOrders"' "todos-dev"`
-// )
+shell.exec(
+  `pg_dump --file "../../ellen_db_dumps/IndexedEdisonOrders_${date}" --host "127.0.0.1" --port "5432" --username "postgres" --no-password --verbose --format=c --blobs --t 'public."IndexedEdisonOrders"' "todos-dev"`
+)
 
 // 2
 // copy verified Company records to IndexedCompanies (-l)
@@ -42,9 +42,9 @@ shell.exec('NODE_ENV=production node ./indexedCompaniesToCSV.js')
 // WARNING THIS WILL CAUSE SERVICE INTERRUPTION, APP SHOULD BE IN MAINTENAANCE MODE
 // NORMAL TIME IS ~15 MINS DUE TO REINDEXING
 console.log('\n Step 6')
-// shell.exec(
-//   `pg_restore -d "postgresql://doadmin:${process.env.PGPASSWORD}@${process.env.PGHOST}:25060/todos-dev?sslmode=require" --jobs 4 --verbose -c --schema "public" "../../ellen_db_dumps/IndexedEdisonOrders_${date}"`
-// )
+shell.exec(
+  `pg_restore -d "postgresql://doadmin:${process.env.PGPASSWORD}@${process.env.PGHOST}:25060/todos-dev?sslmode=require" --jobs 4 --verbose -c --schema "public" "../../ellen_db_dumps/IndexedEdisonOrders_${date}"`
+)
 
 // 7
 // Finally, Update the ES index with the CSV

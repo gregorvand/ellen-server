@@ -29,7 +29,7 @@ if (config.use_env_variable) {
     logging: true,
   })
 } else {
-  console.log('init Sequelize', process.env.PGPASSWORD) // does not work?
+  console.log('init Sequelize')
   sequelize = new Sequelize({
     dialect: 'postgres',
     host: config.host,
