@@ -21,13 +21,16 @@ module.exports = {
   },
 
   async listByUser(req, res) {
+    let selectedCompanies
+    const currentUser = await userHelpers.currentUser(req.token)
     try {
-      const currentUser = await userHelpers.currentUser(req.token)
-      currentUser.getIndexedCompanies().then((selectedCompanies) => {
-        console.log(selectedCompanies)
-        res.json({
-          companies: selectedCompanies,
-        })
+      if (process.env.DATA_ENV === 'unverified') {
+        selectedCompanies = await currentUser.getCompanies()
+      } else {
+        selectedCompanies = await currentUser.getIndexedCompanies()
+      }
+      res.json({
+        companies: selectedCompanies,
       })
     } catch (err) {
       res.send(err)

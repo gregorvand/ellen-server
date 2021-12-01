@@ -8,9 +8,9 @@ const { Op } = require('sequelize')
 const dayjs = require('dayjs')
 const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 
-// const COMPANY_DOMAIN = 'info@soylent.com'
+// const COMPANY_DOMAIN = 'drink@mudwtr.com'
 // const START_DATE = '2017-01-01'
-// const END_DATE = '2021-11-01'
+// const END_DATE = '2021-11-30'
 async function transformOrdersIndexed() {
   // From local DB
   const allCompanyRows = await EdisonOrder.findAll({
@@ -34,7 +34,7 @@ async function transformOrdersIndexed() {
   let skippedCount = 0
   allCompanyRows.map(async (edisonRow) => {
     if (
-      /Refund|refund|Return|return/.test(
+      /Refund|refund|Return|return|shipment|cancelled/.test(
         edisonRow.subjectLine
       )
 
@@ -48,7 +48,7 @@ async function transformOrdersIndexed() {
       // ***OPTIONS**
 
       // 1 Replace parts of ordernumber if required as a patch
-      // edisonRow.orderNumber = edisonRow.orderNumber.replace('', '')
+      // edisonRow.orderNumber = edisonRow.orderNumber.replace('MUD11', '')
 
       // 2 Remap one email to another
       // edisonRow.fromDomain = 'XXXX'
