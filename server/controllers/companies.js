@@ -25,9 +25,13 @@ module.exports = {
     const currentUser = await userHelpers.currentUser(req.token)
     try {
       if (process.env.DATA_ENV === 'unverified') {
-        selectedCompanies = await currentUser.getCompanies()
+        selectedCompanies = await currentUser.getCompanies({
+          order: [['nameIdentifier', 'ASC']],
+        })
       } else {
-        selectedCompanies = await currentUser.getIndexedCompanies()
+        selectedCompanies = await currentUser.getIndexedCompanies({
+          order: [['nameIdentifier', 'ASC']],
+        })
       }
       res.json({
         companies: selectedCompanies,
