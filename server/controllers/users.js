@@ -26,9 +26,9 @@ module.exports = {
         console.log(user)
         if (req.body?.userCompanies) {
           const companiesToSet = req.body.userCompanies.map(
-            (company) => company.id
+            (company) => company.companyEmail
           )
-          user.setCompanies(companiesToSet)
+          user.setIndexedCompanies(companiesToSet)
         } else {
           console.log('user did not have any associated companies on register')
         }
