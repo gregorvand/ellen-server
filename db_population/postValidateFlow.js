@@ -11,7 +11,7 @@ const date = textDate()
 
 // 1
 // DUMP THE INDEXED ORDERS DB
-// console.log('\n Step 1')
+console.log('\n Step 1')
 shell.exec(
   `pg_dump --file "../../ellen_db_dumps/IndexedEdisonOrders_${date}" --host "127.0.0.1" --port "5432" --username "postgres" --no-password --verbose --format=c --blobs --t 'public."IndexedEdisonOrders"' "todos-dev"`
 )
