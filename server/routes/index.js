@@ -191,8 +191,8 @@ module.exports = (app) => {
     usersController.updateUserCompanies
   )
 
-  app.put(
-    '/api/users/update/companies',
+  app.post(
+    '/api/users/remove/companies',
     auth.getToken,
     usersController.removeUserCompanies
   )
