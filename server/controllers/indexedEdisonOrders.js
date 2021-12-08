@@ -171,6 +171,7 @@ const indexedEdisonOrdersByYear = async function (req, res) {
   let meanValuesByMonth = sortedResult.map((dataset, index) => {
     // sort the dataset by date
     let sortedDataset = _.sortBy(dataset.y, 'x')
+    console.log(dataset)
 
     if (process.env.NODE_ENV === 'development') {
       console.log(sortedDataset)
@@ -181,8 +182,9 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     const lastDataPoint = allData[allData.length - 1]
     const differentFirstLast = lastDataPoint - firstDataPoint
 
-    let dataDate = dayjs({ year: year, month: dataset.x - 1 })
-    const dataDateEnd = dataDate.endOf('month')
+    let dataDate = dayjs({ year: year, month: sortedDataset[-1] })
+    // const dataDateEnd = dataDate.endOf('month')
+    const latestDate = dayjs(sortedDataset[sortedDataset.length - 1].x)
 
     if (process.env.NODE_ENV === 'development') {
       console.log(firstDataPoint, lastDataPoint, differentFirstLast)
@@ -191,7 +193,7 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     // TODO: check if we are on the current year/month. If so, date
     // should be latest datapoint date, not auto-generated end of month date
 
-    return { x: dataDateEnd.format('YYYY-MM-DD'), y: differentFirstLast }
+    return { x: latestDate.format('YYYY-MM-DD'), y: differentFirstLast }
   })
 
   res
