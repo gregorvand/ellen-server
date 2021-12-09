@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt')
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
@@ -76,6 +77,19 @@ module.exports = (sequelize, DataTypes) => {
 
   User.prototype.validPassword = async function (password) {
     return await bcrypt.compare(password, this.password)
+  }
+
+  // Adds credit for new users by default if env variable set or > 0
+  if (process.env.INTRO_FREE_CREDIT > 0) {
+    User.addHook('afterCreate', async (user) => {
+      const CreditTransaction = require('./').CreditTransaction
+      await CreditTransaction.create({
+        value: process.env.INTRO_FREE_CREDIT,
+        activated: true,
+        method: 'alpha credit',
+        customerId: user.dataValues.id,
+      })
+    })
   }
 
   return User

@@ -44,6 +44,7 @@ module.exports = {
       })
       .catch((error) => {
         let errorMessage = error
+        console.error('error in user create', error)
         // this.errors = error.response.errors
         errorsToSend.push(errorMessage)
         // res.status(400).send(error)
@@ -134,11 +135,13 @@ module.exports = {
   },
 
   async removeUserCompanies(req, res) {
+    console.log(req)
     try {
       const currentUser = await userHelpers.currentUser(req.token)
-      const selectedCompanyId = req.body.selectedCompany
+      const selectedCompanyEmail = req.body.selectedCompany
+      console.log(currentUser.id, selectedCompanyEmail)
       currentUser
-        .removeCompanies(selectedCompanyId)
+        .removeIndexedCompany(selectedCompanyEmail)
         .then(() => res.sendStatus(201))
         .catch((error) => res.status(400).send(error))
     } catch (err) {

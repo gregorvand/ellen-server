@@ -330,4 +330,6 @@ module.exports = (app) => {
   //   auth.getToken,
   //   edisonController.edisonOrdersByYear
   // )
+
+  // console.log(Object.keys(Company.__proto__))
 }
