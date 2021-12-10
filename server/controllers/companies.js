@@ -100,6 +100,15 @@ module.exports = {
     })
   },
 
+  async trendingList(req, res) {
+    const trendingCompanies = await IndexedCompany.findAll({
+      where: {
+        highlight: true,
+      },
+    })
+    res.send(trendingCompanies)
+  },
+
   async getUsersFromCompanies(companyTicker) {
     const companyObject = await Company.findOne({
       where: {
