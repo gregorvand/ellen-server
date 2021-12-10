@@ -322,7 +322,9 @@ module.exports = (app) => {
     indexedEdisonController.indexedEdisonOrdersByYear
   )
 
-  app.get('/api/companycategory/list', companyCategoryController.list)
+  app.get('/api/trending-companies', companiesController.trendingList)
+
+  // app.get('/api/companycategory/list', companyCategoryController.list)
 
   // debug endpoint
   // app.get(

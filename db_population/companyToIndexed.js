@@ -59,19 +59,21 @@ async function transformCompaniesIndexed() {
       orderSuffix,
       industry,
       data_verified,
+      highlight,
     } = companyRow
 
     let nameIdentifierEsc = nameIdentifier.replace(/'/g, "''")
 
     await db.sequelize.query(
       `INSERT INTO public."IndexedCompanies" (
-        "nameIdentifier", "emailIdentifier", "orderPrefix", "orderSuffix", "industry", "data_verified",
+        "nameIdentifier", "emailIdentifier", "orderPrefix", "orderSuffix", "industry", "data_verified", "highlight",
       "createdAt", "updatedAt"
     ) VALUES (
-        '${nameIdentifierEsc}', '${emailIdentifier}', '${orderPrefix}', '${orderSuffix}', '${industry}', '${data_verified}', NOW(), NOW()
+        '${nameIdentifierEsc}', '${emailIdentifier}', '${orderPrefix}', '${orderSuffix}', '${industry}', '${data_verified}', ${highlight}, NOW(), NOW()
     )
-    ON CONFLICT ("emailIdentifier") DO UPDATE SET 
-      "orderPrefix"=excluded."orderPrefix";`
+    ON CONFLICT ("emailIdentifier") 
+    DO UPDATE SET 
+      "orderPrefix"=excluded."orderPrefix", "highlight"=excluded."highlight";`
     )
 
     bar1.update(barProgress++)
