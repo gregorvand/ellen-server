@@ -33,13 +33,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
+      highlight: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
     },
     {
       indexes: [
         // Create a unique index on email
         {
           unique: true,
-          fields: ['emailIdentifier'],
+          fields: ['emailIdentifier', 'highlight'],
         },
       ],
     }
