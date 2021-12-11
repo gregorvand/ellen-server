@@ -185,15 +185,25 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     let dataDate = dayjs({ year: year, month: sortedDataset[-1] })
     // const dataDateEnd = dataDate.endOf('month')
     const latestDate = dayjs(sortedDataset[sortedDataset.length - 1].x)
+    const firstDate = dayjs(sortedDataset[0].x)
 
     if (process.env.NODE_ENV === 'development') {
-      console.log(firstDataPoint, lastDataPoint, differentFirstLast)
+      console.log(
+        firstDataPoint,
+        lastDataPoint,
+        differentFirstLast,
+        firstDate.format('MMM DD')
+      )
     }
 
     // TODO: check if we are on the current year/month. If so, date
     // should be latest datapoint date, not auto-generated end of month date
 
-    return { x: latestDate.format('YYYY-MM-DD'), y: differentFirstLast }
+    return {
+      x: latestDate.format('YYYY-MM-DD'),
+      y: differentFirstLast,
+      label: firstDate.format('MMM DD'),
+    }
   })
 
   res

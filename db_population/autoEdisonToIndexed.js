@@ -19,7 +19,11 @@ async function autoEdisonToIndexed(limit) {
   let readCount = 0
   let skippedCount = 0
   allCompanyRows.map(async (edisonRow) => {
-    if (/Refund|refund|Return|return|cancelled/.test(edisonRow.subjectLine)) {
+    if (
+      /Refund|refund|Return|return|cancelled|canceled|Arrived/.test(
+        edisonRow.subjectLine
+      )
+    ) {
       skippedCount++
       barProgress++
     } else {

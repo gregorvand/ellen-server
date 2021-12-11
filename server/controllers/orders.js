@@ -238,7 +238,7 @@ module.exports = {
       GROUP BY
         DATE_PART('month', "emailDate")
       HAVING
-        COUNT(DISTINCT DATE_PART('day', "emailDate")) > 2;`
+        COUNT(DISTINCT DATE_PART('day', "emailDate")) > 3;`
     )
     res.send(results).status(200)
   },
