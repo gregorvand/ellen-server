@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    emailIdentifier: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   })
 
   CreditTransaction.associate = (models) => {

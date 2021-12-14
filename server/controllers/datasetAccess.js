@@ -50,8 +50,9 @@ module.exports = {
         await creditTransactionController.create({
           creditValue: -tokenCost,
           activated: true,
-          method: 'internal',
+          method: 'dataset purchase',
           customerId: currentUser.id,
+          emailIdentifier: companyIdentifier,
         })
       } catch (e) {
         res.send(400)
