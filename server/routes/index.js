@@ -324,6 +324,12 @@ module.exports = (app) => {
 
   app.get('/api/trending-companies', companiesController.trendingList)
 
+  app.get(
+    '/api/transactions/list',
+    auth.getToken,
+    creditTransactionController.listTransactions
+  )
+
   // app.get('/api/companycategory/list', companyCategoryController.list)
 
   // debug endpoint

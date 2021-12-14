@@ -238,6 +238,11 @@
                     "field": "method",
                     "seqType": "Sequelize.STRING"
                 },
+                "emailIdentifier": {
+                    "allowNull": true,
+                    "field": "emailIdentifier",
+                    "seqType": "Sequelize.STRING"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -853,50 +858,6 @@
             },
             "indexes": []
         },
-        "trending_companies": {
-            "tableName": "trending_companies",
-            "schema": {
-                "id": {
-                    "allowNull": false,
-                    "primaryKey": true,
-                    "autoIncrement": true,
-                    "field": "id",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "email_identifier": {
-                    "allowNull": false,
-                    "field": "email_identifier",
-                    "seqType": "Sequelize.STRING"
-                },
-                "meta_data": {
-                    "allowNull": true,
-                    "field": "meta_data",
-                    "seqType": "Sequelize.ARRAY(Sequelize.STRING)"
-                },
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "IndexedCompanyEmailIdentifier": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "IndexedCompanies",
-                        "key": "emailIdentifier"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "IndexedCompanyEmailIdentifier",
-                    "seqType": "Sequelize.STRING"
-                }
-            },
-            "indexes": []
-        },
         "Users": {
             "tableName": "Users",
             "schema": {
@@ -1179,5 +1140,5 @@
             "indexes": []
         }
     },
-    "revision": 26
+    "revision": 27
 }
