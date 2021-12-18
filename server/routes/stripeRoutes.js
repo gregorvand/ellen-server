@@ -158,8 +158,6 @@ module.exports = (app, express) => {
   })
 
   const handleStripeWebook = async function (event) {
-    let ellenUser
-
     switch (event.type) {
       case 'invoice.payment_succeeded':
         // sets the card used as the default payment method for subscription
@@ -167,7 +165,7 @@ module.exports = (app, express) => {
         console.log('sub data: ', dataObject)
         const creditsPurchased = dataObject.lines.data[0].quantity
 
-        ellenUser = await User.findOne({
+        let ellenUser = await User.findOne({
           where: {
             email: dataObject.customer_email,
           },
@@ -205,7 +203,8 @@ module.exports = (app, express) => {
           // TODO move to using Stripe products/pricing eventually for top ups, but for now
           // we're just going to use the charge amount to determine the credits to add based on our sliding scale
           let creditsToAdd
-          const chargeAmount = chargeObject.amount
+          const chargeAmount = chargeObject.amount / 100
+          console.log('charge amount: ', chargeAmount)
 
           if (chargeAmount === 300) {
             creditsToAdd = 10
@@ -215,6 +214,8 @@ module.exports = (app, express) => {
             creditsToAdd = 50
           } else if (chargeAmount === 1500) {
             creditsToAdd = 100
+          } else if (chargeAmount === 1) {
+            creditsToAdd = 1
           }
 
           let ellenChargeUser = await User.findOne({
