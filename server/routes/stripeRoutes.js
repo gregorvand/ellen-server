@@ -1,5 +1,5 @@
 const chargeHelpers = require('../utils/calculateCredits')
-const creditTransationController = require('../controllers/creditTransaction')
+const creditTransactionController = require('../controllers/creditTransaction')
 const userHelpers = require('../utils/getUserFromToken')
 const auth = require('../middleware/getToken')
 
@@ -15,14 +15,22 @@ module.exports = (app, express) => {
 
   app.post('/create-payment-intent', express.json(), async (req, res) => {
     // Create a PaymentIntent with the order amount and currency
-    const paymentIntent = await stripe.paymentIntents.create({
-      // amount: calculateOrderAmount(req.body.chargeAmount),
-      amount: calculateOrderAmount(req.body.chargeAmount),
-      currency: 'usd',
-    })
-    res.send({
-      clientSecret: paymentIntent.client_secret,
-    })
+    const tokenArray = req.headers.authorization.split('Bearer ')
+    const currentUser = await userHelpers.currentUser(tokenArray[1])
+
+    try {
+      const paymentIntent = await stripe.paymentIntents.create({
+        // amount: calculateOrderAmount(req.body.chargeAmount),
+        amount: parseInt(req.body.chargeAmount),
+        currency: 'usd',
+        customer: currentUser.stripeCustomerId,
+      })
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      })
+    } catch (error) {
+      console.error('could not create intent..', error)
+    }
   })
 
   const User = require('../models').User
@@ -51,9 +59,10 @@ module.exports = (app, express) => {
     }
   )
   // only create if customer does not already have a stripe customer ID
-  app.post('/create-stripe-customer', auth.getToken, async (req, res) => {
+  app.post('/create-stripe-customer', async (req, res) => {
     // Create a new customer object
-    const currentUser = await userHelpers.currentUser(req.token)
+    const tokenArray = req.headers.authorization.split('Bearer ')
+    const currentUser = await userHelpers.currentUser(tokenArray[1])
 
     try {
       if (!currentUser.stripeCustomerId) {
@@ -128,7 +137,8 @@ module.exports = (app, express) => {
   })
 
   app.get('/current-cards-subscriptions', auth.getToken, async (req, res) => {
-    const currentUser = await userHelpers.currentUser(req.token)
+    const tokenArray = req.headers.authorization.split('Bearer ')
+    const currentUser = await userHelpers.currentUser(tokenArray[1])
 
     const paymentMethods = await stripe.paymentMethods.list({
       customer: currentUser.stripeCustomerId,
@@ -148,6 +158,8 @@ module.exports = (app, express) => {
   })
 
   const handleStripeWebook = async function (event) {
+    let ellenUser
+
     switch (event.type) {
       case 'invoice.payment_succeeded':
         // sets the card used as the default payment method for subscription
@@ -155,20 +167,18 @@ module.exports = (app, express) => {
         console.log('sub data: ', dataObject)
         const creditsPurchased = dataObject.lines.data[0].quantity
 
-        const subscriptionUser = await User.findOne({
+        ellenUser = await User.findOne({
           where: {
             email: dataObject.customer_email,
           },
         })
 
-        const subscriptionUserId = subscriptionUser.dataValues.id
-
         console.log('adding', creditsPurchased)
-        creditTransationController.create({
+        creditTransactionController.create({
           creditValue: creditsPurchased,
           activated: true,
           method: 'subscription',
-          customerId: subscriptionUserId,
+          customerId: ellenUser.dataValues.id,
         })
 
         if (dataObject['billing_reason'] == 'subscription_create') {
@@ -190,12 +200,41 @@ module.exports = (app, express) => {
         }
       case 'charge.succeeded':
         const chargeObject = event.data.object
-        console.log(
-          `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
-        )
-        break
+
+        if (chargeObject.decription !== 'Subscription creation') {
+          // TODO move to using Stripe products/pricing eventually for top ups, but for now
+          // we're just going to use the charge amount to determine the credits to add based on our sliding scale
+          let creditsToAdd
+          const chargeAmount = chargeObject.amount
+
+          if (chargeAmount === 300) {
+            creditsToAdd = 10
+          } else if (chargeAmount === 500) {
+            creditsToAdd = 20
+          } else if (chargeAmount === 1000) {
+            creditsToAdd = 50
+          } else if (chargeAmount === 1500) {
+            creditsToAdd = 100
+          }
+
+          let ellenChargeUser = await User.findOne({
+            where: {
+              email: chargeObject.billing_details.email,
+            },
+          })
+
+          creditTransactionController.create({
+            creditValue: creditsToAdd,
+            activated: true,
+            method: 'credit top up',
+            customerId: ellenChargeUser.dataValues.id,
+          })
+          console.log(
+            `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
+          )
+          break
+        }
       case 'payment_method.attached':
-        const paymentMethod = event.data.object
         console.log('PaymentMethod was attached to a Customer!')
         break
       // ... handle other event types
