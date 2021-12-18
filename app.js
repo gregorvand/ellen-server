@@ -53,6 +53,7 @@ app.use(
       'http://192.168.0.104',
       'https://ellen-alpha-gppebs3mnq-uw.a.run.app',
       'https://alpha2.ellen.me',
+      'https://ellen.me',
       'https://ellenalpha2.ngrok.io',
     ],
   })
