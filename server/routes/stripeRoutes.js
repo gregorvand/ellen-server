@@ -21,7 +21,7 @@ module.exports = (app, express) => {
     try {
       const paymentIntent = await stripe.paymentIntents.create({
         // amount: calculateOrderAmount(req.body.chargeAmount),
-        amount: calculateOrderAmount(req.body.chargeAmount),
+        amount: parseInt(req.body.chargeAmount),
         currency: 'usd',
         customer: currentUser.stripeCustomerId,
       })
@@ -200,40 +200,40 @@ module.exports = (app, express) => {
         }
       case 'charge.succeeded':
         const chargeObject = event.data.object
-        console.log('charge data: ', chargeObject)
 
-        // TODO move to using Stripe products/pricing eventually for top ups, but for now
-        // we're just going to use the charge amount to determine the credits to add based on our sliding scale
-        let creditsToAdd
-        console.log('amount: ', parseInt(chargeObject.amount))
+        if (chargeObject.decription !== 'Subscription creation') {
+          // TODO move to using Stripe products/pricing eventually for top ups, but for now
+          // we're just going to use the charge amount to determine the credits to add based on our sliding scale
+          let creditsToAdd
+          const chargeAmount = chargeObject.amount
 
-        switch (chargeObject.amount / 100) {
-          case 300:
+          if (chargeAmount === 300) {
             creditsToAdd = 10
-          case 500:
+          } else if (chargeAmount === 500) {
             creditsToAdd = 20
-          case 1000:
+          } else if (chargeAmount === 1000) {
             creditsToAdd = 50
-          case 1500:
+          } else if (chargeAmount === 1500) {
             creditsToAdd = 100
+          }
+
+          let ellenChargeUser = await User.findOne({
+            where: {
+              email: chargeObject.billing_details.email,
+            },
+          })
+
+          creditTransactionController.create({
+            creditValue: creditsToAdd,
+            activated: true,
+            method: 'credit top up',
+            customerId: ellenChargeUser.dataValues.id,
+          })
+          console.log(
+            `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
+          )
+          break
         }
-
-        let ellenChargeUser = await User.findOne({
-          where: {
-            email: chargeObject.billing_details.email,
-          },
-        })
-
-        creditTransactionController.create({
-          creditValue: creditsToAdd,
-          activated: true,
-          method: 'credit top up',
-          customerId: ellenChargeUser.dataValues.id,
-        })
-        console.log(
-          `Charge was successful! from ${chargeObject.id}, ${chargeObject.billing_details.email}`
-        )
-        break
       case 'payment_method.attached':
         console.log('PaymentMethod was attached to a Customer!')
         break
