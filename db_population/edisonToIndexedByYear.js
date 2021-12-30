@@ -11,8 +11,8 @@ const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 const getAllIndexedCompanySuffixes =
   require('./getIndexedSuffixes').getAllIndexedCompanySuffixes
 
-const COMPANY_DOMAIN = 'hello@brooklinen.com'
-const START_DATE = '2021-12-02'
+const COMPANY_DOMAIN = 'noreply@triangl.com'
+const START_DATE = '2020-01-01'
 const END_DATE = '2021-12-30'
 
 async function transformOrdersIndexed() {
@@ -41,7 +41,7 @@ async function transformOrdersIndexed() {
   let skippedCount = 0
   allCompanyRows.map(async (edisonRow) => {
     if (
-      /Refund|refund|Return|return|cancelled|canceled|Arrived|shipment/.test(
+      /Refund|refund|Return|return|cancelled|canceled|Arrived|shipment|out|Shipping/.test(
         edisonRow.subjectLine
       )
 
@@ -70,18 +70,19 @@ async function transformOrdersIndexed() {
         return suffix.identifier === edisonRow.fromDomain
       })
 
-      const suffixLength = suffixMatch.suffix.length
-
       // if the suffix matches the last X characters of the orderNumber then remove it
       // ensures we do not replace other bits of the orderNumber, especially with numerical suffixes
+      let suffixLength
+      if (suffixMatch) {
+        suffixLength = suffixMatch.suffix.length
+      }
       if (
         suffixMatch &&
         edisonRow.orderNumber.substr(-suffixLength) === suffixMatch.suffix
       ) {
-        edisonRow.orderNumber = edisonRow.orderNumber.replace(
-          suffixMatch.suffix,
-          ''
-        )
+        // assuming the suffix matches above, use substr to remove it (faster than replace)
+        const keepLength = edisonRow.orderNumber.length - suffixLength
+        edisonRow.orderNumber = edisonRow.orderNumber.substr(0, keepLength)
       }
 
       await indexedEdisonOrders.insertEdisonRowIndexed(edisonRow)

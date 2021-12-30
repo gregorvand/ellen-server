@@ -12,7 +12,6 @@ module.exports = {
         },
       },
     })
-    console.log(`found ${allSuffixIndexedCompanies.length} suffix companies`)
 
     let suffixMap = allSuffixIndexedCompanies.map((indexedCo) => {
       return {
@@ -24,6 +23,10 @@ module.exports = {
     const filteredSuffixMap = suffixMap.filter((company) => {
       return company.suffix !== 'duplicate' && company.suffix !== 'null'
     })
+
+    console.log(
+      `found ${filteredSuffixMap.length} suffix companies with non-empty suffixes and excluding 'duplicate'`
+    )
 
     return filteredSuffixMap
   },
