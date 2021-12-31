@@ -331,6 +331,7 @@ module.exports = (app) => {
   )
 
   app.put('/forgot-password', usersController.forgotPassword)
+  app.put('/reset-password', usersController.resetPassword)
 
   // app.get('/api/companycategory/list', companyCategoryController.list)
 

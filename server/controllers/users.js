@@ -3,7 +3,7 @@ const Order = require('../models').Order
 const jwt = require('jsonwebtoken')
 const userHelpers = require('../utils/getUserFromToken')
 const { sendAnEmail } = require('../services/email/sendgrid')
-// const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt')
 
 module.exports = {
   async create(req, res) {
@@ -166,11 +166,9 @@ module.exports = {
     if (user) {
       const { email, password } = user
       console.log('gots here')
-      const token = jwt.sign(
-        { email, password },
-        process.env.USER_AUTH_SECRET,
-        { expiresIn: '20m' }
-      )
+      const token = jwt.sign({ password }, process.env.USER_AUTH_SECRET, {
+        expiresIn: '20m',
+      })
 
       const message = {
         from: 'gregor@ellen.me', // Use the email address or domain you verified above
@@ -200,6 +198,34 @@ module.exports = {
     }
   },
 
+  async resetPassword(req, res) {
+    const { resetLink, newPassword } = req.body
+    if (resetLink) {
+      jwt.verify(resetLink, process.env.USER_AUTH_SECRET, async (err) => {
+        if (err) {
+          return res
+            .status(400)
+            .json({ error: 'token is incorrect or expired' })
+        }
+
+        const user = User.findOne({ where: { reset_token: resetLink } })
+
+        if (user) {
+          const salt = await bcrypt.genSalt(10)
+          encNewPassword = await bcrypt.hash(newPassword, salt)
+          User.update(
+            { password: encNewPassword, reset_token: null },
+            { where: { reset_token: resetLink } }
+          )
+        }
+
+        res.status(200).json({
+          message: 'Updated Password',
+        })
+      })
+    }
+  },
+
   // takes an object from function calling it, e.g:
   // {'email': email}
   // where the first is a string to match DB column name, second is the object to compare
@@ -212,5 +238,3 @@ async function checkDbForUser(lookup) {
     .then((foundUser) => foundUser)
     .catch((error) => console.error(error))
 }
-
-module.exports.checkDbForUser = checkDbForUser
