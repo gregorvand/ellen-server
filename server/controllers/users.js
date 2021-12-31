@@ -2,6 +2,7 @@ const User = require('../models').User
 const Order = require('../models').Order
 const jwt = require('jsonwebtoken')
 const userHelpers = require('../utils/getUserFromToken')
+const { sendAnEmail } = require('../services/email/sendgrid')
 // const bcrypt = require('bcrypt')
 
 module.exports = {
@@ -147,6 +148,50 @@ module.exports = {
         .catch((error) => res.status(400).send(error))
     } catch (err) {
       res.status(401)
+    }
+  },
+
+  async forgotPassword(req, res) {
+    const { userEmail } = req.body
+    const user = await User.findOne({
+      where: {
+        email: userEmail,
+      },
+    })
+
+    // if (err) {
+    //   return res.status(400).json({ error: err })
+    // }
+
+    if (user) {
+      const { email, password } = user
+      console.log('gots here')
+      const token = jwt.sign({ email, password }, process.env.USER_AUTH_SECRET)
+
+      const message = {
+        from: 'gregor@ellen.me', // Use the email address or domain you verified above
+        template_id: 'd-7ca3fbae49cf42d98ec58d8ab3ce1ca1',
+        dynamic_template_data: {
+          resetLink: `${process.env.FRONTEND_URL}/reset-password/${token}`,
+        },
+        personalizations: [
+          {
+            to: [
+              {
+                email: user.email,
+              },
+            ],
+          },
+        ],
+      }
+      sendAnEmail(req, res, message, false)
+    }
+
+    if (!user || user) {
+      return res.status(200).json({
+        message:
+          'If a user with that email exists, we will send a password reset email',
+      })
     }
   },
 
