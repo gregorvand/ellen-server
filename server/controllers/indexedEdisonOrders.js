@@ -120,26 +120,18 @@ const indexedEdisonOrdersByYear = async function (req, res) {
 
   // if regex is not default, then remap these to have removed the orderPrefix
   if (orderPrefix !== '#') {
+    const chopLength = orderPrefix.length
     resultsRegex = results.map((result) => {
-      const removePrefix = result.y.split(orderPrefix)
-      return { t: result.t, y: removePrefix[1] }
+      // if orderPrefix matches, use substr to remove it. Otherwise leave orderNumber as is
+      // Some data will have mix of prefix and non-prefix data
+      if (result.y.substr(0, chopLength) === orderPrefix) {
+        const removePrefix = result.y.substr(chopLength)
+        return { t: result.t, y: removePrefix }
+      } else {
+        return { t: result.t, y: result.y }
+      }
     })
   }
-
-  // WIP FOR removing suffixes
-  // console.log(resultsRegex)
-
-  // if (
-  //   orderSuffix !== null ||
-  //   orderSuffix !== undefined ||
-  //   orderSuffix !== 'duplicate'
-  // ) {
-  //   resultsRegex = resultsRegex.map((result) => {
-  //     console.log(result)
-  //     const removePrefix = result.y.split(orderSuffix) || false
-  //     return { t: result.t, y: removePrefix[0] || result.y }
-  //   })
-  // }
 
   // Align dates to same times, to compare, and be able to remove duplicates
   const flattenedTimes = resultsRegex.map((order) => ({
