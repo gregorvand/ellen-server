@@ -166,7 +166,11 @@ module.exports = {
     if (user) {
       const { email, password } = user
       console.log('gots here')
-      const token = jwt.sign({ email, password }, process.env.USER_AUTH_SECRET)
+      const token = jwt.sign(
+        { email, password },
+        process.env.USER_AUTH_SECRET,
+        { expiresIn: '20m' }
+      )
 
       const message = {
         from: 'gregor@ellen.me', // Use the email address or domain you verified above
@@ -185,6 +189,7 @@ module.exports = {
         ],
       }
       sendAnEmail(req, res, message, false)
+      User.update({ reset_token: token }, { where: { email: user.email } })
     }
 
     if (!user || user) {
