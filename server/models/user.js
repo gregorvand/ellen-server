@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         unique: true,
       },
-      resetToken: {
+      reset_token: {
         type: DataTypes.STRING,
         allowNull: true,
       },
