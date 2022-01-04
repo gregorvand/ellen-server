@@ -205,17 +205,18 @@ module.exports = (app, express) => {
           let creditsToAdd
           const chargeAmount = chargeObject.amount / 100
           console.log('charge amount: ', chargeAmount)
+          const oneOffMultiplier = 1.5
 
-          if (chargeAmount === 300) {
+          if (chargeAmount === 300 * oneOffMultiplier) {
             creditsToAdd = 10
-          } else if (chargeAmount === 500) {
+          } else if (chargeAmount === 500 * oneOffMultiplier) {
             creditsToAdd = 20
-          } else if (chargeAmount === 1000) {
+          } else if (chargeAmount === 1000 * oneOffMultiplier) {
             creditsToAdd = 50
-          } else if (chargeAmount === 1500) {
+          } else if (chargeAmount === 1500 * oneOffMultiplier) {
             creditsToAdd = 100
-          } else if (chargeAmount === 1) {
-            creditsToAdd = 1
+          } else {
+            creditsToAdd = 0
           }
 
           let ellenChargeUser = await User.findOne({
