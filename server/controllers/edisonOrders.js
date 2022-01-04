@@ -78,7 +78,6 @@ const monthsAvailableByYear = async function (req, res) {
         COUNT(DISTINCT "emailDate"::date) AS count
     FROM "IndexedEdisonOrders"
     WHERE
-      "orderNumber" ~ '${regex}' AND
       "fromDomain" = '${emailIdentifier}' AND
       DATE_PART('year', "emailDate") = '${req.body.year}'
     GROUP BY
