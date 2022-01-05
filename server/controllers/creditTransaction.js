@@ -42,6 +42,7 @@ module.exports = {
         exclude: ['customerId', 'activated', 'updatedAt'],
       },
       limit: 20,
+      offset: 0,
       order: [['createdAt', 'DESC']],
     })
     try {

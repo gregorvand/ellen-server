@@ -909,6 +909,11 @@
                     "field": "stripeCustomerId",
                     "seqType": "Sequelize.STRING"
                 },
+                "reset_token": {
+                    "allowNull": true,
+                    "field": "reset_token",
+                    "seqType": "Sequelize.STRING"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -1140,5 +1145,5 @@
             "indexes": []
         }
     },
-    "revision": 27
+    "revision": 28
 }
