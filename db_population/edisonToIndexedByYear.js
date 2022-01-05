@@ -11,7 +11,7 @@ const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 const getAllIndexedCompanySuffixes =
   require('./getIndexedSuffixes').getAllIndexedCompanySuffixes
 
-const COMPANY_DOMAIN = 'noreply@triangl.com'
+const COMPANY_DOMAIN = 'sleep@ghostbed.com'
 const START_DATE = '2020-01-01'
 const END_DATE = '2021-12-30'
 
@@ -55,10 +55,10 @@ async function transformOrdersIndexed() {
       // ***OPTIONS**
 
       // 1 Replace parts of ordernumber if required as a patch
-      // edisonRow.orderNumber = edisonRow.orderNumber.replace('-US', '')
+      // edisonRow.orderNumber = edisonRow.orderNumber.replace('BL782', '')
 
       // Get a specific range in the ordernumber
-      // edisonRow.orderNumber = edisonRow.orderNumber.substring(5, 10)
+      // edisonRow.orderNumber = edisonRow.orderNumber.substr(5, 6)
 
       // 2 Remap one email to another
       // edisonRow.fromDomain = 'XXXX'
