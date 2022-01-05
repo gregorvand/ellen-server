@@ -2,7 +2,8 @@ const User = require('../models').User
 const Order = require('../models').Order
 const jwt = require('jsonwebtoken')
 const userHelpers = require('../utils/getUserFromToken')
-// const bcrypt = require('bcrypt')
+const { sendAnEmail } = require('../services/email/sendgrid')
+const bcrypt = require('bcrypt')
 
 module.exports = {
   async create(req, res) {
@@ -91,6 +92,7 @@ module.exports = {
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
+            username: user.username,
           })
         }
       })
@@ -149,6 +151,81 @@ module.exports = {
     }
   },
 
+  async forgotPassword(req, res) {
+    const { userEmail } = req.body
+    const user = await User.findOne({
+      where: {
+        email: userEmail,
+      },
+    })
+
+    // if (err) {
+    //   return res.status(400).json({ error: err })
+    // }
+
+    if (user) {
+      const { email, password } = user
+      console.log('gots here')
+      const token = jwt.sign({ password }, process.env.USER_AUTH_SECRET, {
+        expiresIn: '20m',
+      })
+
+      const message = {
+        from: 'gregor@ellen.me', // Use the email address or domain you verified above
+        template_id: 'd-7ca3fbae49cf42d98ec58d8ab3ce1ca1',
+        dynamic_template_data: {
+          resetLink: `${process.env.FRONTEND_URL}/reset-password/${token}`,
+        },
+        personalizations: [
+          {
+            to: [
+              {
+                email: user.email,
+              },
+            ],
+          },
+        ],
+      }
+      sendAnEmail(req, res, message, false)
+      User.update({ reset_token: token }, { where: { email: user.email } })
+    }
+
+    if (!user || user) {
+      return res.status(200).json({
+        message:
+          'If a user with that email exists, we will send a password reset email',
+      })
+    }
+  },
+
+  async resetPassword(req, res) {
+    const { resetLink, newPassword } = req.body
+    if (resetLink) {
+      jwt.verify(resetLink, process.env.USER_AUTH_SECRET, async (err) => {
+        if (err) {
+          return res
+            .status(400)
+            .json({ error: 'token is incorrect or expired' })
+        }
+
+        const user = User.findOne({ where: { reset_token: resetLink } })
+
+        if (user) {
+          const salt = await bcrypt.genSalt(10)
+          encNewPassword = await bcrypt.hash(newPassword, salt)
+          User.update(
+            { password: encNewPassword, reset_token: null },
+            { where: { reset_token: resetLink } }
+          )
+        }
+
+        res.status(200).json({
+          message: 'Updated Password',
+        })
+      })
+    }
+  },
+
   // takes an object from function calling it, e.g:
   // {'email': email}
   // where the first is a string to match DB column name, second is the object to compare
@@ -161,5 +238,3 @@ async function checkDbForUser(lookup) {
     .then((foundUser) => foundUser)
     .catch((error) => console.error(error))
 }
-
-module.exports.checkDbForUser = checkDbForUser

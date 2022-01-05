@@ -1,3 +1,5 @@
+// const { textDate } = require('../server/utils/getToday')
+
 module.exports = Object.freeze({
-  FILE_DATE_IDENTIFIER: '2021-10-30',
+  FILE_DATE_IDENTIFIER: '2021-12-30',
 })
