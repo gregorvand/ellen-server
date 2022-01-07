@@ -165,9 +165,8 @@ module.exports = {
 
     if (user) {
       const { email, password } = user
-      console.log('gots here')
       const token = jwt.sign({ password }, process.env.USER_AUTH_SECRET, {
-        expiresIn: '20m',
+        expiresIn: '10m',
       })
 
       const message = {
@@ -193,7 +192,7 @@ module.exports = {
     if (!user || user) {
       return res.status(200).json({
         message:
-          'If a user with that email exists, we will send a password reset email',
+          'If a user with that email exists, you will receive an email with a link to reset your password shortly.',
       })
     }
   },
@@ -203,13 +202,10 @@ module.exports = {
     if (resetLink) {
       jwt.verify(resetLink, process.env.USER_AUTH_SECRET, async (err) => {
         if (err) {
-          return res
-            .status(400)
-            .json({ error: 'token is incorrect or expired' })
+          return res.json({ message: 'token is incorrect or expired' })
         }
 
-        const user = User.findOne({ where: { reset_token: resetLink } })
-
+        let user = await User.findOne({ where: { reset_token: resetLink } })
         if (user) {
           const salt = await bcrypt.genSalt(10)
           encNewPassword = await bcrypt.hash(newPassword, salt)
@@ -217,11 +213,14 @@ module.exports = {
             { password: encNewPassword, reset_token: null },
             { where: { reset_token: resetLink } }
           )
-        }
 
-        res.status(200).json({
-          message: 'Updated Password',
-        })
+          user = null
+          return res.status(201).json({
+            message: 'Updated Password',
+          })
+        } else {
+          return res.json({ message: 'token is incorrect or expired' })
+        }
       })
     }
   },

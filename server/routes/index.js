@@ -330,8 +330,8 @@ module.exports = (app) => {
     creditTransactionController.listTransactions
   )
 
-  app.put('/forgot-password', usersController.forgotPassword)
-  app.put('/reset-password', usersController.resetPassword)
+  app.put('/api/forgot-password', usersController.forgotPassword)
+  app.put('/api/reset-password', usersController.resetPassword)
 
   // app.get('/api/companycategory/list', companyCategoryController.list)
 
