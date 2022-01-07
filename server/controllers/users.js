@@ -200,7 +200,7 @@ module.exports = {
   async resetPassword(req, res) {
     const { resetLink, newPassword } = req.body
     if (resetLink) {
-      jwt.verify(resetLink, process.env.PASS_RESET_SECRET, async (err) => {
+      jwt.verify(resetLink, process.env.USER_AUTH_SECRET, async (err) => {
         if (err) {
           return res.json({ message: 'token is incorrect or expired' })
         }
