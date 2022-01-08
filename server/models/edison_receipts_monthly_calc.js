@@ -15,13 +15,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       email_time: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
       },
       update_time: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
       },
       insert_time: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATE,
       },
       order_pickup: {
         type: DataTypes.SMALLINT,
