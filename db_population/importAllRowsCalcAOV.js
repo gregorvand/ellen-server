@@ -3,6 +3,9 @@ const db = require('../server/models/index')
 const fs = require('fs')
 // const scriptConstants = require('./script_constants')
 
+const AOV_MONTH = '2021-12-01'
+const AOV_COMPANY = 'service@johnscrazysocks.com'
+
 async function importCSV() {
   // const csvFilePath = `../../edison_daily_updates/dec_21_test/2021-12-22_000.csv`
   const folderPath = '../../edison_daily_updates/dec_21_test/'
@@ -29,9 +32,10 @@ async function importCSV() {
 
 async function getAOV() {
   const [values] = await db.sequelize.query(
-    `SELECT distinct on (checksum) order_subtotal,from_domain,checksum
+    `SELECT distinct on (checksum) order_subtotal,from_domain,checksum,email_time
     FROM public.edison_receipts_monthly_calcs
-    WHERE from_domain = 'info@fashionnova.com'
+	  WHERE email_time >= '${AOV_MONTH}'::date
+    AND from_domain = '${AOV_COMPANY}'
     AND order_subtotal != ''
     AND order_subtotal != '0'`
   )
@@ -43,8 +47,22 @@ async function getAOV() {
   console.log(parsedValues)
 
   // get the average of the values
-  const aov = parsedValues.reduce((a, b) => a + b, 0) / parsedValues.length
-  console.log(aov)
+  let aov = parsedValues.reduce((a, b) => a + b, 0) / parsedValues.length
+  aov = aov.toFixed(2)
+  console.log('logging aov: ', aov)
+
+  const createdRecord = await db.sequelize.query(
+    `INSERT INTO public.aov_indexed_companIES (
+      "from_domain", "aov_period", "aov_value",
+    "createdAt", "updatedAt"
+  ) VALUES (
+      '${AOV_COMPANY}', '${AOV_MONTH}', '${aov}',
+      NOW(), NOW()
+  ) 
+  ON CONFLICT ("from_domain", "aov_period") DO NOTHING`
+  )
+
+  return createdRecord
 }
 
 // importCSV()
