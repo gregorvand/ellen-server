@@ -4,7 +4,7 @@ const fs = require('fs')
 // const scriptConstants = require('./script_constants')
 
 const AOV_MONTH = '2021-12-01'
-const AOV_COMPANY = 'service@johnscrazysocks.com'
+const AOV_COMPANY = 'hello@bombas.com'
 
 async function importCSV() {
   // const csvFilePath = `../../edison_daily_updates/dec_21_test/2021-12-22_000.csv`
@@ -51,6 +51,7 @@ async function getAOV() {
   aov = aov.toFixed(2)
   console.log('logging aov: ', aov)
 
+  // commit the AOV for this specific company and time period to the DB
   const createdRecord = await db.sequelize.query(
     `INSERT INTO public.aov_indexed_companIES (
       "from_domain", "aov_period", "aov_value",
