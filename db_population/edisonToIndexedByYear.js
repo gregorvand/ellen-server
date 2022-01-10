@@ -11,9 +11,9 @@ const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 const getAllIndexedCompanySuffixes =
   require('./getIndexedSuffixes').getAllIndexedCompanySuffixes
 
-const COMPANY_DOMAIN = 'sleep@ghostbed.com'
+const COMPANY_DOMAIN = 'service@johnscrazysocks.com'
 const START_DATE = '2020-01-01'
-const END_DATE = '2021-12-30'
+const END_DATE = '2022-01-30'
 
 async function transformOrdersIndexed() {
   const suffixMap = await getAllIndexedCompanySuffixes()
@@ -41,7 +41,7 @@ async function transformOrdersIndexed() {
   let skippedCount = 0
   allCompanyRows.map(async (edisonRow) => {
     if (
-      /Refund|refund|Return|return|cancelled|canceled|Arrived|shipment|out|Shipping/.test(
+      /Refund|refund|Return|return|cancelled|canceled|Arrived|shipment|out|Shipping|shipment/.test(
         edisonRow.subjectLine
       )
 

@@ -25,7 +25,7 @@ async function autoEdisonToIndexed(limit) {
   let skippedCount = 0
   allCompanyRows.map(async (edisonRow) => {
     if (
-      /Refund|refund|Return|return|cancelled|canceled|Arrived|out|Shipping/.test(
+      /Refund|refund|Return|return|cancelled|canceled|Arrived|out|Shipping|shipment/.test(
         edisonRow.subjectLine
       )
     ) {
