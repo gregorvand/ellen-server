@@ -1,4 +1,5 @@
 const Company = require('../models').Company
+const aov_indexed_company = require('../models').aov_indexed_company
 const IndexedCompany = require('../models').IndexedCompany
 const userHelpers = require('../utils/getUserFromToken')
 
@@ -154,5 +155,21 @@ module.exports = {
       },
     })
     res.send(company)
+  },
+
+  async getLatestAov(req, res) {
+    console.log('got here', req)
+    try {
+      const companyAov = await aov_indexed_company.findOne({
+        where: {
+          from_domain: req.body.from_domain,
+        },
+        attributes: ['aov_period', 'aov_value'],
+      })
+      console.log(companyAov)
+      res.status(200).send(companyAov)
+    } catch (err) {
+      console.log(err)
+    }
   },
 }

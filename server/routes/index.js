@@ -330,6 +330,8 @@ module.exports = (app) => {
     creditTransactionController.listTransactions
   )
 
+  app.post('/api/aov', auth.getToken, companiesController.getLatestAov)
+
   app.put('/api/forgot-password', usersController.forgotPassword)
   app.put('/api/reset-password', usersController.resetPassword)
 

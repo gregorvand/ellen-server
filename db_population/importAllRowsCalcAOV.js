@@ -4,7 +4,7 @@ const fs = require('fs')
 // const scriptConstants = require('./script_constants')
 
 const AOV_MONTH = '2021-12-01'
-const AOV_COMPANY = 'hello@bombas.com'
+const AOV_COMPANY = 'support@lairdsuperfood.com'
 
 async function importCSV() {
   // const csvFilePath = `../../edison_daily_updates/dec_21_test/2021-12-22_000.csv`

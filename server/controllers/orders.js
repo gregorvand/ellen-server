@@ -305,5 +305,3 @@ async function upsertFirstOrderPoints(orderData) {
     )
   }
 }
-
-// lookup all orders in the given company
