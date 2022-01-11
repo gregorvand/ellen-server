@@ -4,7 +4,7 @@ const fs = require('fs')
 // const scriptConstants = require('./script_constants')
 
 const AOV_MONTH = '2021-12-01'
-const AOV_COMPANY = 'support@lairdsuperfood.com'
+const AOV_COMPANY = 'help@goodamerican.com'
 
 async function importCSV() {
   // const csvFilePath = `../../edison_daily_updates/dec_21_test/2021-12-22_000.csv`
@@ -30,12 +30,12 @@ async function importCSV() {
   }
 }
 
-async function getAOV() {
+async function getAOV(company) {
   const [values] = await db.sequelize.query(
     `SELECT distinct on (checksum) order_subtotal,from_domain,checksum,email_time
     FROM public.edison_receipts_monthly_calcs
 	  WHERE email_time >= '${AOV_MONTH}'::date
-    AND from_domain = '${AOV_COMPANY}'
+    AND from_domain = '${company}'
     AND order_subtotal != ''
     AND order_subtotal != '0'`
   )
@@ -49,31 +49,47 @@ async function getAOV() {
   // get the average of the values
   let aov = parsedValues.reduce((a, b) => a + b, 0) / parsedValues.length
   aov = aov.toFixed(2)
-  console.log('logging aov: ', aov)
+  console.log('starting aov..')
 
   // commit the AOV for this specific company and time period to the DB
-  const createdRecord = await db.sequelize.query(
-    `INSERT INTO public.aov_indexed_companIES (
-      "from_domain", "aov_period", "aov_value",
-    "createdAt", "updatedAt"
-  ) VALUES (
-      '${AOV_COMPANY}', '${AOV_MONTH}', '${aov}',
-      NOW(), NOW()
-  ) 
-  ON CONFLICT ("from_domain", "aov_period") DO NOTHING`
-  )
-
-  return createdRecord
+  try {
+    const createdRecord = await db.sequelize.query(
+      `INSERT INTO public.aov_indexed_companIES (
+        "from_domain", "aov_period", "aov_value",
+      "createdAt", "updatedAt"
+    ) VALUES (
+        '${company}', '${AOV_MONTH}', '${aov}',
+        NOW(), NOW()
+    )`
+    )
+    console.log(createdRecord)
+    return createdRecord
+  } catch (err) {
+    console.log('could not process', company)
+  }
 }
 
-// importCSV()
-getAOV()
+// getAOV(AOV_COMPANY)
 
-// ingest all files in a directory
+const Company = require('../server/models').Company
+async function calcAllIndexedAOV() {
+  // get all companies
+  // loop through their emails and do getAOV
+  const allIndexedCompanies = await Company.findAll({
+    where: {
+      data_verified: true,
+    },
+  })
 
-// loop through all indexed companies
-// for each company, get respective email address
-// use in the above query
+  const allCompanies = allIndexedCompanies.map((company) => {
+    return company.emailIdentifier
+  })
 
-// insert the result in a new table
-// AOV, month, indexed company email
+  console.log('yerp', allCompanies)
+  allCompanies.forEach((company) => {
+    console.log('trying to add.. ', company)
+    getAOV(company)
+  })
+}
+
+calcAllIndexedAOV()
