@@ -83,7 +83,7 @@ const monthsAvailableByYear = async function (req, res) {
     GROUP BY
       DATE_PART('month', "emailDate")
     HAVING
-      COUNT(DISTINCT DATE_PART('day', "emailDate")) > 2;`
+      COUNT(DISTINCT DATE_PART('day', "emailDate")) > 1;`
       )
       res.send(results).status(200)
     } catch (e) {
