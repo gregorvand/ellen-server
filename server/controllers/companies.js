@@ -158,18 +158,32 @@ module.exports = {
   },
 
   async getLatestAov(req, res) {
-    console.log('got here', req)
-    try {
-      const companyAov = await aov_indexed_company.findOne({
-        where: {
-          from_domain: req.body.from_domain,
-        },
-        attributes: ['aov_period', 'aov_value'],
-      })
-      console.log(companyAov)
-      res.status(200).send(companyAov)
-    } catch (err) {
-      console.log(err)
+    const currentUser = await userHelpers.currentUser(req.token)
+    const DatasetAccess = require('../controllers/datasetAccess')
+
+    console.log(currentUser)
+
+    const accessGranted = await DatasetAccess.userAccessByCompany(
+      currentUser.id,
+      req.body.from_domain
+    )
+
+    // console.log('got here', req)
+    if (accessGranted.length > 0) {
+      try {
+        const companyAov = await aov_indexed_company.findOne({
+          where: {
+            from_domain: req.body.from_domain,
+          },
+          attributes: ['aov_period', 'aov_value'],
+        })
+        console.log(companyAov)
+        res.status(200).send(companyAov)
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      res.status(403).send('Access Denied')
     }
   },
 }

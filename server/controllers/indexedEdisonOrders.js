@@ -175,7 +175,6 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     const differentFirstLast = lastDataPoint - firstDataPoint
 
     let dataDate = dayjs({ year: year, month: sortedDataset[-1] })
-    // const dataDateEnd = dataDate.endOf('month')
     const latestDate = dayjs(sortedDataset[sortedDataset.length - 1].x)
     const firstDate = dayjs(sortedDataset[0].x)
 
