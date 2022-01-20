@@ -3,15 +3,20 @@ const db = require('../server/models/index')
 const fs = require('fs')
 // const scriptConstants = require('./script_constants')
 
-const AOV_MONTH = '2021-12-01'
-const AOV_COMPANY = 'help@goodamerican.com'
+// --------
+// SET MONTH FOR INGEST AND AOV CALCULATION
+const AOV_MONTH = 12
+// --------
 
-async function importCSV() {
+// Designed to import a full (ie not already de-duplicated) set of order data from a given month
+// This is designed to be run once per month
+// The getAOV function selects disctinct (for e.g.) handle this
+async function importCSVs() {
   // const csvFilePath = `../../edison_daily_updates/dec_21_test/2021-12-22_000.csv`
-  const folderPath = '../../edison_daily_updates/dec_21_test/'
-  await db.sequelize.query(
-    `TRUNCATE public.edison_receipts_monthly_calcs RESTART IDENTITY`
-  ) // clean out old data
+  const folderPath = `../../edison_daily_updates/${AOV_MONTH}-21/`
+  // await db.sequelize.query(
+  //   `TRUNCATE public.edison_receipts_monthly_calcs RESTART IDENTITY`
+  // ) // clean out old data
   const allFiles = fs.readdirSync(folderPath)
 
   // Loop through files and ingest them to edison_receipts_monthly_calcs
@@ -30,11 +35,16 @@ async function importCSV() {
   }
 }
 
+// PERIOD TO CALCULATE AOV FOR
+const AOV_START = `2021-${AOV_MONTH}-01`
+const AOV_END = `2021-${AOV_MONTH}-30` // 31 or 30 depending on month
+
 async function getAOV(company) {
   const [values] = await db.sequelize.query(
     `SELECT distinct on (checksum) order_subtotal,from_domain,checksum,email_time
     FROM public.edison_receipts_monthly_calcs
-	  WHERE email_time >= '${AOV_MONTH}'::date
+	  WHERE email_time >= '${AOV_START}'::date
+    AND email_time <= '${AOV_END}'::date
     AND from_domain = '${company}'
     AND order_subtotal != ''
     AND order_subtotal != '0'`
@@ -46,19 +56,26 @@ async function getAOV(company) {
 
   console.log(parsedValues)
 
+  const removeZeroValues = parsedValues.filter((value) => {
+    return value != 0
+  })
+
+  console.log(removeZeroValues)
+
   // get the average of the values
-  let aov = parsedValues.reduce((a, b) => a + b, 0) / parsedValues.length
+  let aov =
+    removeZeroValues.reduce((a, b) => a + b, 0) / removeZeroValues.length
   aov = aov.toFixed(2)
-  console.log('starting aov..')
+  console.log('calc aov..', aov)
 
   // commit the AOV for this specific company and time period to the DB
   try {
     const createdRecord = await db.sequelize.query(
-      `INSERT INTO public.aov_indexed_companIES (
+      `INSERT INTO public.aov_indexed_companies (
         "from_domain", "aov_period", "aov_value",
       "createdAt", "updatedAt"
     ) VALUES (
-        '${company}', '${AOV_MONTH}', '${aov}',
+        '${company}', '${AOV_END}', '${aov}',
         NOW(), NOW()
     )`
     )
@@ -92,4 +109,13 @@ async function calcAllIndexedAOV() {
   })
 }
 
+// Check one company
+// const AOV_COMPANY = 'support@avocadomattress.com'
+// getAOV(AOV_COMPANY)
+
+// Import a set of CSV files from a folder
+// importCSVs()
+
+// Use all ingested CSVs and get a specific month's AOV data
+// NOTE set variables above before running
 calcAllIndexedAOV()
