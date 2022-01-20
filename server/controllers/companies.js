@@ -171,14 +171,20 @@ module.exports = {
     // console.log('got here', req)
     if (accessGranted.length > 0) {
       try {
-        const companyAov = await aov_indexed_company.findOne({
+        const companyAov = await aov_indexed_company.findAll({
           where: {
             from_domain: req.body.from_domain,
           },
+          order: [['aov_period', 'DESC']],
           attributes: ['aov_period', 'aov_value'],
+          limit: 6,
         })
-        console.log(companyAov)
-        res.status(200).send(companyAov)
+        const averageAov =
+          companyAov.reduce((acc, curr) => {
+            return acc + curr.aov_value
+          }, 0) / companyAov.length
+        console.log(averageAov)
+        res.send({ aov_value: `${averageAov}`, trailing: companyAov.length })
       } catch (err) {
         console.log(err)
       }
