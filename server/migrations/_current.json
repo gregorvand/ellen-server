@@ -694,7 +694,7 @@
                 },
                 "order_pickup": {
                     "field": "order_pickup",
-                    "seqType": "Sequelize.SMALLINT"
+                    "seqType": "Sequelize.STRING"
                 },
                 "order_total_amount": {
                     "allowNull": true,
@@ -1306,5 +1306,5 @@
             "indexes": []
         }
     },
-    "revision": 29
+    "revision": 30
 }
