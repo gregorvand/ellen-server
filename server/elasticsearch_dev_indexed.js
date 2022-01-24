@@ -24,6 +24,12 @@ const client = new Client({
 })
 
 // Needed to update elasticsearch index
+
+// IF DEV/UNVERIFIED THEN USE BELOW QUERY INSTEAD
+
+// `SELECT * FROM public."Companies"
+//  WHERE "createdAt" > '2022-01-20'::date`
+
 async function populateDB() {
   let bulk = []
   const [companies] = await db.sequelize.query(
@@ -41,7 +47,7 @@ async function populateDB() {
 
     bulk.push({
       index: {
-        _index: 'ellen_companies_dev_indexed', // ellen_companies_prod
+        _index: 'ellen_companies_dev_indexed', // ellen_companies_dev_indexed
         _type: 'companies_list',
         _id: company.id,
       },

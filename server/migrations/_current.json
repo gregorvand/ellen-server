@@ -1,5 +1,50 @@
 {
     "tables": {
+        "act_indexed_companies": {
+            "tableName": "act_indexed_companies",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "from_domain": {
+                    "field": "from_domain",
+                    "seqType": "Sequelize.STRING"
+                },
+                "act_value": {
+                    "field": "act_value",
+                    "seqType": "Sequelize.FLOAT"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": {
+                "f2d7a2e387e99734468faa96cda433fcecccf5a7": {
+                    "unique": true,
+                    "fields": [
+                        "from_domain"
+                    ],
+                    "name": "act_indexed_companies_from_domain",
+                    "options": {
+                        "indexName": "act_indexed_companies_from_domain",
+                        "name": "act_indexed_companies_from_domain",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
+        },
         "aov_indexed_companies": {
             "tableName": "aov_indexed_companies",
             "schema": {
@@ -694,7 +739,7 @@
                 },
                 "order_pickup": {
                     "field": "order_pickup",
-                    "seqType": "Sequelize.SMALLINT"
+                    "seqType": "Sequelize.STRING"
                 },
                 "order_total_amount": {
                     "allowNull": true,
@@ -1306,5 +1351,5 @@
             "indexes": []
         }
     },
-    "revision": 29
+    "revision": 32
 }

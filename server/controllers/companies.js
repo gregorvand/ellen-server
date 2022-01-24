@@ -1,5 +1,6 @@
 const Company = require('../models').Company
 const aov_indexed_company = require('../models').aov_indexed_company
+const act_indexed_company = require('../models').act_indexed_company
 const IndexedCompany = require('../models').IndexedCompany
 const userHelpers = require('../utils/getUserFromToken')
 
@@ -185,6 +186,34 @@ module.exports = {
           }, 0) / companyAov.length
         console.log(averageAov)
         res.send({ aov_value: `${averageAov}`, trailing: companyAov.length })
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      res.status(403).send('Access Denied')
+    }
+  },
+  async getLatestAct(req, res) {
+    const currentUser = await userHelpers.currentUser(req.token)
+    const DatasetAccess = require('../controllers/datasetAccess')
+
+    const accessGranted = await DatasetAccess.userAccessByCompany(
+      currentUser.id,
+      req.body.from_domain
+    )
+
+    // console.log('got here', req)
+    if (accessGranted.length > 0) {
+      try {
+        console.log('yep')
+        const companyAct = await act_indexed_company.findOne({
+          where: {
+            from_domain: req.body.from_domain,
+          },
+          attributes: ['act_value'],
+        })
+        console.log('act...', companyAct)
+        res.send({ act_value: `${companyAct.dataValues.act_value}` })
       } catch (err) {
         console.log(err)
       }

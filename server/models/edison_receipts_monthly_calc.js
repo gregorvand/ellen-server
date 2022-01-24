@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
       },
       order_pickup: {
-        type: DataTypes.SMALLINT,
+        type: DataTypes.STRING,
       },
       order_total_amount: {
         type: DataTypes.STRING,
