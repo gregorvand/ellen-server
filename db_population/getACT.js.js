@@ -19,7 +19,6 @@ async function calcAllAvgOrderTotals() {
     return company.emailIdentifier
   })
 
-  console.log('yerp', allCompanies)
   allCompanies.forEach((company) => {
     getCountPerCustomer(company)
   })
@@ -38,28 +37,29 @@ async function getCountPerCustomer(company) {
     return parseFloat(orderRow.count_all)
   })
 
-  const act = parseFloat(
-    allCounts.reduce((a, b) => a + b, 0) / allCounts.length
-  ).toFixed(2)
+  if (allCounts.length > 5) {
+    const act = parseFloat(
+      allCounts.reduce((a, b) => a + b, 0) / allCounts.length
+    ).toFixed(2)
 
-  console.log(`avg for all customers of ${company}: `, act)
+    console.log(`avg for all customers of ${company}: `, act)
 
-  try {
-    const createdRecord = await db.sequelize.query(
-      `INSERT INTO public.act_indexed_companies (
-        "from_domain", "act_value",
-      "createdAt", "updatedAt"
-    ) VALUES (
-        '${company}', '${act}',
-        NOW(), NOW()
-    )
-    ON CONFLICT ("from_domain")
-    DO UPDATE SET
-    "act_value"=excluded."act_value";`
-    )
-    return createdRecord
-  } catch (err) {
-    console.log('could not process act for ', company)
+    try {
+      const createdRecord = await db.sequelize.query(
+        `INSERT INTO public.act_indexed_companies (
+          "from_domain", "act_value",
+        "createdAt", "updatedAt"
+      ) VALUES (
+          '${company}', '${act}',
+          NOW(), NOW()
+      )
+      ON CONFLICT ("from_domain")
+      DO UPDATE SET
+      "act_value"=excluded."act_value";`
+      )
+    } catch (err) {
+      console.log('could not process act for ', company)
+    }
   }
 }
 
