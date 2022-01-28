@@ -161,9 +161,6 @@ module.exports = {
   async getLatestAov(req, res) {
     const currentUser = await userHelpers.currentUser(req.token)
     const DatasetAccess = require('../controllers/datasetAccess')
-
-    console.log(currentUser)
-
     const accessGranted = await DatasetAccess.userAccessByCompany(
       currentUser.id,
       req.body.from_domain
@@ -205,14 +202,12 @@ module.exports = {
     // console.log('got here', req)
     if (accessGranted.length > 0) {
       try {
-        console.log('yep')
         const companyAct = await act_indexed_company.findOne({
           where: {
             from_domain: req.body.from_domain,
           },
           attributes: ['act_value'],
         })
-        console.log('act...', companyAct)
         res.send({ act_value: `${companyAct.dataValues.act_value}` })
       } catch (err) {
         console.log(err)
