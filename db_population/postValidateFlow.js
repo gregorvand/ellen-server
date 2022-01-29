@@ -37,12 +37,16 @@ shell.exec('NODE_ENV=production node ./companyToIndexed.js -p')
 console.log('\n Step 5')
 shell.exec('NODE_ENV=production node ./indexedCompaniesToCSV.js')
 
-// 6
+// 6 Do AOV and ACT run
+shell.exec('node getAOV.js')
+shell.exec('node getACT.js')
+
+// 7
 // Copy over latest AOV and ACT
 console.log('\n Step 6')
 shell.exec(`NODE_ENV=production node copyAOVcopyACT.js`)
 
-// 7
+// 8
 // drop/restore to the live DB instance
 // WARNING THIS WILL CAUSE SERVICE INTERRUPTION, APP SHOULD BE IN MAINTENAANCE MODE
 // NORMAL TIME IS ~15 MINS DUE TO REINDEXING
@@ -51,7 +55,8 @@ shell.exec(
   `pg_restore -d "postgresql://doadmin:${process.env.PGPASSWORD}@${process.env.PGHOST}:25060/todos-dev?sslmode=require" --jobs 4 --verbose -c --schema "public" "../../ellen_db_dumps/IndexedEdisonOrders_${date}"`
 )
 
-// 8
+// 9
 // Finally, Update the ES index with the CSV
+// Should always be after data refreshed above (ie current step 8)
 console.log('\n Step 8')
 shell.exec('NODE_ENV=production node ../server/elasticsearch_prod.js')
