@@ -31,7 +31,7 @@ async function getAOV(company, months = [10, 11, 12]) {
     console.log('how many', parsedValues.length)
 
     // Ensure we have enough orders for an accurate AOV
-    if (parsedValues.length > 5) {
+    if (parsedValues.length > 3) {
       const removeZeroValues = parsedValues.filter((value) => {
         return value != 0
       })
@@ -70,6 +70,7 @@ const Company = require('../server/models').Company
 async function calcAllIndexedAOV() {
   // get all companies
   // loop through their emails and do getAOV
+  // ideally would be based on date updated but PGadmin does not modify updatedAt :(
   const allIndexedCompanies = await Company.findAll({
     where: {
       data_verified: true,
@@ -87,7 +88,7 @@ async function calcAllIndexedAOV() {
 }
 
 // Check one company
-// const AOV_COMPANY = 'support@coppercowcoffee.com'
+// const AOV_COMPANY = 'info@equatorcoffees.com'
 // getAOV(AOV_COMPANY, [10, 11, 12])
 
 // Use all ingested CSVs and get a specific month's AOV data

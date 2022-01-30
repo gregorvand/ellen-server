@@ -19,9 +19,9 @@ async function calcAllAvgOrderTotals() {
     return company.emailIdentifier
   })
 
-  allCompanies.forEach((company) => {
-    getCountPerCustomer(company)
-  })
+  for (company of allCompanies) {
+    await getCountPerCustomer(company)
+  }
 }
 
 async function getCountPerCustomer(company) {

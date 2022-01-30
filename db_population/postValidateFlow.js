@@ -44,7 +44,7 @@ shell.exec('node getACT.js')
 // 7
 // Copy over latest AOV and ACT
 console.log('\n Step 6')
-shell.exec(`NODE_ENV=production node copyAOVcopyACT.js`)
+shell.exec(`NODE_ENVnode copyAOVcopyACT.js`)
 
 // 8
 // drop/restore to the live DB instance
