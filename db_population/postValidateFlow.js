@@ -37,7 +37,7 @@ shell.exec('NODE_ENV=production node ./companyToIndexed.js -p')
 console.log('\n Step 5')
 shell.exec('NODE_ENV=production node ./indexedCompaniesToCSV.js')
 
-// 6 Do AOV and ACT run
+// 6 Do AOV and ACT run (if needed)
 shell.exec('node getAOV.js')
 shell.exec('node getACT.js')
 

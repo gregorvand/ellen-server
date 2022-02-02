@@ -2,10 +2,6 @@ const shell = require('shelljs')
 const csv = require('csvtojson')
 const scriptConstants = require('./script_constants')
 
-const { textDate } = require('../server/utils/getToday')
-// const date = textDate()
-// console.log('generated..', date)
-
 const fileDateIdentifier = scriptConstants.FILE_DATE_IDENTIFIER
 console.log('checking', fileDateIdentifier)
 
