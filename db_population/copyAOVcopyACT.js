@@ -13,7 +13,7 @@ shell.exec(
 )
 
 shell.exec(
-  `pg_dump --file "../../ellen_data_exports/act_backup_${date}" --host "127.0.0.1" --port "5432" --username "postgres" --no-password --verbose --format=c --blobs --table "public.aov_indexed_companies" "todos-dev"`
+  `pg_dump --file "../../ellen_data_exports/act_backup_${date}" --host "127.0.0.1" --port "5432" --username "postgres" --no-password --verbose --format=c --blobs --table "public.act_indexed_companies" "todos-dev"`
 )
 
 console.log(`restoring from ${date}`)
