@@ -30,16 +30,15 @@
                 }
             },
             "indexes": {
-                "9d88efbb02e6c433ff5853092555495c344c1d78": {
+                "f2d7a2e387e99734468faa96cda433fcecccf5a7": {
                     "unique": true,
                     "fields": [
-                        "from_domain",
-                        "act_value"
+                        "from_domain"
                     ],
-                    "name": "act_indexed_companies_from_domain_act_value",
+                    "name": "act_indexed_companies_from_domain",
                     "options": {
-                        "indexName": "act_indexed_companies_from_domain_act_value",
-                        "name": "act_indexed_companies_from_domain_act_value",
+                        "indexName": "act_indexed_companies_from_domain",
+                        "name": "act_indexed_companies_from_domain",
                         "indicesType": "UNIQUE",
                         "type": "UNIQUE"
                     }
@@ -1352,5 +1351,5 @@
             "indexes": []
         }
     },
-    "revision": 31
+    "revision": 32
 }

@@ -1064,6 +1064,56 @@
             },
             "indexes": []
         },
+        "tsi_indexed_companies": {
+            "tableName": "tsi_indexed_companies",
+            "schema": {
+                "id": {
+                    "allowNull": false,
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "from_domain": {
+                    "field": "from_domain",
+                    "seqType": "Sequelize.STRING"
+                },
+                "item_description": {
+                    "field": "item_description",
+                    "seqType": "Sequelize.STRING(100)"
+                },
+                "item_count": {
+                    "field": "item_count",
+                    "seqType": "Sequelize.SMALLINT"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": {
+                "7eb6ce803d7dba971fab6c51a37d9dfe6350a3ae": {
+                    "unique": true,
+                    "fields": [
+                        "from_domain",
+                        "item_description"
+                    ],
+                    "name": "tsi_indexed_companies_from_domain_item_description",
+                    "options": {
+                        "indexName": "tsi_indexed_companies_from_domain_item_description",
+                        "name": "tsi_indexed_companies_from_domain_item_description",
+                        "indicesType": "UNIQUE",
+                        "type": "UNIQUE"
+                    }
+                }
+            }
+        },
         "Users": {
             "tableName": "Users",
             "schema": {
@@ -1351,5 +1401,5 @@
             "indexes": []
         }
     },
-    "revision": 32
+    "revision": 33
 }
