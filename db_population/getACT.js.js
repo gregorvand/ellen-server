@@ -26,7 +26,7 @@ async function calcAllAvgOrderTotals() {
 
 async function getCountPerCustomer(company) {
   const [values] = await db.sequelize.query(
-    `SELECT COUNT (*) as count_all, user_id, from_domain
+    `SELECT COUNT (DISTINCT checksum) as count_all, user_id, from_domain
     FROM public.edison_receipts_monthly_calcs
     WHERE from_domain = '${company}'
     GROUP BY user_id, from_domain`

@@ -11,8 +11,8 @@ const AOV_MONTH = 12
 async function getAOV(company, months = [10, 11, 12]) {
   for (aMonth of months) {
     console.log('trying to add.. ', company, aMonth)
-    const AOV_START = `2021-${aMonth}-01`
-    const AOV_END = `2021-${aMonth}-30` // 31 or 30 depending on month
+    const AOV_START = `2022-${aMonth}-01`
+    const AOV_END = `2022-${aMonth}-30` // 31 or 30 depending on month
 
     const [values] = await db.sequelize.query(
       `SELECT distinct on (checksum) order_subtotal,from_domain,checksum,email_time
