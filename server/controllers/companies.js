@@ -1,6 +1,7 @@
 const Company = require('../models').Company
 const aov_indexed_company = require('../models').aov_indexed_company
 const act_indexed_company = require('../models').act_indexed_company
+const tsi_indexed_company = require('../models').tsi_indexed_company
 const IndexedCompany = require('../models').IndexedCompany
 const userHelpers = require('../utils/getUserFromToken')
 
@@ -211,6 +212,34 @@ module.exports = {
         if (companyAct !== null) {
           res.send({ act_value: `${companyAct.dataValues.act_value}` })
         }
+      } catch (err) {
+        console.log(err)
+      }
+    } else {
+      res.status(403).send('Access Denied')
+    }
+  },
+  async getLatestTsi(req, res) {
+    const currentUser = await userHelpers.currentUser(req.token)
+    const DatasetAccess = require('../controllers/datasetAccess')
+
+    const accessGranted = await DatasetAccess.userAccessByCompany(
+      currentUser.id,
+      req.body.from_domain
+    )
+
+    // console.log('got here', req)
+    if (accessGranted.length > 0 || process.env.NODE_ENV === 'development') {
+      try {
+        const companyTsi = await tsi_indexed_company.findAll({
+          where: {
+            from_domain: req.body.from_domain,
+          },
+          order: [['item_count', 'DESC']],
+          attributes: ['item_description'],
+        })
+        console.log(companyTsi)
+        res.send({ tsi_list: companyTsi })
       } catch (err) {
         console.log(err)
       }
