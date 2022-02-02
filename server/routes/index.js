@@ -332,6 +332,7 @@ module.exports = (app) => {
 
   app.post('/api/aov', auth.getToken, companiesController.getLatestAov)
   app.post('/api/act', auth.getToken, companiesController.getLatestAct)
+  app.post('/api/tsi', auth.getToken, companiesController.getLatestTsi)
 
   app.put('/api/forgot-password', usersController.forgotPassword)
   app.put('/api/reset-password', usersController.resetPassword)
