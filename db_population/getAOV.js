@@ -1,6 +1,4 @@
-const csv = require('csvtojson')
 const db = require('../server/models/index')
-const fs = require('fs')
 // const scriptConstants = require('./script_constants')
 
 // --------
@@ -8,40 +6,13 @@ const fs = require('fs')
 const AOV_MONTH = 12
 // --------
 
-// Designed to import a full (ie not already de-duplicated) set of order data from a given month
-// This is designed to be run once per month
-// The getAOV function selects disctinct (for e.g.) handle this
-async function importCSVs() {
-  // const csvFilePath = `../../edison_daily_updates/dec_21_test/2021-12-22_000.csv`
-  const folderPath = `../../edison_daily_updates/${AOV_MONTH}-21/`
-  // await db.sequelize.query(
-  //   `TRUNCATE public.edison_receipts_monthly_calcs RESTART IDENTITY`
-  // ) // clean out old data
-  const allFiles = fs.readdirSync(folderPath)
-
-  // Loop through files and ingest them to edison_receipts_monthly_calcs
-  // using for..of to ensure promises of bulkCreate are resolved before moving on
-  for (file of allFiles) {
-    if (file !== '.DS_Store') {
-      console.log(file)
-      let csvData = await csv().fromFile(`${folderPath}${file}`)
-      try {
-        await db.edison_receipts_monthly_calc.bulkCreate(csvData)
-        console.log(`done importing ${file}`)
-      } catch (error) {
-        console.error(`could not import ${file}`)
-      }
-    }
-  }
-}
-
 // PERIOD TO CALCULATE AOV FOR
 
 async function getAOV(company, months = [10, 11, 12]) {
   for (aMonth of months) {
     console.log('trying to add.. ', company, aMonth)
-    const AOV_START = `2021-${aMonth}-01`
-    const AOV_END = `2021-${aMonth}-30` // 31 or 30 depending on month
+    const AOV_START = `2022-${aMonth}-01`
+    const AOV_END = `2022-${aMonth}-30` // 31 or 30 depending on month
 
     const [values] = await db.sequelize.query(
       `SELECT distinct on (checksum) order_subtotal,from_domain,checksum,email_time
@@ -60,7 +31,7 @@ async function getAOV(company, months = [10, 11, 12]) {
     console.log('how many', parsedValues.length)
 
     // Ensure we have enough orders for an accurate AOV
-    if (parsedValues.length > 5) {
+    if (parsedValues.length > 3) {
       const removeZeroValues = parsedValues.filter((value) => {
         return value != 0
       })
@@ -99,6 +70,7 @@ const Company = require('../server/models').Company
 async function calcAllIndexedAOV() {
   // get all companies
   // loop through their emails and do getAOV
+  // ideally would be based on date updated but PGadmin does not modify updatedAt :(
   const allIndexedCompanies = await Company.findAll({
     where: {
       data_verified: true,
@@ -109,18 +81,15 @@ async function calcAllIndexedAOV() {
     return company.emailIdentifier
   })
 
-  allCompanies.forEach((company) => {
+  for (company of allCompanies) {
     console.log('trying to add.. ', company)
-    getAOV(company)
-  })
+    await getAOV(company)
+  }
 }
 
 // Check one company
-// const AOV_COMPANY = 'pepsquad@wearpepper.com'
+// const AOV_COMPANY = 'info@equatorcoffees.com'
 // getAOV(AOV_COMPANY, [10, 11, 12])
-
-// Import a set of CSV files from a folder
-// importCSVs()
 
 // Use all ingested CSVs and get a specific month's AOV data
 // NOTE set variables above before running

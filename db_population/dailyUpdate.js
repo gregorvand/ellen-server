@@ -2,10 +2,6 @@ const shell = require('shelljs')
 const csv = require('csvtojson')
 const scriptConstants = require('./script_constants')
 
-const { textDate } = require('../server/utils/getToday')
-// const date = textDate()
-// console.log('generated..', date)
-
 const fileDateIdentifier = scriptConstants.FILE_DATE_IDENTIFIER
 console.log('checking', fileDateIdentifier)
 
@@ -33,12 +29,16 @@ shell.exec(`node ./autoImportCSVtoEdisonOrders.js`)
 // const { importAllCSVToOrders } = require('./autoImportCSVtoEdisonOrders')
 // importAllCSVToOrders(fileDateIdentifier)
 
+// 6 Do AOV and ACT run (also run during postValidateUpdate)
+console.log('step 6 - AOV and ACT')
+shell.exec('node getAOV.js')
+shell.exec('node getACT.js')
+
 //
-// 6 Understand how many records were created in EdisonOrders, get that count
+// 7 Understand how many records were created in EdisonOrders, get that count
 // Use that count for how far back to use for reindexing to EdisonIndexedOrders
 
-// get the length of the csv file
-console.log('step 6')
+console.log('step 7 - do order reindex')
 const { autoEdisonToIndexed } = require('./autoEdisonToIndexed')
 async function getCSVFileLengthAndReindex() {
   const csvFilePath = `../../edison_daily_updates/${fileDateIdentifier}_000_deduped.csv`

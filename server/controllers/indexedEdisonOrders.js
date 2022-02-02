@@ -73,7 +73,7 @@ const indexedEdisonOrdersByYear = async function (req, res) {
     identifier
   )
 
-  // allMonths is an array of just which dataset access IDs they have
+  // allMonths is an array of those of which dataset access IDs they have access to
   // for a given company and requested year
   let allMonths = accessGranted
     .filter((access) => {
@@ -117,10 +117,11 @@ const indexedEdisonOrdersByYear = async function (req, res) {
   let resultsRegex = results.filter((result) => {
     return result.y.match(regex)
   })
-
+  console.log('chopLength', orderPrefix)
   // if regex is not default, then remap these to have removed the orderPrefix
   if (orderPrefix !== '#') {
     const chopLength = orderPrefix.length
+
     resultsRegex = results.map((result) => {
       // if orderPrefix matches, use substr to remove it. Otherwise leave orderNumber as is
       // Some data will have mix of prefix and non-prefix data

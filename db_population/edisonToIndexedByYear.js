@@ -11,13 +11,12 @@ const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 const getAllIndexedCompanySuffixes =
   require('./getIndexedSuffixes').getAllIndexedCompanySuffixes
 
-const COMPANY_DOMAIN = 'service@johnscrazysocks.com'
-const START_DATE = '2020-01-01'
-const END_DATE = '2022-01-30'
+const COMPANY_DOMAIN = 'support@goosecreekinc.com'
+const START_DATE = '2021-05-16'
+const END_DATE = '2022-01-20'
 
 async function transformOrdersIndexed() {
   const suffixMap = await getAllIndexedCompanySuffixes()
-  console.log(suffixMap)
 
   // From local DB
   const allCompanyRows = await EdisonOrder.findAll({
@@ -33,8 +32,6 @@ async function transformOrdersIndexed() {
   // from file
   // const allCompanyRows = await csv().fromFile('../edison_data/new_test.csv')
 
-  console.log(allCompanyRows.length)
-
   let barProgress = 1
   bar1.start(allCompanyRows.length, 0)
   let readCount = 0
@@ -44,7 +41,6 @@ async function transformOrdersIndexed() {
       /Refund|refund|Return|return|cancelled|canceled|Arrived|shipment|out|Shipping|shipment/.test(
         edisonRow.subjectLine
       )
-
       // Or any other conditions
       // || edisonRow.itemReseller !== 'Nisolo'
     ) {
@@ -74,6 +70,7 @@ async function transformOrdersIndexed() {
       // ensures we do not replace other bits of the orderNumber, especially with numerical suffixes
       let suffixLength
       if (suffixMatch) {
+        console.log(`${suffixMatch.identifier} ${suffixMatch.suffix}`)
         suffixLength = suffixMatch.suffix.length
       }
       if (
