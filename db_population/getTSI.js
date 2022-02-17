@@ -34,7 +34,7 @@ async function getCountPerItem(company) {
 
   // so long as the count is more than 1, consider it for adding to the DB
   for (item of values) {
-    if (item.item_count > 1) {
+    if (item.item_count > 30) {
       console.log(`${item.item_description} : ${item.item_count}`)
 
       // if same item/company combo exists, update the count
@@ -58,5 +58,5 @@ async function getCountPerItem(company) {
   }
 }
 
-// getCountPerCustomer('orders@rumpl.com')
+// getCountPerItem('support@byteme.com')
 retrieveAllTopItems()

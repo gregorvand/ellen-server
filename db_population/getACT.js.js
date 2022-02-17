@@ -63,5 +63,5 @@ async function getCountPerCustomer(company) {
   }
 }
 
-// getCountPerCustomer('orders@rumpl.com')
+// getCountPerCustomer('support@byteme.com')
 calcAllAvgOrderTotals()

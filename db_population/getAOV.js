@@ -8,11 +8,11 @@ const AOV_MONTH = 12
 
 // PERIOD TO CALCULATE AOV FOR
 
-async function getAOV(company, months = [10, 11, 12]) {
+async function getAOV(company, months = ['2022-01']) {
   for (aMonth of months) {
     console.log('trying to add.. ', company, aMonth)
-    const AOV_START = `2022-${aMonth}-01`
-    const AOV_END = `2022-${aMonth}-30` // 31 or 30 depending on month
+    const AOV_START = `${aMonth}-01`
+    const AOV_END = `${aMonth}-30` // 31 or 30 depending on month
 
     const [values] = await db.sequelize.query(
       `SELECT distinct on (checksum) order_subtotal,from_domain,checksum,email_time
@@ -88,8 +88,8 @@ async function calcAllIndexedAOV() {
 }
 
 // Check one company
-// const AOV_COMPANY = 'info@equatorcoffees.com'
-// getAOV(AOV_COMPANY, [10, 11, 12])
+// const AOV_COMPANY = 'support@byteme.com'
+// getAOV(AOV_COMPANY, ['2021-10', '2021-11', '2021-12'])
 
 // Use all ingested CSVs and get a specific month's AOV data
 // NOTE set variables above before running

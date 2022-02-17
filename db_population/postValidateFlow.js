@@ -37,7 +37,7 @@ shell.exec('NODE_ENV=production node ./companyToIndexed.js -p')
 console.log('\n Step 5')
 shell.exec('NODE_ENV=production node ./indexedCompaniesToCSV.js')
 
-// 6 Do AOV and ACT run (if needed)
+// // 6 Do AOV and ACT run (if needed)
 shell.exec('node getAOV.js')
 shell.exec('node getACT.js')
 shell.exec('node getTSI.js')
@@ -45,7 +45,7 @@ shell.exec('node getTSI.js')
 // 7
 // Copy over latest AOV and ACT
 console.log('\n Step 6')
-shell.exec(`NODE_ENVnode copyMetricsToProd.js`)
+shell.exec(`node copyMetricsToProd.js`)
 
 // 8
 // drop/restore to the live DB instance
