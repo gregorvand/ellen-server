@@ -58,5 +58,5 @@ async function getCountPerItem(company) {
   }
 }
 
-// getCountPerCustomer('orders@rumpl.com')
+// getCountPerItem('support@byteme.com')
 retrieveAllTopItems()

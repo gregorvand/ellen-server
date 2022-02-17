@@ -30,9 +30,10 @@ shell.exec(`node ./autoImportCSVtoEdisonOrders.js`)
 // importAllCSVToOrders(fileDateIdentifier)
 
 // 6 Do AOV and ACT run (also run during postValidateUpdate)
-console.log('step 6 - AOV and ACT')
-shell.exec('node getAOV.js')
-shell.exec('node getACT.js')
+console.log('step 6 - AOV, ACT, TSI (may be some or all)')
+// shell.exec('node getAOV.js')
+// shell.exec('node getACT.js')
+// shell.exec('node getTSI.js')
 
 //
 // 7 Understand how many records were created in EdisonOrders, get that count

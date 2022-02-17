@@ -11,9 +11,9 @@ const bar1 = new cliProgress.SingleBar({}, cliProgress.Presets.shades_classic)
 const getAllIndexedCompanySuffixes =
   require('./getIndexedSuffixes').getAllIndexedCompanySuffixes
 
-const COMPANY_DOMAIN = 'support@goosecreekinc.com'
-const START_DATE = '2021-05-16'
-const END_DATE = '2022-01-20'
+const COMPANY_DOMAIN = 'info@email.smiledirectclub.com'
+const START_DATE = '2020-01-01'
+const END_DATE = '2022-02-09'
 
 async function transformOrdersIndexed() {
   const suffixMap = await getAllIndexedCompanySuffixes()
