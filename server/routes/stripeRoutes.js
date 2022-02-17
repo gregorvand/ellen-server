@@ -205,7 +205,7 @@ module.exports = (app, express) => {
           let creditsToAdd
           const chargeAmount = chargeObject.amount / 100
           console.log('charge amount: ', chargeAmount)
-          const oneOffMultiplier = 1.5
+          const oneOffMultiplier = 1.65
 
           if (chargeAmount === 300 * oneOffMultiplier) {
             creditsToAdd = 10
