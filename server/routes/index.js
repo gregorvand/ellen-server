@@ -310,11 +310,7 @@ module.exports = (app) => {
     datasetAccessController.datasetAccessCharge
   )
 
-  app.get(
-    '/api/get-company',
-    auth.getToken,
-    companiesController.getIndexedCompany
-  )
+  app.get('/api/get-company', companiesController.getIndexedCompany)
 
   app.get(
     '/api/dataset-year-company-indexed',
